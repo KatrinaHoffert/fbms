@@ -1,0 +1,34 @@
+<project name="FBMS" default="run" basedir=".">
+	<!-- Folders -->
+	<property name="src" value="src" />
+	<property name="build" value="build" />
+	<property name="lib"  value="lib" />
+	<!-- Names -->
+	<property name="mainClass" value="DemoMain" />
+	<!-- Classpath for libraries. Note the inclusion of the build dir
+	     so we can find the class files (since base dir is .) -->
+	<property name="classpath"  value="lib/jnotify-0.94.jar:${build}" />
+
+	<!-- Compiles the sources -->
+	<target name="compile">
+		<mkdir dir="${build}" />
+		<!-- Compile the java code from ${src} into ${build}. Don't include the 
+			 buggy ANT runtime. Classpath is crucial for libraries -->
+		<javac srcdir="${src}" destdir="${build}" classpath="${classpath}" includeantruntime="false" />
+	</target>
+
+	<!-- Runs the program -->
+	<target name="run" depends="compile">
+		<!-- Dynamic libraries must be in same folder as class files -->
+		<copy file="${lib}/libjnotify.jnilib" todir="${build}"/>
+		<copy file="${lib}/libjnotify.so" todir="${build}"/>
+		<copy file="${lib}/jnotify.dll" todir="${build}"/>
+		<copy file="${lib}/jnotify_64bit.dll" todir="${build}"/>
+		<!-- Runs the program with the correct arguments. The fork ensures a fresh JVM -->
+		<java dir="${build}" classname="${mainClass}" fork="true" classpath="${classpath}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build}" />
+	</target>
+</project>
