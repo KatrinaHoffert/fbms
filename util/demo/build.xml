@@ -7,7 +7,7 @@
 	<property name="mainClass" value="DemoMain" />
 	<!-- Classpath for libraries. Note the inclusion of the build dir
 	     so we can find the class files (since base dir is .) -->
-	<property name="classpath"  value="lib/jnotify-0.94.jar:${build}" />
+	<property name="classpath"  value="lib/jnotify-0.94.jar:lib/sqlite-jdbc-3.7.15-M1.jar:${build}" />
 
 	<!-- Compiles the sources -->
 	<target name="compile">
@@ -15,19 +15,20 @@
 		<!-- Compile the java code from ${src} into ${build}. Don't include the 
 			 buggy ANT runtime. Classpath is crucial for libraries -->
 		<javac srcdir="${src}" destdir="${build}" classpath="${classpath}" includeantruntime="false" />
+		<!-- Dynamic libraries must be in same folder as class files -->
+		<copy file="${lib}/libjnotify.so" todir="${build}"/>
+		<copy file="${lib}/jnotify.dll" todir="${build}"/>
+		<copy file="${lib}/jnotify_64bit.dll" todir="${build}"/>
+		<copy file="${lib}/libjnotify.jnilib" todir="${build}"/>
 	</target>
 
 	<!-- Runs the program -->
 	<target name="run" depends="compile">
-		<!-- Dynamic libraries must be in same folder as class files -->
-		<copy file="${lib}/libjnotify.jnilib" todir="${build}"/>
-		<copy file="${lib}/libjnotify.so" todir="${build}"/>
-		<copy file="${lib}/jnotify.dll" todir="${build}"/>
-		<copy file="${lib}/jnotify_64bit.dll" todir="${build}"/>
 		<!-- Runs the program with the correct arguments. The fork ensures a fresh JVM -->
 		<java dir="${build}" classname="${mainClass}" fork="true" classpath="${classpath}" />
 	</target>
 
+	<!-- Deletes junk. Note that nothing in the build folder is safe! -->
 	<target name="clean">
 		<delete dir="${build}" />
 	</target>
