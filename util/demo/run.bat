@@ -1,3 +1,14 @@
+:: ==============================================================
+::	This file is part of FBMS (https://code.google.com/p/fbms)
+::
+::	Copyright (C) 2013 Group 06
+::
+::	You can redistribute this code and/or modify it under
+::	the terms of the GNU General Public License as published
+::	by the Free Software Foundation; either version 3 of the
+::	License, or (at your option) any later version
+:: ==============================================================
+
 :: This is for running the program after ant has already built it with
 :: "ant compile". See run.sh for the Linux version.
 @echo off
