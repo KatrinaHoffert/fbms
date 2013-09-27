@@ -1,11 +1,37 @@
 import net.contentobjects.jnotify.*;
 import java.sql.*;
 import java.util.*;
+import difflib.*;
+import org.apache.log4j.*;
+import java.nio.*;
+import java.nio.file.*;
 
 class DemoMain
 {
+	// Create the logger (takes in a class name for init)
+	static Logger logger = Logger.getLogger(DemoMain.class);
+
 	public static void main(String args[])
 	{
+		// Load the properties file for logger settings
+		PropertyConfigurator.configure("log4j.properties");
+
+		// And print a test message
+		logger.info("Started logging...");
+
+		// Get the path of current directory
+		Path currentDir = Paths.get(System.getProperty("user.dir"));
+
+		// Manipulate the paths to point to specific files.
+		Path pathToFileA = currentDir.resolve("../src/DemoMain.java");
+		Path pathToFileB = currentDir.resolve("../src/DemoContainer.java");
+
+		// Note in the logger that we called normalize() so that we'd get something
+		// like "util/demo/src" and not "util/demo/build/../src". Same path, but
+		// one is easier for a human to read.
+		logger.debug("Path to file A: "	+ pathToFileA.normalize());
+		logger.debug("Path to file B: "	+ pathToFileB.normalize());
+
 		databaseStuff();
 		watcherStuff();
 	}
@@ -53,7 +79,8 @@ class DemoMain
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			// Send error messages to the logger
+			logger.error(e);
 		}
 
 		try
@@ -64,7 +91,7 @@ class DemoMain
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 }

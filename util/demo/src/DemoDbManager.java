@@ -1,10 +1,13 @@
 import java.sql.*;
 import java.util.*;
+import org.apache.log4j.*;
 
 class DemoDbManager
 {
 	// Holds the connection
 	private Connection connection = null;
+	// Get an instance of the DemoMain logger
+	static Logger logger = Logger.getLogger("DemoMain");
 
 	/**
 	 * Chooses the database driver and creates the connection.
@@ -18,8 +21,7 @@ class DemoDbManager
 		}
 		catch(ClassNotFoundException e)
 		{
-			System.out.println("SQLite Xerial Driver library not found. Is classpath"
-				+ " configured correctly?");
+			logger.error(e);
 		}
 
 		try
@@ -30,8 +32,11 @@ class DemoDbManager
 		}
 		catch(SQLException e)
 		{
-			e.printStackTrace();
+			// Logger will print stack trace, etc, to log
+			logger.error(e);
 		}
+
+		logger.info("Database driver successfully connected to database");
 	}
 
 	/**
@@ -56,12 +61,14 @@ class DemoDbManager
 			statement.executeUpdate("INSERT INTO demo VALUES(2, 'Another string')");
 			statement.executeUpdate("INSERT INTO demo VALUES(9001, 'String with high ID')");
 
+			logger.debug("Table demo created");
+
 			// Statements must be closed!
 			close(statement);
 		}
 		catch(SQLException e)
 		{
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 
@@ -89,6 +96,10 @@ class DemoDbManager
 				// Read the result set row
 				row.id = rs.getInt("id");
 				row.name = rs.getString("name");
+
+				// Logging
+				logger.debug("Added row " + row.id + " into list of rows");
+
 				// And add the row to the list
 				rows.add(row);
 			}
@@ -99,7 +110,7 @@ class DemoDbManager
 		}
 		catch(SQLException e)
 		{
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return rows;
@@ -115,11 +126,12 @@ class DemoDbManager
 		{
 			try
 			{
+				logger.debug("Attempting to close database connection");
 				connection.close();
 			}
 			catch(SQLException e)
 			{
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 	}
@@ -133,11 +145,12 @@ class DemoDbManager
 		{
 			try
 			{
+				logger.debug("Attempting to close Statement " + statement);
 				statement.close();
 			}
 			catch(SQLException e)
 			{
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 	}
@@ -151,11 +164,12 @@ class DemoDbManager
 		{
 			try
 			{
+				logger.debug("Attempting to close ResultSet " + rs);
 				rs.close();
 			}
 			catch(SQLException e)
 			{
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 	}
