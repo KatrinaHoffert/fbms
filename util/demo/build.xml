@@ -10,7 +10,7 @@
 	License, or (at your option) any later version
 	==============================================================
 -->
-<project name="FBMS" default="run" basedir=".">
+<project name="FBMS" default="default" basedir=".">
 	<!-- Folders -->
 	<property name="src" value="src" />
 	<property name="build" value="build" />
@@ -18,7 +18,7 @@
 	<!-- Names -->
 	<property name="mainClass" value="DemoMain" />
 	<!-- Classpath for libraries. Note the inclusion of the build dir
-	     so we can find the class files (since base dir is .) -->
+		 so we can find the class files (since base dir is .) -->
 	<property name="classpath" value="lib/jnotify-0.94.jar:lib/sqlite-jdbc-3.7.15-M1.jar:lib/java-diff-utils-1.3.0.jar:lib/log4j-1.2.17.jar:${build}" />
 
 	<!-- Compiles the sources -->
@@ -27,19 +27,39 @@
 		<!-- Compile the java code from ${src} into ${build}. Don't include the 
 			 buggy ANT runtime. Classpath is crucial for libraries -->
 		<javac debug="true" srcdir="${src}" destdir="${build}" classpath="${classpath}" includeantruntime="false" />
-		<!-- Dynamic libraries must be in same folder as class files -->
-		<copy file="${lib}/libjnotify.so" todir="${build}"/>
-		<copy file="${lib}/jnotify.dll" todir="${build}"/>
-		<copy file="${lib}/jnotify_64bit.dll" todir="${build}"/>
-		<copy file="${lib}/libjnotify.jnilib" todir="${build}"/>
-		<!-- And copy the logging property file -->
+		<!-- Copy the logging property file -->
 		<copy file="${src}/log4j.properties" todir="${build}"/>
 	</target>
 
-	<!-- Runs the program -->
-	<target name="run" depends="compile">
+	<!-- Runs the program for the Windows OS -->
+	<target name="windows" depends="compile">
+		<!-- Dynamic libraries must be in same folder as class files -->
+		<copy file="${lib}/jnotify.dll" todir="${build}"/>
+		<copy file="${lib}/jnotify_64bit.dll" todir="${build}"/>
+		<copy file="${lib}/libjnotify.jnilib" todir="${build}"/>
 		<!-- Runs the program with the correct arguments. The fork ensures a fresh JVM -->
 		<java dir="${build}" classname="${mainClass}" fork="true" classpath="${classpath}" />
+	</target>
+
+	<!-- Runs the program for Linux and Mac -->
+	<target name="linux" depends="compile">
+		<!-- Dynamic libraries must be in same folder as class files -->
+		<copy file="${lib}/libjnotify.so" todir="${build}"/>
+		<copy file="${lib}/libjnotify.jnilib" todir="${build}"/>
+		<!-- Runs the program with the correct arguments. The fork ensures a fresh JVM -->
+		<java dir="${build}" classname="${mainClass}" fork="true" classpath="${classpath}">
+				<sysproperty key="java.library.path" path="." />
+		</java>
+	</target>
+
+	<target name="default">
+		<echo level="error">
+Invalid command. Valid commands are:
+ ant windows     Build and run program for the Windows OS
+ ant linux       Build and run program for the Linux and Mac OSes
+ ant compile     Build program only
+ ant clean       Remove created files (rebuild necessary to run program)
+		</echo>
 	</target>
 
 	<!-- Deletes junk. Note that nothing in the build folder is safe! -->
