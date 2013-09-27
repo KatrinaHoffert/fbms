@@ -1,43 +1,69 @@
-MIKE:
-	Class prototypes, PoD classes
-	Watcher.*
-	FileOp.copy() (both)
-	FileOp.rename()
-	FileOp.fileValid()
-	FileHistory.getRevision()
-	FileHistory.storeRevision()
-	FileHistory.obtainRevision()
-	DbManager.init()
-	DbManager.getRevisionData()
-	DbManager.insertRevision()
-	Data.getFolderContents()
-
+MIKE:                                     Estimated time req (in hours):
+	Class prototypes, PoD classes         3
+	Watcher.*                             4
+	Control.displayRevision()             3
+	Control.displayRevisionChanges()      3
+	Control.revertRevision()              4
+	DbManager.init()                      3
+	DbManager.getRevisionData()           3
+	Data.getFolderContents()              3
+                                         ---
+                                 Total:  26
 
 MICHAEL:
-	Control.handleCreatedFiles()
-	Control.handleModifiedFiles()
-	Control.handleRenamedFiles()
-	Control.HandleDeletedFiles()
-	DbManager.renameFile()
-	DbManager.getConfig()
-	DbManager.setConfig()
-	
+	Control.handleCreatedFiles()          4
+	Control.handleModifiedFiles()         4
+	Control.handleRenamedFiles()          4
+	Control.HandleDeletedFiles()          4
+	DbManager.renameFile()                3
+	DbManager.getConfig()                 3
+	DbManager.setConfig()                 3
+                                         ---
+                                 Total:  24
 
 DA:
-	Control.displayRevision()
-	Control.displayRevisionChanges()
-	Control.revertRevision()
-	FileOp.delete()
-	FileOp.filesize()
+	FileHistory.getRevision()             3
+	FileHistory.obtainRevision()          6
+	FileHistory.storeRevision()           3
+	FileOp.delete()                       3
+	FileOp.filesize()                     3
+	FileOp.rename()                       2
+	FileOp.copy() (both)                  4
+	FileOp.fileValid()                    3
+	                                     ---
+                                 Total:  27
 
 
 HATTAN:
-	Control.restoreBackup()
-	FileOp.createDiff()
-	FileOp.applyDiff()
-	FileOp.fileToList()
-	Data.getRevisionInfo()
+	Control.restoreBackup()               4
+	FileOp.createDiff()                   5
+	FileOp.applyDiff()                    5
+	FileOp.fileToList()                   3
+	Data.getRevisionInfo()                3
+	DbManager.insertRevision()            3
+	                                     ---
+                                 Total:  23
 
 
 SYED:
-	FrontEnd.*
+	FrontEnd.*                           20
+	                                     ---
+                                 Total:  20
+
+--------------------------------------------
+                           Grand total: 120
+
+NOTE: I tried my best to keep it fair and a bit spread out for the most part. If anyone wants
+to swap with anyone or make changes, go ahead.
+
+Time estimates are fairly conservative and include time taken to familiar yourself with the system
+and to test your components. The time estimates should be taken with a grain of salt, as they can't
+take into aspect the possibility of difficulties. Thus, they could be terribly overestimated, or
+terribly underestimated. I also can't extrapoliate my guesses well because I'm not very familiar with
+everyone elses' skills and familiarity. Best to give yourself at least twice as much time as the
+estimate, to be safe.
+
+Finally, this only includes the time needed to get what's pretty much the bare essentials
+implemented. All the nice to have features (like database trimming, restoring files from a specific date,
+and scanning everything once on opening the program) can only be implemented if the entire program is
+completed.
