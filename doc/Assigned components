@@ -1,4 +1,5 @@
-MIKE:                                     Estimated time req (in hours):
+                                 Estimated time req
+MIKE:                                 (in hours)
     Class prototypes, PoD classes         3
     Watcher.*                             4
     Control.displayRevision()             3
@@ -39,7 +40,7 @@ HATTAN:
     FileOp.createDiff()                   5
     FileOp.applyDiff()                    5
     FileOp.fileToList()                   3
-	FileOp.isFolder()                     3
+    FileOp.isFolder()                     3
     Data.getRevisionInfo()                3
     DbManager.insertRevision()            3
                                          ---
@@ -48,12 +49,12 @@ HATTAN:
 
 SYED:
     FrontEnd.*                           20
-	FileHistory.renameRevision()          3
+    FileHistory.renameRevision()          3
                                          ---
                                  Total:  23
 
 --------------------------------------------
-                           Grand total: 120
+                           Grand total: 126
 
 NOTE: I tried my best to keep it fair and a bit spread out for the most part. If anyone wants
 to swap with anyone or make changes, go ahead.
