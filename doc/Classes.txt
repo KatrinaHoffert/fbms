@@ -1,0 +1,103 @@
+Cross reference with Technical Details document
+<https://code.google.com/p/fbms/wiki/TechnicalDetails> for an explanation of the workings,
+input, and output for all methods.
+
+Note that the watcher methods have an integer in their parameters list which is not
+used, but a necessary part of the function name. See /util/demo for an example.
+
+Also, the FrontEnd has no real required methods, since no other component depends on the
+FrontEnd. As a result, the FrontEnd can be implemented as the creator wishes, provided
+that it calls appropriate methods from other classes (such as getting folder information
+with `Data.getFolderContents(Path)`). The FrontEnd will without doubt have methods for
+creating the window (when the system tray icon is clicked), calling the appropriate
+Control functions when menu options are chosen, etc. However, their name and format
+are not important.
+
+Private utility functions can be implemented as the implementer sees fit.
+
+Watcher:
+	+ fileRenamed (int wd, String rootPath, String oldName, String newName) : void
+	+ fileModified (int wd, String rootPath, String name) : void
+	+ fileCreated (int wd, String rootPath, String name) : void
+	+ fileDeleted (int wd, String rootPath, String name) : void
+
+Control:
+	+s liveDirectory : Path
+	+s backupDirectory : Path
+	+s createdFiles : List<Path>
+	+s modifiedFiles : List<Path>
+	+s renamedFiles : List<Path>
+	+s deletedFiles : List<Path>
+	-s handleCreatedFiles ( ) : void
+	-s handleModifiedFiles ( ) : void
+	-s handleRenamedFiles ( ) : void
+	-s HandleDeletedFiles ( ) : void
+	+s displayRevision (Path file, int timestamp) : void
+	+s displayRevisionChanges (Path file, int timestamp) : void
+	+s revertRevision (Path file, int timestamp) : void
+	+s restoreBackup ( ) : void
+	+s copyTo (Path sourceFile, Path destFolder) : void
+
+FileOp:
+	+s copy (Path sourceFile, Path destFolder) : void
+	+s copy (List<Path> sourceFiles) : void
+	+s createDiff (Path beforeFile, Path afterFile) : Path
+	+s applyDiff (Path sourceFile, Path diffFile) : Path
+	+s rename (Path file, String newName) : void
+	+s delete (Path file) : void
+	+s fileSize (Path file) : int
+	+s fileToList (Path file) : List<String>
+	+s fileValid (Path file) : boolean
+
+FileHistory:
+	+s getRevision (Path file, int timestamp) : Path
+	+s storeRevision (Path diff, int filesize, int delta) : void
+	+s obtainRevision (Path file, int timestamp) : Path
+
+DbManager:
+	+s lock : Lock
+	+s init ( ) : void
+	+s getRevisionData (Path file) : List<RevisionInfo>
+	+s getRevision (Path file, int timestamp) : RevisionInfo
+	+s insertRevision (Path file, String diff, int timestamp, int delta) : void
+	+s renameFile (Path file, Path newName) : void
+	+s getConfig (String settingName) : String
+	+s setConfig (String settingName, String settingValue) : void
+
+Data:
+	+s getFolderContents (Path folder) : List<FileInfo>
+	+s getRevisionInfo (Path file) : List<RevisionInfo>
+
+FrontEnd:
+	[various helper functions and event handlers for buttons, menus, etc]
+	-s parseTime (int timestamp) : String
+	-s parseSize (int filesize) : String
+
+RevisionInfo:
+	+ id : int
+	+ path : String
+	+ diff : String
+	+ delta : int
+	+ time : int
+
+FileInfo:
+	+ folder : boolean
+	+ fileSize : int
+	+ lastAccessedDate : int
+	+ lastModifiedDate : int
+	+ createdDate : int
+	+ numberOfRevisions : int
+	+ revisionSizes : int
+	+ fileName : String
+
+--------------------------------------
+	Legend:
+		+ Public method or variable
+		- Private method or variable
+		s Static method or variable
+
+   +s displayRevision (Path file, int timestamp) : void
+   ^         ^                    ^                 ^
+   |          \--- Method name     \-- Arguments    |
+ Visibility                           and types   Return
+  Static?                                          type
