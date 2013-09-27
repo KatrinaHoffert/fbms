@@ -14,9 +14,9 @@ class DemoDiff
 	 * Converts a given file into a list of Strings.
 	 * @param filename Path of file to convert
 	 */
-	private static List<String> fileToLines(Path filename)
+	public static List<String> fileToList(Path filename)
 	{
-		List<String> lines = new LinkedList<String>();
+		List<String> lines = new LinkedList<>();
 		String line = "";
 
 		try

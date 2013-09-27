@@ -5,6 +5,7 @@ import difflib.*;
 import org.apache.log4j.*;
 import java.nio.*;
 import java.nio.file.*;
+import java.io.*;
 
 class DemoMain
 {
@@ -13,27 +14,32 @@ class DemoMain
 
 	public static void main(String args[])
 	{
+		loggingStuff();
+		databaseStuff();
+		watcherStuff();
+		diffStuff();
+
+		System.out.println("\n=============================================\n"
+			+ "Press enter to exit program. In the meantime,\n"
+			+ "file system is still being monitored."
+			+ "\n=============================================\n");
+
+		// Wait for input
+		Scanner sc = new Scanner(System.in);
+		sc.nextLine();
+
+		logger.info("EOF");
+	}
+
+	/////////////////////////////////////////////////////////////////
+	public static void loggingStuff()
+	{
 		// Load the properties file for logger settings
 		PropertyConfigurator.configure("log4j.properties");
 
 		// And print a test message
-		logger.info("Started logging...");
-
-		// Get the path of current directory
-		Path currentDir = Paths.get(System.getProperty("user.dir"));
-
-		// Manipulate the paths to point to specific files.
-		Path pathToFileA = currentDir.resolve("../src/DemoMain.java");
-		Path pathToFileB = currentDir.resolve("../src/DemoContainer.java");
-
-		// Note in the logger that we called normalize() so that we'd get something
-		// like "util/demo/src" and not "util/demo/build/../src". Same path, but
-		// one is easier for a human to read.
-		logger.debug("Path to file A: "	+ pathToFileA.normalize());
-		logger.debug("Path to file B: "	+ pathToFileB.normalize());
-
-		databaseStuff();
-		watcherStuff();
+		System.out.println("Logging started. See file \"example.log\".\n");
+		logger.info("Started logging");
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -44,11 +50,13 @@ class DemoMain
 		db.createTable();
 		List<DemoContainer> rows = db.getRows();
 
+		System.out.println("Reading database:");
+
 		// Read the list of rows returned by the select query
 		for(DemoContainer row : rows)
 		{
-			System.out.println("ID:   " + row.id);
-			System.out.println("Name: " + row.name);
+			System.out.println("\tID:   " + row.id);
+			System.out.println("\tName: " + row.name);
 		}
 
 		// Database should be closed when done with it
@@ -71,11 +79,13 @@ class DemoMain
 		// Create listener
 		DemoJnotifyListener listener = new DemoJnotifyListener();
 
+		System.out.println("\nMonitoring file system, output to console.");
+
 		try
 		{
 			// Watch for changes in the dir (see listener for what happens when
 			// changes occur)
-			//int watchID = JNotify.addWatch(path, mask, watchSubtree, listener);
+			int watchID = JNotify.addWatch(path, mask, watchSubtree, listener);
 		}
 		catch(Exception e)
 		{
@@ -88,6 +98,64 @@ class DemoMain
 			// Sleep to give the (concurrent) JNotify time to notice changes (ie, so
 			// the program doesn't open, run, and immediately close)
 			Thread.sleep(1000);
+		}
+		catch(Exception e)
+		{
+			logger.error(e);
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////
+	public static void diffStuff()
+	{
+		// Get the path of current directory
+		Path currentDir = Paths.get(System.getProperty("user.dir"));
+
+		// Manipulate the paths to point to specific files.
+		Path pathToFileA = currentDir.resolve("../src/DemoMain.java");
+		Path pathToFileB = currentDir.resolve("../src/DemoDbManager.java");
+
+		// Note in the logger that we called normalize() so that we'd get something
+		// like "util/demo/src" and not "util/demo/build/../src". Same path, but
+		// one is easier for a human to read.
+		logger.debug("Path to file A: "	+ pathToFileA.normalize());
+		logger.debug("Path to file B: "	+ pathToFileB.normalize());
+
+		System.out.println("\nCreating diffs and patching.");
+
+		// Create a diff (note that it takes in lists of Strings)
+		List<String> fileA = DemoDiff.fileToList(pathToFileA);
+		List<String> fileB = DemoDiff.fileToList(pathToFileB);
+		Patch<String> patch = DiffUtils.diff(fileA, fileB);
+
+		try
+		{
+			// Create a PrintWriter for writing to a file
+			PrintWriter writer = new PrintWriter("difference.patch", "UTF-8");
+			// And loop through the diff to get all lines and print them to the patch file
+			for(Delta<String> delta : patch.getDeltas())
+			{
+				writer.println(delta);
+			}
+			writer.close();
+		}
+		catch(IOException e)
+		{
+			logger.error(e);
+		}
+
+		try
+		{
+			// And apply the patch to File A to recover file B
+			List<String> result = DiffUtils.patch(fileA, patch);
+
+			// And write the recreated file to a physical file
+			PrintWriter writer = new PrintWriter("recreated.java", "UTF-8");
+			for(String line : result)
+			{
+				writer.println(line);
+			}
+			writer.close();
 		}
 		catch(Exception e)
 		{
