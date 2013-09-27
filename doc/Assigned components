@@ -1,53 +1,53 @@
 MIKE:                                     Estimated time req (in hours):
-	Class prototypes, PoD classes         3
-	Watcher.*                             4
-	Control.displayRevision()             3
-	Control.displayRevisionChanges()      3
-	Control.revertRevision()              4
-	DbManager.init()                      3
-	DbManager.getRevisionData()           3
-	Data.getFolderContents()              3
+    Class prototypes, PoD classes         3
+    Watcher.*                             4
+    Control.displayRevision()             3
+    Control.displayRevisionChanges()      3
+    Control.revertRevision()              4
+    DbManager.init()                      3
+    DbManager.getRevisionData()           3
+    Data.getFolderContents()              3
                                          ---
                                  Total:  26
 
 MICHAEL:
-	Control.handleCreatedFiles()          4
-	Control.handleModifiedFiles()         4
-	Control.handleRenamedFiles()          4
-	Control.HandleDeletedFiles()          4
-	DbManager.renameFile()                3
-	DbManager.getConfig()                 3
-	DbManager.setConfig()                 3
+    Control.handleCreatedFiles()          4
+    Control.handleModifiedFiles()         4
+    Control.handleRenamedFiles()          4
+    Control.HandleDeletedFiles()          4
+    DbManager.renameFile()                3
+    DbManager.getConfig()                 3
+    DbManager.setConfig()                 3
                                          ---
                                  Total:  24
 
 DA:
-	FileHistory.getRevision()             3
-	FileHistory.obtainRevision()          6
-	FileHistory.storeRevision()           3
-	FileOp.delete()                       3
-	FileOp.filesize()                     3
-	FileOp.rename()                       2
-	FileOp.copy() (both)                  4
-	FileOp.fileValid()                    3
-	                                     ---
+    FileHistory.getRevision()             3
+    FileHistory.obtainRevision()          6
+    FileHistory.storeRevision()           3
+    FileOp.delete()                       3
+    FileOp.filesize()                     3
+    FileOp.rename()                       2
+    FileOp.copy() (both)                  4
+    FileOp.fileValid()                    3
+                                         ---
                                  Total:  27
 
 
 HATTAN:
-	Control.restoreBackup()               4
-	FileOp.createDiff()                   5
-	FileOp.applyDiff()                    5
-	FileOp.fileToList()                   3
-	Data.getRevisionInfo()                3
-	DbManager.insertRevision()            3
-	                                     ---
+    Control.restoreBackup()               4
+    FileOp.createDiff()                   5
+    FileOp.applyDiff()                    5
+    FileOp.fileToList()                   3
+    Data.getRevisionInfo()                3
+    DbManager.insertRevision()            3
+                                         ---
                                  Total:  23
 
 
 SYED:
-	FrontEnd.*                           20
-	                                     ---
+    FrontEnd.*                           20
+                                         ---
                                  Total:  20
 
 --------------------------------------------
