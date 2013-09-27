@@ -77,7 +77,8 @@ class DemoMain
 	/////////////////////////////////////////////////////////////////
 	public static void watcherStuff()
 	{
-		// Path to either the current directory
+		// Path to current working directory. This is not a reliable method of getting the
+		// current directory, but rather the directory the program is run in.
 		String path = System.getProperty("user.dir");
 
 		// All types of file modifications watched (although we don't need deleted files)

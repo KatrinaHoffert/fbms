@@ -22,27 +22,32 @@ class DemoJnotifyListener implements JNotifyListener
 	public void fileRenamed(int wd, String rootPath, String oldName, String newName)
 	{
 		System.out.println("[" + rootPath + "] RENAMED: " + oldName + " -> " + newName);
-		logger.debug("[" + rootPath + "] RENAMED: " + oldName + " -> " + newName);
+		// Commenting out the logger lines because they change the log every time the log is
+		// changed, which spams the screen with file changes. They can still go in the final
+		// program, however, provided that the log file isn't kept in the live directory.
+		// This creates a limitation on the program: the program must be located outside of
+		// the live directory (otherwise the log, database, etc all get backed up...)
+		//logger.debug("[" + rootPath + "] RENAMED: " + oldName + " -> " + newName);
 	}
 
 	// Likewise for modified files
 	public void fileModified(int wd, String rootPath, String name)
 	{
 		System.out.println("[" + rootPath + "] MODIFIED: " + name);
-		logger.debug("[" + rootPath + "] MODIFIED: " + name);
+		//logger.debug("[" + rootPath + "] MODIFIED: " + name);
 	}
 
 	// And deletions
 	public void fileDeleted(int wd, String rootPath, String name)
 	{
 		System.out.println("[" + rootPath + "] DELETED: " + name);
-		logger.debug("[" + rootPath + "] DELETED: " + name);
+		//logger.debug("[" + rootPath + "] DELETED: " + name);
 	}
 
 	// And creations
 	public void fileCreated(int wd, String rootPath, String name)
 	{
 		System.out.println("[" + rootPath + "] CREATED: " + name);
-		logger.debug("[" + rootPath + "] CREATED: " + name);
+		//logger.debug("[" + rootPath + "] CREATED: " + name);
 	}
 }
