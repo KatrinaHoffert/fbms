@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="F:/Documents/Projects/fbms/trunk/main/lib/java-diff-utils-1.3.0.jar"/>
+	<classpathentry kind="lib" path="F:/Documents/Projects/fbms/trunk/main/lib/jnotify-0.94.jar"/>
+	<classpathentry kind="lib" path="F:/Documents/Projects/fbms/trunk/main/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="F:/Documents/Projects/fbms/trunk/main/lib/sqlite-jdbc-3.7.15-M1.jar"/>
+	<classpathentry kind="lib" path="F:/Documents/Projects/fbms/trunk/main/lib"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
