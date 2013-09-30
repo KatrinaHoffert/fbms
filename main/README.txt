@@ -19,3 +19,7 @@ SVN:
 	  specific wildcard, if necessary.
 	- Commit often, but never commit broken code. The program must always be able
 	  to compile.
+
+Notes:
+	- Eclipse has been configured to use the modified Java code style (demonstrated
+	  in part in the demo program). Changes to this should be discussed.
