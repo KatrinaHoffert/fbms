@@ -53,6 +53,7 @@ FileHistory:
 	+s getRevision (Path file, int timestamp) : Path
 	+s storeRevision (Path diff, int filesize, int delta) : void
 	+s obtainRevision (Path file, int timestamp) : Path
+	+s renameRevision (Path file, String newName) : void
 
 DbManager:
 	+s lock : Lock
