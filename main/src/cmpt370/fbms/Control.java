@@ -11,16 +11,24 @@ import net.contentobjects.jnotify.*;
 
 public class Control
 {
+	// Various public variables shared amongst components
 	public static Path liveDirectory;
 	public static Path backupDirectory;
 	public static List<Path> createdFiles = new LinkedList<>();
 	public static List<Path> modifiedFiles = new LinkedList<>();
-	public static List<Path> renamedFiles = new LinkedList<>();
+	public static List<RenamedFile> renamedFiles = new LinkedList<>();
 	public static List<Path> deletedFiles = new LinkedList<>();
+	
+	// Logger object is linked to the class
+	public static Logger logger = Logger.getLogger(Control.class);
 	
 	public static void main(String[] args)
 	{
-		System.out.println("Hello, world.");
+		// Load the properties file for logger settings
+		PropertyConfigurator.configure("log4j.properties");
+
+		// And print a testing message to the log
+		logger.info("Program started");
 	}
 	
 	private static void handleCreatedFiles()
