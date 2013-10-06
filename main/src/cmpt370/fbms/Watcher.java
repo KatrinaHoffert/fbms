@@ -19,8 +19,8 @@ public class Watcher implements JNotifyListener
 	public void fileRenamed(int wd, String rootPath, String oldName, String newName)
 	{
 		// Strings must be converted into Path objects
-		Path oldPath = Paths.get(rootPath, oldName);
-		Path newPath = Paths.get(rootPath, newName);
+		Path oldPath = Paths.get(rootPath + oldName);
+		Path newPath = Paths.get(rootPath + newName);
 		
 		RenamedFile listObject = new RenamedFile();
 		listObject.oldName = oldPath;
@@ -32,18 +32,51 @@ public class Watcher implements JNotifyListener
 		Control.logger.info("Renamed file " + oldName + " to " + newName + " in " + rootPath);
 	}
 
+	/**
+	 * Event handler for files that are modified. The JNotify watcher will call this method
+	 * if it detects a file rename operation. Such files will be added to the appropriate list
+	 * in Control.
+	 * @param wd Unused
+	 * @param rootPath The path the file is located in
+	 * @param name The file's name
+	 */
 	public void fileModified(int wd, String rootPath, String name)
 	{
-		
+		Path path = Paths.get(rootPath + name);
+		Control.modifiedFiles.add(path);
+
+		Control.logger.info("Modified file " + path);
 	}
 
+	/**
+	 * Event handler for files that are deleted. The JNotify watcher will call this method
+	 * if it detects a file rename operation. Such files will be added to the appropriate list
+	 * in Control.
+	 * @param wd Unused
+	 * @param rootPath The path the file is located in
+	 * @param name The file's name
+	 */
 	public void fileDeleted(int wd, String rootPath, String name)
 	{
-
+		Path path = Paths.get(rootPath + name);
+		Control.deletedFiles.add(path);
+		
+		Control.logger.info("Deleted file " + path);
 	}
 	
+	/**
+	 * Event handler for files that are created. The JNotify watcher will call this method
+	 * if it detects a file rename operation. Such files will be added to the appropriate list
+	 * in Control.
+	 * @param wd Unused
+	 * @param rootPath The path the file is located in
+	 * @param name The file's name
+	 */
 	public void fileCreated(int wd, String rootPath, String name)
 	{
+		Path path = Paths.get(rootPath + name);
+		Control.createdFiles.add(path);
 
+		Control.logger.info("Created file " + path);
 	}
 }
