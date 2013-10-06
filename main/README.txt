@@ -24,4 +24,5 @@ Notes:
 	- Eclipse has been configured to use the modified Java code style (demonstrated
 	  in part in the demo program). Changes to this should be discussed.
 	- To add files that will be ignored by SVN, use "svn propedit svn:ignore . "
-	  The "bin" folder and all files in the pattern "*.log" are already being ignored.
+	  The "bin" folder and all files in the pattern "*.log" or "*.db" are already
+	  being ignored.
