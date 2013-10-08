@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 // Making sure libraries are found (remove later)
 
@@ -24,9 +23,6 @@ public class Control
 
 	public static void main(String[] args)
 	{
-		// Load the properties file for logger settings
-		PropertyConfigurator.configure("log4j.properties");
-
 		// And print a testing message to the log
 		logger.info("Program started");
 

@@ -1,0 +1,18 @@
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+
+    <appender name="mainLogger" class="org.apache.log4j.FileAppender">
+        <param name="File" value="example.log" />
+        <param name="Threshold" value="DEBUG" />
+        <param name="Append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d] %5p (%F:%L) - %m%n"/>
+        </layout>
+    </appender>
+
+
+    <logger name="cmpt370.fbms.Control">
+        <appender-ref ref="mainLogger"/>
+    </logger>
+</log4j:configuration>
