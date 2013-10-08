@@ -120,6 +120,11 @@ public class DbManager
 				{
 					Control.logger.error("Databases exist, but are missing information. Assuming a first run.");
 					firstRun = true;
+
+					// Set them to null in case only one was somehow null (make the user set them
+					// both)
+					Control.liveDirectory = null;
+					Control.backupDirectory = null;
 				}
 			}
 		}
