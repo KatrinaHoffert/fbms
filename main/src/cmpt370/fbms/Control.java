@@ -41,7 +41,7 @@ public class Control
 			// get backup directory and create backup_location file
 			// init db
 			// set live directory
-			new FirstStartWizard();
+			FirstStartWizard.run();
 			while(liveDirectory == null || backupDirectory == null)
 			{
 				try
