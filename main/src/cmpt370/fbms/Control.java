@@ -34,12 +34,25 @@ public class Control
 
 		resolveBackupDirectory();
 
+		// Branch based on whether or not this is considered a "first run"
 		if(backupDirectory == null)
 		{
 			// first run
 			// get backup directory and create backup_location file
 			// init db
 			// set live directory
+			new FirstStartWizard();
+			while(liveDirectory == null || backupDirectory == null)
+			{
+				try
+				{
+					Thread.sleep(500);
+				}
+				catch(InterruptedException e)
+				{
+					logger.error(e);
+				}
+			}
 			System.out.println("It is the first run");
 			System.out.println("liveDirectory = " + liveDirectory);
 			System.out.println("backupDirectory = " + backupDirectory);
@@ -61,6 +74,11 @@ public class Control
 		}
 	}
 
+	/**
+	 * Opens the "backup_location" file in the program directory and parses its contents as a path.
+	 * The parsed path is set as the backup directory. If the path is invalid, the backup directory
+	 * is not set.
+	 */
 	private static void resolveBackupDirectory()
 	{
 		// Load the backup_location file to get the backup folder path. If it doesn't exist, it's
