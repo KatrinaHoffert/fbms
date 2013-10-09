@@ -39,15 +39,13 @@ public class FirstStartWizard
 		// Create the dialog window
 		frame = new JDialog();
 		frame.setTitle("Welcome to FBMS");
-		frame.setVisible(true);
 		frame.setSize(new Dimension(400, 250));
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 
 		frame.add(introPanel());
 
-		// Required for text to display properly
-		frame.revalidate();
+		frame.setVisible(true);
 
 		// Event handler to quit the program if the wizard is terminated prematurely. This was going
 		// to be an anonymous class, but it must be removed for the final panel, so it's now a

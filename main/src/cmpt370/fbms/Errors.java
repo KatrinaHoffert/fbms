@@ -16,6 +16,8 @@ import javax.swing.JOptionPane;
 
 public class Errors
 {
+	private static boolean errorBeingDisplayed = false;
+
 	/**
 	 * Used for alerting the user to fatal errors. Should *only* be used for errors that cannot be
 	 * recovered from and require the program to terminate. Will log the error (along with the stack
@@ -58,8 +60,139 @@ public class Errors
 	}
 
 	/**
-	 * Displays a non-obtrusive notification at the bottom corner of the screen. For use with simple
-	 * errors.
+	 * Displays a non-obtrusive notification at the bottom corner of the screen. For use with
+	 * recoverable errors. Also logs the message.
+	 * 
+	 * @param message
+	 *            The message to display
+	 * @param header
+	 *            The header (title) of the notification
+	 * @param error
+	 *            An exception object
+	 */
+	public static void nonfatalError(String message, String header, Throwable error)
+	{
+		// Never more than one at a time
+		if(!errorBeingDisplayed)
+		{
+			errorBeingDisplayed = true;
+
+			if(error != null)
+			{
+				Control.logger.error(message, error);
+			}
+
+			// The frame
+			final JDialog frame = new JDialog();
+			frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			frame.setSize(300, 100);
+			frame.setUndecorated(true);
+
+			frame.setLayout(new GridBagLayout());
+			GridBagConstraints constraints = new GridBagConstraints();
+
+			// The heading
+			JLabel headingLabel = new JLabel("FBMS: " + header);
+			headingLabel.setFont(new Font("Sans Serif", Font.BOLD, 18));
+			headingLabel.setOpaque(false);
+
+			constraints.gridx = 0;
+			constraints.gridy = 0;
+			constraints.weightx = 1;
+			constraints.weighty = -1;
+			constraints.insets = new Insets(5, 5, 5, 5);
+			constraints.fill = GridBagConstraints.BOTH;
+			frame.add(headingLabel, constraints);
+
+			// The close button
+			// Make the button close the window on click
+			JButton closeButton = new JButton(new AbstractAction("X")
+			{
+				// So Eclipse will shut the hell up
+				private static final long serialVersionUID = -3379092798847301811L;
+
+				@Override
+				public void actionPerformed(ActionEvent arg0)
+				{
+					frame.dispose();
+				}
+			});
+
+			closeButton.setMargin(new Insets(1, 4, 1, 4));
+			closeButton.setFocusable(false);
+
+			constraints.gridx = 1;
+			constraints.weightx = 0;
+			constraints.weighty = 0;
+			constraints.fill = GridBagConstraints.NONE;
+			constraints.anchor = GridBagConstraints.NORTH;
+			frame.add(closeButton, constraints);
+
+			// The message
+			JLabel messageLabel = new JLabel("<html>" + message);
+			messageLabel.setFont(new Font("Sans Serif", Font.PLAIN, 12));
+			constraints.gridx = 0;
+			constraints.gridy = 1;
+			constraints.weightx = 1;
+			constraints.weighty = 1;
+			constraints.insets = new Insets(5, 5, 5, 5);
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			frame.add(messageLabel, constraints);
+
+			// Get dimension of screen and tool bar(s)
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			Insets toolBarOffset = Toolkit.getDefaultToolkit().getScreenInsets(
+					frame.getGraphicsConfiguration());
+
+			// Offset from the left is the width of the screen minus the size of the frame minus and
+			// any
+			// toolbars (so it works with, say, a taskbar that is on the right side of the screen)
+			// Offset from the top is similar
+			frame.setLocation(screenSize.width - frame.getWidth() - toolBarOffset.right,
+					screenSize.height - toolBarOffset.bottom - frame.getHeight());
+
+			frame.setAlwaysOnTop(true);
+			frame.setVisible(true);
+
+			// Use a thread to make the frame disappear after a period of time
+			new Thread()
+			{
+				@Override
+				public void run()
+				{
+					try
+					{
+						Thread.sleep(7500);
+						frame.dispose();
+					}
+					catch(InterruptedException e)
+					{
+						Errors.fatalError("Thread was interupted", e);
+					}
+				};
+			}.start();
+
+			errorBeingDisplayed = false;
+		}
+	}
+
+	/**
+	 * Displays a non-obtrusive notification at the bottom corner of the screen. For use with
+	 * recoverable errors. Also logs the message.
+	 * 
+	 * @param message
+	 *            The message to display
+	 * @param error
+	 *            An exception object
+	 */
+	public static void nonfatalError(String message, Throwable error)
+	{
+		nonfatalError(message, "Error", error);
+	}
+
+	/**
+	 * Displays a non-obtrusive notification at the bottom corner of the screen. For use with
+	 * recoverable errors. Also logs the message.
 	 * 
 	 * @param message
 	 *            The message to display
@@ -68,93 +201,18 @@ public class Errors
 	 */
 	public static void nonfatalError(String message, String header)
 	{
-		// The frame
-		final JDialog frame = new JDialog();
-		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		frame.setSize(300, 100);
-		frame.setUndecorated(true);
+		nonfatalError(message, header, null);
+	}
 
-		frame.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-
-		// The heading
-		JLabel headingLabel = new JLabel("FBMS: " + header);
-		headingLabel.setFont(new Font("Sans Serif", Font.BOLD, 18));
-		headingLabel.setOpaque(false);
-
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.weightx = 1;
-		constraints.weighty = -1;
-		constraints.insets = new Insets(5, 5, 5, 5);
-		constraints.fill = GridBagConstraints.BOTH;
-		frame.add(headingLabel, constraints);
-
-		// The close button
-		// Make the button close the window on click
-		JButton closeButton = new JButton(new AbstractAction("X")
-		{
-			// So Eclipse will shut the hell up
-			private static final long serialVersionUID = -3379092798847301811L;
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				frame.dispose();
-			}
-		});
-
-		closeButton.setMargin(new Insets(1, 4, 1, 4));
-		closeButton.setFocusable(false);
-
-		constraints.gridx = 1;
-		constraints.weightx = 0;
-		constraints.weighty = 0;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.NORTH;
-		frame.add(closeButton, constraints);
-
-		// The message
-		JLabel messageLabel = new JLabel("<html>" + message);
-		messageLabel.setFont(new Font("Sans Serif", Font.PLAIN, 12));
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		constraints.weightx = 1;
-		constraints.weighty = 1;
-		constraints.insets = new Insets(5, 5, 5, 5);
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		frame.add(messageLabel, constraints);
-
-		// Get dimension of screen and tool bar(s)
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Insets toolBarOffset = Toolkit.getDefaultToolkit().getScreenInsets(
-				frame.getGraphicsConfiguration());
-
-		// Offset from the left is the width of the screen minus the size of the frame minus and any
-		// toolbars (so it works with, say, a taskbar that is on the right side of the screen)
-		// Offset from the top is similar
-		frame.setLocation(screenSize.width - frame.getWidth() - toolBarOffset.right,
-				screenSize.height - toolBarOffset.bottom - frame.getHeight());
-
-		frame.setAlwaysOnTop(true);
-		frame.setVisible(true);
-
-		// Use a thread to make the frame disappear after a period of time
-		new Thread()
-		{
-			@Override
-			public void run()
-			{
-				try
-				{
-					Thread.sleep(7500);
-					frame.dispose();
-				}
-				catch(InterruptedException e)
-				{
-					Errors.fatalError("Thread was interupted", e);
-				}
-			};
-		}.start();
+	/**
+	 * Displays a non-obtrusive notification at the bottom corner of the screen. For use with
+	 * recoverable errors. Also logs the message.
+	 * 
+	 * @param message
+	 *            The message to display
+	 */
+	public static void nonfatalError(String message)
+	{
+		nonfatalError(message, "Error", null);
 	}
 }
