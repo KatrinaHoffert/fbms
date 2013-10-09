@@ -28,14 +28,35 @@ public class Control
 	// Logger object is linked to the class
 	public static Logger logger = Logger.getLogger(Control.class);
 
+	/**
+	 * The main method runs the startup code, initializing the database, checking for the first run,
+	 * etc. The main method then loops through the watched files at intervals, checking for changes
+	 * and acting appropriately
+	 * 
+	 * @param args
+	 *            Command line arguments, not currently used
+	 */
 	public static void main(String[] args)
+	{
+		startup();
+	}
+
+	/**
+	 * Manages all the startup functionality. First, we check if the backup directory has been set.
+	 * If not, we begin the first run
+	 */
+	private static void startup()
 	{
 		// And print a testing message to the log
 		logger.info("Program started");
 
 		resolveBackupDirectory();
 
-		// Branch based on whether or not this is considered a "first run"
+		// Branch based on whether or not this is considered a "first run". backupDirectory should
+		// be set to a valid directory if resolveBackupDirectory() found the backup directory.
+		// DbManager.init() can then load the database located there. If that's not the case, we'll
+		// have to run the first start wizard, which will set the database directory and possibly
+		// the live directory (for imports, DbManager.init() fetches the live directory)
 		if(backupDirectory == null)
 		{
 			// Run the first run wizard. Keep the program open until that is done
@@ -51,20 +72,28 @@ public class Control
 					logger.error(e);
 				}
 			}
+
+			// Initialize the database, then set the live directory inside this database (for
+			// sequential program start-ups)
+			DbManager.init();
+			DbManager.setConfig("liveDirectory", liveDirectory.toString());
+
+			// TODO: Remove this testing stuff (replace with logger code)
 			System.out.println("First run wizard complete");
 			System.out.println("liveDirectory = " + liveDirectory);
 			System.out.println("backupDirectory = " + backupDirectory);
-
-			DbManager.init();
 		}
 		else
 		{
-			// This won't first yet...
-			System.out.println("It is NOT the first run");
-			System.out.println("liveDirectory = " + liveDirectory); // should be null
-			System.out.println("backupDirectory = " + backupDirectory); // should be a path
-
 			DbManager.init();
+
+			// This won't work yet... DbManager.setConfig() must be implemented first, as the live
+			// directory is not yet stored in the database. Should get a fatal error about the live
+			// directory not being set
+			// TODO: remove this testing stuff (replace with logger code)
+			System.out.println("It is NOT the first run");
+			System.out.println("liveDirectory = " + liveDirectory);
+			System.out.println("backupDirectory = " + backupDirectory);
 		}
 	}
 

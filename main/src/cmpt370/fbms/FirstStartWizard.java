@@ -206,15 +206,70 @@ public class FirstStartWizard
 		buttonPanel.add(quitButton);
 		JButton prevButton = new JButton("Previous");
 		buttonPanel.add(prevButton);
-		JButton nextButton = new JButton("Next");
-		nextButton.setEnabled(false);
-		buttonPanel.add(nextButton);
+		selectDirsNextButton = new JButton("Next");
+		selectDirsNextButton.setEnabled(false);
+		buttonPanel.add(selectDirsNextButton);
 		panel.add(buttonPanel, BorderLayout.SOUTH);
 
+		JPanel centerPanel = new JPanel();
+		centerPanel.setBorder(new EmptyBorder(25, 0, 0, 0));
+		JLabel backupDirectoryLabel = new JLabel("Backup directory:");
+		backupDirectoryLabel.setPreferredSize(new Dimension(100, 25));
+		backupDirectoryField = new JTextField();
+		backupDirectoryField.setPreferredSize(new Dimension(250, 25));
+		centerPanel.add(backupDirectoryLabel);
+		centerPanel.add(backupDirectoryField);
+		panel.add(centerPanel, BorderLayout.CENTER);
+
 		// Event handler for next button press
-		nextButton.addActionListener(new WizardActionListener(1));
+		selectDirsNextButton.addActionListener(new WizardActionListener(-8));
 
 		prevButton.addActionListener(new WizardActionListener(-10));
+
+		// Event handler for directory choices
+		backupDirectoryField.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+				int returnVal = fileChooser.showOpenDialog(null);
+
+				// Checks that the database file exists inside the specified folder
+				if(returnVal == JFileChooser.APPROVE_OPTION
+						&& fileChooser.getSelectedFile().toPath().resolve(".revisions.db").toFile().exists())
+				{
+					FirstStartWizard.backupDirectoryField.setText(fileChooser.getSelectedFile().toString());
+					Control.backupDirectory = fileChooser.getSelectedFile().toPath();
+					FirstStartWizard.selectDirsNextButton.setEnabled(true);
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null,
+							"The specified path is not a valid backup folder. The backup folder "
+									+ "must contain the \".revisions.db\" file.", "Error",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{}
+
+			@Override
+			public void mousePressed(MouseEvent e)
+			{}
+
+			@Override
+			public void mouseExited(MouseEvent e)
+			{}
+
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{}
+		});
 
 		// Event handler for quit button press
 		quitButton.addActionListener(new ActionListener()

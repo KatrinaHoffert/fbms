@@ -96,8 +96,8 @@ public class DbManager
 				Control.logger.info("Existing settings table found");
 			}
 
-			// If this isn't the first run, fetch the live and backup directories. If it is the
-			// first run, that's up to the Control to do
+			// If this isn't the first run, fetch the live directory. If it is the first run, that's
+			// up to the Control to do
 			if(!firstRun)
 			{
 				// Get the rows of the settings table and loop through them, searching for the
@@ -115,8 +115,8 @@ public class DbManager
 				// actually be a first run
 				if(Control.liveDirectory == null)
 				{
-					Control.logger.error("Databases exist, but are missing information. Assuming a first run.");
-					firstRun = true;
+					Control.logger.fatal("Could not load the live directory from existing backup");
+					System.exit(1);
 				}
 			}
 		}
