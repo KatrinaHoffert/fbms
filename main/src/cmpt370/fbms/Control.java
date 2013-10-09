@@ -1,8 +1,14 @@
 package cmpt370.fbms;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
@@ -26,14 +32,79 @@ public class Control
 		// And print a testing message to the log
 		logger.info("Program started");
 
-		// Initialize database; returns true if the tables had to be created (ie, first run)
-		if(DbManager.init())
+		resolveBackupDirectory();
+
+		if(backupDirectory == null)
 		{
-			// First run code goes here
+			// first run
+			// get backup directory and create backup_location file
+			// init db
+			// set live directory
+			System.out.println("It is the first run");
+			System.out.println("liveDirectory = " + liveDirectory);
+			System.out.println("backupDirectory = " + backupDirectory);
+
+
+			DbManager.init();
 		}
 		else
 		{
-			// Sequential runs
+			// not first run
+			// init db
+			// get live directory
+			System.out.println("It is NOT the first run");
+			System.out.println("liveDirectory = " + liveDirectory);
+			System.out.println("backupDirectory = " + backupDirectory);
+
+
+			DbManager.init();
+		}
+	}
+
+	private static void resolveBackupDirectory()
+	{
+		// Load the backup_location file to get the backup folder path. If it doesn't exist, it's
+		// the first run
+		File backup_file = new File("backup_location");
+		if(backup_file.exists())
+		{
+			Scanner in = null;
+			try
+			{
+				// Read the path in, and if it's valid, set the backup location to this path. If
+				// it's not valid, it's the first run
+				in = new Scanner(new FileReader(backup_file));
+				File backupLocation = Paths.get(in.nextLine()).toFile();
+
+				if(backupLocation.exists())
+				{
+					backupDirectory = backupLocation.toPath();
+					logger.info("Located backup location: " + backupDirectory);
+				}
+			}
+			catch(IOException e)
+			{
+				// If an exception occurs, we couldn't retrieve the backup directory, so must set it
+				// to null
+				logger.error("Could not read in backup_location file", e);
+			}
+			catch(InvalidPathException e)
+			{
+				logger.error("Backup directory path is invalid", e);
+				backupDirectory = null;
+			}
+			catch(SecurityException e)
+			{
+				logger.error("Security error: cannot access backup directory", e);
+				backupDirectory = null;
+			}
+			finally
+			{
+				if(in != null)
+				{
+					in.close();
+				}
+			}
 		}
 	}
 

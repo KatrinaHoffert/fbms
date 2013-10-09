@@ -29,7 +29,7 @@ public class DbManager
 	 * 
 	 * @return True if first run, false otherwise
 	 */
-	public static boolean init()
+	public static void init()
 	{
 		// We need to be able to detect if the program has been run for the first time or not
 		boolean firstRun = false;
@@ -47,9 +47,10 @@ public class DbManager
 
 		try
 		{
-			// Create a connection to an SQLite database. If "revisions.db" does
+			// Create a connection to an SQLite database. If ".revisions.db" does
 			// not exist, create it in working directory
-			connection = DriverManager.getConnection("jdbc:sqlite:revisions.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + Control.backupDirectory
+					+ "/.revisions.db");
 		}
 		catch(SQLException e)
 		{
@@ -100,40 +101,30 @@ public class DbManager
 			if(!firstRun)
 			{
 				// Get the rows of the settings table and loop through them, searching for the
-				// live and backup directory paths
-				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings");
+				// live directory path
+				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'liveDirectory'");
 				while(settingsRows.next())
 				{
 					if(settingsRows.getString("name").equals("liveDirectory"))
 					{
 						Control.liveDirectory = Paths.get(settingsRows.getString("setting"));
 					}
-					else if(settingsRows.getString("name").equals("backupDirectory"))
-					{
-						Control.backupDirectory = Paths.get(settingsRows.getString("setting"));
-					}
 				}
 
-				// If we somehow didn't find them, something went horribly wrong. Assume this must
+				// If we somehow didn't find it, something went horribly wrong. Assume this must
 				// actually be a first run
-				if(Control.liveDirectory == null || Control.backupDirectory == null)
+				if(Control.liveDirectory == null)
 				{
 					Control.logger.error("Databases exist, but are missing information. Assuming a first run.");
 					firstRun = true;
-
-					// Set them to null in case only one was somehow null (make the user set them
-					// both)
-					Control.liveDirectory = null;
-					Control.backupDirectory = null;
 				}
 			}
 		}
 		catch(SQLException e)
 		{
 			Control.logger.fatal("Database table creation failed", e);
+			System.exit(1);
 		}
-
-		return firstRun;
 	}
 
 	public static List<RevisionInfo> getRevisionData(Path file)
