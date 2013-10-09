@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -29,6 +30,7 @@ public class FirstStartWizard
 	public static JTextField liveDirectoryField;
 	public static JTextField backupDirectoryField;
 	public static JButton selectDirsNextButton;
+	public static WindowListener listener;
 
 	public static void run()
 	{
@@ -47,8 +49,10 @@ public class FirstStartWizard
 		// Required for text to display properly
 		frame.revalidate();
 
-		// Event handler to quit the program if the wizard is terminated prematurely
-		frame.addWindowListener(new WindowAdapter()
+		// Event handler to quit the program if the wizard is terminated prematurely. This was going
+		// to be an anonymous class, but it must be removed for the final panel, so it's now a
+		// not-so-anonymous class
+		listener = new WindowAdapter()
 		{
 			@Override
 			public void windowClosing(WindowEvent e)
@@ -57,7 +61,8 @@ public class FirstStartWizard
 						+ FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
-		});
+		};
+		frame.addWindowListener(listener);
 	}
 
 	/**
@@ -364,32 +369,54 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// Write the backup path to the disk
-				FileOutputStream out;
-				try
-				{
-					out = new FileOutputStream("backup_location");
-					out.write(Control.backupDirectory.toString().getBytes());
-					out.close();
+				writeBackupFile();
+			}
+		});
 
-					Control.logger.debug("Backup location file created, set to: "
-							+ Control.backupDirectory);
-				}
-				catch(IOException e)
-				{
-					Errors.fatalError(
-							"Could not write backup path to disk. Is program folder writeable?", e);
-				}
-
-				// And end the wizard
-				Control.firstRunWizardDone = true;
-				frame.dispose();
+		// Remove the listener that terminates the program if the window is closed, otherwise we
+		// risk the user closing the program, thinking it's properly shut down. Instead, we'll add a
+		// new listener which does the same thing as if they clicked "Finish"
+		frame.removeWindowListener(listener);
+		frame.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent event)
+			{
+				writeBackupFile();
 			}
 		});
 
 		Control.logger.debug("First run wizard final panel drawn");
 
 		return panel;
+	}
+
+	/**
+	 * Utility function purely for the purpose of avoiding copying and pasting this code, which is
+	 * run either when you click the "finish" button on the last panel or if you close the window at
+	 * the last panel. It writes the backup location to the disk
+	 */
+	private static void writeBackupFile()
+	{
+		// Write the backup path to the disk
+		FileOutputStream out;
+		try
+		{
+			out = new FileOutputStream("backup_location");
+			out.write(Control.backupDirectory.toString().getBytes());
+			out.close();
+
+			Control.logger.debug("Backup location file created, set to: " + Control.backupDirectory);
+		}
+		catch(IOException e)
+		{
+			Errors.fatalError(
+					"Could not write backup path to disk. Is the program folder writeable?", e);
+		}
+
+		// And end the wizard
+		Control.firstRunWizardDone = true;
+		frame.dispose();
 	}
 }
 
