@@ -23,6 +23,7 @@ public class Control
 	public static List<Path> modifiedFiles = new LinkedList<>();
 	public static List<RenamedFile> renamedFiles = new LinkedList<>();
 	public static List<Path> deletedFiles = new LinkedList<>();
+	public static boolean firstRunWizardDone = false;
 
 	// Logger object is linked to the class
 	public static Logger logger = Logger.getLogger(Control.class);
@@ -42,7 +43,7 @@ public class Control
 			// init db
 			// set live directory
 			FirstStartWizard.run();
-			while(liveDirectory == null || backupDirectory == null)
+			while(!firstRunWizardDone)
 			{
 				try
 				{
