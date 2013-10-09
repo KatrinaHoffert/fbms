@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.Logger;
 
 // Making sure libraries are found (remove later)
@@ -145,6 +147,17 @@ public class Control
 				{
 					in.close();
 				}
+			}
+
+			// If the database file isn't in the backup folder, it's not a valid folder
+			if(!backupDirectory.resolve(".revisions.db").toFile().exists())
+			{
+				logger.error("The backup directory linked in \"backup_location\" is invalid: "
+						+ backupDirectory);
+				backupDirectory = null;
+				JOptionPane.showMessageDialog(null,
+						"A backup location record exists, but is invalid. The first-run wizard "
+								+ "will be displayed.", "Error", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
