@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -256,6 +257,21 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
+				// Write the backup path to the disk
+				FileOutputStream out;
+				try
+				{
+					out = new FileOutputStream("backup_location");
+					out.write(Control.backupDirectory.toString().getBytes());
+					out.close();
+				}
+				catch(IOException e)
+				{
+					Control.logger.fatal("Could not write backup path to disk. Is program"
+							+ "folder writeable?", e);
+				}
+
+				// And end the wizard
 				Control.firstRunWizardDone = true;
 				frame.dispose();
 			}
@@ -311,6 +327,13 @@ class WizardActionListener implements ActionListener
 			FirstStartWizard.frame.setContentPane(FirstStartWizard.selectOldDirPanel());
 			FirstStartWizard.frame.validate();
 			FirstStartWizard.currentPanel = 12;
+		}
+
+		// We're on the folder chooser screen and going back, so remove any set directories
+		if(FirstStartWizard.currentPanel == 3 && FirstStartWizard.currentPanel + offset < 3)
+		{
+			Control.backupDirectory = null;
+			Control.liveDirectory = null;
 		}
 	}
 }
@@ -401,6 +424,7 @@ class DirectoryListener implements MouseListener
 		}
 	}
 
+	// Not using any of these, just here for the interface
 	@Override
 	public void mouseReleased(MouseEvent arg0)
 	{}

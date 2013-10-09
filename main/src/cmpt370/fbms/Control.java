@@ -38,10 +38,7 @@ public class Control
 		// Branch based on whether or not this is considered a "first run"
 		if(backupDirectory == null)
 		{
-			// first run
-			// get backup directory and create backup_location file
-			// init db
-			// set live directory
+			// Run the first run wizard. Keep the program open until that is done
 			FirstStartWizard.run();
 			while(!firstRunWizardDone)
 			{
@@ -54,22 +51,18 @@ public class Control
 					logger.error(e);
 				}
 			}
-			System.out.println("It is the first run");
+			System.out.println("First run wizard complete");
 			System.out.println("liveDirectory = " + liveDirectory);
 			System.out.println("backupDirectory = " + backupDirectory);
-
 
 			DbManager.init();
 		}
 		else
 		{
-			// not first run
-			// init db
-			// get live directory
+			// This won't first yet...
 			System.out.println("It is NOT the first run");
-			System.out.println("liveDirectory = " + liveDirectory);
-			System.out.println("backupDirectory = " + backupDirectory);
-
+			System.out.println("liveDirectory = " + liveDirectory); // should be null
+			System.out.println("backupDirectory = " + backupDirectory); // should be a path
 
 			DbManager.init();
 		}
