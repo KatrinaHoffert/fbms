@@ -41,8 +41,7 @@ public class DbManager
 		}
 		catch(ClassNotFoundException e)
 		{
-			Control.logger.fatal("Could not load database driver", e);
-			System.exit(1);
+			Errors.fatalError("Could not load database driver", e);
 		}
 
 		try
