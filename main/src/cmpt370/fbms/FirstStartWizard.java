@@ -121,9 +121,9 @@ public class FirstStartWizard
 	public static JPanel importPanel()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
-		JLabel label = new JLabel("<html>FBMS allows you to recover import old backups. Do "
-				+ "you have an existing backup you wish to import? Choosing \"no\" "
-				+ "will create a new backup project.</html>");
+		JLabel label = new JLabel("<html>FBMS allows you to recover import old backups. "
+				+ "Do you want to import an existing backup or do you want to create a new "
+				+ "backup project?</html>");
 		label.setFont(new Font("Sans serif", Font.PLAIN, 14));
 		panel.add(label, BorderLayout.NORTH);
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -131,9 +131,9 @@ public class FirstStartWizard
 		JPanel buttonPanel = new JPanel(new GridLayout());
 		JButton quitButton = new JButton("Quit");
 		buttonPanel.add(quitButton);
-		JButton nextButton = new JButton("Yes");
+		JButton nextButton = new JButton("Import existing");
 		buttonPanel.add(nextButton);
-		JButton prevButton = new JButton("No");
+		JButton prevButton = new JButton("Create new");
 		buttonPanel.add(prevButton);
 		panel.add(buttonPanel, BorderLayout.SOUTH);
 
