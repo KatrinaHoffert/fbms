@@ -26,8 +26,22 @@ public class Errors
 			stackTraceContent += line + "\n";
 		}
 
-		JOptionPane.showMessageDialog(null, message + "\n\n" + stackTraceContent, "Error",
+		JOptionPane.showMessageDialog(null, message + "\n\n" + stackTraceContent, "Fatal error",
 				JOptionPane.ERROR_MESSAGE);
+		System.exit(1);
+	}
+
+	/**
+	 * Works the same way as fatalError(String, Throwable), but only requires a message.
+	 * 
+	 * @param message
+	 *            The error message to print
+	 */
+	public static void fatalError(String message)
+	{
+		Control.logger.fatal(message);
+
+		JOptionPane.showMessageDialog(null, message, "Fatal error", JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
 	}
 }

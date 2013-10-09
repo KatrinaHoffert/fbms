@@ -53,8 +53,7 @@ public class DbManager
 		}
 		catch(SQLException e)
 		{
-			Control.logger.fatal("Could not create database connection", e);
-			System.exit(1);
+			Errors.fatalError("Could not create database connection", e);
 		}
 
 		try
@@ -114,15 +113,13 @@ public class DbManager
 				// actually be a first run
 				if(Control.liveDirectory == null)
 				{
-					Control.logger.fatal("Could not load the live directory from existing backup");
-					System.exit(1);
+					Errors.fatalError("Could not load the live directory from existing backup");
 				}
 			}
 		}
 		catch(SQLException e)
 		{
-			Control.logger.fatal("Database table creation failed", e);
-			System.exit(1);
+			Errors.fatalError("Database table creation failed", e);
 		}
 	}
 

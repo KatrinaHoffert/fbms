@@ -322,8 +322,8 @@ public class FirstStartWizard
 				}
 				catch(IOException e)
 				{
-					Control.logger.fatal("Could not write backup path to disk. Is program"
-							+ "folder writeable?", e);
+					Errors.fatalError(
+							"Could not write backup path to disk. Is program folder writeable", e);
 				}
 
 				// And end the wizard
@@ -475,7 +475,7 @@ class DirectoryListener implements MouseListener
 		}
 		catch(IOException e)
 		{
-			Control.logger.error("Could not check paths", e);
+			Errors.fatalError("Could not access specified directories", e);
 		}
 	}
 
