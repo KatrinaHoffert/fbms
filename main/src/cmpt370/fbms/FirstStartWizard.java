@@ -32,6 +32,8 @@ public class FirstStartWizard
 
 	public static void run()
 	{
+		Control.logger.info("Started first run wizard");
+
 		// Create the dialog window
 		frame = new JDialog();
 		frame.setTitle("Welcome to FBMS");
@@ -51,21 +53,28 @@ public class FirstStartWizard
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
+				Control.logger.debug("First run wizard closed in panel "
+						+ FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		});
 	}
 
-	// The first panel
+	/**
+	 * Creates the introduction panel, which summarizes the point of this wizard.
+	 * 
+	 * @return A panel for display.
+	 */
 	public static JPanel introPanel()
 	{
+		// Create panel contents
 		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel("<html>Welcome to the <b>F</b>ile <b>B</b>ackup and "
 				+ "<b>M</b>anagement <b>S</b>ystem, or FBMS. Use the next and previous buttons to "
 				+ "navigate this wizard.</html>");
 		label.setFont(new Font("Sans serif", Font.PLAIN, 14));
 		panel.add(label, BorderLayout.NORTH);
-		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		panel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Padding
 
 		JPanel buttonPanel = new JPanel(new GridLayout());
 		JButton quitButton = new JButton("Quit");
@@ -88,20 +97,28 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
+				Control.logger.debug("First run wizard closed in panel "
+						+ FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		});
 
+		Control.logger.debug("First run wizard introduction panel drawn");
+
 		return panel;
 	}
 
-	// The second panel
+	/**
+	 * Creates the panel which asks the user if they want to import an old backup or create
+	 * 
+	 * @return A panel for display
+	 */
 	public static JPanel importPanel()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel("<html>FBMS allows you to recover import old backups. Do "
-				+ "you have an existing backup you wish to import? New users will want to choose "
-				+ "\"no\".</html>");
+				+ "you have an existing backup you wish to import? Choosing \"no\" "
+				+ "will create a new backup project.</html>");
 		label.setFont(new Font("Sans serif", Font.PLAIN, 14));
 		panel.add(label, BorderLayout.NORTH);
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -109,10 +126,10 @@ public class FirstStartWizard
 		JPanel buttonPanel = new JPanel(new GridLayout());
 		JButton quitButton = new JButton("Quit");
 		buttonPanel.add(quitButton);
-		JButton prevButton = new JButton("No");
-		buttonPanel.add(prevButton);
 		JButton nextButton = new JButton("Yes");
 		buttonPanel.add(nextButton);
+		JButton prevButton = new JButton("No");
+		buttonPanel.add(prevButton);
 		panel.add(buttonPanel, BorderLayout.SOUTH);
 
 		// Event handler for next button press
@@ -126,14 +143,22 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
+				Control.logger.debug("First run wizard closed in panel "
+						+ FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		});
 
+		Control.logger.debug("First run wizard import panel drawn");
+
 		return panel;
 	}
 
-	// The third panel
+	/**
+	 * Creates a panel for selecting the live and backup directories.
+	 * 
+	 * @return A panel for display
+	 */
 	public static JPanel selectDirsPanel()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
@@ -143,6 +168,8 @@ public class FirstStartWizard
 		panel.add(label, BorderLayout.NORTH);
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
+		// Panel for choosing the directories. They're just regular text fields, but will have an
+		// event handler for clicking the fields, which will open a folder chooser
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBorder(new EmptyBorder(25, 0, 0, 0));
 		JLabel liveDirectoryLabel = new JLabel("Live directory:");
@@ -169,9 +196,9 @@ public class FirstStartWizard
 		buttonPanel.add(selectDirsNextButton);
 		panel.add(buttonPanel, BorderLayout.SOUTH);
 
-		// Event handler for next button press
+		// Event handler for next and previous buttons. Note the global next button, to allow the
+		// event handler to modify the button's state
 		selectDirsNextButton.addActionListener(new WizardActionListener(1));
-
 		prevButton.addActionListener(new WizardActionListener(-1));
 
 		// Event handler for directory choices
@@ -184,32 +211,30 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
+				Control.logger.debug("First run wizard closed in panel "
+						+ FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		});
 
+		Control.logger.debug("First run wizard directory choice panel drawn");
+
 		return panel;
 	}
 
-	// Special case: import old dir
+	/**
+	 * Creates a panel for choosing an existing backup directory.
+	 * 
+	 * @return A panel for display
+	 */
 	public static JPanel selectOldDirPanel()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
-		JLabel label = new JLabel("<html>Specify the directory which held the backup (contains "
-				+ "a file named \".revisions.db\").</html>");
+		JLabel label = new JLabel("<html>Specify the directory which held the existing backup"
+				+ "(contains a file named \".revisions.db\").</html>");
 		label.setFont(new Font("Sans serif", Font.PLAIN, 14));
 		panel.add(label, BorderLayout.NORTH);
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
-
-		JPanel buttonPanel = new JPanel(new GridLayout());
-		JButton quitButton = new JButton("Quit");
-		buttonPanel.add(quitButton);
-		JButton prevButton = new JButton("Previous");
-		buttonPanel.add(prevButton);
-		selectDirsNextButton = new JButton("Next");
-		selectDirsNextButton.setEnabled(false);
-		buttonPanel.add(selectDirsNextButton);
-		panel.add(buttonPanel, BorderLayout.SOUTH);
 
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBorder(new EmptyBorder(25, 0, 0, 0));
@@ -221,9 +246,18 @@ public class FirstStartWizard
 		centerPanel.add(backupDirectoryField);
 		panel.add(centerPanel, BorderLayout.CENTER);
 
-		// Event handler for next button press
-		selectDirsNextButton.addActionListener(new WizardActionListener(-8));
+		JPanel buttonPanel = new JPanel(new GridLayout());
+		JButton quitButton = new JButton("Quit");
+		buttonPanel.add(quitButton);
+		JButton prevButton = new JButton("Previous");
+		buttonPanel.add(prevButton);
+		selectDirsNextButton = new JButton("Next");
+		selectDirsNextButton.setEnabled(false);
+		buttonPanel.add(selectDirsNextButton);
+		panel.add(buttonPanel, BorderLayout.SOUTH);
 
+		// Event handler for next and previous button
+		selectDirsNextButton.addActionListener(new WizardActionListener(-8));
 		prevButton.addActionListener(new WizardActionListener(-10));
 
 		// Event handler for directory choices
@@ -232,25 +266,33 @@ public class FirstStartWizard
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
+				// Create the file chooser for selecting a directory
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
+				// Return value will be JFileChooser.APPROVE_OPTION iff a folder was chosen. Any
+				// other value means the window was closed
 				int returnVal = fileChooser.showOpenDialog(null);
 
 				// Checks that the database file exists inside the specified folder
-				if(returnVal == JFileChooser.APPROVE_OPTION
-						&& fileChooser.getSelectedFile().toPath().resolve(".revisions.db").toFile().exists())
+				if(returnVal == JFileChooser.APPROVE_OPTION)
 				{
-					FirstStartWizard.backupDirectoryField.setText(fileChooser.getSelectedFile().toString());
-					Control.backupDirectory = fileChooser.getSelectedFile().toPath();
-					FirstStartWizard.selectDirsNextButton.setEnabled(true);
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null,
-							"The specified path is not a valid backup folder. The backup folder "
-									+ "must contain the \".revisions.db\" file.", "Error",
-							JOptionPane.WARNING_MESSAGE);
+					if(fileChooser.getSelectedFile().toPath().resolve(".revisions.db").toFile().exists())
+					{
+						FirstStartWizard.backupDirectoryField.setText(fileChooser.getSelectedFile().toString());
+						Control.backupDirectory = fileChooser.getSelectedFile().toPath();
+						FirstStartWizard.selectDirsNextButton.setEnabled(true);
+
+						Control.logger.debug("First run wizard existing backup folder chosen: "
+								+ Control.backupDirectory);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,
+								"The specified path is not a valid backup folder. The backup folder "
+										+ "must contain the \".revisions.db\" file.", "Error",
+								JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			}
 
@@ -277,14 +319,24 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
+				Control.logger.debug("First run wizard closed in panel "
+						+ FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		});
 
+		Control.logger.debug("First run wizard import existing backup panel drawn");
+
 		return panel;
 	}
 
-	// The last panel
+	/**
+	 * The final panel which confirms that the live and backup directories have been set. On
+	 * clicking the finish button, the "backup_location" file is created, allowing subsequent runs
+	 * to be recognized as, well, subsequent.
+	 * 
+	 * @return A panel for display
+	 */
 	public static JPanel finishPanel()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
@@ -319,11 +371,14 @@ public class FirstStartWizard
 					out = new FileOutputStream("backup_location");
 					out.write(Control.backupDirectory.toString().getBytes());
 					out.close();
+
+					Control.logger.debug("Backup location file created, set to: "
+							+ Control.backupDirectory);
 				}
 				catch(IOException e)
 				{
 					Errors.fatalError(
-							"Could not write backup path to disk. Is program folder writeable", e);
+							"Could not write backup path to disk. Is program folder writeable?", e);
 				}
 
 				// And end the wizard
@@ -332,17 +387,27 @@ public class FirstStartWizard
 			}
 		});
 
+		Control.logger.debug("First run wizard final panel drawn");
+
 		return panel;
 	}
 }
 
-// Event handler for next and previous buttons. Takes in an offset and applies that to the current
-// panel to figure out which panel needs to be displayed
+/**
+ * Event handler for next and previous buttons. Takes in an offset and applies that to the current
+ * panel to figure out which panel needs to be displayed.
+ */
 class WizardActionListener implements ActionListener
 {
 	private int offset;
 
-	// Just a way to get the direction forward or back a button takes us
+	/**
+	 * Just a way to get the direction forward or back a button takes us.
+	 * 
+	 * @param inOffset
+	 *            The panel offset to move in (note that panels aren't entirely linear, since they
+	 *            must branch based on whether the user wants to import an existing backup or not
+	 */
 	public WizardActionListener(int inOffset)
 	{
 		offset = inOffset;
@@ -384,40 +449,56 @@ class WizardActionListener implements ActionListener
 			FirstStartWizard.currentPanel = 12;
 		}
 
-		// We're on the folder chooser screen and going back, so remove any set directories
+		// We're on the folder chooser panel and going back, so we remove any set directories. This
+		// is necessary because if we come back to this panel and the directories haven't been
+		// reset, they will still be considered when evaluating if one folder is inside another
 		if(FirstStartWizard.currentPanel == 3 && FirstStartWizard.currentPanel + offset < 3)
 		{
 			Control.backupDirectory = null;
 			Control.liveDirectory = null;
 		}
+
+		Control.logger.debug("Moved to panel number " + FirstStartWizard.currentPanel);
 	}
 }
 
-// Event handler for clicks inside the folder choosers
+/**
+ * Event handler for clicks inside the folder choosers.
+ */
 class DirectoryListener implements MouseListener
 {
+	// True = backup directory, false = live directory
 	private boolean backup;
 
+	/**
+	 * The functionality of the event handler depends on the folder we're listening on
+	 * 
+	 * @param type
+	 *            True if we're specifying the backup directory, false for the live directory
+	 */
 	public DirectoryListener(boolean type)
 	{
-		// True = backup directory, false = live directory
 		backup = type;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0)
 	{
-		// We're selecting the backup folder. Show a file chooser for folders only
+		// We're selecting the backup folder
 		if(backup)
 		{
+			// Show a file chooser for folders only
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
 			int returnVal = fileChooser.showOpenDialog(null);
+
 			if(returnVal == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile().exists())
 			{
 				FirstStartWizard.backupDirectoryField.setText(fileChooser.getSelectedFile().toString());
 				Control.backupDirectory = fileChooser.getSelectedFile().toPath();
+
+				Control.logger.info("First run wizard backup folder chosen: "
+						+ Control.backupDirectory);
 			}
 		}
 		// Otherwise we're choosing the live directory
@@ -425,51 +506,60 @@ class DirectoryListener implements MouseListener
 		{
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
 			int returnVal = fileChooser.showOpenDialog(null);
+
 			if(returnVal == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile().exists())
 			{
 				FirstStartWizard.liveDirectoryField.setText(fileChooser.getSelectedFile().toString());
 				Control.liveDirectory = fileChooser.getSelectedFile().toPath();
+
+				Control.logger.info("First run wizard live folder chosen: " + Control.liveDirectory);
 			}
 		}
 
 		try
 		{
-			// Skip this if either directory hasn't been set
+			// We need to ensure that neither directory is inside the other. So if both directories
+			// are set, make sure that they aren't parent directories of one or the other
 			if(Control.liveDirectory != null && Control.backupDirectory != null)
 			{
-				// Ensure that neither the live or backup folder is a child of the other
 				if(Control.liveDirectory.toFile().getCanonicalPath().startsWith(
 						Control.backupDirectory.toFile().getCanonicalPath().toString())
 						|| Control.backupDirectory.toFile().getCanonicalPath().startsWith(
 								Control.liveDirectory.toFile().getCanonicalPath().toString()))
 				{
+					// In the event of one of the directories being inside the other, we need to
+					// remove the directory that we just chose (although the user can manually
+					// change the other, if they wish)
 					if(backup)
 					{
-						// Remove the backup directory: the user will have to enter a new one
 						FirstStartWizard.backupDirectoryField.setText("");
 						Control.backupDirectory = null;
 						JOptionPane.showMessageDialog(
 								null,
 								"The backup directory cannot be a child of the live directory and vice versa.",
 								"Error", JOptionPane.WARNING_MESSAGE);
+
+						Control.logger.debug("Chosen backup directory is a child or parent of live directory");
 					}
 					else
 					{
-						// Remove the backup directory: the user will have to enter a new one
 						FirstStartWizard.liveDirectoryField.setText("");
 						Control.liveDirectory = null;
 						JOptionPane.showMessageDialog(
 								null,
 								"The live directory cannot be a child of the backup directory and vice versa.",
 								"Error", JOptionPane.WARNING_MESSAGE);
+
+						Control.logger.debug("Chosen live directory is a child or parent of backup directory");
 					}
 				}
 				// Otherwise paths are valid: Enable next button
 				else
 				{
 					FirstStartWizard.selectDirsNextButton.setEnabled(true);
+
+					Control.logger.debug("Chosen directories are valid");
 				}
 			}
 		}
@@ -479,7 +569,6 @@ class DirectoryListener implements MouseListener
 		}
 	}
 
-	// Not using any of these, just here for the interface
 	@Override
 	public void mouseReleased(MouseEvent arg0)
 	{}
