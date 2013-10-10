@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class DbManager
 {
-	public static ReentrantLock lock = new ReentrantLock();
+	private static ReentrantLock lock = new ReentrantLock();
 
 	// Holds the active connection
 	private static Connection connection = null;
