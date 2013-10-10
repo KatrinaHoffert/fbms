@@ -239,7 +239,8 @@ public class DbManager
 		// Build our strings for our queries concatenating with our variables.
 		String update = "UPDATE settings SET setting = " + settingValue + "WHERE name = "
 				+ settingName;
-		String insert = "INSERT settings SET name = " + settingName + ", setting = " + settingValue;
+		String insert = "INSERT INTO settings(name, setting) VALUES('" + settingName + "', '"
+				+ settingValue + "')";
 
 		try
 		{
@@ -256,14 +257,13 @@ public class DbManager
 				// If the row exists, update it.
 				if(settingsRows.next())
 				{
-					statement.execute(update);
+					statement.executeUpdate(update);
 				}
 				// If the row does not exist, insert it.
 				else
 				{
-					statement.execute(insert);
+					statement.executeUpdate(insert);
 				}
-
 
 			}
 			if(settingName.equals("backupDirectory"))
@@ -273,12 +273,12 @@ public class DbManager
 				// If the row exists, update it.
 				if(settingsRows.next())
 				{
-					statement.execute(update);
+					statement.executeUpdate(update);
 				}
 				// If the row does not exist, insert it.
 				else
 				{
-					statement.execute(insert);
+					statement.executeUpdate(insert);
 				}
 			}
 
