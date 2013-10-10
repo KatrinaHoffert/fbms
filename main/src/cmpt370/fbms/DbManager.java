@@ -143,13 +143,141 @@ public class DbManager
 
 	}
 
+	/**
+	 * Grabs setting values from the database when provided with a name for the given setting.
+	 * 
+	 * @param settingName
+	 *            Name of the setting you want the value of.
+	 * @return Returns the associated value with the setting name.
+	 */
 	public static String getConfig(String settingName)
 	{
-		return null;
+		// Holds our return result.
+		String toGet = null;
+
+		try
+		{
+			// Setup our connection object to run queries from.
+			Statement statement = connection.createStatement();
+
+
+			// Since we have so few settings using cases to find our values.
+			// Will look into doing a dynamic SQL query later using something like
+			// PreparedStatement.
+			if(settingName == "liveDirectory")
+			{
+
+				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'liveDirectory'");
+
+				// Cycle through all settings named liveDirectory (should only be one).
+				while(settingsRows.next())
+				{
+					if(settingsRows.getString("name").equals("liveDirectory"))
+					{
+						// Set it to our return value
+						toGet = settingsRows.getString("setting");
+					}
+				}
+			}
+			if(settingName == "backupDirectory")
+			{
+				// cycle through all settings named backupDirectory (again should only be one).
+				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'backupDirectory'");
+
+				while(settingsRows.next())
+				{
+					if(settingsRows.getString("name").equals("backupDirectory"))
+					{
+						// Set our return value.
+						toGet = settingsRows.getString("setting");
+					}
+				}
+			}
+
+		}
+		catch(SQLException e)
+		{
+			Errors.fatalError("Database table creation failed", e);
+		}
+		// If our string is still null throw an error.
+		if(toGet == null)
+		{
+			Errors.fatalError("Database error, setting was not pulled correctly.");
+		}
+
+
+		return toGet;
 	}
 
 	public static void setConfig(String settingName, String settingValue)
 	{
+		if(settingName == null || settingValue == null)
+		{
+			Errors.fatalError("Null input provided to setConfig(), unable to proceed.");
+		}
+
+		// Build our strings for our queries concatenating with our variables.
+		String update = "UPDATE settings SET setting = " + settingValue + "WHERE name = "
+				+ settingName;
+		String insert = "INSERT settings SET name = " + settingName + ", setting = " + settingValue;
+
+		try
+		{
+
+			// Grab statement from connection so we can call execute for our queries.
+			Statement statement = connection.createStatement();
+
+
+			if(settingName == "liveDirectory")
+			{
+				// Search for our row.
+				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'liveDirectory'");
+
+				// Double check the name, redundancy.
+				if(settingsRows.getString("name").equals("liveDirectory"))
+				{
+					// If the row exists, update it.
+					if(settingsRows.next())
+					{
+						statement.execute(update);
+					}
+					// If the row does not exist, insert it.
+					else
+					{
+						statement.execute(insert);
+					}
+				}
+
+
+			}
+			if(settingName == "backupDirectory")
+			{
+				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'backupDirectory'");
+
+				// Double check the name, redundancy.
+				if(settingsRows.getString("name").equals("backupDirectory"))
+				{
+					// If the row exists, update it.
+					if(settingsRows.next())
+					{
+						statement.execute(update);
+					}
+					// If the row does not exist, insert it.
+					else
+					{
+						statement.execute(insert);
+					}
+				}
+
+
+			}
+
+		}
+		catch(SQLException e)
+		{
+			Errors.fatalError("Database table creation failed", e);
+		}
+
 
 	}
 }
