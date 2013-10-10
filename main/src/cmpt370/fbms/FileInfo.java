@@ -2,12 +2,12 @@ package cmpt370.fbms;
 
 public class FileInfo
 {
-	public boolean folder;
-	public int fileSize;
-	public int lastAccessedDate;
-	public int lastModifiedDate;
-	public int createdDate;
-	public int numberOfRevisions;
-	public int revisionSizes;
-	public String fileName;
+	public String fileName = "";
+	public boolean folder = false;
+	public long fileSize = 0;
+	public long createdDate = 0;
+	public long lastAccessedDate = 0;
+	public long lastModifiedDate = 0;
+	public int numberOfRevisions = 0;
+	public long revisionSizes = 0;
 }
