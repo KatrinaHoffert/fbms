@@ -1,5 +1,6 @@
 package cmpt370.fbms;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -9,10 +10,12 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class Errors
 {
@@ -88,7 +91,9 @@ public class Errors
 			frame.setSize(300, 100);
 			frame.setUndecorated(true);
 
-			frame.setLayout(new GridBagLayout());
+			JPanel panel = new JPanel();
+			panel.setBorder(BorderFactory.createLineBorder(Color.black));
+			panel.setLayout(new GridBagLayout());
 			GridBagConstraints constraints = new GridBagConstraints();
 
 			// The heading
@@ -102,7 +107,7 @@ public class Errors
 			constraints.weighty = -1;
 			constraints.insets = new Insets(5, 5, 5, 5);
 			constraints.fill = GridBagConstraints.BOTH;
-			frame.add(headingLabel, constraints);
+			panel.add(headingLabel, constraints);
 
 			// The close button
 			// Make the button close the window on click
@@ -120,13 +125,15 @@ public class Errors
 
 			closeButton.setMargin(new Insets(1, 4, 1, 4));
 			closeButton.setFocusable(false);
+			closeButton.setContentAreaFilled(false);
+			closeButton.setBorderPainted(false);
 
 			constraints.gridx = 1;
 			constraints.weightx = 0;
 			constraints.weighty = 0;
 			constraints.fill = GridBagConstraints.NONE;
 			constraints.anchor = GridBagConstraints.NORTH;
-			frame.add(closeButton, constraints);
+			panel.add(closeButton, constraints);
 
 			// The message
 			JLabel messageLabel = new JLabel("<html>" + message);
@@ -137,7 +144,7 @@ public class Errors
 			constraints.weighty = 1;
 			constraints.insets = new Insets(5, 5, 5, 5);
 			constraints.fill = GridBagConstraints.HORIZONTAL;
-			frame.add(messageLabel, constraints);
+			panel.add(messageLabel, constraints);
 
 			// Get dimension of screen and tool bar(s)
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -151,6 +158,7 @@ public class Errors
 			frame.setLocation(screenSize.width - frame.getWidth() - toolBarOffset.right,
 					screenSize.height - toolBarOffset.bottom - frame.getHeight());
 
+			frame.add(panel);
 			frame.setAlwaysOnTop(true);
 			frame.setVisible(true);
 
