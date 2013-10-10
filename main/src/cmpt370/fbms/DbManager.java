@@ -209,6 +209,15 @@ public class DbManager
 		return toGet;
 	}
 
+	/**
+	 * Method to add a setting name and variable into the settings table, or update an existing
+	 * setting to a new value.
+	 * 
+	 * @param settingName
+	 *            The name of the setting to change or insert.
+	 * @param settingValue
+	 *            The value for the named setting to be updated or inserted into the table.
+	 */
 	public static void setConfig(String settingName, String settingValue)
 	{
 		if(settingName == null || settingValue == null)
