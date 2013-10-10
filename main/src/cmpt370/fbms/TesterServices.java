@@ -7,10 +7,14 @@ import java.util.List;
 
 import org.junit.Test;
 
+/**
+ * This class runs tests that can be automated. There must not be any output that has to be examined
+ * or such. This allows us to simply run the file and JUnit will report a success or failure.
+ */
 public class TesterServices
 {
 	@Test
-	public void testInitReturn()
+	public void dataGetFolderContents()
 	{
 		List<FileInfo> list = Data.getFolderContents(Paths.get("").toAbsolutePath());
 
