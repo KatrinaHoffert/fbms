@@ -154,6 +154,10 @@ public class DbManager
 	{
 		// Holds our return result.
 		String toGet = null;
+		if(settingName.equals(null))
+		{
+			Errors.fatalError("Setting name provided is null.");
+		}
 
 		try
 		{
@@ -164,7 +168,7 @@ public class DbManager
 			// Since we have so few settings using cases to find our values.
 			// Will look into doing a dynamic SQL query later using something like
 			// PreparedStatement.
-			if(settingName == "liveDirectory")
+			if(settingName.equals("liveDirectory"))
 			{
 
 				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'liveDirectory'");
@@ -179,7 +183,7 @@ public class DbManager
 					}
 				}
 			}
-			if(settingName == "backupDirectory")
+			if(settingName.equals("backupDirectory"))
 			{
 				// cycle through all settings named backupDirectory (again should only be one).
 				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'backupDirectory'");
@@ -197,14 +201,21 @@ public class DbManager
 		}
 		catch(SQLException e)
 		{
-			Errors.fatalError("Database table creation failed", e);
+			Errors.fatalError("Retrieval of setting value failed", e);
 		}
 		// If our string is still null throw an error.
-		if(toGet == null)
-		{
-			Errors.fatalError("Database error, setting was not pulled correctly.");
-		}
 
+		try
+		{
+			if(toGet.equals(null))
+			{
+				throw new NoSuchFieldException();
+			}
+		}
+		catch(NoSuchFieldException e)
+		{
+			Errors.nonfatalError("Row in settings not found.", e);
+		}
 
 		return toGet;
 	}
@@ -237,54 +248,44 @@ public class DbManager
 			Statement statement = connection.createStatement();
 
 
-			if(settingName == "liveDirectory")
+			if(settingName.equals("liveDirectory"))
 			{
 				// Search for our row.
 				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'liveDirectory'");
 
-				// Double check the name, redundancy.
-				if(settingsRows.getString("name").equals("liveDirectory"))
+				// If the row exists, update it.
+				if(settingsRows.next())
 				{
-					// If the row exists, update it.
-					if(settingsRows.next())
-					{
-						statement.execute(update);
-					}
-					// If the row does not exist, insert it.
-					else
-					{
-						statement.execute(insert);
-					}
+					statement.execute(update);
+				}
+				// If the row does not exist, insert it.
+				else
+				{
+					statement.execute(insert);
 				}
 
 
 			}
-			if(settingName == "backupDirectory")
+			if(settingName.equals("backupDirectory"))
 			{
 				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'backupDirectory'");
 
-				// Double check the name, redundancy.
-				if(settingsRows.getString("name").equals("backupDirectory"))
+				// If the row exists, update it.
+				if(settingsRows.next())
 				{
-					// If the row exists, update it.
-					if(settingsRows.next())
-					{
-						statement.execute(update);
-					}
-					// If the row does not exist, insert it.
-					else
-					{
-						statement.execute(insert);
-					}
+					statement.execute(update);
 				}
-
-
+				// If the row does not exist, insert it.
+				else
+				{
+					statement.execute(insert);
+				}
 			}
 
 		}
 		catch(SQLException e)
 		{
-			Errors.fatalError("Database table creation failed", e);
+			Errors.fatalError("Unable to set requested value in settings.", e);
 		}
 
 
