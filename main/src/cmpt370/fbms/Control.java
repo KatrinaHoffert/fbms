@@ -80,23 +80,18 @@ public class Control
 			DbManager.init();
 			DbManager.setConfig("liveDirectory", liveDirectory.toString());
 
-			// TODO: Remove this testing stuff (replace with logger code)
-			System.out.println("First run wizard complete");
-			System.out.println("liveDirectory = " + liveDirectory);
-			System.out.println("backupDirectory = " + backupDirectory);
+			logger.info("First run wizard completed");
 		}
 		else
 		{
+			// For subsequent runs, the backup directory has already been set and the live
+			// directory will be retreived during DbManager.init()
 			DbManager.init();
 
-			// This won't work yet... DbManager.setConfig() must be implemented first, as the live
-			// directory is not yet stored in the database. Should get a fatal error about the live
-			// directory not being set
-			// TODO: remove this testing stuff (replace with logger code)
-			System.out.println("It is NOT the first run");
-			System.out.println("liveDirectory = " + liveDirectory);
-			System.out.println("backupDirectory = " + backupDirectory);
+			logger.info("It is a subsequent run");
 		}
+		logger.info("liveDirectory = " + liveDirectory);
+		logger.info("backupDirectory = " + backupDirectory);
 	}
 
 	/**
