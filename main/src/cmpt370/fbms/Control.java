@@ -12,6 +12,9 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
+import net.contentobjects.jnotify.JNotify;
+import net.contentobjects.jnotify.JNotifyException;
+
 import org.apache.log4j.Logger;
 
 // Making sure libraries are found (remove later)
@@ -92,6 +95,20 @@ public class Control
 		}
 		logger.info("liveDirectory = " + liveDirectory);
 		logger.info("backupDirectory = " + backupDirectory);
+
+		// JNotify watcher for files. The live directory is watched for all four types of files
+		// changes: creations, deletions, modifications, and renaming. We watch subfolders of the
+		// live directory for changes as well. The Watcher class forms the listener for these
+		// changes
+		try
+		{
+			JNotify.addWatch(liveDirectory.toString(), JNotify.FILE_CREATED | JNotify.FILE_DELETED
+					| JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true, new Watcher());
+		}
+		catch(JNotifyException e)
+		{
+			Errors.fatalError("Could not start file watcher module", e);
+		}
 	}
 
 	/**
