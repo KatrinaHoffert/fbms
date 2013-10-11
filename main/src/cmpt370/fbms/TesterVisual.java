@@ -13,7 +13,6 @@ import org.junit.Test;
  */
 public class TesterVisual
 {
-
 	@Test
 	public void dataGetFolderContents()
 	{

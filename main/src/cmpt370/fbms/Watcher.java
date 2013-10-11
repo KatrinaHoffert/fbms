@@ -32,7 +32,6 @@ public class Watcher implements JNotifyListener
 		RenamedFile listObject = new RenamedFile();
 		listObject.oldName = oldPath;
 		listObject.newName = newPath;
-
 		Control.renamedFiles.add(listObject);
 
 		// Use the logger in Control to issue messages
