@@ -237,8 +237,8 @@ public class DbManager
 		}
 
 		// Build our strings for our queries concatenating with our variables.
-		String update = "UPDATE settings SET setting = " + settingValue + "WHERE name = "
-				+ settingName;
+		String update = "UPDATE settings SET setting = '" + settingValue + "' WHERE name = '"
+				+ settingName + "'";
 		String insert = "INSERT INTO settings(name, setting) VALUES('" + settingName + "', '"
 				+ settingValue + "')";
 
@@ -257,6 +257,7 @@ public class DbManager
 				// If the row exists, update it.
 				if(settingsRows.next())
 				{
+					System.out.println(update);
 					statement.executeUpdate(update);
 				}
 				// If the row does not exist, insert it.
@@ -287,7 +288,20 @@ public class DbManager
 		{
 			Errors.fatalError("Unable to set requested value in settings.", e);
 		}
+	}
 
-
+	public static void close()
+	{
+		if(connection != null)
+		{
+			try
+			{
+				connection.close();
+			}
+			catch(SQLException e)
+			{
+				Control.logger.error("Could not close database connection", e);
+			}
+		}
 	}
 }

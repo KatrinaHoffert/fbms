@@ -2,6 +2,8 @@ package cmpt370.fbms;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -35,5 +37,26 @@ public class TesterServices
 		}
 
 		assertTrue(foundReadme);
+	}
+
+	@Test
+	public void dbManagerGetSetConfig()
+	{
+		// Create database in current directory
+		Control.backupDirectory = Paths.get("").toAbsolutePath();
+		DbManager.init();
+
+		DbManager.setConfig("liveDirectory", "/some/other/path");
+		assertTrue(DbManager.getConfig("liveDirectory").equals("/some/other/path"));
+		DbManager.close();
+
+		try
+		{
+			Files.delete(Control.backupDirectory.resolve(".revisions.db"));
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
