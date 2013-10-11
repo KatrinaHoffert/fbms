@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -44,6 +45,7 @@ public class Control
 	public static void main(String[] args)
 	{
 		startup();
+		fileHandler();
 	}
 
 	/**
@@ -172,6 +174,45 @@ public class Control
 								+ "will be displayed.", "Error", JOptionPane.WARNING_MESSAGE);
 			}
 		}
+	}
+
+	/**
+	 * This method sets up the loop for going through the array lists that the Watcher module
+	 * populates. It also creates an infinite loop in a separate thread, allowing the program to run
+	 * indefinitely in the background.
+	 */
+	private static void fileHandler()
+	{
+		// Run this stuff in a new thread
+		new Thread()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					while(true)
+					{
+						logger.debug("Main service loop running at T = " + new Date().getTime()
+								/ 1000);
+
+						handleCreatedFiles();
+						handleModifiedFiles();
+						handleRenamedFiles();
+						handleDeletedFiles();
+
+						// Time to wait before "polling" the file lists again. A suitable time needs
+						// to be determined. This should be configurable in future versions of the
+						// program
+						Thread.sleep(5000);
+					}
+				}
+				catch(InterruptedException e)
+				{
+					Errors.fatalError("Thread was interupted", e);
+				}
+			};
+		}.start();
 	}
 
 	private static void handleCreatedFiles()
