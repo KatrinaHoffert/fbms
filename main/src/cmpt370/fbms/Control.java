@@ -235,17 +235,17 @@ public class Control
 
 	}
 
-	public static void displayRevision(Path file, int timestamp)
+	public static void displayRevision(Path file, long timestamp)
 	{
 
 	}
 
-	public static void displayRevisionChanges(Path file, int timestamp)
+	public static void displayRevisionChanges(Path file, long timestamp)
 	{
 
 	}
 
-	public static void revertRevision(Path file, int timestampt)
+	public static void revertRevision(Path file, long timestampt)
 	{
 
 	}

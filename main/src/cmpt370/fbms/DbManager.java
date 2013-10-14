@@ -178,12 +178,12 @@ public class DbManager
 		return list;
 	}
 
-	public static RevisionInfo getRevisionInfo(Path file, int timestamp)
+	public static RevisionInfo getRevisionInfo(Path file, long timestamp)
 	{
 		return null;
 	}
 
-	public static void insertRevision(Path file, String diff, int timestamp, int delta)
+	public static void insertRevision(Path file, String diff, long timestamp, int delta)
 	{
 
 	}
