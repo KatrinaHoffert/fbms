@@ -8,8 +8,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
+
 
 public class DbManager
 {
@@ -71,7 +73,7 @@ public class DbManager
 			if(!revisionsTableExists.next())
 			{
 				statement.executeUpdate("CREATE TABLE revisions (id INTEGER PRIMARY KEY ASC,"
-						+ " path STRING, diff BLOB, delta INTEGER, time INTEGER)");
+						+ " path STRING, diff STRING, delta INTEGER, time INTEGER)");
 				firstRun = true;
 
 				Control.logger.info("Existing revisions table not found; new table created");
@@ -123,9 +125,57 @@ public class DbManager
 		}
 	}
 
+	/**
+	 * Gets a list of revision info objects, which contain all the information about the revisions
+	 * of a specific file.
+	 * 
+	 * @param file
+	 *            The file to obtain revisions on.
+	 * @return A list of RevisionInfo object
+	 */
 	public static List<RevisionInfo> getRevisionData(Path file)
 	{
-		return null;
+		List<RevisionInfo> list = new LinkedList<>();
+
+		try
+		{
+			Statement statement = connection.createStatement();
+
+			// Select the rows of revisions
+			ResultSet revisionRows = statement.executeQuery("SELECT * FROM revisions WHERE path = '"
+					+ file + "'");
+
+			while(revisionRows.next())
+			{
+				// Table structure: (id INTEGER, path STRING, diff BLOB, delta INTEGER, time
+				// INTEGER)
+				RevisionInfo newRevision = new RevisionInfo();
+
+				// id INTEGER
+				newRevision.id = revisionRows.getLong("id");
+
+				// path String
+				newRevision.path = revisionRows.getString("path");
+
+				// diff STRING
+				newRevision.diff = revisionRows.getString("diff");
+
+				// delta INTEGER
+				newRevision.delta = revisionRows.getLong("delta");
+
+				// time INTEGER
+				newRevision.time = revisionRows.getLong("time");
+
+				list.add(newRevision);
+			}
+		}
+		catch(SQLException e)
+		{
+			Errors.fatalError("Could not create SQL statement", e);
+		}
+
+
+		return list;
 	}
 
 	public static RevisionInfo getRevisionInfo(Path file, int timestamp)
