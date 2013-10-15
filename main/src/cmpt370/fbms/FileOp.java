@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 public class FileOp
 {
@@ -88,29 +87,5 @@ public class FileOp
 		return false;
 	}
 
-	public static void main(String[] args)
-	{
-
-		// WARNING: THESE CODE SHOULD BE ONLY RUN IN UNIT TEST.
-		// Set isTESTMODE to true to do unit test.
-		boolean isTESTMODE = true;
-		if(isTESTMODE)
-		{
-			// Load the properties file for logger settings
-			PropertyConfigurator.configure("log4j.properties");
-
-			// And print a testing message to the log
-			logger.info("START UNIT TEST FOR FileOp");
-
-
-			File f = new File("D:\\fbms\\test");
-			// Test for fileSize()
-			System.out.println(FileOp.fileSize(f.toPath()));
-			// Test for delete()
-			FileOp.delete(f.toPath());
-		}
-
-
-	}
 
 }
