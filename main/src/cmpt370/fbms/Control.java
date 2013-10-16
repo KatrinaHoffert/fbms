@@ -164,7 +164,8 @@ public class Control
 			}
 
 			// If the database file isn't in the backup folder, it's not a valid folder
-			if(!backupDirectory.resolve(".revisions.db").toFile().exists())
+			if(backupDirectory == null
+					|| !backupDirectory.resolve(".revisions.db").toFile().exists())
 			{
 				logger.error("The backup directory linked in \"backup_location\" is invalid: "
 						+ backupDirectory);
