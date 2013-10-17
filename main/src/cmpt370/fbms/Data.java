@@ -72,8 +72,7 @@ public class Data
 					Errors.nonfatalError("Could not read file size of " + file.getName(), e);
 				}
 
-				// List<RevisionInfo> revisionInfoList = DbManager.getRevisionData(file.toPath());
-				List<RevisionInfo> revisionInfoList = null;
+				List<RevisionInfo> revisionInfoList = DbManager.getRevisionData(file.toPath());
 				int totalRevisions = 0;
 				long totalSizes = 0;
 

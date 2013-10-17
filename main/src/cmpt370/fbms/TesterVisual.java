@@ -1,5 +1,8 @@
 package cmpt370.fbms;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
@@ -14,9 +17,12 @@ import org.junit.Test;
 public class TesterVisual
 {
 	@Test
-	public void dataGetFolderContents()
+	public void dataGetFolderContents() throws IOException
 	{
-		List<FileInfo> list = Data.getFolderContents(Paths.get("").toAbsolutePath());
+		Path path = Paths.get("").toAbsolutePath();
+		Control.backupDirectory = path;
+		DbManager.init();
+		List<FileInfo> list = Data.getFolderContents(path);
 
 		for(FileInfo file : list)
 		{
@@ -31,6 +37,7 @@ public class TesterVisual
 				System.out.println("\tRevisions size:\t" + file.revisionSizes + " B");
 			}
 		}
+		Files.delete(path.resolve(".revisions.db"));
 	}
 
 	@Test
