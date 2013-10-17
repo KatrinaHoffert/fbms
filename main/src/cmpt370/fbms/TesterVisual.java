@@ -57,6 +57,7 @@ public class TesterVisual
 	}
 
 	@Test
+	@Ignore
 	public void errorsNonfatalError()
 	{
 		Errors.nonfatalError("Such error message!<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;"
