@@ -197,10 +197,10 @@ public class Control
 						logger.debug("Main service loop running at T = " + new Date().getTime()
 								/ 1000);
 
+						handleDeletedFiles();
 						handleCreatedFiles();
 						handleModifiedFiles();
 						handleRenamedFiles();
-						handleDeletedFiles();
 
 						// Time to wait before "polling" the file lists again. A suitable time needs
 						// to be determined. This should be configurable in future versions of the
