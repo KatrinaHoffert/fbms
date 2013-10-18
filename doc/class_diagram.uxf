@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.1">
+  <zoom_level>8</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>512</x>
+      <y>592</y>
+      <w>288</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>FileOp
+--
++copy(Path, Path): void
++copy(List&lt;Path&gt;): void
++createDiff(Path, Path): Path
++applyDiff(Path, Path): Path
++rename(Path, String): void
++delete(Path): void
++fileSize(Path): long
++fileToList(Path): List&lt;String&gt;
++fileValid(Path): boolean
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>416</x>
+      <y>224</y>
+      <w>256</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>Data
+--
+--
++getFolderContents(Path): List&lt;FileInfo&gt;
++getRevisionInfo(Path): List&lt;RevisionInfo&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>168</x>
+      <y>408</y>
+      <w>152</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>RevisionInfo
+--
++id: long
++path: String
++diff: String
++delta: long
++time: long
+--
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>856</x>
+      <y>600</y>
+      <w>272</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Watcher
+--
++fileRenamed(int, String, String, String): void
++fileModified(int, String, String): void
++fileDeleted(int, String, String): void
++fileCreated(int, String, String): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>488</x>
+      <y>424</y>
+      <w>232</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>FileHistory
+--
++getRevision(Path, long): Path
++storeRevision(Path, long, long): void
++obtainRevision(Path, long): Path
++renameRevision(Path, String): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>464</x>
+      <y>72</y>
+      <w>144</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>FrontEnd
+--
+-parseTime(int): String
+-parseSize(int): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1080</x>
+      <y>520</y>
+      <w>176</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>RenamedFile
+--
++oldName: Path
++newName: Path
+--
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>704</x>
+      <y>56</y>
+      <w>168</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>FirstRunWizard
+--
++frame: JDialog
+--
++run(): void
++introPanel(): JPanel
++importPanel(): JPanel
++selectDirsPanel(): JPanel
++selectOldDirPanel(): JPanel
++finishPanel(): JPanel
+-writeBackupFile(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>168</x>
+      <y>544</y>
+      <w>264</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>DbManager
+--
+-connection: Connection
+-lock: ReentrantLock
+--
++init(): void
++getRevisionData(Path): List&lt;RevisionInfo&gt;
++getRevisionInfo(Path, long): RevisionInfo
++insertRevision(Path, String, long, long): void
++renameFile(Path, Path): void
++getConfig(String): String
++setConfig(String, String): void
++close(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>784</x>
+      <y>248</y>
+      <w>256</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>Control
+--
++liveDirectory: Path
++backupDirectory: Path
++createdFiles: List&lt;Path&gt;
++modifiedFiles: List&lt;Path&gt;
++renamedFiles: List&lt;RenamedFile&gt;
++deletedFiles: List&lt;Path&gt;
++logger: Logger
+--
++main(String[] args): void
+-startup(): void
+-fileHandler(): void
+-handleCreatedFiles(): void
+-handleModifiedFiles(): void
+-handleRenamedFiles(): void
+-handleDeletedFiles(): void
++displayRevision(Path, long): void
++displayRevisionChanges(Path, long): void
++revertRevision(Path, long): void
++restoreBackup(): void
++copyTo(Path, Path): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>168</x>
+      <y>256</y>
+      <w>152</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>FileInfo
+--
++fileName: String
++folder: boolean
++fileSize: long
++createdDate: long
++lastAccessedDate: long
++lastModifiedDate: long
++numberOfRevisions: int
++revisionSizes: long
+--
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>472</x>
+      <y>104</y>
+      <w>126</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=  1
+m2=  1
+Queries             .</panel_attributes>
+    <additional_attributes>64;120;64;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>752</x>
+      <y>160</y>
+      <w>176</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=  1
+Informs</panel_attributes>
+    <additional_attributes>160;88;160;56;24;56;24;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>392</x>
+      <y>256</y>
+      <w>208</w>
+      <h>304</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=  1
+m2=  1
+Utilizes</panel_attributes>
+    <additional_attributes>24;288;24;136;192;136;192;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>272</x>
+      <y>256</y>
+      <w>296</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=0..*
+                        Retrieves</panel_attributes>
+    <additional_attributes>48;192;88;192;88;112;280;112;280;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>400</x>
+      <y>480</y>
+      <w>184</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=  1
+               Utilizes</panel_attributes>
+    <additional_attributes>32;144;64;144;64;80;168;80;168;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>696</x>
+      <y>424</y>
+      <w>104</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1
+Acts for</panel_attributes>
+    <additional_attributes>24;40;88;40</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>896</x>
+      <y>504</y>
+      <w>110</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2= 1
+         Notifies</panel_attributes>
+    <additional_attributes>56;96;56;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1016</x>
+      <y>352</y>
+      <w>238</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2=0..*
+Contains                                   .</panel_attributes>
+    <additional_attributes>144;168;144;40;24;40</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>592</x>
+      <y>480</y>
+      <w>104</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=  1
+m2=  1
+       Acts for</panel_attributes>
+    <additional_attributes>56;112;56;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>776</x>
+      <y>504</y>
+      <w>102</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=  1
+m2=  1
+r2=             Acts for</panel_attributes>
+    <additional_attributes>24;152;56;152;56;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>296</x>
+      <y>256</y>
+      <w>224</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=   0..*
+m2=0..*
+   Retrieves</panel_attributes>
+    <additional_attributes>24;88;24;64;208;64;208;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>568</x>
+      <y>104</y>
+      <w>232</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=  1
+m2=  1
+Utilizes                             .</panel_attributes>
+    <additional_attributes>216;176;128;176;128;96;24;96;24;24</additional_attributes>
+  </element>
+</diagram>
