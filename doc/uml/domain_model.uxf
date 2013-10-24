@@ -1,279 +1,325 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="12.1">
-  <zoom_level>10</zoom_level>
+  <zoom_level>11</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>810</x>
-      <y>690</y>
-      <w>170</w>
-      <h>60</h>
+      <x>726</x>
+      <y>660</y>
+      <w>187</w>
+      <h>66</h>
     </coordinates>
-    <panel_attributes>FileOp</panel_attributes>
+    <panel_attributes>FileOp
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>450</x>
-      <y>400</y>
-      <w>160</w>
-      <h>60</h>
+      <x>396</x>
+      <y>374</y>
+      <w>176</w>
+      <h>66</h>
     </coordinates>
-    <panel_attributes>Data</panel_attributes>
+    <panel_attributes>Data
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>160</x>
-      <y>500</y>
-      <w>140</w>
-      <h>60</h>
+      <x>154</x>
+      <y>473</y>
+      <w>154</w>
+      <h>121</h>
     </coordinates>
-    <panel_attributes>RevisionInfo</panel_attributes>
+    <panel_attributes>RevisionInfo
+--
+id
+path
+diff
+delta
+time</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1010</x>
-      <y>380</y>
-      <w>160</w>
-      <h>60</h>
+      <x>913</x>
+      <y>363</y>
+      <w>176</w>
+      <h>66</h>
     </coordinates>
-    <panel_attributes>Watcher</panel_attributes>
+    <panel_attributes>Watcher
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>650</x>
-      <y>560</y>
-      <w>150</w>
-      <h>60</h>
+      <x>550</x>
+      <y>572</y>
+      <w>165</w>
+      <h>66</h>
     </coordinates>
-    <panel_attributes>FileHistory</panel_attributes>
+    <panel_attributes>FileHistory
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>720</x>
-      <y>240</y>
-      <w>140</w>
-      <h>60</h>
+      <x>627</x>
+      <y>187</y>
+      <w>154</w>
+      <h>66</h>
     </coordinates>
-    <panel_attributes>FirstRunWizard</panel_attributes>
+    <panel_attributes>FirstRunWizard
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1000</x>
-      <y>540</y>
-      <w>170</w>
-      <h>60</h>
+      <x>902</x>
+      <y>572</y>
+      <w>187</w>
+      <h>66</h>
     </coordinates>
-    <panel_attributes>RenamedFile</panel_attributes>
+    <panel_attributes>RenamedFile
+--
+oldName
+newName</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>460</x>
-      <y>240</y>
-      <w>140</w>
-      <h>60</h>
+      <x>407</x>
+      <y>198</y>
+      <w>154</w>
+      <h>66</h>
     </coordinates>
-    <panel_attributes>FrontEnd</panel_attributes>
+    <panel_attributes>FrontEnd
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>290</x>
-      <y>640</y>
-      <w>140</w>
-      <h>60</h>
+      <x>275</x>
+      <y>638</y>
+      <w>154</w>
+      <h>66</h>
     </coordinates>
-    <panel_attributes>DbManager</panel_attributes>
+    <panel_attributes>DbManager
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>720</x>
-      <y>410</y>
-      <w>160</w>
-      <h>60</h>
+      <x>627</x>
+      <y>363</y>
+      <w>176</w>
+      <h>143</h>
     </coordinates>
-    <panel_attributes>Control</panel_attributes>
+    <panel_attributes>Control
+--
+liveDirectory
+backupDirectory
+createdFiles
+modifiedFiles
+renamedFiles
+deletedFiles</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>160</x>
-      <y>400</y>
-      <w>140</w>
-      <h>60</h>
+      <x>165</x>
+      <y>198</y>
+      <w>154</w>
+      <h>176</h>
     </coordinates>
-    <panel_attributes>FileInfo</panel_attributes>
+    <panel_attributes>FileInfo
+--
+fileName
+folder
+fileSize
+createdDate
+lastAccessedDate 
+lastModifiedDate 
+numberOfRevisions
+revisionSizes</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>450</x>
-      <y>270</y>
-      <w>150</w>
-      <h>150</h>
+      <x>396</x>
+      <y>231</y>
+      <w>174</w>
+      <h>164</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=  1
 m2=  1
 Queries             .</panel_attributes>
-    <additional_attributes>80;130;80;30</additional_attributes>
+    <additional_attributes>88;143;88;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>550</x>
-      <y>270</y>
-      <w>230</w>
-      <h>160</h>
+      <x>506</x>
+      <y>231</y>
+      <w>197</w>
+      <h>153</h>
     </coordinates>
     <panel_attributes>lt=-
-m1=0..*
+m1=0..*      .
 m2=  1
 Acts for</panel_attributes>
-    <additional_attributes>210;140;210;80;30;80;30;30</additional_attributes>
+    <additional_attributes>165;132;165;88;33;88;33;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>340</x>
-      <y>430</y>
-      <w>230</w>
-      <h>230</h>
+      <x>330</x>
+      <y>407</y>
+      <w>197</w>
+      <h>252</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=  1
 m2=  1
   Utilizes</panel_attributes>
-    <additional_attributes>30;210;30;140;210;140;210;30</additional_attributes>
+    <additional_attributes>33;231;33;154;176;154;176;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>270</x>
-      <y>430</y>
-      <w>378</w>
-      <h>120</h>
+      <x>275</x>
+      <y>407</y>
+      <w>300</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
-m2=0..*
-Retrieves                                              .</panel_attributes>
-    <additional_attributes>30;100;230;100;230;30</additional_attributes>
+m2=0..*       .
+Retrieves                              .</panel_attributes>
+    <additional_attributes>33;110;176;110;176;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>400</x>
-      <y>590</y>
-      <w>454</w>
-      <h>100</h>
+      <x>396</x>
+      <y>605</y>
+      <w>345</w>
+      <h>88</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=  1
-Utilizes                                                        .</panel_attributes>
-    <additional_attributes>30;80;300;80;300;30</additional_attributes>
+Utilizes                                          .</panel_attributes>
+    <additional_attributes>33;66;209;66;209;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>680</x>
-      <y>440</y>
-      <w>172</w>
-      <h>140</h>
+      <x>583</x>
+      <y>473</y>
+      <w>186</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=  1
 m2=  1
 Acts for                .</panel_attributes>
-    <additional_attributes>90;120;90;30</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>850</x>
-      <y>370</y>
-      <w>180</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>lt=-
-m1= 1
-m2= 1
-Notifies</panel_attributes>
-    <additional_attributes>160;50;30;50</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>850</x>
-      <y>410</y>
-      <w>354</w>
-      <h>150</h>
-    </coordinates>
-    <panel_attributes>lt=-
-m1=0..*
-m2= 1
-Uses                                            .</panel_attributes>
-    <additional_attributes>230;130;230;50;30;50</additional_attributes>
+    <additional_attributes>99;99;99;33</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>770</x>
-      <y>440</y>
-      <w>132</w>
-      <h>270</h>
+      <y>352</y>
+      <w>164</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2= 1
+Notifies</panel_attributes>
+    <additional_attributes>143;55;33;55</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>770</x>
+      <y>396</y>
+      <w>339</w>
+      <h>197</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*       .
+m2= 1
+Uses                                            .</panel_attributes>
+    <additional_attributes>198;176;198;55;33;55</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>682</x>
+      <y>473</y>
+      <w>144</w>
+      <h>208</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=  1
 m2=  1
        Acts for</panel_attributes>
-    <additional_attributes>70;30;70;250</additional_attributes>
+    <additional_attributes>77;33;77;187</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>270</x>
-      <y>370</y>
-      <w>200</w>
-      <h>70</h>
+      <x>143</x>
+      <y>341</y>
+      <w>274</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=   0..*
 m2=0..*
-   Retrieves</panel_attributes>
-    <additional_attributes>30;50;180;50</additional_attributes>
+                Retrieves</panel_attributes>
+    <additional_attributes>99;33;99;88;253;88</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>750</x>
-      <y>270</y>
-      <w>132</w>
-      <h>160</h>
+      <x>660</x>
+      <y>220</y>
+      <w>142</w>
+      <h>164</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=  1
 m2=  1
        Informs</panel_attributes>
-    <additional_attributes>70;140;70;30</additional_attributes>
+    <additional_attributes>77;143;77;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>968</x>
+      <y>396</y>
+      <w>118</w>
+      <h>197</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*      .
+m2= 1
+     Uses</panel_attributes>
+    <additional_attributes>66;176;66;33</additional_attributes>
   </element>
 </diagram>
