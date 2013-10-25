@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 public class FileOp
 {
 	private static Logger logger = Logger.getLogger(FileOp.class);
+	private static String backupPath;
 
 	public static void copy(Path sourceFile, Path destFolder)
 	{
@@ -87,5 +88,8 @@ public class FileOp
 		return false;
 	}
 
-
+	public static void setBackupPath(String path)
+	{
+		backupPath = path;
+	}
 }
