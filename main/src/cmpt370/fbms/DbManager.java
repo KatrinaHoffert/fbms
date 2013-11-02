@@ -238,56 +238,25 @@ public class DbManager
 	 */
 	public static void setConfig(String settingName, String settingValue)
 	{
-		if(settingName == null || settingValue == null)
-		{
-			Errors.fatalError("Null input provided to setConfig(), unable to proceed.");
-		}
-
-		// Build our strings for our queries concatenating with our variables.
-		String update = "UPDATE settings SET setting = '" + settingValue + "' WHERE name = '"
-				+ settingName + "'";
-		String insert = "INSERT INTO settings(name, setting) VALUES('" + settingName + "', '"
-				+ settingValue + "')";
-
 		try
 		{
-
-			// Grab statement from connection so we can call execute for our queries.
 			Statement statement = connection.createStatement();
 
+			// Search for our row
+			ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = '"
+					+ settingName + "'");
 
-			if(settingName.equals("liveDirectory"))
+			// If the row exists, update it
+			if(settingsRows.next())
 			{
-				// Search for our row.
-				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'liveDirectory'");
-
-				// If the row exists, update it.
-				if(settingsRows.next())
-				{
-					System.out.println(update);
-					statement.executeUpdate(update);
-				}
-				// If the row does not exist, insert it.
-				else
-				{
-					statement.executeUpdate(insert);
-				}
-
+				statement.executeUpdate("UPDATE settings SET setting = '" + settingValue
+						+ "' WHERE name = '" + settingName + "'");
 			}
-			if(settingName.equals("backupDirectory"))
+			// If the row does not exist, insert it
+			else
 			{
-				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'backupDirectory'");
-
-				// If the row exists, update it.
-				if(settingsRows.next())
-				{
-					statement.executeUpdate(update);
-				}
-				// If the row does not exist, insert it.
-				else
-				{
-					statement.executeUpdate(insert);
-				}
+				statement.executeUpdate("INSERT INTO settings(name, setting) VALUES('"
+						+ settingName + "', '" + settingValue + "')");
 			}
 
 		}
