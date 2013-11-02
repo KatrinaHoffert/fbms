@@ -9,7 +9,7 @@ public class FileHistory
 		return null;
 	}
 
-	public static void storeRevision(Path diff, long filesize, long delta)
+	public static void storeRevision(Path file, Path diff, long filesize, long delta)
 	{
 
 	}
