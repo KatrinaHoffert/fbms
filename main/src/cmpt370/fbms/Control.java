@@ -268,20 +268,27 @@ public class Control
 	 */
 	public static void revertRevision(Path file, long timestamp)
 	{
-		// Get the revision we want and make a diff for it
-		Path revertedFile = FileHistory.obtainRevision(file, timestamp);
-		Path diffFromCurrent = FileOp.createDiff(file, revertedFile);
+		if(file.toFile().exists())
+		{
+			// Get the revision we want and make a diff for it
+			Path revertedFile = FileHistory.obtainRevision(file, timestamp);
+			Path diffFromCurrent = FileOp.createDiff(file, revertedFile);
 
-		// Get the filesize of our newly reverted file as well as the delta from the old file
-		long fileSize = FileOp.fileSize(revertedFile);
-		long delta = fileSize - FileOp.fileSize(file);
+			// Get the filesize of our newly reverted file as well as the delta from the old file
+			long fileSize = FileOp.fileSize(revertedFile);
+			long delta = fileSize - FileOp.fileSize(file);
 
-		// Store the revision and copy the reverted file over the backup directory
-		FileHistory.storeRevision(FileOp.convertPath(file), diffFromCurrent, fileSize, delta);
-		FileOp.copy(revertedFile, file);
+			// Store the revision and copy the reverted file over the backup directory
+			FileHistory.storeRevision(FileOp.convertPath(file), diffFromCurrent, fileSize, delta);
+			FileOp.copy(revertedFile, file);
 
-		// Finally, copy that backup directory copy to the live directory
-		FileOp.copy(file, FileOp.convertPath(file));
+			// Finally, copy that backup directory copy to the live directory
+			FileOp.copy(file, FileOp.convertPath(file));
+		}
+		else
+		{
+			Errors.nonfatalError("The file you wanted to revert does not exist!");
+		}
 	}
 
 	public static void restoreBackup()
