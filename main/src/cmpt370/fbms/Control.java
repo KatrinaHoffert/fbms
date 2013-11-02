@@ -1,5 +1,6 @@
 package cmpt370.fbms;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -236,9 +237,25 @@ public class Control
 
 	}
 
+	/**
+	 * Obtains the specified revision and displays it in the default program for that type of file.
+	 * 
+	 * @param file
+	 *            The file's path (in the live directory).
+	 * @param timestamp
+	 *            The Unix time stamp (seconds since Unix epoch).
+	 */
 	public static void displayRevision(Path file, long timestamp)
 	{
-
+		Path fileToOpen = FileHistory.obtainRevision(file, timestamp);
+		try
+		{
+			Desktop.getDesktop().open(fileToOpen.toFile());
+		}
+		catch(IOException e)
+		{
+			Errors.nonfatalError("Could not open revision file.", e);
+		}
 	}
 
 	public static void revertRevision(Path file, long timestampt)
