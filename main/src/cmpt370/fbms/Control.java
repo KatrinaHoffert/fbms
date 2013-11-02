@@ -241,11 +241,6 @@ public class Control
 
 	}
 
-	public static void displayRevisionChanges(Path file, long timestamp)
-	{
-
-	}
-
 	public static void revertRevision(Path file, long timestampt)
 	{
 
