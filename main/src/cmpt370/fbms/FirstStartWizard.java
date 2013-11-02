@@ -39,7 +39,7 @@ public class FirstStartWizard
 		// Create the dialog window
 		frame = new JDialog();
 		frame.setTitle("Welcome to FBMS");
-		frame.setSize(new Dimension(400, 250));
+		frame.setSize(new Dimension(450, 250));
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 
@@ -176,11 +176,11 @@ public class FirstStartWizard
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBorder(new EmptyBorder(25, 0, 0, 0));
 		JLabel liveDirectoryLabel = new JLabel("Live directory:");
-		liveDirectoryLabel.setPreferredSize(new Dimension(100, 25));
+		liveDirectoryLabel.setPreferredSize(new Dimension(130, 25));
 		liveDirectoryField = new JTextField();
 		liveDirectoryField.setPreferredSize(new Dimension(250, 25));
 		JLabel backupDirectoryLabel = new JLabel("Backup directory:");
-		backupDirectoryLabel.setPreferredSize(new Dimension(100, 25));
+		backupDirectoryLabel.setPreferredSize(new Dimension(130, 25));
 		backupDirectoryField = new JTextField();
 		backupDirectoryField.setPreferredSize(new Dimension(250, 25));
 		centerPanel.add(liveDirectoryLabel);
@@ -242,7 +242,7 @@ public class FirstStartWizard
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBorder(new EmptyBorder(25, 0, 0, 0));
 		JLabel backupDirectoryLabel = new JLabel("Backup directory:");
-		backupDirectoryLabel.setPreferredSize(new Dimension(100, 25));
+		backupDirectoryLabel.setPreferredSize(new Dimension(130, 25));
 		backupDirectoryField = new JTextField();
 		backupDirectoryField.setPreferredSize(new Dimension(250, 25));
 		centerPanel.add(backupDirectoryLabel);
