@@ -47,6 +47,7 @@ public class Control
 	{
 		startup();
 		fileHandler();
+		FrontEnd.createAndShowGUI();
 	}
 
 	/**
