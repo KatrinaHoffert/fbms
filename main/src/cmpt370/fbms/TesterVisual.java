@@ -56,7 +56,9 @@ public class TesterVisual
 		DbManager.insertRevision(path.resolve("README.txt"),
 				FileOp.fileToString(path.resolve("README.txt")), 100);
 
-		List<RevisionInfo> list = DbManager.getRevisionData(path.resolve("README.txt"));
+		DbManager.renameFile(path.resolve("README.txt"), "not-readme.txt");
+
+		List<RevisionInfo> list = DbManager.getRevisionData(path.resolve("not-readme.txt"));
 		for(RevisionInfo revision : list)
 		{
 			System.out.println("Found revision id = " + revision.id);

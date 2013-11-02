@@ -223,9 +223,31 @@ public class DbManager
 		}
 	}
 
-	public static void renameFile(Path file, Path newName)
+	/**
+	 * Renames all instances of a certain file to a new name in the revisions database.
+	 * 
+	 * @param file
+	 *            The path of the file we are renaming.
+	 * @param newName
+	 *            The new name of the file. Note this does not include the full path: just the file
+	 *            name (and extension).
+	 */
+	public static void renameFile(Path file, String newName)
 	{
+		try
+		{
+			// Figure out the new name
+			Path newPath = file.resolveSibling(newName);
 
+			Statement statement = connection.createStatement();
+			statement.executeUpdate("UPDATE revisions SET path = '" + newPath.toString()
+					+ "' WHERE path = '" + file.toString() + "'");
+
+		}
+		catch(SQLException e)
+		{
+			Errors.nonfatalError("Could not rename revisions in database.", e);
+		}
 	}
 
 	/**
