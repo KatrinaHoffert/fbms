@@ -1,7 +1,6 @@
 package cmpt370.fbms;
 
 import java.awt.AWTException;
-import java.awt.CheckboxMenuItem;
 import java.awt.Image;
 import java.awt.Menu;
 import java.awt.MenuItem;
@@ -10,8 +9,6 @@ import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -21,6 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import cmpt370.fbms.GUI.MainFrame;
 
 public class FrontEnd
 {
@@ -38,27 +37,15 @@ public class FrontEnd
 
 		// Create a popup menu components
 		MenuItem aboutItem = new MenuItem("About");
-		CheckboxMenuItem cb1 = new CheckboxMenuItem("Set auto size");
-		CheckboxMenuItem cb2 = new CheckboxMenuItem("Set tooltip");
 		Menu displayMenu = new Menu("Display");
-		MenuItem errorItem = new MenuItem("Error");
-		MenuItem warningItem = new MenuItem("Warning");
-		MenuItem infoItem = new MenuItem("Info");
-		MenuItem noneItem = new MenuItem("None");
 		MenuItem exitItem = new MenuItem("Exit");
 		MenuItem openGUI = new MenuItem("Open");
 
 		// Add components to popup menu
 		popup.add(aboutItem);
 		popup.addSeparator();
-		popup.add(cb1);
-		popup.add(cb2);
 		popup.addSeparator();
 		popup.add(displayMenu);
-		displayMenu.add(errorItem);
-		displayMenu.add(warningItem);
-		displayMenu.add(infoItem);
-		displayMenu.add(noneItem);
 		displayMenu.add(openGUI);
 		popup.add(exitItem);
 
@@ -78,7 +65,8 @@ public class FrontEnd
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(null, "This dialog box is run from System Tray");
+				MainFrame frame = new MainFrame();
+				frame.setVisible(true);
 			}
 		});
 
@@ -91,37 +79,6 @@ public class FrontEnd
 			}
 		});
 
-		cb1.addItemListener(new ItemListener()
-		{
-			public void itemStateChanged(ItemEvent e)
-			{
-				int cb1Id = e.getStateChange();
-				if(cb1Id == ItemEvent.SELECTED)
-				{
-					trayIcon.setImageAutoSize(true);
-				}
-				else
-				{
-					trayIcon.setImageAutoSize(false);
-				}
-			}
-		});
-
-		cb2.addItemListener(new ItemListener()
-		{
-			public void itemStateChanged(ItemEvent e)
-			{
-				int cb2Id = e.getStateChange();
-				if(cb2Id == ItemEvent.SELECTED)
-				{
-					trayIcon.setToolTip("Sun TrayIcon");
-				}
-				else
-				{
-					trayIcon.setToolTip(null);
-				}
-			}
-		});
 
 		ActionListener listener = new ActionListener()
 		{
@@ -160,10 +117,10 @@ public class FrontEnd
 			}
 		};
 
-		errorItem.addActionListener(listener);
-		warningItem.addActionListener(listener);
-		infoItem.addActionListener(listener);
-		noneItem.addActionListener(listener);
+		// errorItem.addActionListener(listener);
+		// warningItem.addActionListener(listener);
+		// infoItem.addActionListener(listener);
+		// noneItem.addActionListener(listener);
 
 		exitItem.addActionListener(new ActionListener()
 		{
@@ -174,6 +131,14 @@ public class FrontEnd
 			}
 		});
 
+		openGUI.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				MainFrame frame = new MainFrame();
+				frame.setVisible(true);
+			}
+		});
 	}
 
 	protected static Image createImage(String path, String description)
