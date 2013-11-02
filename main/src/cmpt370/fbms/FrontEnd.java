@@ -33,7 +33,7 @@ public class FrontEnd
 			return;
 		}
 		final PopupMenu popup = new PopupMenu();
-		final TrayIcon trayIcon = new TrayIcon(createImage("res/bulb.gif", "tray icon"));
+		final TrayIcon trayIcon = new TrayIcon(createImage("res/icon.gif", "tray icon"));
 		final SystemTray tray = SystemTray.getSystemTray();
 
 		// Create a popup menu components
@@ -46,6 +46,7 @@ public class FrontEnd
 		MenuItem infoItem = new MenuItem("Info");
 		MenuItem noneItem = new MenuItem("None");
 		MenuItem exitItem = new MenuItem("Exit");
+		MenuItem openGUI = new MenuItem("Open");
 
 		// Add components to popup menu
 		popup.add(aboutItem);
@@ -58,6 +59,7 @@ public class FrontEnd
 		displayMenu.add(warningItem);
 		displayMenu.add(infoItem);
 		displayMenu.add(noneItem);
+		displayMenu.add(openGUI);
 		popup.add(exitItem);
 
 		trayIcon.setPopupMenu(popup);
