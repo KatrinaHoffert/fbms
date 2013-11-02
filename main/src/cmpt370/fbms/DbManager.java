@@ -11,13 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 
 public class DbManager
 {
-	private static ReentrantLock lock = new ReentrantLock();
-
 	// Holds the active connection
 	private static Connection connection = null;
 
@@ -304,6 +301,10 @@ public class DbManager
 		}
 	}
 
+	/**
+	 * Closes the database connection. Meant for tests where the connection is opened and closed for
+	 * each test (as there's no way to be certain of the order the tests will be run in).
+	 */
 	public static void close()
 	{
 		if(connection != null)
