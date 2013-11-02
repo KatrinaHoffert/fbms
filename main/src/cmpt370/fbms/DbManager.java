@@ -183,7 +183,7 @@ public class DbManager
 		return null;
 	}
 
-	public static void insertRevision(Path file, String diff, long timestamp, int delta)
+	public static void insertRevision(Path file, String diff, long timestamp, long delta)
 	{
 
 	}
