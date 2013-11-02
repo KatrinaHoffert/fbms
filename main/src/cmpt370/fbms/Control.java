@@ -258,9 +258,30 @@ public class Control
 		}
 	}
 
-	public static void revertRevision(Path file, long timestampt)
+	/**
+	 * Reverts a revision by obtaining a specific revision and making that the current revision.
+	 * 
+	 * @param file
+	 *            The path to the file (in the backup directory) to revert. The file must exist.
+	 * @param timestamp
+	 *            The time stamp (in Unix time stamp format) of the revision we want.
+	 */
+	public static void revertRevision(Path file, long timestamp)
 	{
+		// Get the revision we want and make a diff for it
+		Path revertedFile = FileHistory.obtainRevision(file, timestamp);
+		Path diffFromCurrent = FileOp.createDiff(file, revertedFile);
 
+		// Get the filesize of our newly reverted file as well as the delta from the old file
+		long fileSize = FileOp.fileSize(revertedFile);
+		long delta = fileSize - FileOp.fileSize(file);
+
+		// Store the revision and copy the reverted file over the backup directory
+		FileHistory.storeRevision(FileOp.convertPath(file), diffFromCurrent, fileSize, delta);
+		FileOp.copy(revertedFile, file);
+
+		// Finally, copy that backup directory copy to the live directory
+		FileOp.copy(file, FileOp.convertPath(file));
 	}
 
 	public static void restoreBackup()
