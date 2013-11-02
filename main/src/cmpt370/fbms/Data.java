@@ -98,8 +98,16 @@ public class Data
 		return list;
 	}
 
+	/**
+	 * Just a wrapper so that the FrontEnd can access the revision info for a file easily.
+	 * 
+	 * @param file
+	 *            The path of the file revision info is required for.
+	 * @return A list of RevisionInfo objects containing ALL the revision information about the
+	 *         file.
+	 */
 	public static List<RevisionInfo> getRevisionInfo(Path file)
 	{
-		return null;
+		return DbManager.getRevisionData(file);
 	}
 }
