@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 public class Data
@@ -96,6 +97,42 @@ public class Data
 		}
 
 		return list;
+	}
+
+	/**
+	 * Takes in a path to a folder and outputs a Vector of Vectors. The parent vector is the rows.
+	 * The vector inside this is the columns.
+	 * 
+	 * @param folder
+	 *            The folder to create a table of vectors for.
+	 * @return A vector of vectors of strings (a 2D vector of Strings) that the JTable can be
+	 *         created from.
+	 */
+	public static Vector<Vector<String>> getTableData(Path folder)
+	{
+		Vector<Vector<String>> tableData = new Vector<>();
+
+		// Get the contents of the folder
+		List<FileInfo> files = Data.getFolderContents(folder);
+
+		for(FileInfo file : files)
+		{
+			// For each file in the folder, create a Vector that will become a row in
+			// our table.
+			Vector<String> row = new Vector<String>();
+
+			row.add(file.fileName);
+			row.add(Long.toString(file.fileSize));
+			row.add(Long.toString(file.createdDate));
+			row.add(Long.toString(file.lastAccessedDate));
+			row.add(Long.toString(file.lastModifiedDate));
+			row.add(Integer.toString(file.numberOfRevisions));
+			row.add(Long.toString(file.revisionSizes));
+
+			tableData.add(row);
+		}
+
+		return tableData;
 	}
 
 	/**
