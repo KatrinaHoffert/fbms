@@ -1,6 +1,10 @@
 package cmpt370.fbms;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -82,6 +86,27 @@ public class FileOp
 	public static List<String> fileToList(Path file)
 	{
 		return null;
+	}
+
+	/**
+	 * A utility function for converting a file to a String.
+	 * 
+	 * @author erickson <http://stackoverflow.com/users/3474/erickson> from
+	 *         <http://stackoverflow.com/a/326440>
+	 * 
+	 * @param path
+	 *            The path of the file to convert.
+	 * @return A string containing the contents of the file.
+	 * @throws IOException
+	 *             If the file does not exist or cannot be opened.
+	 */
+	public static String fileToString(Path path) throws IOException
+	{
+		// Read the file as raw bytes
+		byte[] encoded = Files.readAllBytes(path);
+
+		// And encode those bytes as the default character set (eg, UTF 8)
+		return Charset.defaultCharset().decode(ByteBuffer.wrap(encoded)).toString();
 	}
 
 	public static boolean fileValid(Path file)
