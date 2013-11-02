@@ -42,6 +42,7 @@ public class TesterServices
 		}
 
 		assertTrue(foundReadme);
+		DbManager.close();
 	}
 
 	@Test
