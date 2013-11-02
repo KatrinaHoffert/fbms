@@ -194,80 +194,37 @@ public class DbManager
 	}
 
 	/**
-	 * Grabs setting values from the database when provided with a name for the given setting.
+	 * Grabs the value of a specified setting from the settings database.
 	 * 
 	 * @param settingName
 	 *            Name of the setting you want the value of.
-	 * @return Returns the associated value with the setting name.
+	 * @return Returns the value of the setting or null if it does not exist.
 	 */
 	public static String getConfig(String settingName)
 	{
-		// Holds our return result.
-		String toGet = null;
-		if(settingName.equals(null))
-		{
-			Errors.fatalError("Setting name provided is null.");
-		}
+		String settingValue = null;
 
 		try
 		{
-			// Setup our connection object to run queries from.
+			// Get the row with the setting name
 			Statement statement = connection.createStatement();
+			ResultSet settingRow = statement.executeQuery("SELECT * FROM settings WHERE name = '"
+					+ settingName + "'");
 
-
-			// Since we have so few settings using cases to find our values.
-			// Will look into doing a dynamic SQL query later using something like
-			// PreparedStatement.
-			if(settingName.equals("liveDirectory"))
+			// Make sure that there is a row to get data from (there should be 0 or 1)
+			if(settingRow.next())
 			{
-
-				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'liveDirectory'");
-
-				// Cycle through all settings named liveDirectory (should only be one).
-				while(settingsRows.next())
-				{
-					if(settingsRows.getString("name").equals("liveDirectory"))
-					{
-						// Set it to our return value
-						toGet = settingsRows.getString("setting");
-					}
-				}
+				settingValue = settingRow.getString("setting");
 			}
-			if(settingName.equals("backupDirectory"))
-			{
-				// cycle through all settings named backupDirectory (again should only be one).
-				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'backupDirectory'");
-
-				while(settingsRows.next())
-				{
-					if(settingsRows.getString("name").equals("backupDirectory"))
-					{
-						// Set our return value.
-						toGet = settingsRows.getString("setting");
-					}
-				}
-			}
-
 		}
 		catch(SQLException e)
 		{
 			Errors.fatalError("Retrieval of setting value failed", e);
 		}
-		// If our string is still null throw an error.
 
-		try
-		{
-			if(toGet.equals(null))
-			{
-				throw new NoSuchFieldException();
-			}
-		}
-		catch(NoSuchFieldException e)
-		{
-			Errors.nonfatalError("Row in settings not found.", e);
-		}
-
-		return toGet;
+		// Will end up returning either the setting value if it was found or null if it was not
+		// found
+		return settingValue;
 	}
 
 	/**
