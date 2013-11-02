@@ -38,6 +38,38 @@ public class TesterVisual
 			}
 		}
 		Files.delete(path.resolve(".revisions.db"));
+		DbManager.close();
+	}
+
+	@Test
+	public void dbManagerInsertRevision() throws IOException
+	{
+		Path path = Paths.get("").toAbsolutePath();
+		Control.backupDirectory = path;
+		Control.liveDirectory = path;
+		DbManager.init();
+
+		System.out.println("\n--------------------------------");
+		System.out.println("Size of database before: "
+				+ FileOp.fileSize(path.resolve(".revisions.db")));
+
+		DbManager.insertRevision(path.resolve("README.txt"),
+				FileOp.fileToString(path.resolve("README.txt")), 100);
+
+		List<RevisionInfo> list = DbManager.getRevisionData(path.resolve("README.txt"));
+		for(RevisionInfo revision : list)
+		{
+			System.out.println("Found revision id = " + revision.id);
+			System.out.println(revision.path);
+			System.out.println("Time stamp: " + revision.time + "; Delta: " + revision.delta);
+			System.out.println(revision.diff);
+		}
+
+		System.out.println("Size of database after: "
+				+ FileOp.fileSize(path.resolve(".revisions.db")));
+
+		Files.delete(path.resolve(".revisions.db"));
+		DbManager.close();
 	}
 
 	@Test

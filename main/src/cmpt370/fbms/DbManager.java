@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -147,7 +148,7 @@ public class DbManager
 
 			while(revisionRows.next())
 			{
-				// Table structure: (id INTEGER, path STRING, diff BLOB, delta INTEGER, time
+				// Table structure: (id INTEGER, path STRING, diff STRING, delta INTEGER, time
 				// INTEGER)
 				RevisionInfo newRevision = new RevisionInfo();
 
@@ -183,9 +184,46 @@ public class DbManager
 		return null;
 	}
 
-	public static void insertRevision(Path file, String diff, long timestamp, long delta)
+	/**
+	 * Inserts a revision into the database using the supplied information and the current time as
+	 * the time stamp.
+	 * 
+	 * @param file
+	 *            The path to the file that we're inserting (in the live directory).
+	 * @param diff
+	 *            The diff of the revision as a String (FileOp.fileToString can be useful to get
+	 *            this String representation).
+	 * @param delta
+	 *            The difference in file size that this revision introduced (positive means that
+	 *            this revision increased the file size of the file, while negative means the file
+	 *            size decreased).
+	 */
+	public static void insertRevision(Path file, String diff, long delta)
 	{
+		// Using prepared statements because the diff string can be very long
+		PreparedStatement revision = null;
+		String insertStatment = "INSERT INTO revisions (path, diff, delta, time) VALUES("
+				+ "?, ?, ?, ?)";
 
+		try
+		{
+			revision = connection.prepareStatement(insertStatment);
+
+			// path
+			revision.setString(1, file.toString());
+			// diff
+			revision.setString(2, diff);
+			// delta
+			revision.setLong(3, delta);
+			// time
+			revision.setLong(4, System.currentTimeMillis() / 1000L);
+
+			revision.executeUpdate();
+		}
+		catch(SQLException e1)
+		{
+			Errors.nonfatalError("Could not insert revision into database", e1);
+		}
 	}
 
 	public static void renameFile(Path file, Path newName)
