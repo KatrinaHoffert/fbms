@@ -7,24 +7,45 @@ import java.nio.file.Path;
 
 public class FileHistory
 {
+	/**
+	 * Gets the specified revision and outputs it to a temporary file, returning the path to this
+	 * file.
+	 * 
+	 * @param file
+	 *            The path of the file (in the live directory) to get the revision of.
+	 * @param timestamp
+	 *            The time stamp of the specific revision.
+	 * @return A path to the temporary file containing the diff that makes up that revision.
+	 */
 	public static Path getRevision(Path file, long timestamp)
 	{
 		// Get the revision in question
 		RevisionInfo revision = DbManager.getRevisionInfo(file, timestamp);
 		Path pathToTempFile = null;
+		PrintWriter output = null;
 
 		try
 		{
 			// Create a temporary file for the revision
 			pathToTempFile = Files.createTempFile("revision", ".txt");
-			System.out.println("Temp file : " + pathToTempFile);
 
-			PrintWriter output = new PrintWriter(pathToTempFile.toFile());
+			// Write the diff to that temp file
+			output = new PrintWriter(pathToTempFile.toFile());
 			output.print(revision.diff);
+
+			Control.logger.info("Created temporary file at " + pathToTempFile.toString()
+					+ " for revision " + file.toString() + " (" + timestamp + ")");
 		}
 		catch(IOException e)
 		{
 			Errors.nonfatalError("Could not create temporary file for revision.", e);
+		}
+		finally
+		{
+			if(output != null)
+			{
+				output.close();
+			}
 		}
 
 		return pathToTempFile;
