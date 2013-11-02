@@ -21,6 +21,8 @@ public class TesterServices
 	@Test
 	public void dataGetFolderContents()
 	{
+		Control.backupDirectory = Paths.get("").toAbsolutePath();
+		DbManager.init();
 		List<FileInfo> list = Data.getFolderContents(Paths.get("").toAbsolutePath());
 
 		boolean foundReadme = false;
@@ -101,5 +103,15 @@ public class TesterServices
 
 		Thread.sleep(50);
 		assertTrue(createdFile.equals(Control.deletedFiles.get(0)));
+	}
+
+	@Test
+	public void testConvertPath()
+	{
+		Control.backupDirectory = Paths.get("").toAbsolutePath().resolve("lib");
+		Control.liveDirectory = Paths.get("").toAbsolutePath().resolve("../util/demo/lib");
+
+		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("lib/jnotify.dll")) != null);
+		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("lib/doesNotExist")) == null);
 	}
 }
