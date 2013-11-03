@@ -17,6 +17,7 @@ package cmpt370.fbms;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
@@ -394,6 +395,9 @@ public class Control
 	 * watcher is reassigned, and the contents of the live directory are backed up (and revisioned
 	 * if applicable).
 	 * 
+	 * This does not check if the live directory is valid (eg, not a child of the backup directory).
+	 * That is a pre-condition.
+	 * 
 	 * As of the time of implementation, this is currently not called from anywhere. It is expected
 	 * to be added to future versions of the FrontEnd.
 	 * 
@@ -430,6 +434,49 @@ public class Control
 		catch(JNotifyException e)
 		{
 			Errors.fatalError("Could not add a file watcher.", e);
+		}
+	}
+
+	/**
+	 * Changes the backup directory path. The contents of the existing backup directory will be
+	 * copied to the new directory, and the file pointing to the location of the backup directory
+	 * will be updated.
+	 * 
+	 * The previous backup directory is NOT deleted, but will be left as a dangling folder. Perhaps
+	 * the user should be prompted if they want to delete that old backup directory.
+	 * 
+	 * This does not check if the backup directory is valid (eg, not a child of the live directory).
+	 * That is a pre-condition.
+	 * 
+	 * As of the time of implementation, this is currently not called from anywhere. It is expected
+	 * to be added to future versions of the FrontEnd.
+	 * 
+	 * @param newDirectory
+	 */
+	public static void changeBackupDirectory(Path newDirectory)
+	{
+		// Iterate through all files in the backup folder, copying them to the new backup directory
+		for(File child : backupDirectory.toFile().listFiles())
+		{
+			FileOp.copy(child.toPath(), newDirectory);
+		}
+
+		backupDirectory = newDirectory;
+
+		// Write the backup path to the disk
+		FileOutputStream out;
+		try
+		{
+			out = new FileOutputStream("backup_location");
+			out.write(Control.backupDirectory.toString().getBytes());
+			out.close();
+
+			Control.logger.info("Backup location file modified, set to: " + Control.backupDirectory);
+		}
+		catch(IOException e)
+		{
+			Errors.fatalError(
+					"Could not write backup path to disk. Is the program folder writeable?", e);
 		}
 	}
 }
