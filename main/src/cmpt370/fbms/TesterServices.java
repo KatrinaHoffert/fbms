@@ -211,4 +211,15 @@ public class TesterServices
 		FileOp.delete(path.resolve("../test").normalize());
 		assertTrue(!path.resolve("../test").normalize().toFile().exists());
 	}
+
+	// Test file equivalence
+	@Test
+	public void fileOpIsEqual() throws IOException
+	{
+		Path path = Paths.get("").toAbsolutePath();
+
+		// Compare some files
+		assertTrue(FileOp.isEqual(path.resolve("authors.txt"), path.resolve("authors.txt")));
+		assertTrue(!FileOp.isEqual(path.resolve("authors.txt"), path.resolve("license.txt")));
+	}
 }

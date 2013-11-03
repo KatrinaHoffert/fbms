@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -139,15 +140,14 @@ public class FileOp
 			{
 				// Make any necessary directories up to the parent of where our file is being copied
 				// to
-				destFolder.toFile().mkdir();
+				destFolder.toFile().mkdirs();
 
 				Files.copy(sourceFile, destFile, StandardCopyOption.REPLACE_EXISTING);
 			}
 			catch(IOException e)
 			{
-				Errors.nonfatalError(
-						"Could not copy " + sourceFile.toString() + "to " + destFolder.toString(),
-						e);
+				Errors.nonfatalError("Could not copy " + sourceFile.toString() + " to "
+						+ destFolder.toString(), e);
 			}
 		}
 
@@ -360,4 +360,43 @@ public class FileOp
 		return convertedPath;
 	}
 
+	/**
+	 * Checks the bytes of a file to determine if a given file is equal to another.
+	 * 
+	 * @param file1
+	 * @param file2
+	 * @return
+	 * @throws IOException
+	 */
+	public static boolean isEqual(Path file1, Path file2)
+	{
+		// Can't be equal if the file size is different
+		if(file1.toFile().length() != file2.toFile().length())
+		{
+			return false;
+		}
+
+		// Try to compare the bytes otherwise
+		byte[] file1Bytes = null;
+		byte[] file2Bytes = null;
+		try
+		{
+			file1Bytes = Files.readAllBytes(file1);
+			file2Bytes = Files.readAllBytes(file2);
+		}
+		catch(IOException e)
+		{
+			Control.logger.error(
+					"Could not compare files " + file1.toString() + " " + file2.toString(), e);
+		}
+
+		if(Arrays.equals(file1Bytes, file2Bytes))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
