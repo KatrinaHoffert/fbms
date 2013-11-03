@@ -292,9 +292,16 @@ public class Control
 		}
 	}
 
+	/**
+	 * Copies all files in the backup directory to the live directory.
+	 */
 	public static void restoreBackup()
 	{
-
+		// Iterate through all files in the backup folder, copying them to the live directory
+		for(File child : backupDirectory.toFile().listFiles())
+		{
+			FileOp.copy(child.toPath(), liveDirectory);
+		}
 	}
 
 	public static void copyTo(Path sourceFile, Path destFolder)
