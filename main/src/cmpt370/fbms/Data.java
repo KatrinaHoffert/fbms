@@ -127,12 +127,12 @@ public class Data
 
 			// Populate the columns
 			row.add(file.fileName);
-			row.add(Long.toString(file.fileSize));
+			row.add(Data.humanReadableByteCount(file.fileSize, false));
 			row.add(Data.formatDate(file.createdDate));
 			row.add(Data.formatDate(file.lastAccessedDate));
 			row.add(Data.formatDate(file.lastModifiedDate));
 			row.add(Integer.toString(file.numberOfRevisions));
-			row.add(Long.toString(file.revisionSizes));
+			row.add(Data.humanReadableByteCount(file.revisionSizes, false));
 
 			tableData.add(row);
 		}
@@ -172,5 +172,36 @@ public class Data
 		Date date = new Date(timestamp * 1000);
 
 		return dateFormat.format(date);
+	}
+
+	/**
+	 * Takes in a number of bytes and converts it to a human readable format (eg, 51355 bytes
+	 * becomes 50.1 KiB.
+	 * 
+	 * @author aioobe <http://stackoverflow.com/users/276052/aioobe> from
+	 *         <http://stackoverflow.com/a/3758880>
+	 * 
+	 * @param bytes
+	 *            The number of bytes.
+	 * @param si
+	 *            If false, use powers of 2, if true, use powers of 10. For example, if using powers
+	 *            of 2, then 1024 bytes = 1.0 KiB, while using powers of 10 has 1000 bytes = 1.0 kB.
+	 * @return A String representation of a human readable byte count.
+	 */
+	public static String humanReadableByteCount(long bytes, boolean si)
+	{
+		// Figure out if we're using powers of 2 (non-SI) or 10 (SI)
+		int unit = si ? 1000 : 1024;
+		if(bytes < unit)
+		{
+			return bytes + " B";
+		}
+
+		// Figure out the unit being used
+		int exp = (int) (Math.log(bytes) / Math.log(unit));
+		String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
+
+		// Return as a formatted string
+		return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
 	}
 }
