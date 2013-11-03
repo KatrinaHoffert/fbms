@@ -1,0 +1,25 @@
+FBMS was created by:
+ * Mike Hoffert (mlh374)
+ * Da Tao (dat293)
+ * Michael Butler (mdb815)
+ * Ahsen Rizvi (sar457)
+ * Hattan Alsharif (haa775)
+
+Some code derived from work by:
+ * aioobe <http://stackoverflow.com/users/276052/aioobe>
+ * erickson <http://stackoverflow.com/users/3474/erickson>
+
+FBMS is licensed under GPL v3
+https://code.google.com/p/fbms
+
+Java-diff-utils is licensed under the Apache License v2
+https://code.google.com/p/java-diff-utils/
+
+Log4j is licensed under the Apache License v2
+https://logging.apache.org/log4j/1.2/
+
+SQLite JDBC Driver is licensed under the Apache License v2
+https://bitbucket.org/xerial/sqlite-jdbc
+
+JNotify is licensed under the LGPL v2
+http://jnotify.sourceforge.net/
