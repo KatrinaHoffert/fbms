@@ -284,7 +284,7 @@ public class Control
 			FileOp.copy(revertedFile, file);
 
 			// Finally, copy that backup directory copy to the live directory
-			FileOp.copy(file, FileOp.convertPath(file));
+			FileOp.copy(file, FileOp.convertPath(file).getParent());
 		}
 		else
 		{
