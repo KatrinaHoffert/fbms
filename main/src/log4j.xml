@@ -26,7 +26,7 @@
 		<!--
 			The name of the file to write to.
 		-->
-		<param name="File" value="example.log" />
+		<param name="File" value="fbms.log" />
 
 		<!-- "appends" configuration to the logger.
 			Available log levels are:
