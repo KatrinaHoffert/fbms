@@ -61,6 +61,7 @@ public class Control
 	public static void main(String[] args)
 	{
 		startup();
+		startupScan(liveDirectory);
 		fileHandler();
 		FrontEnd.createAndShowGUI();
 	}
@@ -190,6 +191,58 @@ public class Control
 				JOptionPane.showMessageDialog(null,
 						"A backup location record exists, but is invalid. The first-run wizard "
 								+ "will be displayed.", "Error", JOptionPane.WARNING_MESSAGE);
+			}
+		}
+	}
+
+	/**
+	 * Scans the live directory for byte changes on startup, allowing the detection of files that
+	 * were added or modified when the program was not running. Renames, however, are a lost cause.
+	 * They'll be recognized as a new file.
+	 * 
+	 * @param directory
+	 *            The directory to base the scan on (ie, the live directory)
+	 */
+	private static void startupScan(Path directory)
+	{
+		for(File file : directory.toFile().listFiles())
+		{
+			if(!file.isDirectory())
+			{
+				// If the file doesn't already exist, we can just copy it over
+				if(!FileOp.convertPath(file.toPath()).toFile().exists())
+				{
+					Path targetDirectory = FileOp.convertPath(file.toPath()).getParent();
+					FileOp.copy(file.toPath(), targetDirectory);
+
+					logger.info("Startup: Found new file " + file.toString());
+				}
+				// The file does exist, so determine if the file has been changed. If it
+				// hasn't, we need to create a revision for this file.
+				else if(!FileOp.isEqual(file.toPath(), FileOp.convertPath(file.toPath())))
+				{
+					// Create the diff
+					Path diffFile = FileOp.createDiff(FileOp.convertPath(file.toPath()),
+							file.toPath());
+					// Difference in file sizes
+					long delta = FileOp.fileSize(FileOp.convertPath(file.toPath()))
+							- FileOp.fileSize(file.toPath());
+
+					// Store the revision
+					FileHistory.storeRevision(file.toPath(), diffFile,
+							FileOp.fileSize(file.toPath()), delta);
+
+					// Finally, copy the file over
+					Path targetDirectory = FileOp.convertPath(file.toPath()).getParent();
+					FileOp.copy(file.toPath(), targetDirectory);
+
+					logger.info("Startup: Found modified file " + file.toString());
+				}
+			}
+			else
+			{
+				// Call itself recursively for directories
+				startupScan(directory.resolve(file.toPath()));
 			}
 		}
 	}
