@@ -50,6 +50,9 @@ public class Control
 	// Logger object is linked to the class
 	public static Logger logger = Logger.getLogger(Control.class);
 
+	// Watch ID for JNotify
+	private static int watchId = 0;
+
 	/**
 	 * The main method runs the startup code, initializing the database, checking for the first run,
 	 * etc. The main method then loops through the watched files at intervals, checking for changes
@@ -122,8 +125,9 @@ public class Control
 		// changes
 		try
 		{
-			JNotify.addWatch(liveDirectory.toString(), JNotify.FILE_CREATED | JNotify.FILE_DELETED
-					| JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true, new Watcher());
+			watchId = JNotify.addWatch(liveDirectory.toString(), JNotify.FILE_CREATED
+					| JNotify.FILE_DELETED | JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true,
+					new Watcher());
 		}
 		catch(JNotifyException e)
 		{
@@ -383,5 +387,49 @@ public class Control
 	public static void copyTo(Path sourceFile, Path destFolder)
 	{
 		FileOp.copy(sourceFile, destFolder);
+	}
+
+	/**
+	 * Changes the live directory. The new live directory is set in the program and database, the
+	 * watcher is reassigned, and the contents of the live directory are backed up (and revisioned
+	 * if applicable).
+	 * 
+	 * As of the time of implementation, this is currently not called from anywhere. It is expected
+	 * to be added to future versions of the FrontEnd.
+	 * 
+	 * @param newDirectory
+	 *            The new directory to use for the live directory.
+	 */
+	public static void changeLiveDirectory(Path newDirectory)
+	{
+		// Set the new directory in the database
+		liveDirectory = newDirectory;
+		DbManager.setConfig("liveDirectory", liveDirectory.toString());
+
+		// Remove the old watcher
+		try
+		{
+			JNotify.removeWatch(watchId);
+		}
+		catch(JNotifyException e)
+		{
+			Errors.fatalError(
+					"Could not remove old watcher. This problem might be fixed by a restart.", e);
+		}
+
+		// Copy any existing files in the live directory to the backup directory.
+		startupScan(liveDirectory);
+
+		// And add a new watcher
+		try
+		{
+			watchId = JNotify.addWatch(liveDirectory.toString(), JNotify.FILE_CREATED
+					| JNotify.FILE_DELETED | JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true,
+					new Watcher());
+		}
+		catch(JNotifyException e)
+		{
+			Errors.fatalError("Could not add a file watcher.", e);
+		}
 	}
 }
