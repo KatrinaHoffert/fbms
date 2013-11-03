@@ -1,29 +1,28 @@
 /*
-	FBMS: File Backup and Management System
-	Copyright (C) 2013 Group 06
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * FBMS: File Backup and Management System Copyright (C) 2013 Group 06
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
+ */
 
 package cmpt370.fbms;
 
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.contentobjects.jnotify.JNotify;
@@ -37,7 +36,7 @@ import org.junit.Test;
 public class TesterServices
 {
 	@Test
-	public void dataGetFolderContents()
+	public void dataGetFolderContents() throws IOException
 	{
 		Control.backupDirectory = Paths.get("").toAbsolutePath();
 		DbManager.init();
@@ -61,6 +60,7 @@ public class TesterServices
 
 		assertTrue(foundReadme);
 		DbManager.close();
+		Files.delete(Control.backupDirectory.resolve(".revisions.db"));
 	}
 
 	@Test
@@ -125,12 +125,63 @@ public class TesterServices
 	}
 
 	@Test
-	public void testConvertPath()
+	public void fileOpConvertPath()
 	{
 		Control.backupDirectory = Paths.get("").toAbsolutePath().resolve("lib");
 		Control.liveDirectory = Paths.get("").toAbsolutePath().resolve("../util/demo/lib");
 
 		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("lib/jnotify.dll")) != null);
-		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("lib/doesNotExist")) == null);
+	}
+
+	@Test
+	public void fileOpCopyFolder() throws IOException
+	{
+		Path path = Paths.get("").toAbsolutePath();
+		FileOp.copy(path.resolve("src"), path.resolve("test"));
+
+		assertTrue(path.resolve("test").toFile().exists());
+
+		FileOp.delete(path.resolve("test"));
+
+		assertTrue(!path.resolve("test").toFile().exists());
+	}
+
+	@Test
+	public void fileOpCopyFile() throws IOException
+	{
+		Path path = Paths.get("").toAbsolutePath();
+		FileOp.copy(path.resolve("authors.txt"), path.resolve("test"));
+
+		assertTrue(path.resolve("test/authors.txt").toFile().exists());
+
+		FileOp.delete(path.resolve("test/authors.txt"));
+		FileOp.delete(path.resolve("test"));
+
+		assertTrue(!path.resolve("test").toFile().exists());
+	}
+
+	@Test
+	public void fileOpCopyMultiple() throws IOException
+	{
+		Path path = Paths.get("").toAbsolutePath();
+
+		Control.backupDirectory = path;
+		Control.liveDirectory = path.resolve("../test").normalize();
+		Files.createDirectory(path.resolve("../test"));
+
+		List<Path> filesToCopy = new LinkedList<>();
+		filesToCopy.add(path.resolve("src/cmpt370/fbms/Control.java"));
+		filesToCopy.add(path.resolve("src/log4j.xml"));
+		filesToCopy.add(path.resolve("README.txt"));
+
+		FileOp.copy(filesToCopy);
+
+		assertTrue(path.resolve("../test/src/cmpt370/fbms/Control.java").toFile().exists());
+		assertTrue(path.resolve("../test/src/log4j.xml").toFile().exists());
+		assertTrue(path.resolve("../test/README.txt").toFile().exists());
+
+		FileOp.delete(path.resolve("../test").normalize());
+
+		assertTrue(!path.resolve("../test").normalize().toFile().exists());
 	}
 }

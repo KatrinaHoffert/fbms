@@ -31,77 +31,123 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 public class FileOp
 {
-	private static Logger logger = Control.logger;
-	private static String backupPath;
-	private static String livePath;
-
+	/**
+	 * Copies the specified source (file or directory) into the specified destination directory. New
+	 * directories are created as necessary. If a directory is copied, all its contents are also
+	 * copied.
+	 * 
+	 * @param sourceFile
+	 *            The source file or directory to copy.
+	 * @param destFolder
+	 *            The destination folder to place the copy into.
+	 */
 	public static void copy(Path sourceFile, Path destFolder)
 	{
+		// Declare copies of the attributes as final so they can be accessed inside anonymous child
+		// classes
 		final Path source = sourceFile;
 		final Path target = destFolder;
-		File mFile = sourceFile.toFile();
-		if(mFile.isDirectory())
+
+		// If the path is a directory, we need to walk its tree
+		if(sourceFile.toFile().isDirectory())
 		{
-			// if the given path is a folder...
 			try
 			{
 				// from JDK document
 				Files.walkFileTree(source, EnumSet.of(FileVisitOption.FOLLOW_LINKS),
 						Integer.MAX_VALUE, new SimpleFileVisitor<Path>()
 						{
+							// Called when we encounter a directory in the file tree before we
+							// actually visit the directory
 							@Override
 							public FileVisitResult preVisitDirectory(Path dir,
-									BasicFileAttributes attrs) throws IOException
+									BasicFileAttributes attrs)
 							{
-								Path targetdir = target.resolve(source.relativize(dir));
+								// The target directory the destination folder resolved to the
+								// difference between the folder we're copying and the location
+								// we're currently at inside that folder. So for example, if the
+								// source directory (which we're copying) is %src%, and the current
+								// location in our file tree is %src%/a/b/c, then the target
+								// directory will be %dest%/a/b/c
+								Path targetDir = target.resolve(source.relativize(dir));
+
 								try
 								{
-									Files.copy(dir, targetdir);
+									Files.copy(dir, targetDir);
+
+									Control.logger.debug("Copied " + dir.toString() + " to "
+											+ targetDir.toString());
 								}
 								catch(FileAlreadyExistsException e)
 								{
-									if(!Files.isDirectory(targetdir))
-										throw e;
+									if(!Files.isDirectory(targetDir))
+									{
+										Control.logger.error(
+												"Could not copy " + targetDir.toString()
+														+ "; Not actually a directory.", e);
+									}
 								}
+								catch(IOException e)
+								{
+									Errors.nonfatalError("Could not copy directory", e);
+								}
+
+								// Keep walking through our tree
 								return FileVisitResult.CONTINUE;
 							}
 
+							// Called when we encounter an actual file in our file tree
 							@Override
 							public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-									throws IOException
 							{
-								Files.copy(file, target.resolve(source.relativize(file)),
-										StandardCopyOption.REPLACE_EXISTING);
+								try
+								{
+									// File is copied to folder relative to the folder that we are
+									// copying (the source). Works like targetDir in
+									// preVisitDirectory() above
+									Path targetFile = target.resolve(source.relativize(file));
+									Files.copy(file, targetFile,
+											StandardCopyOption.REPLACE_EXISTING);
+
+									Control.logger.debug("Copied " + file.toString() + " to "
+											+ targetFile);
+								}
+								catch(IOException e)
+								{
+									Errors.nonfatalError("Could not copy file " + file.toString(),
+											e);
+								}
+
 								return FileVisitResult.CONTINUE;
 							}
 						});
 			}
 			catch(IOException e)
 			{
-				String warnString = "Could copy source folder " + sourceFile.toString() + "to "
-						+ destFolder.toString();
-				logger.warn(warnString);
+				Errors.nonfatalError("Could not copy source folder " + sourceFile.toString()
+						+ "to " + destFolder.toString(), e);
 			}
 		}
+		// Otherwise its just a regular file
 		else
 		{
-			// if the given Path is a file
-			Path liveFolder = (new File(livePath)).toPath();
-			Path srcFile = sourceFile.subpath(liveFolder.getNameCount(), sourceFile.getNameCount());
-			Path dstFile = new File(new File(backupPath), srcFile.toString()).toPath();
+			// Append the name of the source file to the destination folder
+			Path destFile = destFolder.resolve(sourceFile.getFileName());
 			try
 			{
-				Files.copy(sourceFile, dstFile, StandardCopyOption.REPLACE_EXISTING);
+				// Make any necessary directories up to the parent of where our file is being copied
+				// to
+				destFolder.toFile().mkdir();
+
+				Files.copy(sourceFile, destFile, StandardCopyOption.REPLACE_EXISTING);
 			}
 			catch(IOException e)
 			{
-				String warnString = "Could copy " + sourceFile.toString() + "to "
-						+ destFolder.toString();
-				logger.warn(warnString);
+				Errors.nonfatalError(
+						"Could not copy " + sourceFile.toString() + "to " + destFolder.toString(),
+						e);
 			}
 		}
 
@@ -109,26 +155,33 @@ public class FileOp
 	}
 
 	/**
-	 * Copy everything in the List to backup folder.
+	 * Copy everything in the list to the backup folder. Only copies files. To copy folders, use
+	 * copy(Path, Path).
 	 * 
 	 * @param sourceFile
-	 *            source file list
+	 *            List of paths to files in the live directory that should be copied to the backup
+	 *            directory.
 	 */
 	public static void copy(List<Path> sourceFiles)
 	{
-		File rootPath = new File(backupPath);
 		for(Path path : sourceFiles)
 		{
-			File dstFile = new File(rootPath, path.toString());
 			try
 			{
-				dstFile.mkdirs();
-				Files.copy(path, dstFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				// Get the path the file would have in the backup directory
+				Path destPath = convertPath(path);
+
+				// Get the folder that file is in (the parent) and create any necessary directories
+				// such that this parent exists
+				destPath.getParent().toFile().mkdirs();
+
+				// Copy the actual file
+				Files.copy(path, destPath, StandardCopyOption.REPLACE_EXISTING);
 			}
 			catch(IOException e)
 			{
-				String warnString = "Could copy " + path.toString() + "to " + dstFile.toString();
-				logger.warn(warnString);
+				Errors.nonfatalError("Could not copy " + path.toString() + "to "
+						+ convertPath(path).toString(), e);
 			}
 		}
 	}
@@ -149,11 +202,10 @@ public class FileOp
 	}
 
 	/**
-	 * Delete the specific Path. If the Path given is directory, delete the directory represented by
-	 * Path.
+	 * Delete the file or directory specified by the Path.
 	 * 
 	 * @param file
-	 *            the Path to delete.
+	 *            The Path to the file or directory to delete.
 	 */
 	public static void delete(Path file)
 	{
@@ -162,23 +214,31 @@ public class FileOp
 		// If a bad path is given...
 		if(!targetFile.exists())
 		{
-			Control.logger.warn(targetFile.toString() + " is not existed. Unable to delete.");
+			Control.logger.error("Unable to delete " + targetFile.toString()
+					+ "  as it does not exist.");
 			return;
 		}
 
 		// If a folder is given, recursively delete its sub-directories first.
 		if(targetFile.isDirectory())
 		{
-			for(File f : targetFile.listFiles())
+			Control.logger.debug(targetFile.toString()
+					+ " is a directory, recursively deleting contents");
+
+			for(File childFile : targetFile.listFiles())
 			{
-				FileOp.delete(f.toPath());
+				FileOp.delete(childFile.toPath());
 			}
 		}
 
+		// Try and delete regular files, logging if unsuccessful
 		if(!targetFile.delete())
 		{
-			Control.logger.warn(file.toString() + " cannot be deleted. Operation aborted.");
-			return;
+			Control.logger.error(file.toString() + " cannot be deleted. Operation aborted.");
+		}
+		else
+		{
+			Control.logger.debug("Successfully deleted " + file.toString());
 		}
 
 	}
@@ -260,28 +320,6 @@ public class FileOp
 		return path.toFile().isDirectory();
 	}
 
-	/**
-	 * Set the backup folder.
-	 * 
-	 * @param path
-	 *            the backup folder.
-	 */
-	protected static void setBackupPath(String path)
-	{
-		backupPath = path;
-	}
-
-	/**
-	 * Set the live folder.
-	 * 
-	 * @param livePath
-	 *            the live folder.
-	 */
-	public static void setLivePath(String livePath)
-	{
-		FileOp.livePath = livePath;
-	}
-
 
 	/**
 	 * Takes in a path to either the live directory or backup directory and converts it to the
@@ -304,11 +342,7 @@ public class FileOp
 					Control.liveDirectory.toString().length());
 			newPath = Control.backupDirectory.toString() + newPath;
 
-			// We only want to return the path if it exists
-			if(Paths.get(newPath).toFile().exists())
-			{
-				convertedPath = Paths.get(newPath).normalize();
-			}
+			convertedPath = Paths.get(newPath).normalize();
 		}
 		else if(inputPath.startsWith(Control.backupDirectory))
 		{
@@ -317,11 +351,7 @@ public class FileOp
 					Control.backupDirectory.toString().length());
 			newPath = Control.liveDirectory.toString() + newPath;
 
-			// We only want to return the path if it exists
-			if(Paths.get(newPath).toFile().exists())
-			{
-				convertedPath = Paths.get(newPath).normalize();
-			}
+			convertedPath = Paths.get(newPath).normalize();
 		}
 
 		// If the file did not exist or the input path did not start with either the backup or
