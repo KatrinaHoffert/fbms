@@ -8,11 +8,11 @@ import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.nio.file.Paths;
 
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 
 import cmpt370.fbms.GUI.MainFrame;
 
@@ -28,7 +28,21 @@ public class FrontEnd
 		}
 
 		// Create the icon for the tray
-		final TrayIcon trayIcon = new TrayIcon(createImage("res/icon.gif", "FBMS"));
+		BufferedImage trayIconImage = null;
+		try
+		{
+			trayIconImage = ImageIO.read(Paths.get("res/icon.png").toFile());
+		}
+		catch(IOException e)
+		{
+			Control.logger.error("Could not load program icon", e);
+		}
+
+		// And scale it to the appropriate size using smooth scaling
+		int trayIconWidth = new TrayIcon(trayIconImage).getSize().width;
+		final TrayIcon trayIcon = new TrayIcon(trayIconImage.getScaledInstance(trayIconWidth, -1,
+				Image.SCALE_SMOOTH));
+
 		final SystemTray tray = SystemTray.getSystemTray();
 
 		// Create a popup menu components (when right clicking on icon)
@@ -82,37 +96,5 @@ public class FrontEnd
 				System.exit(0);
 			}
 		});
-	}
-
-	/**
-	 * Loads an image from the specified path.
-	 * 
-	 * @param path
-	 * @param description
-	 * @return
-	 */
-	private static Image createImage(String path, String description)
-	{
-		URL imageURL = null;
-		try
-		{
-			// Try to load the image
-			imageURL = Paths.get("").toAbsolutePath().resolve(path).toUri().toURL();
-		}
-		catch(MalformedURLException e)
-		{
-			Errors.fatalError("Error loading image.", e);
-		}
-
-		// Couldn't load the image
-		if(imageURL == null)
-		{
-			System.err.println("Resource not found: " + path);
-			return null;
-		}
-		else
-		{
-			return (new ImageIcon(imageURL, description)).getImage();
-		}
 	}
 }
