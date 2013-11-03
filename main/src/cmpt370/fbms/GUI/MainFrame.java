@@ -25,7 +25,7 @@ public class MainFrame extends JFrame
 		setVisible(true);
 
 		// Set size and position
-		setSize(768, 400);
+		setSize(900, 400);
 		setLocationRelativeTo(null);
 
 		// Create main panel

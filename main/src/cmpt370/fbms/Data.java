@@ -5,8 +5,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
@@ -121,11 +125,12 @@ public class Data
 			// our table.
 			Vector<String> row = new Vector<String>();
 
+			// Populate the columns
 			row.add(file.fileName);
 			row.add(Long.toString(file.fileSize));
-			row.add(Long.toString(file.createdDate));
-			row.add(Long.toString(file.lastAccessedDate));
-			row.add(Long.toString(file.lastModifiedDate));
+			row.add(Data.formatDate(file.createdDate));
+			row.add(Data.formatDate(file.lastAccessedDate));
+			row.add(Data.formatDate(file.lastModifiedDate));
 			row.add(Integer.toString(file.numberOfRevisions));
 			row.add(Long.toString(file.revisionSizes));
 
@@ -146,5 +151,26 @@ public class Data
 	public static List<RevisionInfo> getRevisionInfo(Path file)
 	{
 		return DbManager.getRevisionData(file);
+	}
+
+	/**
+	 * Takes in a Unix time stamp and formats it as a human readable String
+	 * 
+	 * @param timestamp
+	 *            The Unix time stamp (seconds since 1970-01-01 00:00:00)
+	 * @return A String in ISO 8601 format.
+	 */
+	public static String formatDate(long timestamp)
+	{
+		// Specify the format that the date should be in (like ISO 8601)
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		// Set the timezone so we have the correct offset
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+		// Note that the Date object is created with milliseconds, while we have seconds
+		Date date = new Date(timestamp * 1000);
+
+		return dateFormat.format(date);
 	}
 }
