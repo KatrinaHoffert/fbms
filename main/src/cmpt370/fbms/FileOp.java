@@ -9,13 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 public class FileOp
 {
-	private static Logger logger = Logger.getLogger(FileOp.class);
-	private static String backupPath;
-
 	public static void copy(Path sourceFile, Path destFolder)
 	{
 
@@ -55,7 +50,7 @@ public class FileOp
 		// If a bad path is given...
 		if(!targetFile.exists())
 		{
-			logger.warn(targetFile.toString() + " is not existed. Unable to delete.");
+			Control.logger.warn(targetFile.toString() + " is not existed. Unable to delete.");
 			return;
 		}
 
@@ -70,7 +65,7 @@ public class FileOp
 
 		if(!targetFile.delete())
 		{
-			logger.warn(file.toString() + " cannot be deleted. Operation aborted.");
+			Control.logger.warn(file.toString() + " cannot be deleted. Operation aborted.");
 			return;
 		}
 
@@ -114,9 +109,16 @@ public class FileOp
 		return false;
 	}
 
-	public static void setBackupPath(String path)
+	/**
+	 * Returns whether or not a path is a folder.
+	 * 
+	 * @param path
+	 *            The path in question.
+	 * @return True if a folder, false if a regular file.
+	 */
+	public static boolean isFolder(Path path)
 	{
-		backupPath = path;
+		return path.toFile().isDirectory();
 	}
 
 	/**
