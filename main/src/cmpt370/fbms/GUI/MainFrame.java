@@ -3,6 +3,7 @@ package cmpt370.fbms.GUI;
 import java.awt.BorderLayout;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,6 +33,9 @@ public class MainFrame extends JFrame
 		contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+
+		// Set the icon
+		setIconImage(new ImageIcon("res/icon.png").getImage());
 
 		// Create menu
 		MainMenu topMenu = new MainMenu();
