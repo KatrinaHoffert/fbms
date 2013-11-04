@@ -44,6 +44,8 @@ SVN:
 	  specific wildcard, if necessary.
 	- Commit often, but never commit broken code. The program must always be able
 	  to compile.
+	- To make a branch, use:
+	  svn copy https://fbms.googlecode.com/svn/trunk https://fbms.googlecode.com/svn/branches/BRANCH_NAME
 
 Notes:
 	- Eclipse has been configured to use the modified Java code style (demonstrated
