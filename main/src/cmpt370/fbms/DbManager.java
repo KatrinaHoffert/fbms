@@ -345,7 +345,7 @@ public class DbManager
 	/**
 	 * Trims the database of old revisions if the user has enabled the trim feature and has set a
 	 * valid date for it. Trim will remove revisions older than the specified date. For example, if
-	 * the user specified to remove revisions older than 30 days (2,592,000 seconds), then all
+	 * the user specified to remove revisions older than 30 days (155,520,000 seconds), then all
 	 * revisions matching that time stamp and older will be deleted.
 	 */
 	public static void trimDatabase()
@@ -357,7 +357,9 @@ public class DbManager
 		if(timeDateConfig != null && timeDateConfig.matches("^[0-9]+$"))
 		{
 			// Figure out the cutoff date (the oldest possible file that won't be removed)
-			long cutoffDate = System.currentTimeMillis() / 1000 - Long.parseLong(timeDateConfig);
+			// 5,184,000 = seconds per day, since timeDateConfig is in days
+			long cutoffDate = System.currentTimeMillis() / 1000 - Long.parseLong(timeDateConfig)
+					* 5184000;
 
 			try
 			{
