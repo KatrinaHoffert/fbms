@@ -354,17 +354,29 @@ public class DbManager
 		String timeDateConfig = getConfig("trimDate");
 
 		// Only trim if the value is valid
-		if(timeDateConfig != null && !timeDateConfig.equals("-1"))
+		if(timeDateConfig != null && timeDateConfig.matches("^[0-9]+$"))
 		{
 			// Figure out the cutoff date (the oldest possible file that won't be removed)
 			long cutoffDate = System.currentTimeMillis() / 1000 - Long.parseLong(timeDateConfig);
 
-			Control.logger.debug("Database trimmed of entries older than "
-					+ Data.formatDate(cutoffDate));
+			try
+			{
+				// Remove the revisions with an older date
+				Statement statement = connection.createStatement();
+				statement.execute("DELETE FROM revisions WHERE time < " + cutoffDate);
+
+				Control.logger.debug("Database trimmed of entries older than "
+						+ Data.formatDate(cutoffDate));
+			}
+			catch(SQLException e)
+			{
+				Errors.nonfatalError("Could not remove older revisions", "Trim failed", e);
+			}
 		}
 		else
 		{
-			Control.logger.debug("Database trim command encountered and ignored because trim is disabled");
+			Control.logger.debug("Database trim command encountered and ignored because trim is"
+					+ " disabled or is set to an invalid value");
 		}
 	}
 

@@ -282,8 +282,7 @@ public class Control
 						handleRenamedFiles();
 
 						// Every 500 loops, we run the command to trim the database
-						// TODO: Change back to 500 (lowered for testing)
-						if(loop % 5 == 0)
+						if(loop % 500 == 0)
 						{
 							DbManager.trimDatabase();
 						}
