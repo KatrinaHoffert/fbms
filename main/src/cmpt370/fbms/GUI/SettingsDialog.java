@@ -54,6 +54,13 @@ class SettingsDialog extends JDialog
 
 		panel.add(optionsPanel);
 
+		// Tooltips for options
+		String trimToolTip = "Revisions older than this will be removed from the database. Set"
+				+ " to -1 to disable. Defaults to disabled.";
+		trimLabel1.setToolTipText(trimToolTip);
+		trimLabel2.setToolTipText(trimToolTip);
+		trimOption.setToolTipText(trimToolTip);
+
 		// Create the buttons at the bottom
 		JPanel buttonsPanel = new JPanel(new GridLayout(1, 2));
 		JButton cancelButton = new JButton("Cancel");
