@@ -188,7 +188,46 @@ public class FileOp
 
 	public static Path createDiff(Path beforeFile, Path afterFile)
 	{
-		return null;
+
+
+		List<String> original = fileToList(beforeFile);
+		List<String> modified = fileToList(afterFile);
+
+		// Compute diff. Get the Patch object. Patch is the container for computed deltas.
+		Patch<String> patch = DiffUtils.diff(original, modified);
+
+		PrintWriter output = null;
+		Path pathToTempFile = null;
+
+		try
+		{
+			// Create a temporary file for the revision
+			pathToTempFile = Files.createTempFile("revision", ".txt");
+			// pathToTempFile = Paths.get("").toAbsolutePath().resolve("myFile.txt");
+
+			// Write the diff to that temp file
+			output = new PrintWriter(pathToTempFile.toFile());
+
+			for(Delta<String> delta : patch.getDeltas())
+			{
+				output.write(delta.toString());
+			}
+
+		}
+		catch(IOException e)
+		{
+			
+		}
+		finally
+		{
+			if(output != null)
+			{
+				output.close();
+			}
+		}
+
+
+		return pathToTempFile;
 	}
 
 	public static Path applyDiff(Path sourceFile, Path afterFile)
