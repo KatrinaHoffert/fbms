@@ -45,6 +45,7 @@ public class MainToolBar extends JToolBar
 		upButton.setOpaque(false);
 		upButton.setContentAreaFilled(false);
 		upButton.setBorderPainted(false);
+		upButton.setEnabled(false);
 		refreshButton.setMargin(new Insets(0, 0, 0, 0));
 		refreshButton.setBorder(null);
 		refreshButton.setOpaque(false);
