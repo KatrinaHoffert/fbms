@@ -9,6 +9,10 @@ Some code derived from work by:
  * aioobe <http://stackoverflow.com/users/276052/aioobe>
  * erickson <http://stackoverflow.com/users/3474/erickson>
 
+Resources:
+ * Program and refresh icons by oxygen (CC-BY-SA 3.0)
+ * Up icon by crystal (LGPL-2.1)
+
 FBMS is licensed under GPL v3
 https://code.google.com/p/fbms
 
