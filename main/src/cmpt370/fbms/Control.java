@@ -53,6 +53,7 @@ public class Control
 
 	// Watch ID for JNotify
 	private static int watchId = 0;
+	private static long loop = 0;
 
 	/**
 	 * The main method runs the startup code, initializing the database, checking for the first run,
@@ -210,6 +211,14 @@ public class Control
 	 */
 	private static void startupScan(Path directory)
 	{
+		String status = DbManager.getConfig("startupScan");
+		// Check if user disabled the scan
+		if(status != null && !status.equals("true"))
+		{
+			logger.info("Startup scan is disabled.");
+			return;
+		}
+
 		for(File file : directory.toFile().listFiles())
 		{
 			if(!file.isDirectory())
@@ -272,10 +281,19 @@ public class Control
 						logger.debug("Main service loop running at T = " + new Date().getTime()
 								/ 1000);
 
+						// Keep track of how many file loops we've done
+						loop++;
+
 						handleDeletedFiles();
 						handleCreatedFiles();
 						handleModifiedFiles();
 						handleRenamedFiles();
+
+						// Every 500 loops, we run the command to trim the database
+						if(loop % 500 == 0)
+						{
+							DbManager.trimDatabase();
+						}
 
 						// Time to wait before "polling" the file lists again. A suitable time needs
 						// to be determined. This should be configurable in future versions of the

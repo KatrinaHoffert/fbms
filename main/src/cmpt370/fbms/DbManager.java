@@ -343,6 +343,46 @@ public class DbManager
 	}
 
 	/**
+	 * Trims the database of old revisions if the user has enabled the trim feature and has set a
+	 * valid date for it. Trim will remove revisions older than the specified date. For example, if
+	 * the user specified to remove revisions older than 30 days (155,520,000 seconds), then all
+	 * revisions matching that time stamp and older will be deleted.
+	 */
+	public static void trimDatabase()
+	{
+		// Get the trim date from the database
+		String timeDateConfig = getConfig("trimDate");
+
+		// Only trim if the value is valid
+		if(timeDateConfig != null && timeDateConfig.matches("^[0-9]+$"))
+		{
+			// Figure out the cutoff date (the oldest possible file that won't be removed)
+			// 5,184,000 = seconds per day, since timeDateConfig is in days
+			long cutoffDate = System.currentTimeMillis() / 1000 - Long.parseLong(timeDateConfig)
+					* 5184000;
+
+			try
+			{
+				// Remove the revisions with an older date
+				Statement statement = connection.createStatement();
+				statement.execute("DELETE FROM revisions WHERE time < " + cutoffDate);
+
+				Control.logger.debug("Database trimmed of entries older than "
+						+ Data.formatDate(cutoffDate));
+			}
+			catch(SQLException e)
+			{
+				Errors.nonfatalError("Could not remove older revisions", "Trim failed", e);
+			}
+		}
+		else
+		{
+			Control.logger.debug("Database trim command encountered and ignored because trim is"
+					+ " disabled or is set to an invalid value");
+		}
+	}
+
+	/**
 	 * Closes the database connection. Meant for tests where the connection is opened and closed for
 	 * each test (as there's no way to be certain of the order the tests will be run in).
 	 */
