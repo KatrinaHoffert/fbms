@@ -35,6 +35,9 @@ import net.contentobjects.jnotify.JNotifyException;
 
 import org.apache.log4j.Logger;
 
+import cmpt370.fbms.GUI.FirstStartWizard;
+import cmpt370.fbms.GUI.FrontEnd;
+
 // Making sure libraries are found (remove later)
 
 public class Control

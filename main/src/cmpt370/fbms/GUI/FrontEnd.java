@@ -13,7 +13,7 @@
  * not, see <http://www.gnu.org/licenses/>.
  */
 
-package cmpt370.fbms;
+package cmpt370.fbms.GUI;
 
 import java.awt.AWTException;
 import java.awt.Image;
@@ -29,7 +29,8 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
-import cmpt370.fbms.GUI.MainFrame;
+import cmpt370.fbms.Control;
+import cmpt370.fbms.Errors;
 
 public class FrontEnd
 {

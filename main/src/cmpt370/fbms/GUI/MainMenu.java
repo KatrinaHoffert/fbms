@@ -24,7 +24,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import cmpt370.fbms.FrontEnd;
+
 
 public class MainMenu extends JMenuBar
 {

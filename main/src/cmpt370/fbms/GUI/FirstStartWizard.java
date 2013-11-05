@@ -16,7 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package cmpt370.fbms;
+package cmpt370.fbms.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -40,6 +40,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import cmpt370.fbms.Control;
+import cmpt370.fbms.Errors;
 
 public class FirstStartWizard
 {
