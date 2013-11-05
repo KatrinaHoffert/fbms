@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,7 +24,7 @@ class SettingsDialog extends JDialog
 	SettingsDialog()
 	{
 		setTitle("Settings");
-		setSize(new Dimension(450, 250));
+		setSize(new Dimension(400, 125));
 		setResizable(false);
 
 		add(createSettings());
@@ -39,7 +40,7 @@ class SettingsDialog extends JDialog
 		JPanel panel = new JPanel(new BorderLayout());
 
 		// Create the options panel
-		JPanel optionsPanel = new JPanel(new GridLayout(1, 1));
+		JPanel optionsPanel = new JPanel(new GridLayout(2, 1));
 
 		// Trim panel
 		JPanel trimPanel = new JPanel();
@@ -52,14 +53,34 @@ class SettingsDialog extends JDialog
 		trimPanel.add(trimLabel2);
 		optionsPanel.add(trimPanel);
 
-		panel.add(optionsPanel);
+		// Startup scan panel
+		JPanel scanPanel = new JPanel();
+		JCheckBox scanCheck = new JCheckBox("Scan for file changes on startup");
+		// Figure out if the box is checked
+		String status = DbManager.getConfig("startupScan");
+		if(status == null || status.equals("true"))
+		{
+			scanCheck.setSelected(true);
+		}
+		scanPanel.add(scanCheck);
+		optionsPanel.add(scanPanel);
+
+		// Add the settings panels to the main panel
+		panel.add(optionsPanel, BorderLayout.CENTER);
 
 		// Tooltips for options
-		String trimToolTip = "Revisions older than this will be removed from the database. Set"
+		// Note that to allow the tooltips to be wrapped, we must use the HTML tag and <br /> tags
+		String trimToolTip = "<html>Revisions older than this will be removed from the database. Set<br />"
 				+ " to -1 to disable. Defaults to disabled.";
 		trimLabel1.setToolTipText(trimToolTip);
 		trimLabel2.setToolTipText(trimToolTip);
 		trimOption.setToolTipText(trimToolTip);
+
+		String scanToolTip = "<html>If enabled, the program will scan for changes when the program is<br />"
+				+ " first started, allowing detection of file changes that occured while the<br />"
+				+ " program was not running. However, this adds overhead to startup, and<br />"
+				+ " can be disabled if the program is always running.<br />";
+		scanCheck.setToolTipText(scanToolTip);
 
 		// Create the buttons at the bottom
 		JPanel buttonsPanel = new JPanel(new GridLayout(1, 2));
@@ -71,7 +92,7 @@ class SettingsDialog extends JDialog
 
 		// Listeners for the buttons
 		cancelButton.addActionListener(new CancelActionListener(this));
-		acceptButton.addActionListener(new AcceptActionListener(this, trimOption));
+		acceptButton.addActionListener(new AcceptActionListener(this, trimOption, scanCheck));
 
 		return panel;
 	}
@@ -106,17 +127,19 @@ class AcceptActionListener implements ActionListener
 {
 	private JDialog dialog;
 	private JTextField trimField;
+	private JCheckBox scanField;
 
-	public AcceptActionListener(JDialog frame, JTextField trim)
+	public AcceptActionListener(JDialog frame, JTextField trim, JCheckBox scan)
 	{
 		dialog = frame;
 		trimField = trim;
+		scanField = scan;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		// Parse the settings fields
+		// Parse the trim field
 		if(trimField.getText().matches("-?[0-9]+"))
 		{
 			if(Integer.parseInt(trimField.getText()) < 0)
@@ -132,8 +155,18 @@ class AcceptActionListener implements ActionListener
 		{
 			DbManager.setConfig("trimDate", "-1");
 		}
-
 		Control.logger.info("Set trimDate to: " + DbManager.getConfig("trimDate"));
+
+		// Parse the scan field
+		if(scanField.isSelected())
+		{
+			DbManager.setConfig("startupScan", "true");
+		}
+		else
+		{
+			DbManager.setConfig("startupScan", "false");
+		}
+		Control.logger.info("Set startupScan to: " + DbManager.getConfig("startupScan"));
 
 		// Close the window
 		dialog.dispose();

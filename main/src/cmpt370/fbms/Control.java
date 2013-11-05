@@ -211,6 +211,14 @@ public class Control
 	 */
 	private static void startupScan(Path directory)
 	{
+		String status = DbManager.getConfig("startupScan");
+		// Check if user disabled the scan
+		if(status != null && !status.equals("true"))
+		{
+			logger.info("Startup scan is disabled.");
+			return;
+		}
+
 		for(File file : directory.toFile().listFiles())
 		{
 			if(!file.isDirectory())
