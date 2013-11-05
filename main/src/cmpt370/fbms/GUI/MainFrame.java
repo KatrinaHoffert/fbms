@@ -1,20 +1,17 @@
 /*
-	FBMS: File Backup and Management System
-	Copyright (C) 2013 Group 06
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * FBMS: File Backup and Management System Copyright (C) 2013 Group 06
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
+ */
 
 package cmpt370.fbms.GUI;
 
@@ -27,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableModel;
 
 import cmpt370.fbms.Control;
 import cmpt370.fbms.Data;
@@ -74,7 +72,18 @@ public class MainFrame extends JFrame
 		columns.add("Revision sizes");
 
 		// Create table
-		JTable table = new JTable(Data.getTableData(Control.backupDirectory), columns);
+		JTable table = new JTable();
+
+		// Insert the data into a modified table model based on the default. This lets us disable
+		// editing of table cells.
+		table.setModel(new DefaultTableModel(Data.getTableData(Control.backupDirectory), columns)
+		{
+			@Override
+			public boolean isCellEditable(int row, int column)
+			{
+				return false;
+			}
+		});
 
 		// Create scrollpane for the table
 		JScrollPane scrollPane = new JScrollPane(table);
