@@ -226,6 +226,12 @@ public class Control
 			return;
 		}
 
+		// TODO: Expand this to prompt the user for a course of action.
+		if(directory.toFile().listFiles() == null)
+		{
+			Errors.fatalError("The live directory cannot be found!");
+		}
+
 		for(File file : directory.toFile().listFiles())
 		{
 			if(!file.isDirectory())
@@ -398,6 +404,7 @@ public class Control
 		// Iterate through all files in the backup folder, copying them to the live directory
 		for(File child : backupDirectory.toFile().listFiles())
 		{
+			// If we're copying a directory, we must specify the folder name instead of destination
 			if(child.isDirectory())
 			{
 				FileOp.copy(child.toPath(), directory.resolve(child.getName()));
@@ -419,7 +426,15 @@ public class Control
 	 */
 	public static void copyTo(Path sourceFile, Path destFolder)
 	{
-		FileOp.copy(sourceFile, destFolder);
+		// If we're copying a directory, we must specify the folder name instead of destination
+		if(sourceFile.toFile().isDirectory())
+		{
+			FileOp.copy(sourceFile, destFolder.resolve(sourceFile.getFileName()));
+		}
+		else
+		{
+			FileOp.copy(sourceFile, destFolder);
+		}
 	}
 
 	/**
@@ -490,7 +505,14 @@ public class Control
 		// Iterate through all files in the backup folder, copying them to the new backup directory
 		for(File child : backupDirectory.toFile().listFiles())
 		{
-			FileOp.copy(child.toPath(), newDirectory);
+			if(child.isDirectory())
+			{
+				FileOp.copy(child.toPath(), newDirectory.resolve(child.getName()));
+			}
+			else
+			{
+				FileOp.copy(child.toPath(), newDirectory);
+			}
 		}
 
 		backupDirectory = newDirectory;

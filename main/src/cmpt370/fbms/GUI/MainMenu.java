@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Path;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -39,6 +40,8 @@ public class MainMenu extends JMenuBar
 	public JMenuItem revisionsOption = new JMenuItem("View revisions");
 	private JMenuItem restoreAllOption = new JMenuItem("Restore all");
 	private JMenuItem settingsOption = new JMenuItem("Settings");
+	private JMenuItem changeLiveDirOption = new JMenuItem("Change live directory");
+	private JMenuItem changeBackupDirOption = new JMenuItem("Change backup directory");
 	private JMenuItem exitOption = new JMenuItem("Exit");
 
 	private JMenuItem helpOption = new JMenuItem("Display help");
@@ -57,6 +60,8 @@ public class MainMenu extends JMenuBar
 		fileMenu.addSeparator();
 		fileMenu.add(restoreAllOption);
 		fileMenu.addSeparator();
+		fileMenu.add(changeLiveDirOption);
+		fileMenu.add(changeBackupDirOption);
 		fileMenu.add(settingsOption);
 		fileMenu.addSeparator();
 		fileMenu.add(exitOption);
@@ -108,7 +113,6 @@ public class MainMenu extends JMenuBar
 			}
 		});
 
-
 		restoreAllOption.addActionListener(new ActionListener()
 		{
 			@Override
@@ -128,6 +132,72 @@ public class MainMenu extends JMenuBar
 					JOptionPane.showMessageDialog(FrontEnd.frame,
 							"All files in the backup directory have been restored to "
 									+ fileChooser.getSelectedFile().toString());
+				}
+			}
+		});
+
+		changeBackupDirOption.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+				// Return value will be JFileChooser.APPROVE_OPTION iff a folder was chosen. Any
+				// other value means the window was closed
+				int returnVal = fileChooser.showOpenDialog(null);
+
+				// We're a go
+				if(returnVal == JFileChooser.APPROVE_OPTION)
+				{
+					Path chosenPath = fileChooser.getSelectedFile().toPath();
+
+					// We must make sure that the selected path isn't a child of the live directory
+					// or vice versa
+					if(!chosenPath.startsWith(Control.liveDirectory)
+							&& !Control.liveDirectory.startsWith(chosenPath))
+					{
+						Control.changeBackupDirectory(fileChooser.getSelectedFile().toPath());
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(FrontEnd.frame,
+								"Backup directory cannot be a child of the live directory and vice versa.");
+					}
+				}
+			}
+		});
+
+		changeLiveDirOption.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+				// Return value will be JFileChooser.APPROVE_OPTION iff a folder was chosen. Any
+				// other value means the window was closed
+				int returnVal = fileChooser.showOpenDialog(null);
+
+				// We're a go
+				if(returnVal == JFileChooser.APPROVE_OPTION)
+				{
+					Path chosenPath = fileChooser.getSelectedFile().toPath();
+
+					// We must make sure that the selected path isn't a child of the live directory
+					// or vice versa
+					if(!chosenPath.startsWith(Control.backupDirectory)
+							&& !Control.backupDirectory.startsWith(chosenPath))
+					{
+						Control.changeLiveDirectory(fileChooser.getSelectedFile().toPath());
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(FrontEnd.frame,
+								"Live directory cannot be a child of the live directory and vice versa.");
+					}
 				}
 			}
 		});
@@ -159,7 +229,6 @@ public class MainMenu extends JMenuBar
 				}
 			}
 		});
-
 	}
 
 	/**
