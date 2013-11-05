@@ -142,4 +142,34 @@ public class TesterVisual
 		// Sleep so the program doesn't instantly terminate
 		Thread.sleep(5000);
 	}
+   
+   @Test
+	@Ignore
+	public void fileOpFileToList()
+	{
+		List<String> list = FileOp.fileToList(Paths.get("").resolve("authors.txt"));
+
+		for(String s : list)
+		{
+			System.out.println(s);
+		}
+	}
+
+	@Test
+	@Ignore
+	public void fileOpCreatDiff() throws IOException
+	{
+
+		Path diff = FileOp.createDiff(Paths.get("").resolve("authors.txt"),
+				Paths.get("").resolve("README.txt"));
+
+		FileReader reader = new FileReader(diff.toFile());
+
+		int r;
+		while((r = reader.read()) != -1)
+		{
+			System.out.print((char) r);
+		}
+
+	}
 }
