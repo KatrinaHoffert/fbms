@@ -108,6 +108,10 @@ public class Control
 			DbManager.init();
 			DbManager.setConfig("liveDirectory", liveDirectory.toString());
 
+			// Set some default settings
+			DbManager.setConfig("trimDate", "-1");
+			DbManager.setConfig("startupScan", "true");
+
 			logger.info("First run wizard completed");
 		}
 		else
