@@ -406,7 +406,6 @@ public class Control
 			{
 				FileOp.copy(child.toPath(), directory);
 			}
-			System.out.println(child.toString() + " -> " + directory.toString());
 		}
 	}
 
