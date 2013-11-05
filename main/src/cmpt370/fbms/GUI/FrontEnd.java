@@ -38,6 +38,10 @@ public class FrontEnd
 
 	public static void createAndShowGUI()
 	{
+		// TODO: create option to use system look and feel, because Swing
+		// is as ugly as sin.
+		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
 		// Check the SystemTray support
 		if(!SystemTray.isSupported())
 		{

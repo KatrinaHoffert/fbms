@@ -121,7 +121,7 @@ public class FileOp
 											StandardCopyOption.REPLACE_EXISTING);
 
 									Control.logger.debug("Copied " + file.toString() + " to "
-											+ targetFile);
+											+ targetFile.toString());
 								}
 								catch(IOException e)
 								{

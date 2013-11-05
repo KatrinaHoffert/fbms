@@ -393,12 +393,20 @@ public class Control
 	/**
 	 * Copies all files in the backup directory to the live directory.
 	 */
-	public static void restoreBackup()
+	public static void restoreBackup(Path directory)
 	{
 		// Iterate through all files in the backup folder, copying them to the live directory
 		for(File child : backupDirectory.toFile().listFiles())
 		{
-			FileOp.copy(child.toPath(), liveDirectory);
+			if(child.isDirectory())
+			{
+				FileOp.copy(child.toPath(), directory.resolve(child.getName()));
+			}
+			else
+			{
+				FileOp.copy(child.toPath(), directory);
+			}
+			System.out.println(child.toString() + " -> " + directory.toString());
 		}
 	}
 
@@ -496,7 +504,8 @@ public class Control
 			out.write(Control.backupDirectory.toString().getBytes());
 			out.close();
 
-			Control.logger.info("Backup location file modified, set to: " + Control.backupDirectory);
+			Control.logger.info("Backup location file modified, set to: "
+					+ Control.backupDirectory.toString());
 		}
 		catch(IOException e)
 		{
