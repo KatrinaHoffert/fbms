@@ -35,12 +35,8 @@ import cmpt370.fbms.Errors;
 
 public class MainMenu extends JMenuBar
 {
-
-
-	private static final long serialVersionUID = 1L;
-
-	private JMenuItem copyToOption = new JMenuItem("Copy to");
-	private JMenuItem revisionsOption = new JMenuItem("View revisions");
+	public JMenuItem copyToOption = new JMenuItem("Copy to");
+	public JMenuItem revisionsOption = new JMenuItem("View revisions");
 	private JMenuItem restoreAllOption = new JMenuItem("Restore all");
 	private JMenuItem settingsOption = new JMenuItem("Settings");
 	private JMenuItem exitOption = new JMenuItem("Exit");
@@ -67,6 +63,11 @@ public class MainMenu extends JMenuBar
 
 		helpMenu.add(helpOption);
 
+		// Disable the copy to and view revisions options; they are enabled only when a file is
+		// selected
+		copyToOption.setEnabled(false);
+		revisionsOption.setEnabled(false);
+
 		// Create event handlers
 		initFileActions();
 		initHelpOptions();
@@ -82,7 +83,19 @@ public class MainMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Clicked copy");
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+				// Return value will be JFileChooser.APPROVE_OPTION iff a folder was chosen. Any
+				// other value means the window was closed
+				int returnVal = fileChooser.showOpenDialog(null);
+
+				// We're a go
+				if(returnVal == JFileChooser.APPROVE_OPTION)
+				{
+					Control.copyTo(FrontEnd.frame.selectedFile,
+							fileChooser.getSelectedFile().toPath());
+				}
 			}
 		});
 

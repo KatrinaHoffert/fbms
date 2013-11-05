@@ -16,6 +16,11 @@
 package cmpt370.fbms.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.nio.file.Path;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -32,6 +37,12 @@ import cmpt370.fbms.Data;
 
 public class MainFrame extends JFrame
 {
+	public JTable table;
+	public Path currentDirectory;
+	public MainToolBar topTool;
+	public MainMenu topMenu;
+	public Path selectedFile = null;
+
 	private JPanel contentPane;
 
 	/**
@@ -56,11 +67,11 @@ public class MainFrame extends JFrame
 		setIconImage(new ImageIcon("res/icon.png").getImage());
 
 		// Create menu
-		MainMenu topMenu = new MainMenu();
+		topMenu = new MainMenu();
 		setJMenuBar(topMenu);
 
 		// Create toolbar
-		MainToolBar topTool = new MainToolBar();
+		topTool = new MainToolBar();
 		add(topTool, BorderLayout.NORTH);
 
 		// Create table columns
@@ -74,7 +85,7 @@ public class MainFrame extends JFrame
 		columns.add("Revision sizes");
 
 		// Create table
-		JTable table = new JTable();
+		table = new JTable();
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -101,7 +112,76 @@ public class MainFrame extends JFrame
 		table.setFillsViewportHeight(true);
 		add(scrollPane, BorderLayout.CENTER);
 
+		// Set the current directory
+		currentDirectory = Control.backupDirectory;
+		topTool.currentDirectory.setText("/");
+
 		// Necessary to revalidate the frame so that we can see the table
 		revalidate();
+
+		table.addMouseListener(new TableSelectionListener());
+		table.addKeyListener(new TableSelectionListener());
 	}
+}
+
+/**
+ * An event listener for finding changes to the currently selected row in the table (via either
+ * clicking a row with the mouse or navigating via the keyboard).
+ */
+class TableSelectionListener implements MouseListener, KeyListener
+{
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		// If we have selected a valid row
+		if(FrontEnd.frame.table.getSelectedRow() != -1)
+		{
+			FrontEnd.frame.topMenu.copyToOption.setEnabled(true);
+			FrontEnd.frame.topMenu.revisionsOption.setEnabled(true);
+
+			// table.getValueAt() will get the value in the selected row. Use that to get the file
+			// name.
+			FrontEnd.frame.selectedFile = FrontEnd.frame.currentDirectory.resolve((String) FrontEnd.frame.table.getValueAt(
+					FrontEnd.frame.table.getSelectedRow(), 0));
+
+			// TODO: Remove this temporary line
+			System.out.println(FrontEnd.frame.selectedFile.toString());
+		}
+		else
+		{
+			FrontEnd.frame.topMenu.copyToOption.setEnabled(false);
+			FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e)
+	{
+		mouseClicked(null);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e)
+	{}
+
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{}
+
+	@Override
+	public void mousePressed(MouseEvent e)
+	{}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{}
+
+	@Override
+	public void keyTyped(KeyEvent e)
+	{}
+
 }

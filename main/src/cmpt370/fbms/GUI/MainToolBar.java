@@ -16,6 +16,7 @@
 package cmpt370.fbms.GUI;
 
 
+import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,16 +28,14 @@ import javax.swing.JToolBar;
 
 public class MainToolBar extends JToolBar
 {
-	private static final long serialVersionUID = 1L;
-
 	// Icons
 	private ImageIcon upIcon = new ImageIcon("res/up.png");
 	private ImageIcon refreshIcon = new ImageIcon("res/refresh.png");
 
-	private JButton upButton = new JButton(upIcon);
+	public JButton upButton = new JButton(upIcon);
 	private JButton refreshButton = new JButton(refreshIcon);
 
-	private JTextField currentDirectory = new JTextField(5);
+	public JTextField currentDirectory = new JTextField(5);
 
 	public MainToolBar()
 	{
@@ -52,7 +51,9 @@ public class MainToolBar extends JToolBar
 		refreshButton.setContentAreaFilled(false);
 		refreshButton.setBorderPainted(false);
 
+		// Format the directory text field to be disabled and a dark grey
 		currentDirectory.setEnabled(false);
+		currentDirectory.setDisabledTextColor(new Color(0.2f, 0.2f, 0.2f));
 
 		// Refresh button clicked
 		refreshButton.addActionListener(new ActionListener()
