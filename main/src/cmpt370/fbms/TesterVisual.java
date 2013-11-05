@@ -15,6 +15,7 @@
 
 package cmpt370.fbms;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -142,8 +143,8 @@ public class TesterVisual
 		// Sleep so the program doesn't instantly terminate
 		Thread.sleep(5000);
 	}
-   
-   @Test
+
+	@Test
 	@Ignore
 	public void fileOpFileToList()
 	{
@@ -159,7 +160,6 @@ public class TesterVisual
 	@Ignore
 	public void fileOpCreatDiff() throws IOException
 	{
-
 		Path diff = FileOp.createDiff(Paths.get("").resolve("authors.txt"),
 				Paths.get("").resolve("README.txt"));
 
@@ -171,5 +171,6 @@ public class TesterVisual
 			System.out.print((char) r);
 		}
 
+		reader.close();
 	}
 }
