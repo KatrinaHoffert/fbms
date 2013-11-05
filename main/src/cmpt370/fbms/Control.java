@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import net.contentobjects.jnotify.JNotify;
@@ -122,6 +123,50 @@ public class Control
 			// For subsequent runs, the backup directory has already been set and the live
 			// directory will be retreived during DbManager.init()
 			DbManager.init();
+
+			// Live directory specified in database is invalid
+			if(!liveDirectory.toFile().exists())
+			{
+				int choice = JOptionPane.showConfirmDialog(
+						null,
+						"The live directory could not be found. Would you like to specify an alternative directory?",
+						"Fatal error", JOptionPane.YES_NO_OPTION);
+				if(choice == JOptionPane.YES_OPTION)
+				{
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+					// Return value will be JFileChooser.APPROVE_OPTION iff a folder was chosen. Any
+					// other value means the window was closed
+					int returnVal = fileChooser.showOpenDialog(null);
+
+					// We're a go
+					if(returnVal == JFileChooser.APPROVE_OPTION)
+					{
+						Path chosenPath = fileChooser.getSelectedFile().toPath();
+
+						if(!chosenPath.startsWith(backupDirectory)
+								&& !backupDirectory.startsWith(chosenPath))
+						{
+							liveDirectory = chosenPath;
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null,
+									"Live directory cannot be a child of the live directory and vice versa.");
+							System.exit(2);
+						}
+					}
+					else
+					{
+						System.exit(2);
+					}
+				}
+				else
+				{
+					System.exit(2);
+				}
+			}
 
 			logger.info("It is a subsequent run");
 		}
@@ -224,12 +269,6 @@ public class Control
 		{
 			logger.info("Startup scan is disabled.");
 			return;
-		}
-
-		// TODO: Expand this to prompt the user for a course of action.
-		if(directory.toFile().listFiles() == null)
-		{
-			Errors.fatalError("The live directory cannot be found!");
 		}
 
 		for(File file : directory.toFile().listFiles())
