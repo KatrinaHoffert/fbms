@@ -297,7 +297,39 @@ public class FileOp
 
 	public static List<String> fileToList(Path file)
 	{
-		return null;
+
+		String fileName = file.toString();
+		List<String> lines = new LinkedList<String>();
+		String line = "";
+		BufferedReader in = null;
+		try
+		{
+			in = new BufferedReader(new FileReader(fileName));
+			while((line = in.readLine()) != null)
+			{
+				lines.add(line);
+			}
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(in != null)
+			{
+				try
+				{
+					in.close();
+				}
+				catch(IOException e)
+				{
+
+				}
+			}
+		}
+
+		return lines;
 	}
 
 	/**
