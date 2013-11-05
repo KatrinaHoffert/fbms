@@ -23,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
@@ -40,6 +41,7 @@ public class MainFrame extends JFrame
 	{
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
+		setTitle("FBMS: File Backup and Management System");
 
 		// Set size and position
 		setSize(900, 400);
@@ -73,6 +75,8 @@ public class MainFrame extends JFrame
 
 		// Create table
 		JTable table = new JTable();
+		table.setShowGrid(false);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// Insert the data into a modified table model based on the default. This lets us disable
 		// editing of table cells.
@@ -84,6 +88,12 @@ public class MainFrame extends JFrame
 				return false;
 			}
 		});
+
+		// Set some default column sizes as larger, so dates fit in better
+		table.getColumnModel().getColumn(0).setMinWidth(100);
+		table.getColumnModel().getColumn(2).setMinWidth(90);
+		table.getColumnModel().getColumn(3).setMinWidth(90);
+		table.getColumnModel().getColumn(4).setMinWidth(90);
 
 		// Create scrollpane for the table
 		JScrollPane scrollPane = new JScrollPane(table);
