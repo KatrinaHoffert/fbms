@@ -117,6 +117,78 @@ public class Data
 		return list;
 	}
 
+	// public static List<RevisionInfo> getFileInfo(Path File){
+	//
+	// File[] fileInfo;
+	//
+	// List<RevisionInfo> list = new LinkedList<>();
+	//
+	// for(File file : fileInfo)
+	// {
+	// FileInfo currentFile = new FileInfo();
+	//
+	// // String fileName
+	// currentFile.fileName = file.getName();
+	//
+	//
+	// try
+	// {
+	// BasicFileAttributes attributes = Files.readAttributes(file.toPath(),
+	// BasicFileAttributes.class);
+	//
+	// // long lastAccessedDate
+	// currentFile.lastAccessedDate = attributes.lastAccessTime().to(TimeUnit.SECONDS);
+	//
+	// // long lastModifiedDate
+	// currentFile.lastModifiedDate = attributes.lastModifiedTime().to(TimeUnit.SECONDS);
+	//
+	// // long createdDate
+	// currentFile.createdDate = attributes.creationTime().to(TimeUnit.SECONDS);
+	// }
+	// catch(IOException e)
+	// {
+	// Errors.nonfatalError("Could not read file attributes of " + file.getName(), e);
+	// }
+	//
+	// // Leave the number of revisions and file sizes out if it's a folder
+	// if(!currentFile.folder)
+	// {
+	// // long fileSize
+	// try
+	// {
+	// currentFile.fileSize = Files.size(file.toPath());
+	// }
+	// catch(IOException e)
+	// {
+	// Errors.nonfatalError("Could not read file size of " + file.getName(), e);
+	// }
+	//
+	// List<RevisionInfo> revisionInfoList = DbManager.getRevisionData(file.toPath());
+	// int totalRevisions = 0;
+	// long totalSizes = 0;
+	//
+	// if(revisionInfoList != null)
+	// {
+	// for(RevisionInfo revisionInfo : revisionInfoList)
+	// {
+	// totalRevisions++;
+	// totalSizes += revisionInfo.diff.length() * 2; // characters are 2 bytes
+	// }
+	//
+	// // int numberOfRevisions
+	// currentFile.numberOfRevisions = totalRevisions;
+	//
+	// // long revisionSizes
+	// currentFile.revisionSizes = totalSizes;
+	// }
+	// }
+	//
+	// //list.add(currentFile);
+	// }
+	//
+	// return List;
+	//
+	// }
 	/**
 	 * Takes in a path to a folder and outputs a Vector of Vectors. The parent vector is the rows.
 	 * The vector inside this is the columns.
@@ -149,6 +221,7 @@ public class Data
 			row.add(Data.humanReadableByteCount(file.revisionSizes, false));
 
 			tableData.add(row);
+
 		}
 
 		return tableData;

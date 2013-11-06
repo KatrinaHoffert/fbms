@@ -16,6 +16,7 @@
 package cmpt370.fbms.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -114,6 +115,7 @@ public class MainFrame extends JFrame
 
 		// Set the current directory
 		currentDirectory = Control.backupDirectory;
+
 		topTool.currentDirectory.setText("/");
 
 		// Necessary to revalidate the frame so that we can see the table
@@ -144,8 +146,19 @@ class TableSelectionListener implements MouseListener, KeyListener
 			FrontEnd.frame.selectedFile = FrontEnd.frame.currentDirectory.resolve((String) FrontEnd.frame.table.getValueAt(
 					FrontEnd.frame.table.getSelectedRow(), 0));
 
-			// TODO: Remove this temporary line
-			System.out.println(FrontEnd.frame.selectedFile.toString());
+			if(e != null && e.getClickCount() == 2)
+			{
+				System.out.println("DOUBLE CLICKED ON: " + FrontEnd.frame.selectedFile.toString());
+				RevisionInfo revisionWindow = new RevisionInfo(FrontEnd.frame.selectedFile);
+				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
+				revisionWindow.setVisible(true);
+			}
+			else
+			{
+				// TODO: Remove this temporary line
+				System.out.println("SINGLE CLICKED ON: " + FrontEnd.frame.selectedFile.toString());
+
+			}
 		}
 		else
 		{
@@ -174,7 +187,9 @@ class TableSelectionListener implements MouseListener, KeyListener
 
 	@Override
 	public void mousePressed(MouseEvent e)
-	{}
+	{
+
+	}
 
 	@Override
 	public void mouseReleased(MouseEvent e)

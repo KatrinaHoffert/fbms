@@ -52,7 +52,7 @@ public class Control
 	public static List<Path> deletedFiles = new LinkedList<>();
 	public static boolean firstRunWizardDone = false;
 
-	// Logger object is linked to the class
+	// Logger object is linked to the S
 	public static Logger logger = Logger.getLogger(Control.class);
 
 	// Watch ID for JNotify
