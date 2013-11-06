@@ -149,7 +149,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 			if(e != null && e.getClickCount() == 2)
 			{
 				System.out.println("DOUBLE CLICKED ON: " + FrontEnd.frame.selectedFile.toString());
-				RevisionInfo revisionWindow = new RevisionInfo(FrontEnd.frame.selectedFile);
+				RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
 				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
 				revisionWindow.setVisible(true);
 			}

@@ -45,6 +45,7 @@ public class TesterVisual
 		// Get the contents of this directory
 		List<FileInfo> list = Data.getFolderContents(path);
 
+
 		// And print out what we know
 		for(FileInfo file : list)
 		{
@@ -64,6 +65,7 @@ public class TesterVisual
 		Files.delete(path.resolve(".revisions.db"));
 		DbManager.close();
 	}
+
 
 	// Insert a revision, rename it, and then obtain it
 	@Test

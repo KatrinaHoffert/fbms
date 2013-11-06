@@ -117,78 +117,28 @@ public class Data
 		return list;
 	}
 
-	// public static List<RevisionInfo> getFileInfo(Path File){
-	//
-	// File[] fileInfo;
-	//
-	// List<RevisionInfo> list = new LinkedList<>();
-	//
-	// for(File file : fileInfo)
-	// {
-	// FileInfo currentFile = new FileInfo();
-	//
-	// // String fileName
-	// currentFile.fileName = file.getName();
-	//
-	//
-	// try
-	// {
-	// BasicFileAttributes attributes = Files.readAttributes(file.toPath(),
-	// BasicFileAttributes.class);
-	//
-	// // long lastAccessedDate
-	// currentFile.lastAccessedDate = attributes.lastAccessTime().to(TimeUnit.SECONDS);
-	//
-	// // long lastModifiedDate
-	// currentFile.lastModifiedDate = attributes.lastModifiedTime().to(TimeUnit.SECONDS);
-	//
-	// // long createdDate
-	// currentFile.createdDate = attributes.creationTime().to(TimeUnit.SECONDS);
-	// }
-	// catch(IOException e)
-	// {
-	// Errors.nonfatalError("Could not read file attributes of " + file.getName(), e);
-	// }
-	//
-	// // Leave the number of revisions and file sizes out if it's a folder
-	// if(!currentFile.folder)
-	// {
-	// // long fileSize
-	// try
-	// {
-	// currentFile.fileSize = Files.size(file.toPath());
-	// }
-	// catch(IOException e)
-	// {
-	// Errors.nonfatalError("Could not read file size of " + file.getName(), e);
-	// }
-	//
-	// List<RevisionInfo> revisionInfoList = DbManager.getRevisionData(file.toPath());
-	// int totalRevisions = 0;
-	// long totalSizes = 0;
-	//
-	// if(revisionInfoList != null)
-	// {
-	// for(RevisionInfo revisionInfo : revisionInfoList)
-	// {
-	// totalRevisions++;
-	// totalSizes += revisionInfo.diff.length() * 2; // characters are 2 bytes
-	// }
-	//
-	// // int numberOfRevisions
-	// currentFile.numberOfRevisions = totalRevisions;
-	//
-	// // long revisionSizes
-	// currentFile.revisionSizes = totalSizes;
-	// }
-	// }
-	//
-	// //list.add(currentFile);
-	// }
-	//
-	// return List;
-	//
-	// }
+	/**
+	 * Taking in path of a file and returning a vector that can be used to populate a table.
+	 * 
+	 * @param file
+	 *            path to a file for which all the data needs to be generated.
+	 * @return A vector of vectors of strings (a 2D vector of Strings) that the JTable can be
+	 *         created from.
+	 */
+	public static Vector<Vector<String>> getRevisionData(Path file)
+	{
+		Vector<Vector<String>> revisionData = new Vector<>();
+		List<RevisionInfo> list = getRevisionInfo(file);
+		for(RevisionInfo revision : list)
+		{
+			Vector<String> row = new Vector<String>();
+			row.add(Data.formatDate(revision.time));
+			row.add(Data.humanReadableByteCount(revision.delta, false));
+		}
+
+		return revisionData;
+	}
+
 	/**
 	 * Takes in a path to a folder and outputs a Vector of Vectors. The parent vector is the rows.
 	 * The vector inside this is the columns.
