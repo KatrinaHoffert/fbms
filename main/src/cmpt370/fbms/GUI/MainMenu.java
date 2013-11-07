@@ -15,7 +15,6 @@
 
 package cmpt370.fbms.GUI;
 
-
 import java.awt.Desktop;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
@@ -33,8 +32,7 @@ import javax.swing.JOptionPane;
 import cmpt370.fbms.Control;
 import cmpt370.fbms.Errors;
 
-
-public class MainMenu extends JMenuBar
+class MainMenu extends JMenuBar
 {
 	public JMenuItem copyToOption = new JMenuItem("Copy to");
 	public JMenuItem revisionsOption = new JMenuItem("View revisions");
@@ -109,7 +107,10 @@ public class MainMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Clicked revision");
+				RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
+				revisionWindow.setLocationRelativeTo(FrontEnd.frame);
+				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
+				revisionWindow.setVisible(true);
 			}
 		});
 
