@@ -230,6 +230,10 @@ class TableSelectionListener implements MouseListener, KeyListener
 			{
 				FrontEnd.frame.topMenu.revisionsOption.setEnabled(true);
 			}
+			else
+			{
+				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
+			}
 			FrontEnd.frame.topMenu.copyToOption.setEnabled(true);
 		}
 		else
