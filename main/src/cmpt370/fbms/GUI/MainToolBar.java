@@ -21,6 +21,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 
 import javax.swing.ImageIcon;
@@ -30,6 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import cmpt370.fbms.Control;
+import cmpt370.fbms.Errors;
 
 public class MainToolBar extends JToolBar
 {
@@ -112,24 +114,16 @@ public class MainToolBar extends JToolBar
 					text = text.substring(1);
 				}
 
-				// Apparently having two or more dots at the end of the path is a valid path
-				// (somehow), yet when redrawing the table, it's no longer a valid path, meaning it
-				// causes errors down the road. The "\\." matches a single period (the \\ becomes a
-				// single slash, which escapes the period). Whoever designed Java's regex was not
-				// sober. Oh, and we have to check if the two dots appear after a slash. If that's
-				// the case, it's a valid "go up a directory".
-				// This is only done for Windows. Unix-style OSes don't have this problem.
-				if(System.getProperty("os.name").toLowerCase().indexOf("win") >= 0
-						&& !text.matches(".*/\\.\\.$") && !text.matches(".*\\\\.\\.$")
-						&& text.matches(".*\\.\\.$"))
-				{
-					JOptionPane.showMessageDialog(FrontEnd.frame,
-							"The entered directory is invalid.");
-					return;
-				}
-
 				// Calculate the new path
-				Path enteredPath = Control.backupDirectory.resolve(text);
+				Path enteredPath = null;
+				try
+				{
+					enteredPath = Control.backupDirectory.resolve(text).toFile().getCanonicalFile().toPath();
+				}
+				catch(IOException e1)
+				{
+					Errors.nonfatalError("Could not interpret entered path.", e1);
+				}
 
 				// Make sure that the path is a directory and not a parent of the backup directory
 				if(enteredPath.toFile().isDirectory()
