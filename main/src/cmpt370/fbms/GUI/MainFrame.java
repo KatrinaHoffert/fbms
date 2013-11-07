@@ -101,6 +101,7 @@ public class MainFrame extends JFrame
 			}
 		});
 
+
 		// Set some default column sizes as larger, so dates fit in better
 		table.getColumnModel().getColumn(0).setMinWidth(100);
 		table.getColumnModel().getColumn(2).setMinWidth(90);
