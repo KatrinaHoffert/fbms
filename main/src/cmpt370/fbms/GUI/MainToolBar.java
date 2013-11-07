@@ -25,10 +25,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import javax.swing.table.DefaultTableModel;
 
 import cmpt370.fbms.Control;
-import cmpt370.fbms.Data;
 
 public class MainToolBar extends JToolBar
 {
@@ -71,15 +69,7 @@ public class MainToolBar extends JToolBar
 				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
 
 				// Recreate the table
-				FrontEnd.frame.table.setModel(new DefaultTableModel(
-						Data.getTableData(FrontEnd.frame.currentDirectory), FrontEnd.frame.columns)
-				{
-					@Override
-					public boolean isCellEditable(int row, int column)
-					{
-						return false;
-					}
-				});
+				FrontEnd.frame.redrawTable(FrontEnd.frame.currentDirectory);
 			}
 		});
 
@@ -103,15 +93,7 @@ public class MainToolBar extends JToolBar
 				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
 
 				// And recreate the table
-				FrontEnd.frame.table.setModel(new DefaultTableModel(
-						Data.getTableData(FrontEnd.frame.currentDirectory), FrontEnd.frame.columns)
-				{
-					@Override
-					public boolean isCellEditable(int row, int column)
-					{
-						return false;
-					}
-				});
+				FrontEnd.frame.redrawTable(FrontEnd.frame.currentDirectory);
 			}
 		});
 

@@ -79,6 +79,7 @@ public class MainFrame extends JFrame
 
 		// Create table columns
 		columns = new Vector<>();
+		columns.add("");
 		columns.add("Name");
 		columns.add("Size");
 		columns.add("Created date");
@@ -101,14 +102,22 @@ public class MainFrame extends JFrame
 			{
 				return false;
 			}
+
+			@Override
+			public Class getColumnClass(int column)
+			{
+				return getValueAt(0, column).getClass();
+			}
 		});
 
 
 		// Set some default column sizes as larger, so dates fit in better
-		table.getColumnModel().getColumn(0).setMinWidth(100);
-		table.getColumnModel().getColumn(2).setMinWidth(90);
+		table.getColumnModel().getColumn(0).setMinWidth(25);
+		table.getColumnModel().getColumn(0).setMaxWidth(25);
+		table.getColumnModel().getColumn(1).setMinWidth(100);
 		table.getColumnModel().getColumn(3).setMinWidth(90);
 		table.getColumnModel().getColumn(4).setMinWidth(90);
+		table.getColumnModel().getColumn(5).setMinWidth(90);
 
 		// Create scrollpane for the table
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -126,6 +135,33 @@ public class MainFrame extends JFrame
 
 		table.addMouseListener(new TableSelectionListener());
 		table.addKeyListener(new TableSelectionListener());
+	}
+
+	public void redrawTable(Path directory)
+	{
+		// Recreate the data model
+		FrontEnd.frame.table.setModel(new DefaultTableModel(Data.getTableData(directory), columns)
+		{
+			@Override
+			public boolean isCellEditable(int row, int column)
+			{
+				return false;
+			}
+
+			@Override
+			public Class getColumnClass(int column)
+			{
+				return getValueAt(0, column).getClass();
+			}
+		});
+
+		// Set the appropriate widths
+		FrontEnd.frame.table.getColumnModel().getColumn(0).setMinWidth(25);
+		FrontEnd.frame.table.getColumnModel().getColumn(0).setMaxWidth(25);
+		FrontEnd.frame.table.getColumnModel().getColumn(1).setMinWidth(100);
+		FrontEnd.frame.table.getColumnModel().getColumn(3).setMinWidth(90);
+		FrontEnd.frame.table.getColumnModel().getColumn(4).setMinWidth(90);
+		FrontEnd.frame.table.getColumnModel().getColumn(5).setMinWidth(90);
 	}
 }
 
@@ -172,7 +208,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 			// table.getValueAt() will get the value in the selected row. Use that to get the file
 			// name.
 			FrontEnd.frame.selectedFile = FrontEnd.frame.currentDirectory.resolve((String) FrontEnd.frame.table.getValueAt(
-					FrontEnd.frame.table.getSelectedRow(), 0));
+					FrontEnd.frame.table.getSelectedRow(), 1));
 
 			// Enable menu options that require a selected file (view revisions is only accessible
 			// if a file is selected
@@ -205,15 +241,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 				FrontEnd.frame.currentDirectory = FrontEnd.frame.currentDirectory.resolve(FrontEnd.frame.selectedFile.getFileName());
 
 				// And recreate the table
-				FrontEnd.frame.table.setModel(new DefaultTableModel(
-						Data.getTableData(FrontEnd.frame.currentDirectory), FrontEnd.frame.columns)
-				{
-					@Override
-					public boolean isCellEditable(int row, int column)
-					{
-						return false;
-					}
-				});
+				FrontEnd.frame.redrawTable(FrontEnd.frame.currentDirectory);
 
 				// Disable options that require a selected file
 				FrontEnd.frame.topMenu.copyToOption.setEnabled(false);

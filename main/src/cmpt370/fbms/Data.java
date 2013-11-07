@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.ImageIcon;
+
 public class Data
 {
 	/**
@@ -148,9 +150,9 @@ public class Data
 	 * @return A vector of vectors of strings (a 2D vector of Strings) that the JTable can be
 	 *         created from.
 	 */
-	public static Vector<Vector<String>> getTableData(Path folder)
+	public static Vector<Vector<Object>> getTableData(Path folder)
 	{
-		Vector<Vector<String>> tableData = new Vector<>();
+		Vector<Vector<Object>> tableData = new Vector<>();
 
 		// Get the contents of the folder
 		List<FileInfo> files = Data.getFolderContents(folder);
@@ -159,9 +161,17 @@ public class Data
 		{
 			// For each file in the folder, create a Vector that will become a row in
 			// our table.
-			Vector<String> row = new Vector<String>();
+			Vector<Object> row = new Vector<>();
 
 			// Populate the columns
+			if(file.folder)
+			{
+				row.add(new ImageIcon("res/folder.png"));
+			}
+			else
+			{
+				row.add(new ImageIcon("res/file.png"));
+			}
 			row.add(file.fileName);
 			row.add(Data.humanReadableByteCount(file.fileSize, false));
 			row.add(Data.formatDate(file.createdDate));

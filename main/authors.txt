@@ -12,6 +12,7 @@ Some code derived from work by:
 Resources:
  * Program and refresh icons by oxygen (CC-BY-SA 3.0)
  * Up icon by crystal (LGPL-2.1)
+ * File and folder icons by nuovext2 (LGPL-2.1)
 
 FBMS is licensed under GPL v3
 https://code.google.com/p/fbms
