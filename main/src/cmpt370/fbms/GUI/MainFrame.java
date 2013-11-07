@@ -140,7 +140,7 @@ public class MainFrame extends JFrame
 
 		// In the backup directory, the location bar is set to a single slash. The direction of the
 		// slash is platform dependent. Windows uses \\ while Unix and Mac use /.
-		topTool.currentDirectory.setText(File.separator);
+		topTool.locationBar.setText(File.separator);
 
 		// Necessary to revalidate the frame so that we can see the table
 		revalidate();
@@ -178,12 +178,12 @@ public class MainFrame extends JFrame
 		// Set the location bar to the current directory relative to the
 		String locationBarText = directory.toString().substring(
 				Control.backupDirectory.toString().length());
-		FrontEnd.frame.topTool.currentDirectory.setText(locationBarText);
+		FrontEnd.frame.topTool.locationBar.setText(locationBarText);
 
 		// If we're in the backup directory, set the location bar to a single slash
 		if(locationBarText.equals(""))
 		{
-			FrontEnd.frame.topTool.currentDirectory.setText(File.separator);
+			FrontEnd.frame.topTool.locationBar.setText(File.separator);
 		}
 	}
 }

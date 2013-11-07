@@ -20,9 +20,12 @@ import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.file.Path;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
@@ -37,7 +40,7 @@ public class MainToolBar extends JToolBar
 	public JButton upButton = new JButton(upIcon);
 	private JButton refreshButton = new JButton(refreshIcon);
 
-	public JTextField currentDirectory = new JTextField(5);
+	public JTextField locationBar = new JTextField(5);
 
 	public MainToolBar()
 	{
@@ -55,8 +58,7 @@ public class MainToolBar extends JToolBar
 		refreshButton.setBorderPainted(false);
 
 		// Format the directory text field to be disabled and a dark grey
-		currentDirectory.setEnabled(false);
-		currentDirectory.setDisabledTextColor(new Color(0.2f, 0.2f, 0.2f));
+		locationBar.setDisabledTextColor(new Color(0.2f, 0.2f, 0.2f));
 
 		// Refresh button clicked
 		refreshButton.addActionListener(new ActionListener()
@@ -97,11 +99,66 @@ public class MainToolBar extends JToolBar
 			}
 		});
 
+		// Enter key pressed within the location bar
+		locationBar.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// Remove the separate character (it's just for looks)
+				String text = locationBar.getText();
+				if(!text.equals("") && text.charAt(0) == File.separatorChar)
+				{
+					text = text.substring(1);
+				}
+
+				// Apparently having two or more dots at the end of the path is a valid path
+				// (somehow), yet when redrawing the table, it's no longer a valid path, meaning it
+				// causes errors down the road. The "\\." matches a single period (the \\ becomes a
+				// single slash, which escapes the period). Whoever designed Java's regex was not
+				// sober. Oh, and we have to check if the two dots appear after a slash. If that's
+				// the case, it's a valid "go up a directory".
+				if(!text.matches(".*/\\.\\.$") && !text.matches(".*\\\\.\\.$")
+						&& text.matches(".*\\.\\.$"))
+				{
+					JOptionPane.showMessageDialog(FrontEnd.frame,
+							"The entered directory is invalid.");
+					return;
+				}
+
+				// Calculate the new path
+				Path enteredPath = Control.backupDirectory.resolve(text);
+
+				// Make sure that the path is a directory and not a parent of the backup directory
+				if(enteredPath.toFile().isDirectory()
+						&& (!Control.backupDirectory.startsWith(enteredPath.normalize()) || Control.backupDirectory.equals(enteredPath.normalize())))
+				{
+					FrontEnd.frame.redrawTable(enteredPath.normalize());
+					FrontEnd.frame.currentDirectory = enteredPath.normalize();
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(FrontEnd.frame,
+							"The entered directory does not exist or is outside of the backup directory.");
+				}
+
+				// Possible disable or enable the up button
+				if(FrontEnd.frame.currentDirectory.equals(Control.backupDirectory))
+				{
+					FrontEnd.frame.topTool.upButton.setEnabled(false);
+				}
+				else
+				{
+					FrontEnd.frame.topTool.upButton.setEnabled(true);
+				}
+			}
+		});
+
 		this.setFloatable(false);
 		this.add(upButton);
 		this.addSeparator();
 		this.add(refreshButton);
 		this.addSeparator();
-		this.add(currentDirectory);
+		this.add(locationBar);
 	}
 }
