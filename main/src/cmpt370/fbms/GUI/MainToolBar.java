@@ -118,7 +118,9 @@ public class MainToolBar extends JToolBar
 				// single slash, which escapes the period). Whoever designed Java's regex was not
 				// sober. Oh, and we have to check if the two dots appear after a slash. If that's
 				// the case, it's a valid "go up a directory".
-				if(!text.matches(".*/\\.\\.$") && !text.matches(".*\\\\.\\.$")
+				// This is only done for Windows. Unix-style OSes don't have this problem.
+				if(System.getProperty("os.name").toLowerCase().indexOf("win") >= 0
+						&& !text.matches(".*/\\.\\.$") && !text.matches(".*\\\\.\\.$")
 						&& text.matches(".*\\.\\.$"))
 				{
 					JOptionPane.showMessageDialog(FrontEnd.frame,
