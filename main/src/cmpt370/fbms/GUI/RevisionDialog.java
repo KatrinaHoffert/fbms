@@ -13,70 +13,66 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableModel;
+
+import cmpt370.fbms.Data;
 
 
 public class RevisionDialog extends JDialog
 {
 	public JTable table;
-	public JButton b1, b2;
-
-	private JPanel contentPane;
+	public JButton viewRevisionButton, revertRevisionButton;
 
 	/**
 	 * Create the frame.
 	 */
 	public RevisionDialog(Path file)
 	{
-		System.out.println(file.toString());
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setVisible(true);
 		setTitle("Revision Log");
-
-		// Set size and position
-		setSize(423, 274);
-		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setIconImage(new ImageIcon("res/icon.png").getImage());
+		setSize(400, 250);
 
 		// Create main panel
-		contentPane = new JPanel();
-		setContentPane(contentPane);
+		JPanel contentPane = new JPanel(new BorderLayout());
 
-		// Set the icon
-		setIconImage(new ImageIcon("res/icon.png").getImage());
-		contentPane.setLayout(new BorderLayout(0, 0));
 		// Create table columns
 		Vector<String> columns = new Vector<>();
 		columns.add("Date");
-		columns.add("Size");
 		columns.add("Delta");
-
 
 		// Create table
 		table = new JTable();
 		table.setShowGrid(false);
 
-
-		// Set some default column sizes as larger, so dates fit in better
-		table.getColumnModel().getColumn(0).setMinWidth(100);
-		table.getColumnModel().getColumn(1).setMinWidth(90);
-		table.getColumnModel().getColumn(2).setMinWidth(90);
-
+		// Create the data model
+		table.setModel(new DefaultTableModel(Data.getRevisionData(file), columns)
+		{
+			@Override
+			public boolean isCellEditable(int row, int column)
+			{
+				return false;
+			}
+		});
 
 		// Create scrollpane for the table
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		table.setFillsViewportHeight(true);
-		getContentPane().add(scrollPane);
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(b1);
-		buttonPanel.add(b2);
-		contentPane.add(buttonPanel);
-		buttonPanel.setLayout(new FlowLayout());
+		// Create buttons at the bottom
+		JPanel buttonPanel = new JPanel(new FlowLayout());
+		viewRevisionButton = new JButton("View revision");
+		revertRevisionButton = new JButton("Revert revision");
+		buttonPanel.add(viewRevisionButton);
+		buttonPanel.add(revertRevisionButton);
 
+		// And add to the main panel
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+		contentPane.add(buttonPanel, BorderLayout.SOUTH);
+		add(contentPane);
 
 		// Necessary to revalidate the frame so that we can see the table
 		revalidate();
-
-
 	}
 }

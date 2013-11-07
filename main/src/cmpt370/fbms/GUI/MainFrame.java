@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Vector;
 
@@ -128,7 +129,9 @@ public class MainFrame extends JFrame
 		// Set the current directory
 		currentDirectory = Control.backupDirectory;
 
-		topTool.currentDirectory.setText("/");
+		// In the backup directory, the location bar is set to a single slash. The direction of the
+		// slash is platform dependent. Windows uses \\ while Unix and Mac use /.
+		topTool.currentDirectory.setText(File.separator);
 
 		// Necessary to revalidate the frame so that we can see the table
 		revalidate();
@@ -162,6 +165,17 @@ public class MainFrame extends JFrame
 		FrontEnd.frame.table.getColumnModel().getColumn(3).setMinWidth(90);
 		FrontEnd.frame.table.getColumnModel().getColumn(4).setMinWidth(90);
 		FrontEnd.frame.table.getColumnModel().getColumn(5).setMinWidth(90);
+
+		// Set the location bar to the current directory relative to the
+		String locationBarText = directory.toString().substring(
+				Control.backupDirectory.toString().length());
+		FrontEnd.frame.topTool.currentDirectory.setText(locationBarText);
+
+		// If we're in the backup directory, set the location bar to a single slash
+		if(locationBarText.equals(""))
+		{
+			FrontEnd.frame.topTool.currentDirectory.setText(File.separator);
+		}
 	}
 }
 
@@ -248,14 +262,12 @@ class TableSelectionListener implements MouseListener, KeyListener
 				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
 
 				FrontEnd.frame.topTool.upButton.setEnabled(true);
-
 			}
 			// Display revision window for files
 			else
 			{
-				System.out.println("Activated file: " + FrontEnd.frame.selectedFile.toString());
-
 				RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
+				revisionWindow.setLocationRelativeTo(FrontEnd.frame);
 				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
 				revisionWindow.setVisible(true);
 			}
