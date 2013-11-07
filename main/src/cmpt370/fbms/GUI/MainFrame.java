@@ -169,13 +169,18 @@ class TableSelectionListener implements MouseListener, KeyListener
 		// If we have selected a valid row
 		if(FrontEnd.frame.table.getSelectedRow() != -1)
 		{
-			FrontEnd.frame.topMenu.copyToOption.setEnabled(true);
-			FrontEnd.frame.topMenu.revisionsOption.setEnabled(true);
-
 			// table.getValueAt() will get the value in the selected row. Use that to get the file
 			// name.
 			FrontEnd.frame.selectedFile = FrontEnd.frame.currentDirectory.resolve((String) FrontEnd.frame.table.getValueAt(
 					FrontEnd.frame.table.getSelectedRow(), 0));
+
+			// Enable menu options that require a selected file (view revisions is only accessible
+			// if a file is selected
+			if(FrontEnd.frame.selectedFile.toFile().isFile())
+			{
+				FrontEnd.frame.topMenu.revisionsOption.setEnabled(true);
+			}
+			FrontEnd.frame.topMenu.copyToOption.setEnabled(true);
 		}
 		else
 		{
@@ -209,6 +214,10 @@ class TableSelectionListener implements MouseListener, KeyListener
 						return false;
 					}
 				});
+
+				// Disable options that require a selected file
+				FrontEnd.frame.topMenu.copyToOption.setEnabled(false);
+				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
 
 				FrontEnd.frame.topTool.upButton.setEnabled(true);
 

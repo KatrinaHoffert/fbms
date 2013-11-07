@@ -25,6 +25,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.table.DefaultTableModel;
+
+import cmpt370.fbms.Control;
+import cmpt370.fbms.Data;
 
 public class MainToolBar extends JToolBar
 {
@@ -62,7 +66,20 @@ public class MainToolBar extends JToolBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Clicked refresh");
+				// Disable options that require a selected file
+				FrontEnd.frame.topMenu.copyToOption.setEnabled(false);
+				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
+
+				// Recreate the table
+				FrontEnd.frame.table.setModel(new DefaultTableModel(
+						Data.getTableData(FrontEnd.frame.currentDirectory), FrontEnd.frame.columns)
+				{
+					@Override
+					public boolean isCellEditable(int row, int column)
+					{
+						return false;
+					}
+				});
 			}
 		});
 
@@ -72,7 +89,29 @@ public class MainToolBar extends JToolBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Clicked up");
+				// Figure out the new path
+				FrontEnd.frame.currentDirectory = FrontEnd.frame.currentDirectory.resolve("..").normalize();
+
+				// Disable the up button if we're in the backup directory
+				if(FrontEnd.frame.currentDirectory.equals(Control.backupDirectory))
+				{
+					FrontEnd.frame.topTool.upButton.setEnabled(false);
+				}
+
+				// Disable options that require a selected file
+				FrontEnd.frame.topMenu.copyToOption.setEnabled(false);
+				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
+
+				// And recreate the table
+				FrontEnd.frame.table.setModel(new DefaultTableModel(
+						Data.getTableData(FrontEnd.frame.currentDirectory), FrontEnd.frame.columns)
+				{
+					@Override
+					public boolean isCellEditable(int row, int column)
+					{
+						return false;
+					}
+				});
 			}
 		});
 
