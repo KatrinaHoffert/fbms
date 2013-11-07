@@ -16,7 +16,6 @@
 package cmpt370.fbms.GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Dialog.ModalityType;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -149,9 +148,9 @@ class TableSelectionListener implements MouseListener, KeyListener
 			if(e != null && e.getClickCount() == 2)
 			{
 				System.out.println("DOUBLE CLICKED ON: " + FrontEnd.frame.selectedFile.toString());
-				RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
-				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
-				revisionWindow.setVisible(true);
+				// RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
+				// revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
+				// revisionWindow.setVisible(true);
 			}
 			else
 			{
