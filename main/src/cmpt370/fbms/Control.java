@@ -23,9 +23,11 @@ import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
@@ -46,10 +48,10 @@ public class Control
 	// Various public variables shared amongst components
 	public static Path liveDirectory = null;
 	public static Path backupDirectory = null;
-	public static List<Path> createdFiles = new LinkedList<>();
-	public static List<Path> modifiedFiles = new LinkedList<>();
-	public static List<RenamedFile> renamedFiles = new LinkedList<>();
-	public static List<Path> deletedFiles = new LinkedList<>();
+	public static List<Path> createdFiles = Collections.synchronizedList(new LinkedList<Path>());
+	public static List<Path> modifiedFiles = Collections.synchronizedList(new LinkedList<Path>());
+	public static List<RenamedFile> renamedFiles = Collections.synchronizedList(new LinkedList<RenamedFile>());
+	public static List<Path> deletedFiles = Collections.synchronizedList(new LinkedList<Path>());
 	public static boolean firstRunWizardDone = false;
 
 	// Logger object is linked to the S
@@ -336,10 +338,23 @@ public class Control
 						// Keep track of how many file loops we've done
 						loop++;
 
-						handleDeletedFiles();
-						handleCreatedFiles();
-						handleModifiedFiles();
-						handleRenamedFiles();
+						// Synchronize all lists before we handle them.
+						synchronized(deletedFiles)
+						{
+							synchronized(createdFiles)
+							{
+								synchronized(modifiedFiles)
+								{
+									synchronized(renamedFiles)
+									{
+										handleDeletedFiles();
+										handleCreatedFiles();
+										handleModifiedFiles();
+										handleRenamedFiles();
+									}
+								}
+							}
+						}
 
 						// Every 500 loops, we run the command to trim the database
 						if(loop % 500 == 0)
@@ -361,24 +376,264 @@ public class Control
 		}.start();
 	}
 
+	/**
+	 * Handles all created files identified by the watcher. Also handles recurrent entries between
+	 * modified, and renamed files. All iterations start from the back of the list, that way we
+	 * handle the most recent events first. This is more important for file renames but I kept it
+	 * consistent.
+	 */
 	private static void handleCreatedFiles()
 	{
+		ListIterator<Path> itrc, itrm;
+		ListIterator<RenamedFile> itrr;
+		boolean hit, found;
+		Path pathc, pathm;
+		RenamedFile toRename;
+		itrc = createdFiles.listIterator(createdFiles.size());
+		found = false;
+		logger.debug("Handle Created Files has started.");
+		// Search through all elements of created files, comparing them to instances of renamed
+		// files and modified files.
+		while(itrc.hasPrevious())
+		{
+			pathc = itrc.previous();
+			hit = false; // If we've hit a duplicate already in this list.
+			itrr = renamedFiles.listIterator(renamedFiles.size());
+			// Check renamed files for created files duplicates.
+			while(itrr.hasPrevious())
+			{
+				toRename = itrr.previous();
+				if(pathc.equals(toRename.newName))
+				{
+					// If we've hit a duplicate already, we've made the diff/backup and we can
+					// delete this one safely.
+					if(hit == true)
+					{
+						itrr.remove();
+						logger.info("Create File Handle: Found duplicate in renamed, removing.");
+					}
+					// Otherwise we set found and hit to be true. It will be then removed from
+					// created and left on renamed to be handled there.
+					else
+					{
+						hit = true;
+						found = true;
+					}
+				}
+			}
 
+			hit = false;
+			itrm = modifiedFiles.listIterator(modifiedFiles.size());
+			// Now we cycle through the modified list.
+			while(itrm.hasPrevious())
+			{
+				pathm = itrm.previous();
+				if(pathc.equals(pathm))
+				{
+					// If we find a duplicate but already have made a diff/backup just delete the
+					// duplicate.
+					if(hit == true || found == true)
+					{
+						itrm.remove();
+						logger.info("Create File Handle: Found duplicate in modified, removing.");
+					}
+					// Otherwise we make backups/entries and set hit/found to true.
+					else
+					{
+						hit = true;
+						found = true;
+					}
+				}
+			}
+			// If after going through both modified and renamed lists we didn't find a duplicate,
+			// make a diff/backup and remove it from the created list.
+			if(!found)
+			{
+				// If the file doesn't exist we copy it over.
+				if(!FileOp.convertPath(pathc).toFile().exists())
+				{
+					// If the file isn't a folder and is not in the backup folder, copy it over.
+					Path targetDirectory = FileOp.convertPath(pathc).getParent();
+					FileOp.copy(pathc, targetDirectory);
+
+					logger.info("Create File Handle: Found new file " + pathc.toFile().toString());
+				}
+				// If it does exist, it was modified after creation and that takes priority.
+				else
+				{
+					modifiedFiles.add(pathc);
+					logger.info("Create File Handle: Move created file to modified.");
+				}
+			}
+			itrc.remove();
+		}
 	}
 
+	/**
+	 * Checks for modified files using the list created by watcher. Compares its entries against
+	 * those that have been renamed. Renamed entries take priority, removes duplicate entry in its
+	 * own list. Creates new copies or diffs of files when necessary.
+	 */
 	private static void handleModifiedFiles()
 	{
+		ListIterator<Path> itrm = modifiedFiles.listIterator(modifiedFiles.size());
+		ListIterator<RenamedFile> itrr;
+		Path pathm, diff;
+		RenamedFile toRename;
+		boolean hit = false;
+		logger.debug("Handle Modified Files has started.");
+		while(itrm.hasPrevious())
+		{
+			pathm = itrm.previous();
+			itrr = renamedFiles.listIterator(renamedFiles.size());
+			hit = false;
+			while(itrr.hasPrevious())
+			{
+				toRename = itrr.previous();
+				if(pathm.equals(toRename.newName))
+				{
+					// Clean up additional copies, will only do this if its already made a
+					// diff/backup of the file.
+					if(hit == true)
+					{
+						itrr.remove();
+					}
+					else
+					{
+						hit = true;
+					}
+				}
+			}
+			if(!hit)
+			{
+				if(FileOp.fileValid(pathm))
+				{
+					if(!FileOp.convertPath(pathm).toFile().exists())
+					{
+						// If the file isn't a folder and is not in the backup folder, copy it over.
+						Path targetDirectory = FileOp.convertPath(pathm).getParent();
+						FileOp.copy(pathm, targetDirectory);
 
+						logger.info("Create File Handle: Found new file "
+								+ pathm.toFile().toString());
+					}
+					else
+					{
+						// Following the conventions in startupScan...
+						// If the file isn't a folder but DOES exist, make diff and copy.
+						// Make diff file.
+						diff = FileOp.createDiff(FileOp.convertPath(pathm), pathm);
+						// Look at size difference.
+						long delta = FileOp.fileSize(FileOp.convertPath(pathm))
+								- FileOp.fileSize(pathm);
+
+						// Store a revision
+						FileHistory.storeRevision(pathm, diff, FileOp.fileSize(pathm), delta);
+
+						// Copy file over.
+						Path targetDirectory = FileOp.convertPath(pathm).getParent();
+						FileOp.copy(pathm, targetDirectory);
+
+						logger.info("Handle File Modified: Found existing modified file "
+								+ pathm.toFile().toString());
+					}
+				}
+				else
+				{
+					// If the file isn't valid, just copy (its binary or large).
+					Path targetDirectory = FileOp.convertPath(pathm).getParent();
+					FileOp.copy(pathm, targetDirectory);
+
+					logger.info("Create File Handle: Found new large or binary file "
+							+ pathm.toFile().toString());
+				}
+			}
+			itrm.remove();
+		}
 	}
 
 	private static void handleRenamedFiles()
 	{
 
+		ListIterator<RenamedFile> itrr = renamedFiles.listIterator(renamedFiles.size());
+		RenamedFile toRename;
+		String newName;
+		// Since this is last to call all modified/created files should be dealt with.
+		// We just iterate through the list and rename files.
+		// All files on the list should by convention already exist.
+		logger.debug("Handle Renamed Files has started.");
+		while(itrr.hasPrevious())
+		{
+			toRename = itrr.previous();
+			newName = toRename.oldName.getParent().relativize(toRename.newName).toString();
+			// If this is a file we're renaming update database and rename file.
+			if(!FileOp.isFolder(toRename.oldName))
+			{
+				FileHistory.renameRevision(toRename.oldName, newName);
+				FileOp.rename(toRename.oldName, newName);
+			}
+			// Otherwise we have a folder, use file op to rename.
+			else
+			{
+				if(FileOp.isFolder(toRename.oldName))
+				{
+					FileOp.rename(toRename.oldName, newName);
+				}
+
+			}
+			// Remove entry to move onto the next.
+			itrr.remove();
+		}
+
 	}
 
+	/**
+	 * Compares all elements in deletedFiles to every other handle list, removing those found in
+	 * deleted. DOES NOT delete files, only list entries. We want to keep the last version of a
+	 * file.
+	 */
 	private static void handleDeletedFiles()
 	{
 
+		ListIterator<Path> itrd = deletedFiles.listIterator(deletedFiles.size());
+		ListIterator<Path> itrc = createdFiles.listIterator(createdFiles.size());
+		ListIterator<Path> itrm = modifiedFiles.listIterator(modifiedFiles.size());
+		ListIterator<RenamedFile> itrr = renamedFiles.listIterator(renamedFiles.size());
+		RenamedFile toRename;
+		Path pathm, pathc, pathd;
+		logger.debug("Handle Deleted Files has started.");
+
+		while(itrd.hasPrevious())
+		{
+			pathd = itrd.previous();
+			while(itrc.hasPrevious())
+			{
+				pathc = itrd.previous();
+				if(pathd.equals(pathc))
+				{
+					itrd.remove();
+				}
+			}
+			while(itrm.hasPrevious())
+			{
+				pathm = itrm.previous();
+				if(pathd.equals(pathm))
+				{
+					itrm.remove();
+				}
+
+			}
+			while(itrr.hasPrevious())
+			{
+				toRename = itrr.previous();
+				if(pathd.equals(toRename.newName))
+				{
+					itrr.remove();
+				}
+			}
+			itrd.remove();
+
+		}
 	}
 
 	/**
