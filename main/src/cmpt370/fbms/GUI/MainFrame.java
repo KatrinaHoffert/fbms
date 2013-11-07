@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
@@ -119,6 +120,14 @@ public class MainFrame extends JFrame
 		table.getColumnModel().getColumn(3).setMinWidth(90);
 		table.getColumnModel().getColumn(4).setMinWidth(90);
 		table.getColumnModel().getColumn(5).setMinWidth(90);
+
+		// Make the enter key active the cell instead of going to the next cell. Basically, we
+		// create a new keyboard mapping for the enter key which does nothing, allowing the listener
+		// to pick up the enter key later.
+		final String solve = "Solve";
+		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		table.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, solve);
+		table.getActionMap().put(solve, null);
 
 		// Create scrollpane for the table
 		JScrollPane scrollPane = new JScrollPane(table);
