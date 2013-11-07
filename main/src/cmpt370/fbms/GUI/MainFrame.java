@@ -16,6 +16,7 @@
 package cmpt370.fbms.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -43,6 +44,7 @@ public class MainFrame extends JFrame
 	public MainToolBar topTool;
 	public MainMenu topMenu;
 	public Path selectedFile = null;
+	public Vector<String> columns;
 
 	private JPanel contentPane;
 
@@ -76,7 +78,7 @@ public class MainFrame extends JFrame
 		add(topTool, BorderLayout.NORTH);
 
 		// Create table columns
-		Vector<String> columns = new Vector<>();
+		columns = new Vector<>();
 		columns.add("Name");
 		columns.add("Size");
 		columns.add("Created date");
@@ -174,9 +176,6 @@ class TableSelectionListener implements MouseListener, KeyListener
 			// name.
 			FrontEnd.frame.selectedFile = FrontEnd.frame.currentDirectory.resolve((String) FrontEnd.frame.table.getValueAt(
 					FrontEnd.frame.table.getSelectedRow(), 0));
-
-			// TODO: Remove this temporary line
-			System.out.println("SELECTED: " + FrontEnd.frame.selectedFile.toString());
 		}
 		else
 		{
@@ -191,15 +190,38 @@ class TableSelectionListener implements MouseListener, KeyListener
 	 */
 	private void activateRow()
 	{
-		if(FrontEnd.frame.currentDirectory.toFile().exists())
+		// Make sure the file exists
+		if(FrontEnd.frame.selectedFile.toFile().exists())
 		{
-			// TODO: Remove this temporary line
-			System.out.println("ACTIVATED: " + FrontEnd.frame.selectedFile.toString());
+			// Go into directories
+			if(FrontEnd.frame.selectedFile.toFile().isDirectory())
+			{
+				// Set the new directory
+				FrontEnd.frame.currentDirectory = FrontEnd.frame.currentDirectory.resolve(FrontEnd.frame.selectedFile.getFileName());
 
-			// TODO: Uncomment when Ahsen adds the file
-			// RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
-			// revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
-			// revisionWindow.setVisible(true);
+				// And recreate the table
+				FrontEnd.frame.table.setModel(new DefaultTableModel(
+						Data.getTableData(FrontEnd.frame.currentDirectory), FrontEnd.frame.columns)
+				{
+					@Override
+					public boolean isCellEditable(int row, int column)
+					{
+						return false;
+					}
+				});
+
+				FrontEnd.frame.topTool.upButton.setEnabled(true);
+
+			}
+			// Display revision window for files
+			else
+			{
+				System.out.println("Activated file: " + FrontEnd.frame.selectedFile.toString());
+
+				RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
+				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
+				revisionWindow.setVisible(true);
+			}
 		}
 		else
 		{
