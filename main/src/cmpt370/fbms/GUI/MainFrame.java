@@ -34,6 +34,7 @@ import javax.swing.table.DefaultTableModel;
 
 import cmpt370.fbms.Control;
 import cmpt370.fbms.Data;
+import cmpt370.fbms.Errors;
 
 public class MainFrame extends JFrame
 {
@@ -134,6 +135,34 @@ class TableSelectionListener implements MouseListener, KeyListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
+		selectRow();
+
+		// Get double clicks
+		if(e.getClickCount() == 2)
+		{
+			activateRow();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e)
+	{
+		selectRow();
+
+		// If the enter key was pressed, "enter" that row (go into folders and open revision window
+		// for files)
+		if(e.getKeyCode() == KeyEvent.VK_ENTER)
+		{
+			activateRow();
+		}
+	}
+
+	/**
+	 * Called when a row is selected. Sets that file as the current file and enables
+	 * context-specific menu options.
+	 */
+	private void selectRow()
+	{
 		// If we have selected a valid row
 		if(FrontEnd.frame.table.getSelectedRow() != -1)
 		{
@@ -145,19 +174,8 @@ class TableSelectionListener implements MouseListener, KeyListener
 			FrontEnd.frame.selectedFile = FrontEnd.frame.currentDirectory.resolve((String) FrontEnd.frame.table.getValueAt(
 					FrontEnd.frame.table.getSelectedRow(), 0));
 
-			if(e != null && e.getClickCount() == 2)
-			{
-				System.out.println("DOUBLE CLICKED ON: " + FrontEnd.frame.selectedFile.toString());
-				// RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
-				// revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
-				// revisionWindow.setVisible(true);
-			}
-			else
-			{
-				// TODO: Remove this temporary line
-				System.out.println("SINGLE CLICKED ON: " + FrontEnd.frame.selectedFile.toString());
-
-			}
+			// TODO: Remove this temporary line
+			System.out.println("SELECTED: " + FrontEnd.frame.selectedFile.toString());
 		}
 		else
 		{
@@ -166,10 +184,26 @@ class TableSelectionListener implements MouseListener, KeyListener
 		}
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e)
+	/**
+	 * Catches a double click or enter key on a row, which goes into folders and opens the revision
+	 * info window for files.
+	 */
+	private void activateRow()
 	{
-		mouseClicked(null);
+		if(FrontEnd.frame.currentDirectory.toFile().exists())
+		{
+			// TODO: Remove this temporary line
+			System.out.println("ACTIVATED: " + FrontEnd.frame.selectedFile.toString());
+
+			// TODO: Uncomment when Ahsen adds the file
+			// RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
+			// revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
+			// revisionWindow.setVisible(true);
+		}
+		else
+		{
+			Errors.nonfatalError("The selected file no longer exists.");
+		}
 	}
 
 	@Override
@@ -186,9 +220,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 
 	@Override
 	public void mousePressed(MouseEvent e)
-	{
-
-	}
+	{}
 
 	@Override
 	public void mouseReleased(MouseEvent e)
@@ -197,5 +229,4 @@ class TableSelectionListener implements MouseListener, KeyListener
 	@Override
 	public void keyTyped(KeyEvent e)
 	{}
-
 }
