@@ -169,31 +169,48 @@ public class Data
 
 		Control.logger.debug("Found " + files.size() + " entries for " + folder.toString());
 
+		// Add folders
 		for(FileInfo file : files)
 		{
-			// For each file in the folder, create a Vector that will become a row in
-			// our table.
-			Vector<Object> row = new Vector<>();
+			Vector<Object> row = null;
 
-			// Populate the columns
 			if(file.folder)
 			{
+				row = new Vector<>();
+
 				row.add(new ImageIcon("res/folder.png"));
+				row.add(file.fileName);
+				row.add(Data.humanReadableByteCount(file.fileSize, false));
+				row.add(Data.formatDate(file.createdDate));
+				row.add(Data.formatDate(file.lastAccessedDate));
+				row.add(Data.formatDate(file.lastModifiedDate));
+				row.add(Integer.toString(file.numberOfRevisions));
+				row.add(Data.humanReadableByteCount(file.revisionSizes, false));
+
+				tableData.add(row);
 			}
-			else
+		}
+
+		// Add files
+		for(FileInfo file : files)
+		{
+			Vector<Object> row = null;
+
+			if(!file.folder)
 			{
+				row = new Vector<>();
+
 				row.add(new ImageIcon("res/file.png"));
+				row.add(file.fileName);
+				row.add(Data.humanReadableByteCount(file.fileSize, false));
+				row.add(Data.formatDate(file.createdDate));
+				row.add(Data.formatDate(file.lastAccessedDate));
+				row.add(Data.formatDate(file.lastModifiedDate));
+				row.add(Integer.toString(file.numberOfRevisions));
+				row.add(Data.humanReadableByteCount(file.revisionSizes, false));
+
+				tableData.add(row);
 			}
-			row.add(file.fileName);
-			row.add(Data.humanReadableByteCount(file.fileSize, false));
-			row.add(Data.formatDate(file.createdDate));
-			row.add(Data.formatDate(file.lastAccessedDate));
-			row.add(Data.formatDate(file.lastModifiedDate));
-			row.add(Integer.toString(file.numberOfRevisions));
-			row.add(Data.humanReadableByteCount(file.revisionSizes, false));
-
-			tableData.add(row);
-
 		}
 
 		return tableData;
