@@ -85,7 +85,7 @@ public class TesterVisual
 
 		// Insert a "revision" with filler content
 		DbManager.insertRevision(path.resolve("README.txt"),
-				FileOp.fileToString(path.resolve("README.txt")), 100);
+				FileOp.fileToString(path.resolve("README.txt")), 100, 50);
 
 		// Now rename that revision
 		DbManager.renameFile(path.resolve("README.txt"), "not-readme.txt");

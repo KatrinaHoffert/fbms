@@ -95,7 +95,7 @@ public class FileHistory
 		{
 			Errors.nonfatalError("Could not store " + diff.toAbsolutePath() + " to database.");
 		}
-		DbManager.insertRevision(file, diffString, delta);
+		DbManager.insertRevision(file, diffString, delta, filesize);
 	}
 
 	public static Path obtainRevision(Path file, long timestamp)

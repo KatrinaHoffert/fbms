@@ -21,6 +21,7 @@ public class RevisionInfo implements Comparable<RevisionInfo>
 	public String path;
 	public String diff;
 	public long delta;
+	public long filesize;
 	public long time;
 
 	@Override

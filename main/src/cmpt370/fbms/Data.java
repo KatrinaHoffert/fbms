@@ -135,6 +135,7 @@ public class Data
 		{
 			Vector<String> row = new Vector<String>();
 			row.add(Data.formatDate(revision.time));
+			row.add(Data.humanReadableByteCount(revision.filesize, false));
 			row.add(Data.humanReadableByteCount(revision.delta, false));
 		}
 

@@ -39,6 +39,7 @@ public class RevisionDialog extends JDialog
 		// Create table columns
 		Vector<String> columns = new Vector<>();
 		columns.add("Date");
+		columns.add("File size");
 		columns.add("Delta");
 
 		// Create table

@@ -86,7 +86,7 @@ public class DbManager
 			if(!revisionsTableExists.next())
 			{
 				statement.executeUpdate("CREATE TABLE revisions (id INTEGER PRIMARY KEY ASC,"
-						+ " path STRING, diff STRING, delta INTEGER, time INTEGER)");
+						+ " path STRING, diff STRING, delta INTEGER, filesize INTEGER, time INTEGER)");
 				firstRun = true;
 
 				Control.logger.info("Existing revisions table not found; new table created");
@@ -180,6 +180,9 @@ public class DbManager
 				// delta INTEGER
 				newRevision.delta = revisionRows.getLong("delta");
 
+				// filesize INTEGER
+				newRevision.delta = revisionRows.getLong("filesize");
+
 				// time INTEGER
 				newRevision.time = revisionRows.getLong("time");
 
@@ -214,7 +217,7 @@ public class DbManager
 	 *            this revision increased the file size of the file, while negative means the file
 	 *            size decreased).
 	 */
-	public static void insertRevision(Path file, String diff, long delta)
+	public static void insertRevision(Path file, String diff, long delta, long filesize)
 	{
 		// Using prepared statements because the diff string can be very long
 		PreparedStatement revision = null;
@@ -231,8 +234,10 @@ public class DbManager
 			revision.setString(2, diff);
 			// delta
 			revision.setLong(3, delta);
+			// filesize
+			revision.setLong(4, filesize);
 			// time
-			revision.setLong(4, System.currentTimeMillis() / 1000L);
+			revision.setLong(5, System.currentTimeMillis() / 1000L);
 
 			revision.executeUpdate();
 		}
