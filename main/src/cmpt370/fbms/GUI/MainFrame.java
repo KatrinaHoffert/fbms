@@ -180,6 +180,9 @@ public class MainFrame extends JFrame
 				Control.backupDirectory.toString().length());
 		FrontEnd.frame.topTool.locationBar.setText(locationBarText);
 
+		// Blank the selected file
+		FrontEnd.frame.selectedFile = null;
+
 		// If we're in the backup directory, set the location bar to a single slash
 		if(locationBarText.equals(""))
 		{
@@ -232,6 +235,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 			// name.
 			FrontEnd.frame.selectedFile = FrontEnd.frame.currentDirectory.resolve((String) FrontEnd.frame.table.getValueAt(
 					FrontEnd.frame.table.getSelectedRow(), 1));
+			Control.logger.debug("Selected file/folder: " + FrontEnd.frame.selectedFile.toString());
 
 			// Enable menu options that require a selected file (view revisions is only accessible
 			// if a file is selected
@@ -258,12 +262,15 @@ class TableSelectionListener implements MouseListener, KeyListener
 	 */
 	private void activateRow()
 	{
-		// Make sure the file exists
-		if(FrontEnd.frame.selectedFile.toFile().exists())
+		// Make sure the file exists (and that something is selected)
+		if(FrontEnd.frame.selectedFile != null && FrontEnd.frame.selectedFile.toFile().exists())
 		{
 			// Go into directories
 			if(FrontEnd.frame.selectedFile.toFile().isDirectory())
 			{
+				Control.logger.debug("Activated on folder: "
+						+ FrontEnd.frame.selectedFile.toString());
+
 				// Set the new directory
 				FrontEnd.frame.currentDirectory = FrontEnd.frame.currentDirectory.resolve(FrontEnd.frame.selectedFile.getFileName());
 
@@ -279,13 +286,15 @@ class TableSelectionListener implements MouseListener, KeyListener
 			// Display revision window for files
 			else
 			{
+				Control.logger.debug("Activated on file: " + FrontEnd.frame.selectedFile.toString());
+
 				RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
 				revisionWindow.setLocationRelativeTo(FrontEnd.frame);
 				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
 				revisionWindow.setVisible(true);
 			}
 		}
-		else
+		else if(FrontEnd.frame.selectedFile != null)
 		{
 			Errors.nonfatalError("The selected file no longer exists.");
 		}
