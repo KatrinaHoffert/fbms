@@ -178,6 +178,7 @@ public class TesterVisual
 	}
 
 	@Test
+	@Ignore
 	public void dataGetRevisionInfo()
 	{
 		// Initialize test

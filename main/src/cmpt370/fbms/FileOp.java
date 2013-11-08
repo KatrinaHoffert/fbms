@@ -194,10 +194,17 @@ public class FileOp
 		}
 	}
 
+	/**
+	 * Creates a diff from one file to another.
+	 * 
+	 * @param beforeFile
+	 *            The original file in the diff creation.
+	 * @param afterFile
+	 *            The new file in the diff creation.
+	 * @return A path to a temporary file containing the contents of the diff.
+	 */
 	public static Path createDiff(Path beforeFile, Path afterFile)
 	{
-
-
 		List<String> original = fileToList(beforeFile);
 		List<String> modified = fileToList(afterFile);
 
@@ -206,25 +213,22 @@ public class FileOp
 
 		PrintWriter output = null;
 		Path pathToTempFile = null;
-
 		try
 		{
 			// Create a temporary file for the revision
 			pathToTempFile = Files.createTempFile("revision", ".txt");
-			// pathToTempFile = Paths.get("").toAbsolutePath().resolve("myFile.txt");
 
 			// Write the diff to that temp file
 			output = new PrintWriter(pathToTempFile.toFile());
-
 			for(Delta<String> delta : patch.getDeltas())
 			{
 				output.write(delta.toString());
+				System.out.println(delta.toString());
 			}
-
 		}
 		catch(IOException e)
 		{
-
+			Errors.nonfatalError("Could not create temporary file for revision diff.", e);
 		}
 		finally
 		{
@@ -234,56 +238,69 @@ public class FileOp
 			}
 		}
 
+		Control.logger.debug("Created diff for file " + beforeFile.toString() + " and stored in "
+				+ pathToTempFile.toString() + " (file size: " + pathToTempFile.toFile().length()
+				+ ")");
 
 		return pathToTempFile;
 	}
 
+	/**
+	 * Takes in a file and a diff, and applies the diff to that file in reverse, creating the
+	 * original file.
+	 * 
+	 * @param sourceFile
+	 *            The file in question.
+	 * @param diffFile
+	 *            The diff that was generated going from an older version to a newer version of the
+	 *            source file.
+	 * @return A path to a temporary file containing the newly patched file.
+	 */
 	public static Path applyDiff(Path sourceFile, Path diffFile)
-    {
+	{
+		List<String> currentFile = fileToList(sourceFile);
+		List<String> patched = fileToList(diffFile);
 
-        List<String> currentFile = fileToList(sourceFile);
-        List<String> patched = fileToList(diffFile);
+		// At first, parse the unified diff file and get the patch
+		Patch<String> patch = DiffUtils.parseUnifiedDiff(patched);
 
-        // At first, parse the unified diff file and get the patch
-        Patch<String> patch = DiffUtils.parseUnifiedDiff(patched);
+		List<String> oldFile = null;
+		PrintWriter output = null;
+		Path pathToTempFile = null;
+		oldFile = DiffUtils.unpatch(currentFile, patch);
 
-        List<String> oldFile = null;
-        PrintWriter output = null;
-        Path pathToTempFile = null;
-        oldFile = DiffUtils.unpatch(currentFile, patch);
+		try
+		{
+			patch = DiffUtils.parseUnifiedDiff(oldFile);
 
-        try
-        {
+			// Create a temporary file for the revision
+			pathToTempFile = Files.createTempFile("revision", ".txt");
 
+			// Write the diff to that temp file
+			output = new PrintWriter(pathToTempFile.toFile());
+			for(Delta<String> delta : patch.getDeltas())
+			{
+				output.write(delta.toString());
+			}
+		}
+		catch(IOException e)
+		{
+			Errors.nonfatalError("Could not create temporary file for patched revision.", e);
+		}
+		finally
+		{
+			if(output != null)
+			{
+				output.close();
+			}
+		}
 
-            patch = DiffUtils.parseUnifiedDiff(oldFile);
+		Control.logger.debug("Applied patch on file " + sourceFile.toString() + " and stored in "
+				+ pathToTempFile.toString() + " (file size: " + pathToTempFile.toFile().length()
+				+ ")");
 
-            // Create a temporary file for the revision
-            pathToTempFile = Files.createTempFile("revision", ".txt");
-            // Write the diff to that temp file
-            output = new PrintWriter(pathToTempFile.toFile());
-
-            for(Delta<String> delta : patch.getDeltas())
-            {
-                output.write(delta.toString());
-            }
-
-        }
-        catch(IOException e)
-        {
-
-        }
-        finally
-        {
-            if(output != null)
-            {
-                output.close();
-            }
-        }
-
-
-        return pathToTempFile;
-    }
+		return pathToTempFile;
+	}
 
 	public static void rename(Path file, String newName)
 	{
@@ -345,11 +362,18 @@ public class FileOp
 		return targetFile.length();
 	}
 
+	/**
+	 * Converts a file into a list of strings. This method is from the Java-diff-utils examples.
+	 * 
+	 * @param file
+	 *            The file to read in.
+	 * @return A list of strings corresponding to lines of that file.
+	 */
 	public static List<String> fileToList(Path file)
 	{
-
 		String fileName = file.toString();
 		List<String> lines = new LinkedList<String>();
+
 		String line = "";
 		BufferedReader in = null;
 		try

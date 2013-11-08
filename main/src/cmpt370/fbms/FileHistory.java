@@ -72,14 +72,14 @@ public class FileHistory
 	}
 
 	/**
-	 * Store the diff file to database and copy the current file to backup folder.
+	 * Stores the revision in the database with the supplied information.
 	 * 
 	 * @param file
-	 *            the actual file.
+	 *            the path to the actual file (in the live directory).
 	 * @param diff
-	 *            the diff file.
+	 *            the path to the diff file.
 	 * @param filesize
-	 *            the old file size.
+	 *            the new file size (ie, the file size of the file in the live directory).
 	 * @param delta
 	 *            change in file size.
 	 */
@@ -89,13 +89,15 @@ public class FileHistory
 		try
 		{
 			diffString = FileOp.fileToString(diff);
-			FileOp.copy(file, Control.backupDirectory);
 		}
 		catch(IOException e)
 		{
-			Errors.nonfatalError("Could not store " + diff.toAbsolutePath() + " to database.");
+			Errors.nonfatalError("Could not store " + file.toString() + " to database.");
 		}
 		DbManager.insertRevision(file, diffString, delta, filesize);
+
+		Control.logger.debug("Revision stored for file " + file.toString() + " (file size: "
+				+ filesize + "; delta: " + delta + ")");
 	}
 
 	public static Path obtainRevision(Path file, long timestamp)
