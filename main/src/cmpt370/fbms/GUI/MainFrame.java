@@ -38,6 +38,7 @@ import javax.swing.table.DefaultTableModel;
 import cmpt370.fbms.Control;
 import cmpt370.fbms.Data;
 import cmpt370.fbms.Errors;
+import cmpt370.fbms.FileOp;
 
 public class MainFrame extends JFrame
 {
@@ -288,7 +289,8 @@ class TableSelectionListener implements MouseListener, KeyListener
 			{
 				Control.logger.debug("Activated on file: " + FrontEnd.frame.selectedFile.toString());
 
-				RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
+				RevisionDialog revisionWindow = new RevisionDialog(
+						FileOp.convertPath(FrontEnd.frame.selectedFile));
 				revisionWindow.setLocationRelativeTo(FrontEnd.frame);
 				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
 				revisionWindow.setVisible(true);
