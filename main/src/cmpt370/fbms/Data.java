@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -131,6 +132,8 @@ public class Data
 	{
 		Vector<Vector<String>> revisionData = new Vector<>();
 		List<RevisionInfo> revisions = getRevisionInfo(file);
+
+		Collections.sort(revisions);
 
 		Control.logger.debug("Found " + revisions.size() + " entries for " + file.toString());
 
