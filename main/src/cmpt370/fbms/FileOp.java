@@ -17,6 +17,8 @@ package cmpt370.fbms;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -302,9 +304,33 @@ public class FileOp
 		return pathToTempFile;
 	}
 
+	/**
+	 * Rename the given file to a new name.
+	 * 
+	 * @param file
+	 *            the file to rename.
+	 * @param newName
+	 *            the file's new name.
+	 */
 	public static void rename(Path file, String newName)
 	{
-
+		File mFile = file.toFile();
+		File newFile = new File(mFile.getParentFile(), newName);
+		if(!mFile.exists())
+		{
+			Control.logger.warn("Could not rename non-existed file: " + mFile.getAbsolutePath());
+			return;
+		}
+		if(newFile.exists())
+		{
+			Control.logger.warn("Could not rename to existed file: " + newFile.getAbsolutePath());
+			return;
+		}
+		if(!mFile.renameTo(newFile))
+		{
+			Errors.nonfatalError("Rename failed: " + mFile.getAbsolutePath() + " to "
+					+ newFile.getAbsolutePath());
+		}
 	}
 
 	/**
@@ -423,8 +449,30 @@ public class FileOp
 		// Read the file as raw bytes
 		byte[] encoded = Files.readAllBytes(path);
 
-		// And encode those bytes as the default character set (eg, UTF 8)
-		return Charset.defaultCharset().decode(ByteBuffer.wrap(encoded)).toString();
+		// And encode those bytes as UTF-8
+		return Charset.forName("utf-8").decode(ByteBuffer.wrap(encoded)).toString();
+	}
+
+	/**
+	 * A utility function for converting a String to a file. It is a reverse of fileToString(Path
+	 * path).
+	 * 
+	 * @param s
+	 *            The String to be written to file.
+	 * @param file
+	 *            A Path representing the target file.
+	 * @throws FileNotFoundException
+	 *             from the constructor of FileOutputStream
+	 * @throws IOException
+	 *             from FileOutputStream.write
+	 */
+	public static void stringToFile(String s, Path file) throws FileNotFoundException, IOException
+	{
+		FileOutputStream fo = new FileOutputStream(file.toFile());
+		byte[] bytes = s.getBytes(Charset.forName("utf-8"));
+		fo.write(bytes);
+		fo.flush();
+		fo.close();
 	}
 
 	/**
