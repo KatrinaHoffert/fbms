@@ -221,7 +221,7 @@ public class DbManager
 	{
 		// Using prepared statements because the diff string can be very long
 		PreparedStatement revision = null;
-		String insertStatment = "INSERT INTO revisions (path, diff, delta, time) VALUES("
+		String insertStatment = "INSERT INTO revisions (path, diff, delta, filesize, time) VALUES("
 				+ "?, ?, ?, ?)";
 
 		try
