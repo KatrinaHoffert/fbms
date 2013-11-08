@@ -136,6 +136,8 @@ public class DbManager
 		{
 			Errors.fatalError("Database table creation failed", e);
 		}
+
+		Control.logger.debug("Database connection successfully initialized");
 	}
 
 	/**
@@ -194,6 +196,9 @@ public class DbManager
 			Errors.fatalError("Could not create SQL statement", e);
 		}
 
+		Control.logger.debug("Fetched revision data for " + file.toString() + "(found "
+				+ list.size() + " entries)");
+
 		return list;
 	}
 
@@ -246,6 +251,14 @@ public class DbManager
 
 				// time INTEGER
 				revision.time = revisionRows.getLong("time");
+
+				Control.logger.debug("Found revision entry for " + file.toString() + " (at T = "
+						+ timestamp + ")");
+			}
+			else
+			{
+				Control.logger.debug("Failed to find a revision entry for " + file.toString()
+						+ " (at T = " + timestamp + ")");
 			}
 		}
 		catch(SQLException e)
@@ -298,6 +311,9 @@ public class DbManager
 		{
 			Errors.nonfatalError("Could not insert revision into database", e1);
 		}
+
+		Control.logger.debug("Successfully inserted revision " + file.toString() + " (delta: "
+				+ delta + "; filesize: " + filesize + ")");
 	}
 
 	/**
@@ -311,20 +327,21 @@ public class DbManager
 	 */
 	public static void renameFile(Path file, String newName)
 	{
+		// Figure out the new name
+		Path newPath = file.resolveSibling(newName);
 		try
 		{
-			// Figure out the new name
-			Path newPath = file.resolveSibling(newName);
-
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("UPDATE revisions SET path = '" + newPath.toString()
 					+ "' WHERE path = '" + file.toString() + "'");
-
 		}
 		catch(SQLException e)
 		{
 			Errors.nonfatalError("Could not rename revisions in database.", e);
 		}
+
+		Control.logger.debug("Renamed revisions in database " + file.toString() + " -> "
+				+ newPath.toString());
 	}
 
 	/**
@@ -355,6 +372,8 @@ public class DbManager
 		{
 			Errors.fatalError("Retrieval of setting value failed", e);
 		}
+
+		Control.logger.debug("Found configuration value for " + settingName + " = " + settingValue);
 
 		// Will end up returning either the setting value if it was found or null if it was not
 		// found
@@ -392,12 +411,14 @@ public class DbManager
 				statement.executeUpdate("INSERT INTO settings(name, setting) VALUES('"
 						+ settingName + "', '" + settingValue + "')");
 			}
-
 		}
 		catch(SQLException e)
 		{
 			Errors.fatalError("Unable to set requested value in settings.", e);
 		}
+
+		Control.logger.debug("Successfully set configuration value " + settingName + " = "
+				+ settingValue);
 	}
 
 	/**
@@ -457,5 +478,7 @@ public class DbManager
 				Control.logger.error("Could not close database connection", e);
 			}
 		}
+
+		Control.logger.debug("Database connection closed.");
 	}
 }
