@@ -238,10 +238,52 @@ public class FileOp
 		return pathToTempFile;
 	}
 
-	public static Path applyDiff(Path sourceFile, Path afterFile)
-	{
-		return null;
-	}
+	public static Path applyDiff(Path sourceFile, Path diffFile)
+    {
+
+        List<String> currentFile = fileToList(sourceFile);
+        List<String> patched = fileToList(diffFile);
+
+        // At first, parse the unified diff file and get the patch
+        Patch<String> patch = DiffUtils.parseUnifiedDiff(patched);
+
+        List<String> oldFile = null;
+        PrintWriter output = null;
+        Path pathToTempFile = null;
+        oldFile = DiffUtils.unpatch(currentFile, patch);
+
+        try
+        {
+
+
+            patch = DiffUtils.parseUnifiedDiff(oldFile);
+
+            // Create a temporary file for the revision
+            pathToTempFile = Files.createTempFile("revision", ".txt");
+            // Write the diff to that temp file
+            output = new PrintWriter(pathToTempFile.toFile());
+
+            for(Delta<String> delta : patch.getDeltas())
+            {
+                output.write(delta.toString());
+            }
+
+        }
+        catch(IOException e)
+        {
+
+        }
+        finally
+        {
+            if(output != null)
+            {
+                output.close();
+            }
+        }
+
+
+        return pathToTempFile;
+    }
 
 	public static void rename(Path file, String newName)
 	{
