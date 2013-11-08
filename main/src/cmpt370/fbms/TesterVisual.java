@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -174,5 +175,36 @@ public class TesterVisual
 		}
 
 		reader.close();
+	}
+
+	@Test
+	public void dataGetRevisionInfo()
+	{
+		// Initialize test
+		Path path = Paths.get("").toAbsolutePath();
+		Control.backupDirectory = path;
+		Control.liveDirectory = path;
+		DbManager.init();
+
+		// Insert revisions for a file
+		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("README.txt"), 100, 200);
+		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("license.txt"), 300, 400);
+		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("authors.txt"), 500, 600);
+
+		// Get the revision table for that file
+		Vector<Vector<String>> tableData = Data.getRevisionData(path.resolve("README.txt"));
+
+		// And print it out
+		for(Vector<String> rows : tableData)
+		{
+			for(String data : rows)
+			{
+				System.out.println(data);
+			}
+		}
+
+		// Clean up
+		DbManager.close();
+		FileOp.delete(path.resolve(".revisions.db"));
 	}
 }

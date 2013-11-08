@@ -130,13 +130,19 @@ public class Data
 	public static Vector<Vector<String>> getRevisionData(Path file)
 	{
 		Vector<Vector<String>> revisionData = new Vector<>();
-		List<RevisionInfo> list = getRevisionInfo(file);
-		for(RevisionInfo revision : list)
+		List<RevisionInfo> revisions = getRevisionInfo(file);
+
+		Control.logger.debug("Found " + revisions.size() + " entries for " + file.toString());
+
+		for(RevisionInfo revision : revisions)
 		{
 			Vector<String> row = new Vector<String>();
+
 			row.add(Data.formatDate(revision.time));
 			row.add(Data.humanReadableByteCount(revision.filesize, false));
 			row.add(Data.humanReadableByteCount(revision.delta, false));
+
+			revisionData.add(row);
 		}
 
 		return revisionData;
@@ -157,6 +163,8 @@ public class Data
 
 		// Get the contents of the folder
 		List<FileInfo> files = Data.getFolderContents(folder);
+
+		Control.logger.debug("Found " + files.size() + " entries for " + folder.toString());
 
 		for(FileInfo file : files)
 		{
