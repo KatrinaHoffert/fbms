@@ -85,6 +85,7 @@ public class FileHistory
 	 */
 	public static void storeRevision(Path file, Path diff, long filesize, long delta)
 	{
+		// Get the diff as a String
 		String diffString = null;
 		try
 		{
@@ -94,6 +95,7 @@ public class FileHistory
 		{
 			Errors.nonfatalError("Could not store " + file.toString() + " to database.");
 		}
+
 		DbManager.insertRevision(file, diffString, delta, filesize);
 
 		Control.logger.debug("Revision stored for file " + file.toString() + " (file size: "

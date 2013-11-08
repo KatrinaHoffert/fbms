@@ -164,8 +164,8 @@ public class DbManager
 
 			while(revisionRows.next())
 			{
-				// Table structure: (id INTEGER, path STRING, diff STRING, delta INTEGER, time
-				// INTEGER)
+				// Table structure: (id INTEGER, path STRING, diff STRING, delta INTEGER, filesize
+				// INTEGER, time INTEGER)
 				RevisionInfo newRevision = new RevisionInfo();
 
 				// id INTEGER
@@ -181,7 +181,7 @@ public class DbManager
 				newRevision.delta = revisionRows.getLong("delta");
 
 				// filesize INTEGER
-				newRevision.delta = revisionRows.getLong("filesize");
+				newRevision.filesize = revisionRows.getLong("filesize");
 
 				// time INTEGER
 				newRevision.time = revisionRows.getLong("time");
