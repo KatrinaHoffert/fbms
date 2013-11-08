@@ -194,13 +194,66 @@ public class DbManager
 			Errors.fatalError("Could not create SQL statement", e);
 		}
 
-
 		return list;
 	}
 
+	/**
+	 * Fetches a single revision entry with the specified time stamp.
+	 * 
+	 * @param file
+	 *            The path (in the live directory) of the file.
+	 * @param timestamp
+	 *            The time stamp of the desired revision.
+	 * @return The revision in question if found or null if the revision does not exist.
+	 */
 	public static RevisionInfo getRevisionInfo(Path file, long timestamp)
 	{
-		return null;
+		RevisionInfo revision = null;
+
+		PreparedStatement statement = null;
+		String selectQuery = "SELECT * FROM revisions WHERE path = ? AND time = ?";
+
+		try
+		{
+			// Fill in the prepared statement
+			statement = connection.prepareStatement(selectQuery);
+			statement.setString(1, file.toString());
+			statement.setString(2, Long.toString(timestamp));
+
+			// Select the rows of revisions
+			ResultSet revisionRows = statement.executeQuery();
+
+			if(revisionRows.next())
+			{
+				// Table structure: (id INTEGER, path STRING, diff STRING, delta INTEGER, filesize
+				// INTEGER, time INTEGER)
+				revision = new RevisionInfo();
+
+				// id INTEGER
+				revision.id = revisionRows.getLong("id");
+
+				// path String
+				revision.path = revisionRows.getString("path");
+
+				// diff STRING
+				revision.diff = revisionRows.getString("diff");
+
+				// delta INTEGER
+				revision.delta = revisionRows.getLong("delta");
+
+				// filesize INTEGER
+				revision.filesize = revisionRows.getLong("filesize");
+
+				// time INTEGER
+				revision.time = revisionRows.getLong("time");
+			}
+		}
+		catch(SQLException e)
+		{
+			Errors.fatalError("Could not create SQL statement", e);
+		}
+
+		return revision;
 	}
 
 	/**
