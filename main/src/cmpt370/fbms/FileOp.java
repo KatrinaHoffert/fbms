@@ -305,7 +305,7 @@ public class FileOp
 	}
 
 	/**
-	 * Rename the given file to a new name.
+	 * Rename the given file to a new name. If the new name already exists, overwrite.
 	 * 
 	 * @param file
 	 *            the file to rename.
@@ -316,21 +316,30 @@ public class FileOp
 	{
 		File mFile = file.toFile();
 		File newFile = new File(mFile.getParentFile(), newName);
+
+		// Can't rename a file that doesn't exist
 		if(!mFile.exists())
 		{
 			Control.logger.warn("Could not rename non-existed file: " + mFile.getAbsolutePath());
 			return;
 		}
+		// If the new name already exists, it must be deleted to make way for our renamed file
 		if(newFile.exists())
 		{
-			Control.logger.warn("Could not rename to existed file: " + newFile.getAbsolutePath());
-			return;
+			newFile.delete();
+			mFile.renameTo(newFile);
+
+			Control.logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString()
+					+ " (had to delete existing file)");
 		}
+		// Otherwise we can just rename it
 		if(!mFile.renameTo(newFile))
 		{
 			Errors.nonfatalError("Rename failed: " + mFile.getAbsolutePath() + " to "
 					+ newFile.getAbsolutePath());
 		}
+
+		Control.logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString());
 	}
 
 	/**
