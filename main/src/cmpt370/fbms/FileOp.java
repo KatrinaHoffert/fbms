@@ -462,7 +462,7 @@ public class FileOp
 
 		if(fileTypeString == null)
 		{
-			return true;
+			return false;
 		}
 
 		return fileTypeString.startsWith("text");
