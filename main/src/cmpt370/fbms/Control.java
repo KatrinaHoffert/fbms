@@ -293,8 +293,8 @@ public class Control
 					Path diffFile = FileOp.createDiff(FileOp.convertPath(file.toPath()),
 							file.toPath());
 					// Difference in file sizes
-					long delta = FileOp.fileSize(FileOp.convertPath(file.toPath()))
-							- FileOp.fileSize(file.toPath());
+					long delta = FileOp.fileSize(file.toPath())
+							- FileOp.fileSize(FileOp.convertPath(file.toPath()));
 
 					// Store the revision
 					FileHistory.storeRevision(file.toPath(), diffFile,
@@ -524,8 +524,8 @@ public class Control
 						// Make diff file.
 						diff = FileOp.createDiff(FileOp.convertPath(pathm), pathm);
 						// Look at size difference.
-						long delta = FileOp.fileSize(FileOp.convertPath(pathm))
-								- FileOp.fileSize(pathm);
+						long delta = FileOp.fileSize(pathm)
+								- FileOp.fileSize(FileOp.convertPath(pathm));
 
 						// Store a revision
 						FileHistory.storeRevision(pathm, diff, FileOp.fileSize(pathm), delta);
