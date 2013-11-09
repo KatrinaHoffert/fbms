@@ -355,7 +355,7 @@ public class FileOp
 		// If a bad path is given...
 		if(!targetFile.exists())
 		{
-			Control.logger.error("Unable to delete " + targetFile.toString()
+			Control.logger.warn("Unable to delete " + targetFile.toString()
 					+ "  as it does not exist.");
 			return;
 		}
@@ -375,7 +375,7 @@ public class FileOp
 		// Try and delete regular files, logging if unsuccessful
 		if(!targetFile.delete())
 		{
-			Control.logger.error(file.toString() + " cannot be deleted. Operation aborted.");
+			Errors.nonfatalError("Could not delete: " + file.toString());
 		}
 		else
 		{
@@ -393,7 +393,7 @@ public class FileOp
 	public static long fileSize(Path file)
 	{
 		File targetFile = file.toFile();
-
+		Control.logger.debug("Size of " + file + " is " + targetFile.length());
 		return targetFile.length();
 	}
 
@@ -421,7 +421,7 @@ public class FileOp
 		}
 		catch(IOException e)
 		{
-			e.printStackTrace();
+			Errors.nonfatalError("Could not convert " + file.toString() + " to List.", e);
 		}
 		finally
 		{
@@ -475,13 +475,24 @@ public class FileOp
 	 * @throws IOException
 	 *             from FileOutputStream.write
 	 */
-	public static void stringToFile(String s, Path file) throws FileNotFoundException, IOException
+	public static void stringToFile(String s, Path file)
 	{
-		FileOutputStream fo = new FileOutputStream(file.toFile());
-		byte[] bytes = s.getBytes(Charset.forName("utf-8"));
-		fo.write(bytes);
-		fo.flush();
-		fo.close();
+		FileOutputStream fo = null;
+		try
+		{
+			fo = new FileOutputStream(file.toFile());
+			byte[] bytes = s.getBytes(Charset.forName("utf-8"));
+			fo.write(bytes);
+			fo.flush();
+			if(fo != null)
+			{
+				fo.close();
+			}
+		}
+		catch(IOException e)
+		{
+			Errors.nonfatalError("Could not convert String to " + file.toString(), e);
+		}
 	}
 
 	/**
@@ -501,12 +512,15 @@ public class FileOp
 		catch(Exception e)
 		{
 			// when failed, return false.
+			Control.logger.info("Could not probe file due to: " + e.getMessage());
 			return false;
 		}
 		if(fileSize(file) > 5242880)
 		{
+			Control.logger.debug(file.toString() + " is larger than 5 MB");
 			return false;
 		}
+		Control.logger.debug(file.toString() + " is " + fileTypeString);
 		return fileTypeString.startsWith("text");
 	}
 
@@ -572,9 +586,11 @@ public class FileOp
 	 */
 	public static boolean isEqual(Path file1, Path file2)
 	{
+		Control.logger.debug("Comparing file: " + file1.toString() + " and " + file2.toString());
 		// Can't be equal if the file size is different
 		if(file1.toFile().length() != file2.toFile().length())
 		{
+			Control.logger.debug("Files have different length.");
 			return false;
 		}
 
@@ -594,10 +610,12 @@ public class FileOp
 
 		if(Arrays.equals(file1Bytes, file2Bytes))
 		{
+			Control.logger.debug("Files are equal.");
 			return true;
 		}
 		else
 		{
+			Control.logger.debug("Files are different.");
 			return false;
 		}
 	}
