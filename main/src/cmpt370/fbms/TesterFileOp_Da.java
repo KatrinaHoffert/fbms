@@ -22,8 +22,11 @@ import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -40,7 +43,7 @@ public class TesterFileOp_Da extends TestCase
 	/**
 	 * Prepare Test Environment: All temporary item will be created under folder TestFileOp.
 	 * Temporary item: File(s) and Folder(s) for fileSize(Path), fileValid(Path), Copy(Path, Path),
-	 * copy(List<Path>) and for delete(Path)
+	 * Rename(Path, String), copy(List<Path>) and for delete(Path)
 	 * 
 	 */
 	public void setUp()
@@ -49,6 +52,8 @@ public class TesterFileOp_Da extends TestCase
 		File testPath = new File("TestFileOp\\Test1");
 		File testBackupPath = new File("TestFileOp\\TestBackup");
 		File nestedFile = new File("TestFileOp\\Test1\\ZeroSize.txt");
+		File nestedFile1 = new File("TestFileOp\\Test1\\nested\\");
+		File nestedFile2 = new File("TestFileOp\\Test1\\nested\\ZeroSize.txt");
 		File mZeroFile = new File("TestFileOp\\ZeroSize.txt");
 		File mSmallFile = new File("TestFileOp\\SmallSize.txt");
 		File mLargeFile = new File("TestFileOp\\LargeSize.txt");
@@ -56,11 +61,13 @@ public class TesterFileOp_Da extends TestCase
 		basePath.mkdir();
 		testPath.mkdirs();
 		testBackupPath.mkdirs();
+		nestedFile1.mkdirs();
 		try
 		{
 			// create all test file needed
 			Files.createFile(mZeroFile.toPath());
 			Files.createFile(nestedFile.toPath());
+			Files.createFile(nestedFile2.toPath());
 			PrintWriter smallFile = new PrintWriter(Files.newOutputStream(mSmallFile.toPath()),
 					true);
 			FileOutputStream fos = new FileOutputStream(mLargeFile);
@@ -120,20 +127,27 @@ public class TesterFileOp_Da extends TestCase
 		assertTrue("fileValid() reported false for small text file.",
 				FileOp.fileValid(new File("TestFileOp\\SmallSize.txt").toPath()));
 
-		assertTrue("fileValid() reported false for large text file.",
+		assertFalse("fileValid() reported true for large text file.",
 				FileOp.fileValid(new File("TestFileOp\\LargeSize.txt").toPath()));
 
 		assertFalse("fileValid() reported true for binary file.",
 				FileOp.fileValid(new File("TestFileOp\\BinaryFile.bin").toPath()));
 	}
 
-	public void testcopySingleFile()
+	public void testcopySingleFile() throws IOException
 	{
 		FileOp.copy((new File("TestFileOp\\BinaryFile.bin")).toPath(), (new File(
 				"TestFileOp\\Test1")).toPath());
 
 		assertTrue("copy(Path, Path) faild to copy file: TestFileOp\\BinaryFile.bin", (new File(
 				"TestFileOp\\Test1\\BinaryFile.bin")).exists());
+
+		FileOp.copy((new File("TestFileOp\\Test1")).toPath(),
+				(new File("TestFileOp\\Test2")).toPath());
+		assertTrue("Copy folder failed", (new File("TestFileOp\\Test2\\BinaryFile.bin")).exists()
+				&& new File("TestFileOp\\Test2\\ZeroSize.txt").exists()
+				&& new File("TestFileOp\\Test2\\nested").exists()
+				&& new File("TestFileOp\\Test2\\nested\\ZeroSize.txt").exists());
 	}
 
 	public void testMultiFiles()
@@ -143,9 +157,62 @@ public class TesterFileOp_Da extends TestCase
 		sourcePaths.add(new File("TestFileOp\\LargeSize.txt").toPath());
 		sourcePaths.add(new File("TestFileOp\\BinaryFile.bin").toPath());
 
+		Control.backupDirectory = new File("TestFileOp\\Test2\\").toPath();
+		Control.liveDirectory = new File("TestFileOp\\").toPath();
 		FileOp.copy(sourcePaths);
 
-		// TODO: rewrite FileOp, adding BackupPath
+		assertTrue("copy(List<Path>) faild to copy file: TestFileOp\\SmallSize.txt", (new File(
+				"TestFileOp\\Test2\\SmallSize.txt")).exists());
+		assertTrue("copy(List<Path>) faild to copy file: TestFileOp\\LargeSize.txt", (new File(
+				"TestFileOp\\Test2\\LargeSize.txt")).exists());
+		assertTrue("copy(List<Path>) faild to copy file: TestFileOp\\BinaryFile.bin", (new File(
+				"TestFileOp\\Test2\\BinaryFile.bin")).exists());
+	}
+
+	public void testRename()
+	{
+		FileOp.rename((new File("TestFileOp\\SmallSize.txt")).toPath(), "SmallSize2.txt");
+		assertTrue("TestFileOp\\SmallSize.txt is not renamed to SmallSize2.txt", new File(
+				"TestFileOp\\SmallSize2.txt").exists());
+
+		FileOp.rename((new File("TestFileOp\\SmallSize2.txt")).toPath(), "SmallSize.txt");
+		assertTrue("TestFileOp\\SmallSize2.txt is not renamed to SmallSize.txt", new File(
+				"TestFileOp\\SmallSize.txt").exists());
+	}
+
+	@Override
+	public void tearDown() throws Exception
+	{
+		File basePath = new File("TestFileOp");
+		Path start = basePath.toPath();
+		Files.walkFileTree(start, new SimpleFileVisitor<Path>()
+		{
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+					throws IOException
+			{
+				Files.delete(file);
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException
+			{
+				if(e == null)
+				{
+					Files.delete(dir);
+					return FileVisitResult.CONTINUE;
+				}
+				else
+				{
+					// directory iteration failed
+					throw e;
+				}
+			}
+		});
+
+		basePath.delete();
+
 	}
 
 }
