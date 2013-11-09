@@ -59,7 +59,6 @@ public class FileHistory
 		catch(IOException e)
 		{
 			Errors.nonfatalError("Could not create temporary file for revision.", e);
-			Control.logger.warn("Could not create temporary file for revision.", e);
 		}
 		finally
 		{
@@ -95,7 +94,6 @@ public class FileHistory
 		catch(IOException e)
 		{
 			Errors.nonfatalError("Could not store " + file.toString() + " to database.");
-			Control.logger.warn("Could not store " + file.toString() + " to database.", e);
 		}
 
 		DbManager.insertRevision(file, diffString, delta, filesize);
