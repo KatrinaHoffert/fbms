@@ -28,6 +28,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
@@ -373,13 +374,17 @@ public class FileOp
 		}
 
 		// Try and delete regular files, logging if unsuccessful
-		if(!targetFile.delete())
+		try
 		{
-			Errors.nonfatalError("Could not delete: " + file.toString());
+			Files.delete(file);
 		}
-		else
+		catch(NoSuchFileException e)
 		{
-			Control.logger.debug("Successfully deleted " + file.toString());
+			Control.logger.info("Could not delete non-existed file: " + file.toString());
+		}
+		catch(IOException e)
+		{
+			Errors.nonfatalError("I/O error occurs while deleting file:" + file.toString(), e);
 		}
 
 	}
