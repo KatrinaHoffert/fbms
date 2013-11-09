@@ -222,4 +222,18 @@ public class TesterServices
 		assertTrue(FileOp.isEqual(path.resolve("authors.txt"), path.resolve("authors.txt")));
 		assertTrue(!FileOp.isEqual(path.resolve("authors.txt"), path.resolve("license.txt")));
 	}
+   @Test
+	public void fileOpApplyDiff() throws IOException
+	{
+
+		Path diff = FileOp.createDiff(Paths.get("").resolve("test1.txt"),
+				Paths.get("").resolve("test2.txt"));
+
+		Path applyed = FileOp.applyDiff(Paths.get("").resolve("test2.txt"), diff);
+
+
+		boolean equality = FileOp.isEqual(applyed, diff);
+
+		System.out.println(equality);
+	}
 }
