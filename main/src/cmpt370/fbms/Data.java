@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -245,6 +246,34 @@ public class Data
 		Date date = new Date(timestamp * 1000);
 
 		return dateFormat.format(date);
+	}
+
+	/**
+	 * Converts a human readable date from formatDate() into a time stamp (seconds since Unix epoch)
+	 * that the system can use.
+	 * 
+	 * @param timestamp
+	 *            The date in the format yyyy-mm-dd hh:mm:ss
+	 * @return The seconds since 1970-01-01 00:00:00
+	 */
+	public static long unformatDate(String timestamp)
+	{
+		// Read the date in
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = null;
+		try
+		{
+			// Convert it
+			date = sdf.parse(timestamp);
+		}
+		catch(ParseException e)
+		{
+			Errors.nonfatalError("Could not retreive time stamp for revision.", e);
+		}
+
+		// Get the time in seconds since Unix epoch
+		long timeInMsSinceEpoch = date.getTime();
+		return timeInMsSinceEpoch / 1000;
 	}
 
 	/**
