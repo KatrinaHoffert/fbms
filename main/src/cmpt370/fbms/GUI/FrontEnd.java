@@ -104,7 +104,7 @@ public class FrontEnd
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				MainFrame frame = new MainFrame();
+				frame = new MainFrame();
 				frame.setVisible(true);
 			}
 		});
