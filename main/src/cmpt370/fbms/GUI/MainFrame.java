@@ -21,6 +21,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Vector;
@@ -68,6 +70,35 @@ public class MainFrame extends JFrame
 		contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+
+		// Set the frame variable to null when the frame is closed, so we can keep track of whether
+		// or not a frame is open
+		addWindowListener(new WindowListener()
+		{
+			@Override
+			public void windowClosed(WindowEvent arg0)
+			{
+				FrontEnd.frame = null;
+			}
+
+			public void windowActivated(WindowEvent e)
+			{}
+
+			public void windowClosing(WindowEvent e)
+			{}
+
+			public void windowDeactivated(WindowEvent e)
+			{}
+
+			public void windowDeiconified(WindowEvent e)
+			{}
+
+			public void windowIconified(WindowEvent e)
+			{}
+
+			public void windowOpened(WindowEvent e)
+			{}
+		});
 
 		// Set the icon
 		setIconImage(new ImageIcon("res/icon.png").getImage());

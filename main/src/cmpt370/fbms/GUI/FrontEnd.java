@@ -89,13 +89,23 @@ public class FrontEnd
 			Errors.fatalError("Cannot create system tray icon", e);
 		}
 
-		// Listener for when the tray iucon is clicked
+		// Listener for when the tray icon is clicked
 		trayIcon.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				frame = new MainFrame();
-				frame.setVisible(true);
+				// If the window doesn't exist, create it. If it already exists, bring it to the
+				// front (on some OSes, this will just make it blink in the taskbar)
+				if(frame == null)
+				{
+					frame = new MainFrame();
+					frame.setVisible(true);
+				}
+				else
+				{
+					frame.toFront();
+					frame.repaint();
+				}
 			}
 		});
 
@@ -104,8 +114,16 @@ public class FrontEnd
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				frame = new MainFrame();
-				frame.setVisible(true);
+				if(frame == null)
+				{
+					frame = new MainFrame();
+					frame.setVisible(true);
+				}
+				else
+				{
+					frame.toFront();
+					frame.repaint();
+				}
 			}
 		});
 
