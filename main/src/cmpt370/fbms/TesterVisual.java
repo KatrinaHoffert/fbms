@@ -149,21 +149,9 @@ public class TesterVisual
 
 	@Test
 	@Ignore
-	public void fileOpFileToList()
-	{
-		List<String> list = FileOp.fileToList(Paths.get("").resolve("authors.txt"));
-
-		for(String s : list)
-		{
-			System.out.println(s);
-		}
-	}
-
-	@Test
-	@Ignore
 	public void fileOpCreatDiff() throws IOException
 	{
-		Path diff = FileOp.createDiff(Paths.get("").resolve("authors.txt"),
+		Path diff = FileOp.createPatch(Paths.get("").resolve("authors.txt"),
 				Paths.get("").resolve("README.txt"));
 
 		FileReader reader = new FileReader(diff.toFile());

@@ -290,7 +290,7 @@ public class Control
 				else if(!FileOp.isEqual(file.toPath(), FileOp.convertPath(file.toPath())))
 				{
 					// Create the diff
-					Path diffFile = FileOp.createDiff(FileOp.convertPath(file.toPath()),
+					Path diffFile = FileOp.createPatch(FileOp.convertPath(file.toPath()),
 							file.toPath());
 					// Difference in file sizes
 					long delta = FileOp.fileSize(file.toPath())
@@ -522,7 +522,7 @@ public class Control
 						// Following the conventions in startupScan...
 						// If the file isn't a folder but DOES exist, make diff and copy.
 						// Make diff file.
-						diff = FileOp.createDiff(FileOp.convertPath(pathm), pathm);
+						diff = FileOp.createPatch(FileOp.convertPath(pathm), pathm);
 						// Look at size difference.
 						long delta = FileOp.fileSize(pathm)
 								- FileOp.fileSize(FileOp.convertPath(pathm));
@@ -671,7 +671,7 @@ public class Control
 		{
 			// Get the revision we want and make a diff for it
 			Path revertedFile = FileHistory.obtainRevision(file, timestamp);
-			Path diffFromCurrent = FileOp.createDiff(file, revertedFile);
+			Path diffFromCurrent = FileOp.createPatch(file, revertedFile);
 
 			// Get the filesize of our newly reverted file as well as the delta from the old file
 			long fileSize = FileOp.fileSize(revertedFile);

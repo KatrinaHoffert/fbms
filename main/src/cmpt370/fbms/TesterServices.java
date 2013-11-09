@@ -17,15 +17,12 @@ package cmpt370.fbms;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
-
-import net.contentobjects.jnotify.JNotify;
 
 import org.junit.Test;
 
@@ -85,53 +82,6 @@ public class TesterServices
 		// Cleanup
 		DbManager.close();
 		Files.delete(Control.backupDirectory.resolve(".revisions.db"));
-	}
-
-	// Test the watcher detecting different types of file changes
-	@Test
-	public void watcher() throws Exception
-	{
-		// Create the watcher
-		JNotify.addWatch(Paths.get("").toAbsolutePath().toString(), JNotify.FILE_CREATED
-				| JNotify.FILE_DELETED | JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true,
-				new Watcher());
-
-		// Test creations
-		Path createdFile = Files.createFile(Paths.get("").toAbsolutePath().resolve("tempfile1234"));
-		Thread.sleep(50); // Delay so that JNotify has time to spot the modification
-		assertTrue(createdFile.equals(Control.createdFiles.get(0)));
-
-		// Test modifications
-		FileOutputStream out = new FileOutputStream(createdFile.toFile());
-		out.write("Hello World".getBytes());
-		out.close();
-		Thread.sleep(50);
-
-		// Not guaranteed that this file will have been the only one modified, as the log file
-		// is often modified first, thus, search till we find it
-		boolean foundMatch = false;
-		for(Path path : Control.modifiedFiles)
-		{
-			if(path.equals(createdFile))
-			{
-				foundMatch = true;
-			}
-		}
-		assertTrue(foundMatch);
-
-		// Test renaming
-		Files.move(createdFile, createdFile.resolveSibling("tempfile5678"));
-		Thread.sleep(50);
-		assertTrue(createdFile.equals(Control.renamedFiles.get(0).oldName));
-		assertTrue(createdFile.resolveSibling("tempfile5678").equals(
-				Control.renamedFiles.get(0).newName));
-
-		// Test deletion
-		createdFile = createdFile.resolveSibling("tempfile5678");
-		Files.delete(createdFile);
-
-		Thread.sleep(50);
-		assertTrue(createdFile.equals(Control.deletedFiles.get(0)));
 	}
 
 	// Test converting between live and backup directory paths
@@ -222,18 +172,19 @@ public class TesterServices
 		assertTrue(FileOp.isEqual(path.resolve("authors.txt"), path.resolve("authors.txt")));
 		assertTrue(!FileOp.isEqual(path.resolve("authors.txt"), path.resolve("license.txt")));
 	}
-   @Test
+
+	@Test
 	public void fileOpApplyDiff() throws IOException
 	{
+		Path original = Paths.get("").resolve("authors.txt");
+		Path modified = Paths.get("").resolve("README.txt");
 
-		Path diff = FileOp.createDiff(Paths.get("").resolve("test1.txt"),
-				Paths.get("").resolve("test2.txt"));
+		// Create the diff
+		Path diff = FileOp.createPatch(original, modified);
 
-		Path applyed = FileOp.applyDiff(Paths.get("").resolve("test2.txt"), diff);
+		// Apply the diff
+		Path applied = FileOp.applyPatch(modified, diff);
 
-
-		boolean equality = FileOp.isEqual(applyed, diff);
-
-		System.out.println(equality);
+		assertTrue(FileOp.isEqual(original, applied));
 	}
 }

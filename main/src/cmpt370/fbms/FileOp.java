@@ -15,11 +15,9 @@
 
 package cmpt370.fbms;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
@@ -39,9 +37,8 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import difflib.Delta;
-import difflib.DiffUtils;
-import difflib.Patch;
+import name.fraser.neil.plaintext.diff_match_patch;
+import name.fraser.neil.plaintext.diff_match_patch.Patch;
 
 public class FileOp
 {
@@ -198,111 +195,91 @@ public class FileOp
 	}
 
 	/**
-	 * Creates a diff from one file to another.
+	 * Creates a patch ("diff") from one file to another. The created patch shows the changes from
+	 * the NEWER file to the OLDER one, as this allows us to apply the patches in reverse, going
+	 * from the newer revisions to older revisions.
 	 * 
-	 * @param beforeFile
-	 *            The original file in the diff creation.
-	 * @param afterFile
-	 *            The new file in the diff creation.
-	 * @return A path to a temporary file containing the contents of the diff.
+	 * @param oldRevision
+	 *            The original file in the patch creation.
+	 * @param currentRevision
+	 *            The new file in the patch creation.
+	 * @return A path to a temporary file containing the contents of the patch.
 	 */
-	public static Path createDiff(Path beforeFile, Path afterFile)
+	public static Path createPatch(Path oldRevision, Path currentRevision)
 	{
-		List<String> original = fileToList(beforeFile);
-		List<String> modified = fileToList(afterFile);
-
-		// Compute diff. Get the Patch object. Patch is the container for computed deltas.
-		Patch<String> patch = DiffUtils.diff(original, modified);
-
-		PrintWriter output = null;
-		Path pathToTempFile = null;
 		try
 		{
-			// Create a temporary file for the revision
-			pathToTempFile = Files.createTempFile("revision", ".txt");
+			String originalFile = FileOp.fileToString(oldRevision);
+			String modifiedFile = FileOp.fileToString(currentRevision);
 
-			// Write the diff to that temp file
-			output = new PrintWriter(pathToTempFile.toFile());
-			for(Delta<String> delta : patch.getDeltas())
+			// Create the patch.
+			diff_match_patch patchEngine = new diff_match_patch();
+			List<Patch> patch = patchEngine.patch_make(modifiedFile, originalFile);
+
+			// Write the patch to a file
+			Path tempFile = Files.createTempFile("revision", ".txt");
+			PrintWriter writer = new PrintWriter(tempFile.toFile());
+
+			for(Patch patchLine : patch)
 			{
-				output.write(delta.toString());
-				System.out.println(delta.toString());
+				writer.write(patchLine.toString());
 			}
+
+			writer.close();
+
+			return tempFile;
 		}
 		catch(IOException e)
 		{
-			Errors.nonfatalError("Could not create temporary file for revision diff.", e);
-		}
-		finally
-		{
-			if(output != null)
-			{
-				output.close();
-			}
+			Errors.nonfatalError("Could not create patch from " + oldRevision.toString() + " -> "
+					+ currentRevision.toString(), e);
 		}
 
-		Control.logger.debug("Created diff for file " + beforeFile.toString() + " and stored in "
-				+ pathToTempFile.toString() + " (file size: " + pathToTempFile.toFile().length()
-				+ ")");
-
-		return pathToTempFile;
+		// An error occurred
+		return null;
 	}
 
 	/**
-	 * Takes in a file and a diff, and applies the diff to that file in reverse, creating the
+	 * Takes in a file and a patch, and applies the patch to that file in reverse, creating the
 	 * original file.
 	 * 
-	 * @param sourceFile
+	 * @param currentRevision
 	 *            The file in question.
 	 * @param diffFile
-	 *            The diff that was generated going from an older version to a newer version of the
+	 *            The patch that was generated going from an older version to a newer version of the
 	 *            source file.
 	 * @return A path to a temporary file containing the newly patched file.
 	 */
-	public static Path applyDiff(Path sourceFile, Path diffFile)
+	public static Path applyPatch(Path currentRevision, Path patchFile)
 	{
-		List<String> currentFile = fileToList(sourceFile);
-		List<String> patched = fileToList(diffFile);
-
-		// At first, parse the unified diff file and get the patch
-		Patch<String> patch = DiffUtils.parseUnifiedDiff(patched);
-
-		List<String> oldFile = null;
-		PrintWriter output = null;
-		Path pathToTempFile = null;
-		oldFile = DiffUtils.unpatch(currentFile, patch);
-
 		try
 		{
-			patch = DiffUtils.parseUnifiedDiff(oldFile);
+			String originalFile = FileOp.fileToString(currentRevision);
+			String patchString = FileOp.fileToString(patchFile);
 
-			// Create a temporary file for the revision
-			pathToTempFile = Files.createTempFile("revision", ".txt");
+			// Parse the patch
+			diff_match_patch patchEngine = new diff_match_patch();
+			List<Patch> patch = patchEngine.patch_fromText(patchString);
 
-			// Write the diff to that temp file
-			output = new PrintWriter(pathToTempFile.toFile());
-			for(Delta<String> delta : patch.getDeltas())
-			{
-				output.write(delta.toString());
-			}
+			// And apply it (note that we are only given a generic List and must pass a LinkedList
+			LinkedList<Patch> linkedListPatch = new LinkedList<>(patch);
+			String text = (String) patchEngine.patch_apply(linkedListPatch, originalFile)[0];
+
+			// Write the new text to a file
+			Path tempFile = Files.createTempFile("revision", ".txt");
+			PrintWriter writer = new PrintWriter(tempFile.toFile());
+			writer.write(text);
+			writer.close();
+
+			return tempFile;
 		}
 		catch(IOException e)
 		{
-			Errors.nonfatalError("Could not create temporary file for patched revision.", e);
-		}
-		finally
-		{
-			if(output != null)
-			{
-				output.close();
-			}
+			Errors.nonfatalError("Could not apply patch " + patchFile.toString() + " to "
+					+ currentRevision.toString(), e);
 		}
 
-		Control.logger.debug("Applied patch on file " + sourceFile.toString() + " and stored in "
-				+ pathToTempFile.toString() + " (file size: " + pathToTempFile.toFile().length()
-				+ ")");
-
-		return pathToTempFile;
+		return null;
 	}
 
 	/**
@@ -403,50 +380,6 @@ public class FileOp
 	}
 
 	/**
-	 * Converts a file into a list of strings. This method is from the Java-diff-utils examples.
-	 * 
-	 * @param file
-	 *            The file to read in.
-	 * @return A list of strings corresponding to lines of that file.
-	 */
-	public static List<String> fileToList(Path file)
-	{
-		String fileName = file.toString();
-		List<String> lines = new LinkedList<String>();
-
-		String line = "";
-		BufferedReader in = null;
-		try
-		{
-			in = new BufferedReader(new FileReader(fileName));
-			while((line = in.readLine()) != null)
-			{
-				lines.add(line);
-			}
-		}
-		catch(IOException e)
-		{
-			Errors.nonfatalError("Could not convert " + file.toString() + " to List.", e);
-		}
-		finally
-		{
-			if(in != null)
-			{
-				try
-				{
-					in.close();
-				}
-				catch(IOException e)
-				{
-
-				}
-			}
-		}
-
-		return lines;
-	}
-
-	/**
 	 * A utility function for converting a file to a String.
 	 * 
 	 * @author erickson <http://stackoverflow.com/users/3474/erickson> from
@@ -526,6 +459,12 @@ public class FileOp
 			return false;
 		}
 		Control.logger.debug(file.toString() + " is " + fileTypeString);
+
+		if(fileTypeString == null)
+		{
+			return true;
+		}
+
 		return fileTypeString.startsWith("text");
 	}
 
