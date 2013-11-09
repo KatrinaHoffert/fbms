@@ -398,24 +398,26 @@ public class Control
 		{
 			pathc = itrc.previous();
 			hit = false; // If we've hit a duplicate already in this list.
+			found = false;
 			itrr = renamedFiles.listIterator(renamedFiles.size());
 			// Check renamed files for created files duplicates.
 			while(itrr.hasPrevious())
 			{
 				toRename = itrr.previous();
-				if(pathc.equals(toRename.newName))
+				if(pathc.toFile().equals(toRename.newName.toFile()))
 				{
 					// If we've hit a duplicate already, we've made the diff/backup and we can
 					// delete this one safely.
 					if(hit == true)
 					{
 						itrr.remove();
-						logger.info("Create File Handle: Found duplicate in renamed, removing.");
+						logger.debug("Create Handle: Found duplicate in renamed, removing.");
 					}
 					// Otherwise we set found and hit to be true. It will be then removed from
 					// created and left on renamed to be handled there.
 					else
 					{
+						logger.debug("Create Handle: Found same entry in renamed, leaving and deleting in created.");
 						hit = true;
 						found = true;
 					}
@@ -428,18 +430,20 @@ public class Control
 			while(itrm.hasPrevious())
 			{
 				pathm = itrm.previous();
-				if(pathc.equals(pathm))
+				if(pathc.toFile().equals(pathm.toFile()))
 				{
 					// If we find a duplicate but already have made a diff/backup just delete the
 					// duplicate.
 					if(hit == true || found == true)
 					{
 						itrm.remove();
-						logger.info("Create File Handle: Found duplicate in modified, removing.");
+						logger.debug("Create File Handle: Found duplicate in modified, removing:"
+								+ pathm.toFile().toString());
 					}
 					// Otherwise we make backups/entries and set hit/found to true.
 					else
 					{
+						logger.debug("Create Handle: Found same entry in modified, leaving and deleting in created.");
 						hit = true;
 						found = true;
 					}
@@ -449,6 +453,8 @@ public class Control
 			// make a diff/backup and remove it from the created list.
 			if(!found)
 			{
+				logger.info("Create Handle: file " + pathc.toFile().toString()
+						+ " was not found in any other list.");
 				// If the file doesn't exist we copy it over.
 				if(!FileOp.convertPath(pathc).toFile().exists())
 				{
@@ -456,13 +462,14 @@ public class Control
 					Path targetDirectory = FileOp.convertPath(pathc).getParent();
 					FileOp.copy(pathc, targetDirectory);
 
-					logger.info("Create File Handle: Found new file " + pathc.toFile().toString());
+					logger.debug("Create Handle: Found new file " + pathc.toFile().toString());
 				}
 				// If it does exist, it was modified after creation and that takes priority.
 				else
 				{
 					modifiedFiles.add(pathc);
-					logger.info("Create File Handle: Move created file to modified.");
+					logger.debug("Create Handle: Move " + pathc.toFile().toString()
+							+ "to modified, it exists.");
 				}
 			}
 			itrc.remove();
@@ -514,7 +521,7 @@ public class Control
 						Path targetDirectory = FileOp.convertPath(pathm).getParent();
 						FileOp.copy(pathm, targetDirectory);
 
-						logger.info("Create File Handle: Found new file "
+						logger.debug("Create File Handle: Found new file "
 								+ pathm.toFile().toString());
 					}
 					else
@@ -534,7 +541,7 @@ public class Control
 						Path targetDirectory = FileOp.convertPath(pathm).getParent();
 						FileOp.copy(pathm, targetDirectory);
 
-						logger.info("Handle File Modified: Found existing modified file "
+						logger.debug("Handle File Modified: Found existing modified file "
 								+ pathm.toFile().toString());
 					}
 				}
@@ -544,7 +551,7 @@ public class Control
 					Path targetDirectory = FileOp.convertPath(pathm).getParent();
 					FileOp.copy(pathm, targetDirectory);
 
-					logger.info("Create File Handle: Found new large or binary file "
+					logger.debug("Create File Handle: Found new large or binary file "
 							+ pathm.toFile().toString());
 				}
 			}
@@ -557,6 +564,7 @@ public class Control
 
 		ListIterator<RenamedFile> itrr = renamedFiles.listIterator(renamedFiles.size());
 		RenamedFile toRename;
+		Path diff;
 		String newName;
 		// Since this is last to call all modified/created files should be dealt with.
 		// We just iterate through the list and rename files.
@@ -566,21 +574,53 @@ public class Control
 		{
 			toRename = itrr.previous();
 			newName = toRename.oldName.getParent().relativize(toRename.newName).toString();
-			// If this is a file we're renaming update database and rename file.
-			if(!FileOp.isFolder(toRename.oldName))
+			if(FileOp.convertPath(toRename.oldName).toFile().exists())
 			{
-				FileHistory.renameRevision(toRename.oldName, newName);
-				FileOp.rename(toRename.oldName, newName);
+				// If this is a file we're renaming update database and rename file.
+				if(!FileOp.isFolder(FileOp.convertPath(toRename.oldName)))
+				{
+					if(FileOp.fileValid(toRename.newName))
+					{
+						diff = FileOp.createPatch(FileOp.convertPath(toRename.oldName),
+								toRename.newName);
+						// Look at size difference.
+						long delta = FileOp.fileSize(toRename.newName)
+								- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
+
+						// Store a revision
+						FileHistory.storeRevision(toRename.newName, diff,
+								FileOp.fileSize(toRename.newName), delta);
+
+						// Copy file over.
+						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
+						FileOp.copy(toRename.newName, targetDirectory);
+						FileOp.delete(FileOp.convertPath(toRename.oldName));
+						FileHistory.renameRevision(toRename.oldName, newName);
+
+						logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+								+ "already existed and was updated.");
+					}
+					else
+					{
+						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
+						FileOp.copy(toRename.newName, targetDirectory);
+						FileOp.delete(FileOp.convertPath(toRename.oldName));
+						FileHistory.renameRevision(toRename.oldName, newName);
+						logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+								+ "existed but was not a valid file and was updated.");
+					}
+				}
 			}
-			// Otherwise we have a folder, use file op to rename.
 			else
 			{
-				if(FileOp.isFolder(toRename.oldName))
-				{
-					FileOp.rename(toRename.oldName, newName);
-				}
 
+				Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
+				FileOp.copy(toRename.newName, targetDirectory);
+
+				logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+						+ "did not exist and was added.");
 			}
+
 			// Remove entry to move onto the next.
 			itrr.remove();
 		}
