@@ -20,9 +20,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
@@ -733,20 +735,22 @@ public class Control
 	{
 		if(file.toFile().exists())
 		{
-			// Get the revision we want and make a diff for it
+			// Get the revision we want
 			Path revertedFile = FileHistory.obtainRevision(file, timestamp);
-			Path diffFromCurrent = FileOp.createPatch(file, revertedFile);
 
-			// Get the filesize of our newly reverted file as well as the delta from the old file
-			long fileSize = FileOp.fileSize(revertedFile);
-			long delta = fileSize - FileOp.fileSize(file);
+			// Rename the temporary file to the correct name and copy it over to the live directory
+			String fileName = file.getFileName().toString();
 
-			// Store the revision and copy the reverted file over the backup directory
-			FileHistory.storeRevision(FileOp.convertPath(file), diffFromCurrent, fileSize, delta);
-			FileOp.copy(revertedFile, file);
-
-			// Finally, copy that backup directory copy to the live directory
-			FileOp.copy(file, FileOp.convertPath(file).getParent());
+			try
+			{
+				Files.copy(revertedFile, FileOp.convertPath(file),
+						StandardCopyOption.REPLACE_EXISTING);
+			}
+			catch(IOException e)
+			{
+				Errors.nonfatalError("Could not copy file " + revertedFile.toString() + " to "
+						+ FileOp.convertPath(file).toString(), e);
+			}
 		}
 		else
 		{
