@@ -16,11 +16,11 @@
 
 package cmpt370.fbms;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -102,6 +102,20 @@ public class FileHistory
 				+ filesize + "; delta: " + delta + ")");
 	}
 
+	/**
+	 * Obtain a file revision by given time stamp.
+	 * <p>
+	 * The time stamp should be valid, otherwise this method will restore the file revision nearest
+	 * to the given time stamp.
+	 * <p>
+	 * Returns a Path to the patched file. If error occurs, null will be returned.
+	 * 
+	 * @param file
+	 *            a Path to a file in backup directory.
+	 * @param timestamp
+	 *            a long representing the file version.
+	 * @return a Path of patched file. null if failed.
+	 */
 	public static Path obtainRevision(Path file, long timestamp)
 	{
 		// Retrieve data from database
@@ -123,18 +137,38 @@ public class FileHistory
 
 		// Copy the newest file to temporary folder
 		Path newestFile = FileOp.convertPath(file);
-		FileOp.copy(newestFile, (new File("temp\\")).toPath());
-
-		// Apply diff to the file
-		Path tempPatchFile = (new File("temp\\patch.diff")).toPath();
-		for(RevisionInfo patch : patchList)
+		Path tempPath = null;
+		try
 		{
-			// TODO Discuss design of this FileOp.applyDiff()
-			// FileOp.stringToFile(patch.diff, tempPatchFile);
-			// FileOp.applyDiff(sourceFile, afterFile);
+			Path tempFilePath = Files.createTempFile("FBMS-", ".tmp");
+			Files.copy(newestFile, tempFilePath, StandardCopyOption.REPLACE_EXISTING);
+			tempPath = Files.createTempDirectory("FBMS-temp");
+			FileOp.copy(newestFile, tempPath);
+		}
+		catch(IOException e)
+		{
+			Errors.nonfatalError("Could not copy the newest file to temp folder", e);
+			return null;
 		}
 
-		return null;
+		// Apply diff to the file
+		Path tempPatchFile = null;
+		try
+		{
+			tempPatchFile = Files.createTempFile(tempPath, "FBMS", ".tmp");
+
+			for(RevisionInfo revisionInfo : patchList)
+			{
+				FileOp.stringToFile(revisionInfo.diff, tempPatchFile);
+				newestFile = FileOp.applyPatch(newestFile, tempPatchFile);
+			}
+			return newestFile;
+		}
+		catch(IOException e)
+		{
+			Errors.nonfatalError("Error occurs while applying patches.", e);
+			return null;
+		}
 	}
 
 	/**
