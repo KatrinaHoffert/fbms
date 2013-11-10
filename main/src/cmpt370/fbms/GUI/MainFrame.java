@@ -202,9 +202,9 @@ public class MainFrame extends JFrame
 		FrontEnd.frame.table.getColumnModel().getColumn(0).setMinWidth(25);
 		FrontEnd.frame.table.getColumnModel().getColumn(0).setMaxWidth(25);
 		FrontEnd.frame.table.getColumnModel().getColumn(1).setMinWidth(100);
-		FrontEnd.frame.table.getColumnModel().getColumn(3).setMinWidth(90);
-		FrontEnd.frame.table.getColumnModel().getColumn(4).setMinWidth(90);
-		FrontEnd.frame.table.getColumnModel().getColumn(5).setMinWidth(90);
+		FrontEnd.frame.table.getColumnModel().getColumn(3).setMinWidth(115);
+		FrontEnd.frame.table.getColumnModel().getColumn(4).setMinWidth(115);
+		FrontEnd.frame.table.getColumnModel().getColumn(5).setMinWidth(115);
 
 		// Set the location bar to the current directory relative to the
 		String locationBarText = directory.toString().substring(
