@@ -53,11 +53,13 @@ public class MainToolBar extends JToolBar
 		upButton.setContentAreaFilled(false);
 		upButton.setBorderPainted(false);
 		upButton.setEnabled(false);
+		upButton.setFocusPainted(false);
 		refreshButton.setMargin(new Insets(0, 0, 0, 0));
 		refreshButton.setBorder(null);
 		refreshButton.setOpaque(false);
 		refreshButton.setContentAreaFilled(false);
 		refreshButton.setBorderPainted(false);
+		refreshButton.setFocusPainted(false);
 
 		// Format the directory text field to be disabled and a dark grey
 		locationBar.setDisabledTextColor(new Color(0.2f, 0.2f, 0.2f));
