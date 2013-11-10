@@ -55,6 +55,12 @@ public class Data
 
 		for(File file : folderContents)
 		{
+			if(folder.equals(Control.backupDirectory)
+					&& file.toPath().getFileName().toString().equals(".revisions.db"))
+			{
+				continue;
+			}
+
 			FileInfo currentFile = new FileInfo();
 
 			// String fileName
