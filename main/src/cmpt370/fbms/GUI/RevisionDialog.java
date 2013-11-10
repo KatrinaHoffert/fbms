@@ -30,7 +30,7 @@ import cmpt370.fbms.Data;
 public class RevisionDialog extends JDialog
 {
 	public JTable table;
-	public JButton viewRevisionButton, revertRevisionButton;
+	public JButton viewRevisionButton, revertRevisionButton, viewChangesButton;
 	public long selectedTimestamp = -1;
 
 	/**
@@ -41,7 +41,7 @@ public class RevisionDialog extends JDialog
 		setTitle("Revision Log");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setIconImage(new ImageIcon("res/icon.png").getImage());
-		setSize(400, 250);
+		setSize(450, 250);
 
 		// Create main panel
 		JPanel contentPane = new JPanel(new BorderLayout());
@@ -81,15 +81,26 @@ public class RevisionDialog extends JDialog
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		viewRevisionButton = new JButton("View revision");
 		revertRevisionButton = new JButton("Revert revision");
+		viewChangesButton = new JButton("View changes");
 		revertRevisionButton.setEnabled(false);
 		viewRevisionButton.setEnabled(false);
+		viewChangesButton.setEnabled(false);
 		buttonPanel.add(viewRevisionButton);
 		buttonPanel.add(revertRevisionButton);
+		buttonPanel.add(viewChangesButton);
 
 		// And add to the main panel
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		contentPane.add(buttonPanel, BorderLayout.SOUTH);
 		add(contentPane);
+
+		// Make the enter key active the cell instead of going to the next cell. Basically, we
+		// create a new keyboard mapping for the enter key which does nothing, allowing the listener
+		// to pick up the enter key later.
+		final String solve = "Solve";
+		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		table.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, solve);
+		table.getActionMap().put(solve, null);
 
 		// Necessary to revalidate the frame so that we can see the table
 		revalidate();
@@ -111,15 +122,6 @@ public class RevisionDialog extends JDialog
 			}
 		});
 
-		// Make the enter key active the cell instead of going to the next cell. Basically, we
-		// create a new keyboard mapping for the enter key which does nothing, allowing the listener
-		// to pick up the enter key later.
-		final String solve = "Solve";
-		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-		table.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, solve);
-		table.getActionMap().put(solve, null);
-
-
 		// Handler for revert revision button
 		revertRevisionButton.addActionListener(new ActionListener()
 		{
@@ -131,6 +133,23 @@ public class RevisionDialog extends JDialog
 					Control.revertRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
 
 					Control.logger.debug("Reverted revision of "
+							+ FrontEnd.frame.selectedFile.toString() + " @ T = "
+							+ selectedTimestamp);
+				}
+			}
+		});
+
+		// Handler for view changes button
+		viewChangesButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				if(selectedTimestamp != -1)
+				{
+					Control.displayRevisionChanges(FrontEnd.frame.selectedFile, selectedTimestamp);
+
+					Control.logger.debug("Viewed revision changes of "
 							+ FrontEnd.frame.selectedFile.toString() + " @ T = "
 							+ selectedTimestamp);
 				}
@@ -192,6 +211,7 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 
 			dialog.revertRevisionButton.setEnabled(true);
 			dialog.viewRevisionButton.setEnabled(true);
+			dialog.viewChangesButton.setEnabled(true);
 
 			Control.logger.debug("Selected revision: " + FrontEnd.frame.selectedFile.toString()
 					+ " (timestamp: " + dialog.selectedTimestamp + ")");
@@ -201,6 +221,7 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 			dialog.selectedTimestamp = -1;
 			dialog.revertRevisionButton.setEnabled(false);
 			dialog.viewRevisionButton.setEnabled(false);
+			dialog.viewChangesButton.setEnabled(false);
 		}
 	}
 

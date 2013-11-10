@@ -698,6 +698,30 @@ public class Control
 	}
 
 	/**
+	 * Displays the changes between two revisions by opening up an HTML file in the web browser.
+	 * 
+	 * @param file
+	 *            The file's path (in the live directory).
+	 * @param timestamp
+	 *            The Unix time stamp (seconds since Unix epoch).
+	 */
+	public static void displayRevisionChanges(Path file, long timestamp)
+	{
+		// Displays the diff of the specified revision
+		Path specificDiff = FileHistory.getRevision(FileOp.convertPath(file), timestamp);
+		Path html = FileOp.prettyPrintPatch(specificDiff);
+
+		try
+		{
+			Desktop.getDesktop().open(html.toFile());
+		}
+		catch(IOException e)
+		{
+			Errors.nonfatalError("Could not open revision changes file.", e);
+		}
+	}
+
+	/**
 	 * Reverts a revision by obtaining a specific revision and making that the current revision.
 	 * 
 	 * @param file

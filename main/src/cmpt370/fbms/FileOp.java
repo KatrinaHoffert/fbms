@@ -293,19 +293,34 @@ public class FileOp
 			diff_match_patch patchEngine = new diff_match_patch();
 			List<Patch> patch = patchEngine.patch_fromText(patchString);
 
-			// Cleanup the diff
-			LinkedList<Diff> diffs = patch.get(0).diffs;
-			patchEngine.diff_cleanupSemantic(diffs);
-			patchEngine.diff_cleanupSemanticLossless(diffs);
-			patchEngine.diff_cleanupMerge(diffs);
+			Path tempFile = null;
 
-			String html = patchEngine.diff_prettyHtml(diffs);
+			// If there was changes, get the pretty diff
+			if(patch.size() > 0)
+			{
+				// Cleanup the diff
+				LinkedList<Diff> diffs = patch.get(0).diffs;
+				patchEngine.diff_cleanupSemantic(diffs);
+				patchEngine.diff_cleanupSemanticLossless(diffs);
+				patchEngine.diff_cleanupMerge(diffs);
 
-			// Write the new text to a file
-			Path tempFile = Files.createTempFile("pretty-print", ".html");
-			PrintWriter writer = new PrintWriter(tempFile.toFile());
-			writer.write(html);
-			writer.close();
+				String html = patchEngine.diff_prettyHtml(diffs);
+
+				// Write the new text to a file
+				tempFile = Files.createTempFile("pretty-print", ".html");
+				PrintWriter writer = new PrintWriter(tempFile.toFile());
+				writer.write(html);
+				writer.close();
+			}
+			// Otherwise tell the user there were no changes
+			else
+			{
+				tempFile = Files.createTempFile("revision", ".html");
+
+				PrintWriter writer = new PrintWriter(tempFile.toFile());
+				writer.write("There were no changes.");
+				writer.close();
+			}
 
 			return tempFile;
 		}
