@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -119,7 +118,7 @@ public class FileHistory
 	public static Path obtainRevision(Path file, long timestamp)
 	{
 		// Retrieve data from database
-		List<RevisionInfo> fileRevisionList = DbManager.getRevisionData(file);
+		List<RevisionInfo> fileRevisionList = DbManager.getRevisionData(FileOp.convertPath(file));
 		LinkedList<RevisionInfo> patchList = new LinkedList<>();
 
 		// Add the records we needed to a linked list
@@ -131,31 +130,18 @@ public class FileHistory
 			}
 		}
 
+
 		// Sort the linked list in reverse order
 		Collections.sort(patchList);
 		Collections.reverse(patchList);
 
-		// Copy the newest file to temporary folder
-		Path newestFile = FileOp.convertPath(file);
-		Path tempPath = null;
-		try
-		{
-			Path tempFilePath = Files.createTempFile("FBMS-", ".tmp");
-			Files.copy(newestFile, tempFilePath, StandardCopyOption.REPLACE_EXISTING);
-			tempPath = Files.createTempDirectory("FBMS-temp");
-			FileOp.copy(newestFile, tempPath);
-		}
-		catch(IOException e)
-		{
-			Errors.nonfatalError("Could not copy the newest file to temp folder", e);
-			return null;
-		}
 
-		// Apply diff to the file
+		// Apply diff to the file. return null if error occurs
+		Path newestFile = file;
 		Path tempPatchFile = null;
 		try
 		{
-			tempPatchFile = Files.createTempFile(tempPath, "FBMS", ".tmp");
+			tempPatchFile = Files.createTempFile("FBMS", ".tmp");
 
 			for(RevisionInfo revisionInfo : patchList)
 			{
