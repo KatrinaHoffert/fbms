@@ -331,9 +331,14 @@ public class DbManager
 		Path newPath = file.resolveSibling(newName);
 		try
 		{
-			Statement statement = connection.createStatement();
-			statement.executeUpdate("UPDATE revisions SET path = '" + newPath.toString()
-					+ "' WHERE path = '" + file.toString() + "'");
+			String updateStatement = "UPDATE revisions SET path = ? WHERE path = ?";
+
+			PreparedStatement prepStatement = connection.prepareStatement(updateStatement);
+
+			prepStatement.setString(1, file.getParent().resolve(newName).toString());
+			prepStatement.setString(2, file.toString());
+
+			prepStatement.executeUpdate();
 		}
 		catch(SQLException e)
 		{
