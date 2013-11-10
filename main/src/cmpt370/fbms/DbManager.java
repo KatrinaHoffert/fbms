@@ -391,6 +391,8 @@ public class DbManager
 	 */
 	public static void setConfig(String settingName, String settingValue)
 	{
+		String insertStatment = "INSERT INTO settings(name, setting) VALUES(?, ?)";
+		String updateStatement = "UPDATE settings SET setting = ? WHERE name = ?";
 		try
 		{
 			Statement statement = connection.createStatement();
@@ -402,14 +404,22 @@ public class DbManager
 			// If the row exists, update it
 			if(settingsRows.next())
 			{
-				statement.executeUpdate("UPDATE settings SET setting = '" + settingValue
-						+ "' WHERE name = '" + settingName + "'");
+				PreparedStatement prepStatement = connection.prepareStatement(updateStatement);
+
+				prepStatement.setString(1, settingValue);
+				prepStatement.setString(2, settingName);
+
+				prepStatement.executeUpdate();
 			}
 			// If the row does not exist, insert it
 			else
 			{
-				statement.executeUpdate("INSERT INTO settings(name, setting) VALUES('"
-						+ settingName + "', '" + settingValue + "')");
+				PreparedStatement prepStatement = connection.prepareStatement(insertStatment);
+
+				prepStatement.setString(1, settingName);
+				prepStatement.setString(2, settingValue);
+
+				prepStatement.executeUpdate();
 			}
 		}
 		catch(SQLException e)

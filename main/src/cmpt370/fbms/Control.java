@@ -120,6 +120,7 @@ public class Control
 			// Set some default settings
 			DbManager.setConfig("trimDate", "-1");
 			DbManager.setConfig("startupScan", "true");
+			DbManager.setConfig("disableNonFatalErrors", "false");
 
 			logger.info("First run wizard completed");
 		}
