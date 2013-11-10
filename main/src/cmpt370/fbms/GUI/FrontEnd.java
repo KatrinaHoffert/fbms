@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import cmpt370.fbms.Control;
 import cmpt370.fbms.Errors;
@@ -38,9 +40,18 @@ public class FrontEnd
 
 	public static void createAndShowGUI()
 	{
-		// TODO: create option to use system look and feel, because Swing
-		// is as ugly as sin.
-		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		// Alias the text and apply look and feel
+		System.setProperty("awt.useSystemAAFontSettings", "on");
+		System.setProperty("swing.aatext", "true");
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch(ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e)
+		{
+			Errors.nonfatalError("Could not apply look and feel.", e);
+		}
 
 		// Check the SystemTray support
 		if(!SystemTray.isSupported())
