@@ -144,14 +144,13 @@ public class MainFrame extends JFrame
 			}
 		});
 
-
 		// Set some default column sizes as larger, so dates fit in better
 		table.getColumnModel().getColumn(0).setMinWidth(25);
 		table.getColumnModel().getColumn(0).setMaxWidth(25);
 		table.getColumnModel().getColumn(1).setMinWidth(100);
-		table.getColumnModel().getColumn(3).setMinWidth(90);
-		table.getColumnModel().getColumn(4).setMinWidth(90);
-		table.getColumnModel().getColumn(5).setMinWidth(90);
+		table.getColumnModel().getColumn(3).setMinWidth(115);
+		table.getColumnModel().getColumn(4).setMinWidth(115);
+		table.getColumnModel().getColumn(5).setMinWidth(115);
 
 		// Make the enter key active the cell instead of going to the next cell. Basically, we
 		// create a new keyboard mapping for the enter key which does nothing, allowing the listener
