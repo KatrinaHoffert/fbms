@@ -118,6 +118,8 @@ public class Data
 			list.add(currentFile);
 		}
 
+		Collections.sort(list);
+
 		return list;
 	}
 
