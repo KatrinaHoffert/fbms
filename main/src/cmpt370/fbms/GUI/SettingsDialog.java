@@ -24,7 +24,7 @@ class SettingsDialog extends JDialog
 	SettingsDialog()
 	{
 		setTitle("Settings");
-		setSize(new Dimension(400, 125));
+		setSize(new Dimension(400, 150));
 		setResizable(false);
 
 		add(createSettings());
@@ -40,7 +40,7 @@ class SettingsDialog extends JDialog
 		JPanel panel = new JPanel(new BorderLayout());
 
 		// Create the options panel
-		JPanel optionsPanel = new JPanel(new GridLayout(2, 1));
+		JPanel optionsPanel = new JPanel(new GridLayout(3, 1));
 
 		// Trim panel
 		JPanel trimPanel = new JPanel();
@@ -57,13 +57,25 @@ class SettingsDialog extends JDialog
 		JPanel scanPanel = new JPanel();
 		JCheckBox scanCheck = new JCheckBox("Scan for file changes on startup");
 		// Figure out if the box is checked
-		String status = DbManager.getConfig("startupScan");
-		if(status == null || status.equals("true"))
+		String statusStartupScan = DbManager.getConfig("startupScan");
+		if(statusStartupScan == null || statusStartupScan.equals("true"))
 		{
 			scanCheck.setSelected(true);
 		}
 		scanPanel.add(scanCheck);
 		optionsPanel.add(scanPanel);
+
+		// Startup scan panel
+		JPanel disableErrorsPanel = new JPanel();
+		JCheckBox disableErrorsCheck = new JCheckBox("Don't display non-fatal errors");
+		// Figure out if the box is checked
+		String statusErrors = DbManager.getConfig("disableNonFatalErrors");
+		if(statusErrors != null && statusErrors.equals("true"))
+		{
+			disableErrorsCheck.setSelected(true);
+		}
+		disableErrorsPanel.add(disableErrorsCheck);
+		optionsPanel.add(disableErrorsPanel);
 
 		// Add the settings panels to the main panel
 		panel.add(optionsPanel, BorderLayout.CENTER);
@@ -82,6 +94,12 @@ class SettingsDialog extends JDialog
 				+ " can be disabled if the program is always running.<br />";
 		scanCheck.setToolTipText(scanToolTip);
 
+		String disableErrorsToolTip = "<html>If enabled, non-fatal errors, which normally bring up a warning<br />"
+				+ " box in the bottom right corner of the screen, will be disabled. This is not<br />"
+				+ " recommended, as you can be oblivious to issues the program is facing, but is<br />"
+				+ " an option if you have permission issues that cause error messages frequently.<br />";
+		disableErrorsCheck.setToolTipText(disableErrorsToolTip);
+
 		// Create the buttons at the bottom
 		JPanel buttonsPanel = new JPanel(new GridLayout(1, 2));
 		JButton cancelButton = new JButton("Cancel");
@@ -92,7 +110,8 @@ class SettingsDialog extends JDialog
 
 		// Listeners for the buttons
 		cancelButton.addActionListener(new CancelActionListener(this));
-		acceptButton.addActionListener(new AcceptActionListener(this, trimOption, scanCheck));
+		acceptButton.addActionListener(new AcceptActionListener(this, trimOption, scanCheck,
+				disableErrorsCheck));
 
 		return panel;
 	}
@@ -128,12 +147,14 @@ class AcceptActionListener implements ActionListener
 	private JDialog dialog;
 	private JTextField trimField;
 	private JCheckBox scanField;
+	private JCheckBox disableErrorsField;
 
-	public AcceptActionListener(JDialog frame, JTextField trim, JCheckBox scan)
+	public AcceptActionListener(JDialog frame, JTextField trim, JCheckBox scan, JCheckBox errors)
 	{
 		dialog = frame;
 		trimField = trim;
 		scanField = scan;
+		disableErrorsField = errors;
 	}
 
 	@Override
@@ -167,6 +188,18 @@ class AcceptActionListener implements ActionListener
 			DbManager.setConfig("startupScan", "false");
 		}
 		Control.logger.info("Set startupScan to: " + DbManager.getConfig("startupScan"));
+
+		// Parse the disable errors field
+		if(disableErrorsField.isSelected())
+		{
+			DbManager.setConfig("disableNonFatalErrors", "true");
+		}
+		else
+		{
+			DbManager.setConfig("disableNonFatalErrors", "false");
+		}
+		Control.logger.info("Set disableNonFatalErrors to: "
+				+ DbManager.getConfig("disableNonFatalErrors"));
 
 		// Close the window
 		dialog.dispose();

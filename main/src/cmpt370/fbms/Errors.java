@@ -91,7 +91,7 @@ public class Errors
 	public static void nonfatalError(String message, String header, Throwable error)
 	{
 		// Never more than one at a time
-		if(!errorBeingDisplayed)
+		if(!errorBeingDisplayed && DbManager.getConfig("disableNonFatalErrors").equals("false"))
 		{
 			errorBeingDisplayed = true;
 
