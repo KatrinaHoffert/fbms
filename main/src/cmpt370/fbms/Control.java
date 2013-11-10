@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -191,6 +192,28 @@ public class Control
 		{
 			Errors.fatalError("Could not start file watcher module", e);
 		}
+
+		// Redirect standard error to the log
+		System.setErr(createLoggingProxy(System.err));
+	}
+
+	/**
+	 * Sends an output to the log. Used to redirect standard error.
+	 * 
+	 * @param realPrintStream
+	 *            The output stream to send to the log.
+	 * @return The passed in print stream, which is logged AND sent to standard error.
+	 */
+	private static PrintStream createLoggingProxy(final PrintStream realPrintStream)
+	{
+		return new PrintStream(realPrintStream)
+		{
+			public void print(final String string)
+			{
+				realPrintStream.print(string);
+				logger.error(string);
+			}
+		};
 	}
 
 	/**
