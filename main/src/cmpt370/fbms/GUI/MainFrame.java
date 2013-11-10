@@ -233,11 +233,12 @@ class TableSelectionListener implements MouseListener, KeyListener
 	{
 		selectRow();
 
-		// Get double clicks
-		if(e.getClickCount() == 2)
+		// Get double clicks (and make sure that we actually clicked a row)
+		if(e.getClickCount() == 2 && FrontEnd.frame.table.rowAtPoint(e.getPoint()) != -1)
 		{
 			activateRow();
 		}
+
 	}
 
 	@Override

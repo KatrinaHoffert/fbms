@@ -158,7 +158,7 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 		selectRow();
 
 		// Get double clicks
-		if(e.getClickCount() == 2)
+		if(e.getClickCount() == 2 && dialog.table.rowAtPoint(e.getPoint()) != -1)
 		{
 			activateRow();
 		}
