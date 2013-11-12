@@ -2,6 +2,7 @@ package cmpt370.fbms.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +25,7 @@ class SettingsDialog extends JDialog
 	SettingsDialog()
 	{
 		setTitle("Settings");
-		setSize(new Dimension(400, 150));
+		setSize(new Dimension(250, 150));
 		setResizable(false);
 
 		add(createSettings());
@@ -43,7 +44,7 @@ class SettingsDialog extends JDialog
 		JPanel optionsPanel = new JPanel(new GridLayout(3, 1));
 
 		// Trim panel
-		JPanel trimPanel = new JPanel();
+		JPanel trimPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel trimLabel1 = new JLabel("Remove revisions older than ");
 		JTextField trimOption = new JTextField(3);
 		trimOption.setText(DbManager.getConfig("trimDate"));
@@ -54,7 +55,7 @@ class SettingsDialog extends JDialog
 		optionsPanel.add(trimPanel);
 
 		// Startup scan panel
-		JPanel scanPanel = new JPanel();
+		JPanel scanPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JCheckBox scanCheck = new JCheckBox("Scan for file changes on startup");
 		// Figure out if the box is checked
 		String statusStartupScan = DbManager.getConfig("startupScan");
@@ -66,7 +67,7 @@ class SettingsDialog extends JDialog
 		optionsPanel.add(scanPanel);
 
 		// Startup scan panel
-		JPanel disableErrorsPanel = new JPanel();
+		JPanel disableErrorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JCheckBox disableErrorsCheck = new JCheckBox("Don't display non-fatal errors");
 		// Figure out if the box is checked
 		String statusErrors = DbManager.getConfig("disableNonFatalErrors");
@@ -101,7 +102,7 @@ class SettingsDialog extends JDialog
 		disableErrorsCheck.setToolTipText(disableErrorsToolTip);
 
 		// Create the buttons at the bottom
-		JPanel buttonsPanel = new JPanel(new GridLayout(1, 2));
+		JPanel buttonsPanel = new JPanel();
 		JButton cancelButton = new JButton("Cancel");
 		JButton acceptButton = new JButton("Accept");
 		buttonsPanel.add(cancelButton);
