@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>630</w>
+      <h>940</h>
+    </coordinates>
+    <panel_attributes>name.fraser.neil.plaintext::diff_match_patch
+--
++Diff_Timeout = 1.0f: float
++Diff_EditCost = 4: short
++Match_Threshold = 0.5f: float
++Match_Distance = 1000: int
++Patch_DeleteThreshold = 0.5f: float
++Patch_Margin = 4: short
+-Match_MaxBits = 32: short
+-BLANKLINEEND = Pattern.compile("\\n\\r?\\n\\Z", Pattern.DOTALL): Pattern
+-BLANKLINESTART = Pattern.compile("\\A\\r?\\n\\r?\\n", Pattern.DOTALL): Pattern
+--
++diff_main(String text1, String text2): LinkedList&lt;Diff&gt;
++diff_main(String text1, String text2, boolean checklines): LinkedList&lt;Diff&gt;
+-diff_main(String text1, String text2, boolean checklines, long deadline): LinkedList&lt;Diff&gt;
+-diff_compute(String text1, String text2, boolean checklines, long deadline): LinkedList&lt;Diff&gt;
+-diff_lineMode(String text1, String text2, long deadline): LinkedList&lt;Diff&gt;
+#diff_bisect(String text1, String text2, long deadline): LinkedList&lt;Diff&gt;
+-diff_bisectSplit(String text1, String text2, int x, int y, long deadline): LinkedList&lt;Diff&gt;
+#diff_linesToChars(String text1, String text2): LinesToCharsResult
+-diff_linesToCharsMunge(String text, List&lt;String&gt; lineArray, Map&lt;String, Integer&gt; lineHash): String
+#diff_charsToLines(LinkedList&lt;Diff&gt; diffs, List&lt;String&gt; lineArray): void
++diff_commonPrefix(String text1, String text2): int
++diff_commonSuffix(String text1, String text2): int
+#diff_commonOverlap(String text1, String text2): int
+#diff_halfMatch(String text1, String text2): String[]
+-diff_halfMatchI(String longtext, String shorttext, int i): String[]
++diff_cleanupSemantic(LinkedList&lt;Diff&gt; diffs): void
++diff_cleanupSemanticLossless(LinkedList&lt;Diff&gt; diffs): void
+-diff_cleanupSemanticScore(String one, String two): int
++diff_cleanupEfficiency(LinkedList&lt;Diff&gt; diffs): void
++diff_cleanupMerge(LinkedList&lt;Diff&gt; diffs): void
++diff_xIndex(LinkedList&lt;Diff&gt; diffs, int loc): int
++diff_prettyHtml(LinkedList&lt;Diff&gt; diffs): String
++diff_text1(LinkedList&lt;Diff&gt; diffs): String
++diff_text2(LinkedList&lt;Diff&gt; diffs): String
++diff_levenshtein(LinkedList&lt;Diff&gt; diffs): int
++diff_toDelta(LinkedList&lt;Diff&gt; diffs): String
++diff_fromDelta(String text1, String delta): LinkedList&lt;Diff&gt;
++match_main(String text, String pattern, int loc): int
+#match_bitap(String text, String pattern, int loc): int
+-match_bitapScore(int e, int x, int loc, String pattern): double
+#match_alphabet(String pattern): Map&lt;Character, Integer&gt;
+#patch_addContext(Patch patch, String text): void
++patch_make(String text1, String text2): LinkedList&lt;Patch&gt;
++patch_make(LinkedList&lt;Diff&gt; diffs): LinkedList&lt;Patch&gt;
++patch_make(String text1, String text2, LinkedList&lt;Diff&gt; diffs): LinkedList&lt;Patch&gt;
++patch_make(String text1, LinkedList&lt;Diff&gt; diffs): LinkedList&lt;Patch&gt;
++patch_deepCopy(LinkedList&lt;Patch&gt; patches): LinkedList&lt;Patch&gt;
++patch_apply(LinkedList&lt;Patch&gt; patches, String text): Object[]
++patch_addPadding(LinkedList&lt;Patch&gt; patches): String
++patch_splitMax(LinkedList&lt;Patch&gt; patches): void
++patch_toText(List&lt;Patch&gt; patches): String
++patch_fromText(String textline): List&lt;Patch&gt;
+-unescapeForEncodeUriCompatability(String str): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>640</x>
+      <y>0</y>
+      <w>270</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms.Gui::DirectoryListener
+--
++frame: JDialog
++currentPanel = 1: int
++liveDirectoryField: JTextField
++backupDirectoryField: JTextField
++selectDirsNextButton: JButton
++listener: WindowListener
+-offset: int
+-backup: boolean
+--
++WizardButtonListener(int inOffset): ctor
++DirectoryListener(boolean type): ctor
++run(): void
++introPanel(): JPanel
++importPanel(): JPanel
++selectDirsPanel(): JPanel
++selectOldDirPanel(): JPanel
++finishPanel(): JPanel
+-writeBackupFile(): void
++actionPerformed(ActionEvent e): void
++mouseClicked(MouseEvent arg0): void
++mouseReleased(MouseEvent arg0): void
++mousePressed(MouseEvent arg0): void
++mouseExited(MouseEvent arg0): void
++mouseEntered(MouseEvent arg0): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>920</x>
+      <y>0</y>
+      <w>640</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms::Main
+--
++liveDirectory = null: Path
++backupDirectory = null: Path
++createdFiles = Collections.synchronizedList(new LinkedList&lt;Path&gt;()): List&lt;Path&gt;
++modifiedFiles = Collections.synchronizedList(new LinkedList&lt;Path&gt;()): List&lt;Path&gt;
++renamedFiles = Collections.synchronizedList(new LinkedList&lt;RenamedFile&gt;()): List&lt;RenamedFile&gt;
++deletedFiles = Collections.synchronizedList(new LinkedList&lt;Path&gt;()): List&lt;Path&gt;
++firstRunWizardDone = false: boolean
++logger = Logger.getLogger(Main.class): Logger
++watchId = 0: int
++loop = 0: long
+--
++main(String[] args): void
+-fileHandler(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1570</x>
+      <y>0</y>
+      <w>540</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms.Gui::MainMenu
+--
++copyToOption = new JMenuItem("Copy to"): JMenuItem
++revisionsOption = new JMenuItem("View revisions"): JMenuItem
+-restoreAllOption = new JMenuItem("Restore all"): JMenuItem
+-settingsOption = new JMenuItem("Settings"): JMenuItem
+-changeLiveDirOption = new JMenuItem("Change live directory"): JMenuItem
+-changeBackupDirOption = new JMenuItem("Change backup directory"): JMenuItem
+-exitOption = new JMenuItem("Exit"): JMenuItem
+-helpOption = new JMenuItem("Display help"): JMenuItem
+--
++MainMenu(): ctor
+-initFileActions(): void
+-initHelpActions(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>950</y>
+      <w>610</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms.Gui::AcceptActionListener
+--
+-dialog: JDialog
+-dialog: JDialog
+-trimField: JTextField
+-scanField: JCheckBox
+-disableErrorsField: JCheckBox
+--
+~SettingsDialog(): ctor
++CancelActionListener(JDialog frame): ctor
++AcceptActionListener(JDialog frame, JTextField trim, JCheckBox scan, JCheckBox errors): ctor
+-createSettings(): JPanel
++actionPerformed(ActionEvent e): void
++actionPerformed(ActionEvent e): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>620</x>
+      <y>950</y>
+      <w>190</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms::FileInfo
+--
++fileName = "": String
++folder = false: boolean
++fileSize = 0: long
++createdDate = 0: long
++lastAccessedDate = 0: long
++lastModifiedDate = 0: long
++numberOfRevisions = 0: int
++revisionSizes = 0: long
+--
++compareTo(FileInfo o): int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>820</x>
+      <y>950</y>
+      <w>260</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms.test::TesterVisual
+--
+--
++dataGetFolderContents(): void
++dbManagerInsertRevision(): void
++errorsFatalError(): void
++errorsFatalErrorWithStackTrace(): void
++errorsNonfatalError(): void
++fileOpCreatDiff(): void
++dataGetRevisionInfo(): void
++fileOpPrettyPrintPatch(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1090</x>
+      <y>950</y>
+      <w>440</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms::Errors
+--
+-errorBeingDisplayed = false: boolean
+--
++fatalError(String message, Throwable error): void
++fatalError(String message): void
++nonfatalError(String message, String header, Throwable error): void
++nonfatalError(String message, Throwable error): void
++nonfatalError(String message, String header): void
++nonfatalError(String message): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1540</x>
+      <y>950</y>
+      <w>370</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms::GuiController
+--
+--
++displayRevision(Path file, long timestamp): void
++displayRevisionChanges(Path file, long timestamp): void
++revertRevision(Path file, long timestamp): void
++restoreBackup(Path directory): void
++copyTo(Path sourceFile, Path destFolder): void
++changeLiveDirectory(Path newDirectory): void
++changeBackupDirectory(Path newDirectory): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>1200</y>
+      <w>220</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms::RevisionInfo
+--
++id: long
++path: String
++diff: String
++delta: long
++filesize: long
++time: long
+--
++compareTo(RevisionInfo o): int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>230</x>
+      <y>1200</y>
+      <w>390</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms.Gui::MainToolBar
+--
+-upIcon = new ImageIcon("res/up.png"): ImageIcon
+-refreshIcon = new ImageIcon("res/refresh.png"): ImageIcon
++upButton = new JButton(upIcon): JButton
+-refreshButton = new JButton(refreshIcon): JButton
++locationBar = new JTextField(5): JTextField
+--
++MainToolBar(): ctor
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>630</x>
+      <y>1200</y>
+      <w>240</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms::FileChangeHandlers
+--
+--
++handleCreatedFiles(): void
++handleModifiedFiles(): void
++handleRenamedFiles(): void
++handleDeletedFiles(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>880</x>
+      <y>1200</y>
+      <w>440</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms::Startup
+--
+--
++startup(): void
++createLoggingProxy(final PrintStream realPrintStream): PrintStream
++resolveBackupDirectory(): void
++startupScan(Path directory): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1330</x>
+      <y>1200</y>
+      <w>500</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms::Watcher
+--
+--
++fileRenamed(int wd, String rootPath, String oldName, String newName): void
++fileModified(int wd, String rootPath, String name): void
++fileDeleted(int wd, String rootPath, String name): void
++fileCreated(int wd, String rootPath, String name): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1840</x>
+      <y>1200</y>
+      <w>350</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms.Gui::GuiUtility
+--
+--
++formatDate(long timestamp): String
++unformatDate(String timestamp): long
++humanReadableBytes(long bytes, boolean si): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>1390</y>
+      <w>200</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>cmpt370.fbms::RenamedFile
+--
++oldName: Path
++newName: Path
+--
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
