@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -28,7 +29,7 @@ class SettingsDialog extends JDialog
 	SettingsDialog()
 	{
 		setTitle("Settings");
-		setSize(new Dimension(250, 150));
+		setSize(new Dimension(300, 150));
 		setResizable(false);
 
 		add(createSettings());
@@ -42,6 +43,7 @@ class SettingsDialog extends JDialog
 	private JPanel createSettings()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
+		setIconImage(new ImageIcon("res/icon.png").getImage());
 
 		// Create the options panel
 		JPanel optionsPanel = new JPanel(new GridLayout(3, 1));
