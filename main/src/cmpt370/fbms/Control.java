@@ -674,10 +674,10 @@ public class Control
 			pathd = itrd.previous();
 			while(itrc.hasPrevious())
 			{
-				pathc = itrd.previous();
+				pathc = itrc.previous();
 				if(pathd.equals(pathc))
 				{
-					itrd.remove();
+					itrc.remove();
 				}
 			}
 			while(itrm.hasPrevious())
@@ -692,7 +692,7 @@ public class Control
 			while(itrr.hasPrevious())
 			{
 				toRename = itrr.previous();
-				if(pathd.equals(toRename.newName))
+				if(pathd.equals(toRename.oldName))
 				{
 					itrr.remove();
 				}
@@ -762,13 +762,16 @@ public class Control
 			// Get the revision we want
 			Path revertedFile = FileHistory.obtainRevision(file, timestamp);
 
+			logger.debug("Revert to: " + revertedFile.toFile().toString());
 			// Rename the temporary file to the correct name and copy it over to the live directory
 			String fileName = file.getFileName().toString();
-
 			try
 			{
 				Files.copy(revertedFile, FileOp.convertPath(file),
 						StandardCopyOption.REPLACE_EXISTING);
+
+				logger.debug("Copied " + revertedFile.toFile().toString() + " as "
+						+ FileOp.convertPath(file).toFile().toString());
 			}
 			catch(IOException e)
 			{
