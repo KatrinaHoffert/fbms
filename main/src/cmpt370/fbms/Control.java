@@ -763,8 +763,6 @@ public class Control
 			Path revertedFile = FileHistory.obtainRevision(file, timestamp);
 
 			logger.debug("Revert to: " + revertedFile.toFile().toString());
-			// Rename the temporary file to the correct name and copy it over to the live directory
-			String fileName = file.getFileName().toString();
 			try
 			{
 				Files.copy(revertedFile, FileOp.convertPath(file),
