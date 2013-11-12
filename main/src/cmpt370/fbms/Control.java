@@ -388,10 +388,8 @@ public class Control
 							DbManager.trimDatabase();
 						}
 
-						// Time to wait before "polling" the file lists again. A suitable time needs
-						// to be determined. This should be configurable in future versions of the
-						// program
-						Thread.sleep(5000);
+						// Time to wait before "polling" the file lists again.
+						Thread.sleep(1000);
 					}
 				}
 				catch(InterruptedException e)
