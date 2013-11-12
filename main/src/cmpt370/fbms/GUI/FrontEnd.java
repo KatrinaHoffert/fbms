@@ -40,9 +40,13 @@ public class FrontEnd
 
 	public static void createAndShowGUI()
 	{
-		// Alias the text and apply look and feel
-		System.setProperty("awt.useSystemAAFontSettings", "on");
-		System.setProperty("swing.aatext", "true");
+		// Alias the text and apply look and feel. Aliasing is not done on Windows, where text is
+		// already aliased in the system look and feel.
+		if(System.getProperty("os.name").toLowerCase().indexOf("win") == -1)
+		{
+			System.setProperty("awt.useSystemAAFontSettings", "on");
+			System.setProperty("swing.aatext", "true");
+		}
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

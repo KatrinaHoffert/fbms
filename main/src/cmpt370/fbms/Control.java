@@ -57,7 +57,7 @@ public class Control
 	public static List<Path> deletedFiles = Collections.synchronizedList(new LinkedList<Path>());
 	public static boolean firstRunWizardDone = false;
 
-	// Logger object is linked to the S
+	// Logger object is linked to the class
 	public static Logger logger = Logger.getLogger(Control.class);
 
 	// Watch ID for JNotify
