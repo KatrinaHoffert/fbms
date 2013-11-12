@@ -24,7 +24,7 @@
 	<property name="classpath" value="lib/jnotify-0.94.jar:lib/sqlite-jdbc-3.7.15-M1.jar:lib/log4j-1.2.17.jar:${build}" />
 
 	<!-- Compiles the sources-->
-	<target name="make">        		
+	<target name="make" depends="copy_res">        		
 		<mkdir dir="${build}" />
 		<!-- Compile the java code from ${src} into ${build}. Don't include the 
 				buggy ANT runtime. Classpath is crucial for libraries -->
@@ -76,13 +76,14 @@
 		</target>
 
 		<!-- Creates distribution archive -->
-		<target name="dist" depends="make,copy_res">
+		<target name="dist" depends="make">
 		    <!-- Copy neceressary files -->
 			<mkdir dir="${dist}" />
 			<copy  todir="${dist}">
 				<fileset dir="${build}"></fileset>
 			</copy>
-			<!-- Delete unnecessary folders -->
+			<!-- Delete unnecessary folders:
+					It will delete *.class created by make -->
 			<delete dir="${dist}/cmpt370"></delete>
 			<delete dir="${dist}/name"></delete>
 			<!-- Create archive -->
