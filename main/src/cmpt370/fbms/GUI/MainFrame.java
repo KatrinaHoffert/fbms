@@ -126,6 +126,7 @@ public class MainFrame extends JFrame
 		table = new JTable();
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
 
 		// Insert the data into a modified table model based on the default. This lets us disable
 		// editing of table cells.

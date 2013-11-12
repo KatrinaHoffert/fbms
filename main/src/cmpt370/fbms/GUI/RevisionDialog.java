@@ -56,6 +56,7 @@ public class RevisionDialog extends JDialog
 		table = new JTable();
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
 		table.addMouseListener(new RevisionTableSelectionListener(this));
 		table.addKeyListener(new RevisionTableSelectionListener(this));
 
