@@ -24,7 +24,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.Vector;
 
@@ -101,11 +100,8 @@ public class MainFrame extends JFrame
 			{}
 		});
 
-		// Locate resource in jar
-		URLClassLoader urlLoader = (URLClassLoader) this.getClass().getClassLoader();
-
 		// Set the icon
-		setIconImage(new ImageIcon(urlLoader.findResource("res/icon.png")).getImage());
+		setIconImage(new ImageIcon("res/icon.png").getImage());
 
 		// Create menu
 		topMenu = new MainMenu();
