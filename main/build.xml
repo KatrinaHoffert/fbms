@@ -17,6 +17,7 @@
 	<property name="lib" value="lib" />
 	<property name="res" value="res" />
 	<property name="dist" value="dist" />
+	<property name="script" value="script" />
 	<!-- Names -->
 	<property name="mainClass" value="cmpt370.fbms.Main" />
 	<property name="executableName" value="fbms" />
@@ -76,6 +77,9 @@
 		</copy>
 		<!-- Copy README-->
 		<copy file="README.txt" todir="${build}"/>
+		<copy todir="${build}">
+			<fileset dir="${script}"/>	
+		</copy>
 	</target>
 
 	<!-- Creates distribution archive -->
