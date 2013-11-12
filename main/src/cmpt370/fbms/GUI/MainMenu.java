@@ -193,6 +193,7 @@ class MainMenu extends JMenuBar
 							&& !Control.backupDirectory.startsWith(chosenPath))
 					{
 						Control.changeLiveDirectory(fileChooser.getSelectedFile().toPath());
+						FrontEnd.frame.redrawTable(Control.liveDirectory);
 					}
 					else
 					{

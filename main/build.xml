@@ -10,40 +10,42 @@
         License, or (at your option) any later version
         ==============================================================
 -->
-<project name="FBMS" default="help" basedir=".">
+<project name="FBMS" default="debug" basedir=".">
 	<!-- Folders -->
 	<property name="src" value="src" />
 	<property name="build" value="build" />
-	<property name="lib"  value="lib" />
-	<property name="res"  value="res" />
-	<property name="dist"  value="dist" />
+	<property name="lib" value="lib" />
+	<property name="res" value="res" />
+	<property name="dist" value="dist" />
 	<!-- Names -->
 	<property name="mainClass" value="cmpt370.fbms.Control" />
+	<property name="executableName" value="fbms" />
 	<!-- Classpath for libraries. Note the inclusion of the build dir
 		so we can find the class files (since base dir is .) -->
-	<property name="classpath" value="lib/jnotify-0.94.jar:lib/sqlite-jdbc-3.7.15-M1.jar:lib/log4j-1.2.17.jar:${build}" />
+	<property name="classpath"
+		value="lib/jnotify-0.94.jar:lib/sqlite-jdbc-3.7.15-M1.jar:lib/log4j-1.2.17.jar:${build}" />
+	<!-- Sets whether the binaries are compiled with the debug flag or not -->
+	<property name="debug" value="on" />
 
 	<!-- Compiles the sources-->
-	<target name="make" depends="copy_res">        		
+	<target name="make">
 		<mkdir dir="${build}" />
 		<!-- Compile the java code from ${src} into ${build}. Don't include the 
 				buggy ANT runtime. Classpath is crucial for libraries -->
-		<javac debug="true" 
-				srcdir="${src}" 
-				destdir="${build}" 
-				classpath="${classpath}" 
-				includeantruntime="false">
-				<exclude name="cmpt370/fbms/test/**"/>
+		<javac debug="${debug}" srcdir="${src}" destdir="${build}" classpath="${classpath}"
+			includeantruntime="false">
+			<exclude name="cmpt370/fbms/test/**"/>
 		</javac>
-		<!-- Generate jar file -->
-		<jar destfile="${build}/FBMS.jar" basedir="build">
+		<!-- Generate JAR file -->
+		<jar destfile="${build}/${executableName}.jar" basedir="build" excludes="${executableName}.jar">
 			<manifest>
-				<attribute name="Main-Class" value="cmpt370.fbms.Control"/>
-				<attribute name="Class-Path" value=". lib/jnotify-0.94.jar lib/log4j-1.2.17.jar lib/sqlite-jdbc-3.7.15-M1.jar"/>
+				<attribute name="Main-Class" value="${mainClass}"/>
+				<attribute name="Class-Path"
+					value=". lib/jnotify-0.94.jar lib/log4j-1.2.17.jar lib/sqlite-jdbc-3.7.15-M1.jar"/>
 			</manifest>
 		</jar>
 		<!-- Copy all libraries to ${build}/${lib} -->
-			<copy  todir="${build}/${lib}">
+			<copy todir="${build}/${lib}">
 				<fileset dir="${lib}"/>	
 			</copy>
 		<!-- Move the libraries files -->
@@ -53,56 +55,54 @@
 		<move file="${build}/${lib}/libjnotify.jnilib" todir="${build}"/>
 		<!-- Copy the logging property file -->
 		<copy file="${src}/log4j.xml" todir="${build}"/>
+		<!-- Delete unnecessary folders -->
+		<delete dir="${build}/cmpt370" />
+		<delete dir="${build}/name" />
 	</target>
 	
 	<!-- Copies the resources-->
 	<target name="copy_res">
-			<!-- Copy the images-->
-			<copy  todir="${build}/${res}">
-				<fileset dir="${res}"/>	
-			</copy>
-			<!-- Copy the licenses-->
-			<copy todir="${build}/licenses">
-				<filelist id="licenses" 
-					dir="." 
-					files="apache-license-v2.txt
-							authors.txt
-							lgpl-v2.txt
-							license.txt">
-				</filelist>
-			</copy>
-			<!-- Copy README-->
-			<copy file="README.txt" todir="${build}"/>			
-		</target>
+		<!-- Copy the images-->
+		<copy todir="${build}/${res}">
+			<fileset dir="${res}"/>	
+		</copy>
+		<!-- Copy the licenses-->
+		<copy todir="${build}/licenses">
+			<filelist id="licenses" dir="." 
+				files="apache-license-v2.txt
+						authors.txt
+						lgpl-v2.txt
+						license.txt" />
+		</copy>
+		<!-- Copy README-->
+		<copy file="README.txt" todir="${build}"/>
+	</target>
 
-		<!-- Creates distribution archive -->
-		<target name="dist" depends="make">
-		    <!-- Copy neceressary files -->
-			<mkdir dir="${dist}" />
-			<copy  todir="${dist}">
-				<fileset dir="${build}"></fileset>
-			</copy>
-			<!-- Delete unnecessary folders:
-					It will delete *.class created by make -->
-			<delete dir="${dist}/cmpt370"></delete>
-			<delete dir="${dist}/name"></delete>
-			<!-- Create archive -->
-			<zip destfile="FBMS.zip" basedir="${dist}"></zip>
-		</target>
+	<!-- Creates distribution archive -->
+	<target name="debug" depends="make,copy_res">
+		<!-- Create archive -->
+		<zip destfile="${executableName}.zip" basedir="${build}" />
+	</target>
 
-		<!-- Compile help -->
-		<target name="help">
-			<echo level="info">
----- How to compile using ANT ----
- ant dist               Create distribution archive.
- ant make            Compile program and create jar.
- ant clean            Remove created files (rebuild necessary to run program)
-			</echo>
-		</target>
+	<!-- Same as debug, but with the debug flag off -->
+	<target name="release">
+		<antcall target="debug">
+			<param name="debug" value="off"/>
+		</antcall>
+	</target>
 
-		<!-- Deletes junk. Note that nothing in the build or distribution folder is safe! -->
-		<target name="clean">
-			<delete dir="${build}" />
-			<delete dir="${dist}" />
-		</target>
+	<!-- Deletes junk. Note that nothing in the build or distribution folder is safe! -->
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete file="${executableName}.zip" />
+	</target>
+
+	<!-- Compile help -->
+	<target name="help">
+		<echo level="info">---- How to compile FBMS using ANT ----
+ ant debug    Compile and create distribution archive with debug code.
+ ant release  Compile and create distribution archive without debug code.
+ ant clean    Remove created files (rebuild necessary to run program).</echo>
+	</target>
 </project>
