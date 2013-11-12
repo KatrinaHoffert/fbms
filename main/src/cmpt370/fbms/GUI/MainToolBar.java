@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLClassLoader;
 import java.nio.file.Path;
 
 import javax.swing.ImageIcon;
@@ -35,9 +36,12 @@ import cmpt370.fbms.Errors;
 
 public class MainToolBar extends JToolBar
 {
+	// Locate resource in jar
+	URLClassLoader urlLoader = (URLClassLoader) this.getClass().getClassLoader();
+
 	// Icons
-	private ImageIcon upIcon = new ImageIcon("res/up.png");
-	private ImageIcon refreshIcon = new ImageIcon("res/refresh.png");
+	private ImageIcon upIcon = new ImageIcon(urlLoader.findResource("res/up.png"));
+	private ImageIcon refreshIcon = new ImageIcon(urlLoader.findResource("res/refresh.png"));
 
 	public JButton upButton = new JButton(upIcon);
 	private JButton refreshButton = new JButton(refreshIcon);
