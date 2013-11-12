@@ -853,6 +853,24 @@ public class Control
 					"Could not remove old watcher. This problem might be fixed by a restart.", e);
 		}
 
+		// Empty the lists, since those files aren't the live directory, anymore
+		synchronized(deletedFiles)
+		{
+			synchronized(createdFiles)
+			{
+				synchronized(modifiedFiles)
+				{
+					synchronized(renamedFiles)
+					{
+						deletedFiles.clear();
+						createdFiles.clear();
+						modifiedFiles.clear();
+						renamedFiles.clear();
+					}
+				}
+			}
+		}
+
 		// Copy any existing files in the live directory to the backup directory.
 		startupScan(liveDirectory);
 
