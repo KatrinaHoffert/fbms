@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
-import cmpt370.fbms.GUI.FirstStartWizard;
+import cmpt370.fbms.Gui.FirstStartWizard;
 
 /**
  * Runs the finer points of the startup that the program requires.

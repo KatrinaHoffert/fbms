@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import cmpt370.fbms.GUI.FrontEnd;
+import cmpt370.fbms.Gui.FrontEnd;
 
 /**
  * Main class for handling the setup of the program. Starts everything up and initiates the file
