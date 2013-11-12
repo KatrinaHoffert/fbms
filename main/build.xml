@@ -84,8 +84,10 @@
 					<exclude name="cmpt370/name" />
 				</fileset>
 			</copy>
+        	<!-- Delete unnecessary folders -->
         	<delete dir="${dist}/cmpt370"></delete>
         	<delete dir="${dist}/name"></delete>
+        	<!-- Create archive -->
             <zip destfile="FBMS.zip" basedir="${dist}"></zip>
         </target>
 
