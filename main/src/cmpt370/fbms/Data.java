@@ -152,7 +152,21 @@ public class Data
 
 			row.add(Data.formatDate(revision.time));
 			row.add(Data.humanReadableByteCount(revision.filesize, false));
-			row.add(Data.humanReadableByteCount(revision.delta, false));
+			if(revision.delta < 0)
+			{
+				row.add("<html><span style=\"color: red;\">"
+						+ Data.humanReadableByteCount(revision.delta, false));
+			}
+			else if(revision.delta > 0)
+			{
+				row.add("<html><span style=\"color: green;\">+"
+						+ Data.humanReadableByteCount(revision.delta, false));
+			}
+			else
+			{
+				row.add("<html><span style=\"color: gray;\">"
+						+ Data.humanReadableByteCount(revision.delta, false));
+			}
 
 			revisionData.add(row);
 		}
