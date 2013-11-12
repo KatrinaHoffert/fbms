@@ -66,9 +66,9 @@
 	</appender>
 
 	<!--
-		The logger to use for the Control class (actually everywhere, since it's public static)
+		The logger to use for the Main class (actually everywhere, since it's public static)
 	-->
-	<logger name="cmpt370.fbms.Control">
+	<logger name="cmpt370.fbms.Main">
 		<appender-ref ref="mainLogger"/>
 	</logger>
 </log4j:configuration>

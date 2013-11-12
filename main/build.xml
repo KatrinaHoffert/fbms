@@ -18,7 +18,7 @@
 	<property name="res" value="res" />
 	<property name="dist" value="dist" />
 	<!-- Names -->
-	<property name="mainClass" value="cmpt370.fbms.Control" />
+	<property name="mainClass" value="cmpt370.fbms.Main" />
 	<property name="executableName" value="fbms" />
 	<!-- Classpath for libraries. Note the inclusion of the build dir
 		so we can find the class files (since base dir is .) -->

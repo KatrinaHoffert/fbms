@@ -14,9 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import cmpt370.fbms.Control;
 import cmpt370.fbms.DbManager;
+import cmpt370.fbms.Main;
 
+/**
+ * Extends a JDialog to create the window that allows settings to be chosen.
+ */
 class SettingsDialog extends JDialog
 {
 	/**
@@ -177,7 +180,7 @@ class AcceptActionListener implements ActionListener
 		{
 			DbManager.setConfig("trimDate", "-1");
 		}
-		Control.logger.info("Set trimDate to: " + DbManager.getConfig("trimDate"));
+		Main.logger.info("Set trimDate to: " + DbManager.getConfig("trimDate"));
 
 		// Parse the scan field
 		if(scanField.isSelected())
@@ -188,7 +191,7 @@ class AcceptActionListener implements ActionListener
 		{
 			DbManager.setConfig("startupScan", "false");
 		}
-		Control.logger.info("Set startupScan to: " + DbManager.getConfig("startupScan"));
+		Main.logger.info("Set startupScan to: " + DbManager.getConfig("startupScan"));
 
 		// Parse the disable errors field
 		if(disableErrorsField.isSelected())
@@ -199,7 +202,7 @@ class AcceptActionListener implements ActionListener
 		{
 			DbManager.setConfig("disableNonFatalErrors", "false");
 		}
-		Control.logger.info("Set disableNonFatalErrors to: "
+		Main.logger.info("Set disableNonFatalErrors to: "
 				+ DbManager.getConfig("disableNonFatalErrors"));
 
 		// Close the window

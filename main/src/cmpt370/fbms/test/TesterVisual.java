@@ -28,13 +28,13 @@ import java.util.Vector;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import cmpt370.fbms.Control;
-import cmpt370.fbms.Data;
+import cmpt370.fbms.DataRetriever;
 import cmpt370.fbms.DbManager;
 import cmpt370.fbms.Errors;
 import cmpt370.fbms.FileHistory;
 import cmpt370.fbms.FileInfo;
 import cmpt370.fbms.FileOp;
+import cmpt370.fbms.Main;
 import cmpt370.fbms.RevisionInfo;
 
 /**
@@ -50,11 +50,11 @@ public class TesterVisual
 	{
 		// Manual setup
 		Path path = Paths.get("").toAbsolutePath();
-		Control.backupDirectory = path;
-		DbManager.init();
+		Main.backupDirectory = path;
+		DbManager.initConnection();
 
 		// Get the contents of this directory
-		List<FileInfo> list = Data.getFolderContents(path);
+		List<FileInfo> list = DataRetriever.getFolderContents(path);
 
 
 		// And print out what we know
@@ -85,9 +85,9 @@ public class TesterVisual
 	{
 		// Setup
 		Path path = Paths.get("").toAbsolutePath();
-		Control.backupDirectory = path;
-		Control.liveDirectory = path;
-		DbManager.init();
+		Main.backupDirectory = path;
+		Main.liveDirectory = path;
+		DbManager.initConnection();
 
 		// Print out the database size
 		System.out.println("\n--------------------------------");
@@ -99,10 +99,10 @@ public class TesterVisual
 				FileOp.fileToString(path.resolve("README.txt")), 100, 50);
 
 		// Now rename that revision
-		DbManager.renameFile(path.resolve("README.txt"), "not-readme.txt");
+		DbManager.renameRevisions(path.resolve("README.txt"), "not-readme.txt");
 
 		// Finally, obtain it and print it out
-		List<RevisionInfo> list = DbManager.getRevisionData(path.resolve("not-readme.txt"));
+		List<RevisionInfo> list = DbManager.getFileRevisions(path.resolve("not-readme.txt"));
 		for(RevisionInfo revision : list)
 		{
 			System.out.println("Found revision id = " + revision.id);
@@ -131,6 +131,7 @@ public class TesterVisual
 	// Demonstrates a fatal error that also has a stack trace included (see also: the log)
 	@Test
 	@Ignore
+	@SuppressWarnings("null")
 	public void errorsFatalErrorWithStackTrace()
 	{
 		String someString = null;
@@ -181,9 +182,9 @@ public class TesterVisual
 	{
 		// Initialize test
 		Path path = Paths.get("").toAbsolutePath();
-		Control.backupDirectory = path;
-		Control.liveDirectory = path;
-		DbManager.init();
+		Main.backupDirectory = path;
+		Main.liveDirectory = path;
+		DbManager.initConnection();
 
 		// Insert revisions for a file
 		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("README.txt"), 100, 200);
@@ -191,7 +192,7 @@ public class TesterVisual
 		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("authors.txt"), 500, 600);
 
 		// Get the revision table for that file
-		Vector<Vector<String>> tableData = Data.getRevisionData(path.resolve("README.txt"));
+		Vector<Vector<String>> tableData = DataRetriever.getRevisionInfoTable(path.resolve("README.txt"));
 
 		// And print it out
 		for(Vector<String> rows : tableData)

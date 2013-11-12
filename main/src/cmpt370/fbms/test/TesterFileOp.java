@@ -31,14 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cmpt370.fbms.Control;
-import cmpt370.fbms.FileOp;
 import junit.framework.TestCase;
+import cmpt370.fbms.FileOp;
+import cmpt370.fbms.Main;
 
 /**
- * Test case for file. This test case is used for methods by Da.
+ * Tests functionality related to file operations.
  */
-
 public class TesterFileOp extends TestCase
 {
 
@@ -159,8 +158,8 @@ public class TesterFileOp extends TestCase
 		sourcePaths.add(new File("TestFileOp\\LargeSize.txt").toPath());
 		sourcePaths.add(new File("TestFileOp\\BinaryFile.bin").toPath());
 
-		Control.backupDirectory = new File("TestFileOp\\Test2\\").toPath();
-		Control.liveDirectory = new File("TestFileOp\\").toPath();
+		Main.backupDirectory = new File("TestFileOp\\Test2\\").toPath();
+		Main.liveDirectory = new File("TestFileOp\\").toPath();
 		FileOp.copy(sourcePaths);
 
 		assertTrue("copy(List<Path>) faild to copy file: TestFileOp\\SmallSize.txt", (new File(

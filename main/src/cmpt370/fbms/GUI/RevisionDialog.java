@@ -23,10 +23,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
-import cmpt370.fbms.Control;
-import cmpt370.fbms.Data;
+import cmpt370.fbms.DataRetriever;
+import cmpt370.fbms.GuiController;
+import cmpt370.fbms.Main;
 
-
+/**
+ * Extends a JDialog to make up the revision window, which consists of a JTable and some buttons.
+ */
 public class RevisionDialog extends JDialog
 {
 	public JTable table;
@@ -61,7 +64,7 @@ public class RevisionDialog extends JDialog
 		table.addKeyListener(new RevisionTableSelectionListener(this));
 
 		// Create the data model
-		table.setModel(new DefaultTableModel(Data.getRevisionData(file), columns)
+		table.setModel(new DefaultTableModel(DataRetriever.getRevisionInfoTable(file), columns)
 		{
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -114,9 +117,9 @@ public class RevisionDialog extends JDialog
 			{
 				if(selectedTimestamp != -1)
 				{
-					Control.displayRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
+					GuiController.displayRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
 
-					Control.logger.debug("Viewed revision of "
+					Main.logger.debug("Viewed revision of "
 							+ FrontEnd.frame.selectedFile.toString() + " @ T = "
 							+ selectedTimestamp);
 				}
@@ -131,9 +134,9 @@ public class RevisionDialog extends JDialog
 			{
 				if(selectedTimestamp != -1)
 				{
-					Control.revertRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
+					GuiController.revertRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
 
-					Control.logger.debug("Reverted revision of "
+					Main.logger.debug("Reverted revision of "
 							+ FrontEnd.frame.selectedFile.toString() + " @ T = "
 							+ selectedTimestamp);
 				}
@@ -148,9 +151,10 @@ public class RevisionDialog extends JDialog
 			{
 				if(selectedTimestamp != -1)
 				{
-					Control.displayRevisionChanges(FrontEnd.frame.selectedFile, selectedTimestamp);
+					GuiController.displayRevisionChanges(FrontEnd.frame.selectedFile,
+							selectedTimestamp);
 
-					Control.logger.debug("Viewed revision changes of "
+					Main.logger.debug("Viewed revision changes of "
 							+ FrontEnd.frame.selectedFile.toString() + " @ T = "
 							+ selectedTimestamp);
 				}
@@ -207,14 +211,14 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 		if(dialog.table.getSelectedRow() != -1)
 		{
 			// Get the selected timestamp
-			dialog.selectedTimestamp = Data.unformatDate((String) dialog.table.getValueAt(
+			dialog.selectedTimestamp = GuiUtility.unformatDate((String) dialog.table.getValueAt(
 					dialog.table.getSelectedRow(), 0));
 
 			dialog.revertRevisionButton.setEnabled(true);
 			dialog.viewRevisionButton.setEnabled(true);
 			dialog.viewChangesButton.setEnabled(true);
 
-			Control.logger.debug("Selected revision: " + FrontEnd.frame.selectedFile.toString()
+			Main.logger.debug("Selected revision: " + FrontEnd.frame.selectedFile.toString()
 					+ " (timestamp: " + dialog.selectedTimestamp + ")");
 		}
 		else
@@ -234,9 +238,9 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 	{
 		if(dialog.selectedTimestamp != -1)
 		{
-			Control.displayRevision(FrontEnd.frame.selectedFile, dialog.selectedTimestamp);
+			GuiController.displayRevision(FrontEnd.frame.selectedFile, dialog.selectedTimestamp);
 
-			Control.logger.debug("Viewed revision of " + FrontEnd.frame.selectedFile.toString()
+			Main.logger.debug("Viewed revision of " + FrontEnd.frame.selectedFile.toString()
 					+ " @ T = " + dialog.selectedTimestamp);
 		}
 	}

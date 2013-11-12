@@ -41,6 +41,9 @@ import name.fraser.neil.plaintext.diff_match_patch;
 import name.fraser.neil.plaintext.diff_match_patch.Diff;
 import name.fraser.neil.plaintext.diff_match_patch.Patch;
 
+/**
+ * A utility class for the various file operations that are performed by other methods.
+ */
 public class FileOp
 {
 	/**
@@ -87,16 +90,15 @@ public class FileOp
 								{
 									Files.copy(dir, targetDir);
 
-									Control.logger.debug("Copied " + dir.toString() + " to "
+									Main.logger.debug("Copied " + dir.toString() + " to "
 											+ targetDir.toString());
 								}
 								catch(FileAlreadyExistsException e)
 								{
 									if(!Files.isDirectory(targetDir))
 									{
-										Control.logger.error(
-												"Could not copy " + targetDir.toString()
-														+ "; Not actually a directory.", e);
+										Main.logger.error("Could not copy " + targetDir.toString()
+												+ "; Not actually a directory.", e);
 									}
 								}
 								catch(IOException e)
@@ -121,7 +123,7 @@ public class FileOp
 									Files.copy(file, targetFile,
 											StandardCopyOption.REPLACE_EXISTING);
 
-									Control.logger.debug("Copied " + file.toString() + " to "
+									Main.logger.debug("Copied " + file.toString() + " to "
 											+ targetFile.toString());
 								}
 								catch(IOException e)
@@ -349,7 +351,7 @@ public class FileOp
 		// Can't rename a file that doesn't exist
 		if(!mFile.exists())
 		{
-			Control.logger.warn("Could not rename non-existed file: " + mFile.getAbsolutePath());
+			Main.logger.warn("Could not rename non-existed file: " + mFile.getAbsolutePath());
 			return;
 		}
 		// If the new name already exists, it must be deleted to make way for our renamed file
@@ -358,7 +360,7 @@ public class FileOp
 			newFile.delete();
 			mFile.renameTo(newFile);
 
-			Control.logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString()
+			Main.logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString()
 					+ " (had to delete existing file)");
 		}
 		// Otherwise we can just rename it
@@ -368,7 +370,7 @@ public class FileOp
 					+ newFile.getAbsolutePath());
 		}
 
-		Control.logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString());
+		Main.logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString());
 	}
 
 	/**
@@ -384,7 +386,7 @@ public class FileOp
 		// If a bad path is given...
 		if(!targetFile.exists())
 		{
-			Control.logger.warn("Unable to delete " + targetFile.toString()
+			Main.logger.warn("Unable to delete " + targetFile.toString()
 					+ "  as it does not exist.");
 			return;
 		}
@@ -392,7 +394,7 @@ public class FileOp
 		// If a folder is given, recursively delete its sub-directories first.
 		if(targetFile.isDirectory())
 		{
-			Control.logger.debug(targetFile.toString()
+			Main.logger.debug(targetFile.toString()
 					+ " is a directory, recursively deleting contents");
 
 			for(File childFile : targetFile.listFiles())
@@ -408,7 +410,7 @@ public class FileOp
 		}
 		catch(NoSuchFileException e)
 		{
-			Control.logger.info("Could not delete non-existed file: " + file.toString());
+			Main.logger.info("Could not delete non-existed file: " + file.toString());
 		}
 		catch(IOException e)
 		{
@@ -426,7 +428,7 @@ public class FileOp
 	public static long fileSize(Path file)
 	{
 		File targetFile = file.toFile();
-		Control.logger.debug("Size of " + file + " is " + targetFile.length());
+		Main.logger.debug("Size of " + file + " is " + targetFile.length());
 		return targetFile.length();
 	}
 
@@ -501,15 +503,15 @@ public class FileOp
 		catch(Exception e)
 		{
 			// when failed, return false.
-			Control.logger.info("Could not probe file due to: " + e.getMessage());
+			Main.logger.info("Could not probe file due to: " + e.getMessage());
 			return false;
 		}
 		if(fileSize(file) > 5242880)
 		{
-			Control.logger.debug(file.toString() + " is larger than 5 MB");
+			Main.logger.debug(file.toString() + " is larger than 5 MB");
 			return false;
 		}
-		Control.logger.debug(file.toString() + " is " + fileTypeString);
+		Main.logger.debug(file.toString() + " is " + fileTypeString);
 
 		if(fileTypeString == null)
 		{
@@ -546,21 +548,20 @@ public class FileOp
 	{
 		Path convertedPath = null;
 
-		if(inputPath.startsWith(Control.liveDirectory))
+		if(inputPath.startsWith(Main.liveDirectory))
 		{
 			// Remove the live directory from this path and add the backup directory to it
-			String newPath = inputPath.toString().substring(
-					Control.liveDirectory.toString().length());
-			newPath = Control.backupDirectory.toString() + newPath;
+			String newPath = inputPath.toString().substring(Main.liveDirectory.toString().length());
+			newPath = Main.backupDirectory.toString() + newPath;
 
 			convertedPath = Paths.get(newPath).normalize();
 		}
-		else if(inputPath.startsWith(Control.backupDirectory))
+		else if(inputPath.startsWith(Main.backupDirectory))
 		{
 			// Remove the backup directory from this path and add the live directory to it
 			String newPath = inputPath.toString().substring(
-					Control.backupDirectory.toString().length());
-			newPath = Control.liveDirectory.toString() + newPath;
+					Main.backupDirectory.toString().length());
+			newPath = Main.liveDirectory.toString() + newPath;
 
 			convertedPath = Paths.get(newPath).normalize();
 		}
@@ -581,11 +582,11 @@ public class FileOp
 	 */
 	public static boolean isEqual(Path file1, Path file2)
 	{
-		Control.logger.debug("Comparing file: " + file1.toString() + " and " + file2.toString());
+		Main.logger.debug("Comparing file: " + file1.toString() + " and " + file2.toString());
 		// Can't be equal if the file size is different
 		if(file1.toFile().length() != file2.toFile().length())
 		{
-			Control.logger.debug("Files have different length.");
+			Main.logger.debug("Files have different length.");
 			return false;
 		}
 
@@ -599,18 +600,18 @@ public class FileOp
 		}
 		catch(IOException e)
 		{
-			Control.logger.error(
+			Main.logger.error(
 					"Could not compare files " + file1.toString() + " " + file2.toString(), e);
 		}
 
 		if(Arrays.equals(file1Bytes, file2Bytes))
 		{
-			Control.logger.debug("Files are equal.");
+			Main.logger.debug("Files are equal.");
 			return true;
 		}
 		else
 		{
-			Control.logger.debug("Files are different.");
+			Main.logger.debug("Files are different.");
 			return false;
 		}
 	}

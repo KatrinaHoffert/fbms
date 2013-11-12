@@ -29,9 +29,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import cmpt370.fbms.Control;
 import cmpt370.fbms.Errors;
+import cmpt370.fbms.GuiController;
+import cmpt370.fbms.Main;
 
+/**
+ * This JMenuBar-like class makes up the menu bar of the main frame.
+ */
 class MainMenu extends JMenuBar
 {
 	public JMenuItem copyToOption = new JMenuItem("Copy to");
@@ -73,7 +77,7 @@ class MainMenu extends JMenuBar
 
 		// Create event handlers
 		initFileActions();
-		initHelpOptions();
+		initHelpActions();
 	}
 
 	/**
@@ -96,7 +100,7 @@ class MainMenu extends JMenuBar
 				// We're a go
 				if(returnVal == JFileChooser.APPROVE_OPTION)
 				{
-					Control.copyTo(FrontEnd.frame.selectedFile,
+					GuiController.copyTo(FrontEnd.frame.selectedFile,
 							fileChooser.getSelectedFile().toPath());
 				}
 			}
@@ -129,7 +133,7 @@ class MainMenu extends JMenuBar
 				// We're a go
 				if(returnVal == JFileChooser.APPROVE_OPTION)
 				{
-					Control.restoreBackup(fileChooser.getSelectedFile().toPath());
+					GuiController.restoreBackup(fileChooser.getSelectedFile().toPath());
 					JOptionPane.showMessageDialog(FrontEnd.frame,
 							"All files in the backup directory have been restored to "
 									+ fileChooser.getSelectedFile().toString());
@@ -156,10 +160,10 @@ class MainMenu extends JMenuBar
 
 					// We must make sure that the selected path isn't a child of the live directory
 					// or vice versa
-					if(!chosenPath.startsWith(Control.liveDirectory)
-							&& !Control.liveDirectory.startsWith(chosenPath))
+					if(!chosenPath.startsWith(Main.liveDirectory)
+							&& !Main.liveDirectory.startsWith(chosenPath))
 					{
-						Control.changeBackupDirectory(fileChooser.getSelectedFile().toPath());
+						GuiController.changeBackupDirectory(fileChooser.getSelectedFile().toPath());
 					}
 					else
 					{
@@ -189,11 +193,11 @@ class MainMenu extends JMenuBar
 
 					// We must make sure that the selected path isn't a child of the live directory
 					// or vice versa
-					if(!chosenPath.startsWith(Control.backupDirectory)
-							&& !Control.backupDirectory.startsWith(chosenPath))
+					if(!chosenPath.startsWith(Main.backupDirectory)
+							&& !Main.backupDirectory.startsWith(chosenPath))
 					{
-						Control.changeLiveDirectory(fileChooser.getSelectedFile().toPath());
-						FrontEnd.frame.redrawTable(Control.liveDirectory);
+						GuiController.changeLiveDirectory(fileChooser.getSelectedFile().toPath());
+						FrontEnd.frame.redrawTable(Main.liveDirectory);
 					}
 					else
 					{
@@ -236,7 +240,7 @@ class MainMenu extends JMenuBar
 	/**
 	 * Creates event handlers for the help menu
 	 */
-	private void initHelpOptions()
+	private void initHelpActions()
 	{
 		helpOption.addActionListener(new ActionListener()
 		{

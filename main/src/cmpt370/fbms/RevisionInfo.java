@@ -15,6 +15,9 @@
 
 package cmpt370.fbms;
 
+/**
+ * Largely a plain old data class for grouping together information on revisions.
+ */
 public class RevisionInfo implements Comparable<RevisionInfo>
 {
 	public long id;

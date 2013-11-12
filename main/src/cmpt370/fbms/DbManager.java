@@ -27,7 +27,13 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import cmpt370.fbms.GUI.GuiUtility;
 
+/**
+ * DbManager handles all the direct database activity, connecting and interfacing with the SQLite
+ * database. No other class calls database queries directly, so changes to the database only require
+ * changes to this class.
+ */
 public class DbManager
 {
 	// Holds the active connection
@@ -44,7 +50,7 @@ public class DbManager
 	 * 
 	 * @return True if first run, false otherwise
 	 */
-	public static void init()
+	public static void initConnection()
 	{
 		// We need to be able to detect if the program has been run for the first time or not
 		boolean firstRun = false;
@@ -63,7 +69,7 @@ public class DbManager
 		{
 			// Create a connection to an SQLite database. If ".revisions.db" does
 			// not exist, create it in working directory
-			connection = DriverManager.getConnection("jdbc:sqlite:" + Control.backupDirectory
+			connection = DriverManager.getConnection("jdbc:sqlite:" + Main.backupDirectory
 					+ "/.revisions.db");
 		}
 		catch(SQLException e)
@@ -89,11 +95,11 @@ public class DbManager
 						+ " path STRING, diff STRING, delta INTEGER, filesize INTEGER, time INTEGER)");
 				firstRun = true;
 
-				Control.logger.info("Existing revisions table not found; new table created");
+				Main.logger.info("Existing revisions table not found; new table created");
 			}
 			else
 			{
-				Control.logger.info("Existing revisions table found");
+				Main.logger.info("Existing revisions table found");
 			}
 
 			// Likewise for the settings table
@@ -102,11 +108,11 @@ public class DbManager
 				statement.executeUpdate("CREATE TABLE settings (name STRING, setting STRING)");
 				firstRun = true;
 
-				Control.logger.info("Existing settings table not found; new table created");
+				Main.logger.info("Existing settings table not found; new table created");
 			}
 			else
 			{
-				Control.logger.info("Existing settings table found");
+				Main.logger.info("Existing settings table found");
 			}
 
 			// If this isn't the first run, fetch the live directory. If it is the first run, that's
@@ -120,13 +126,13 @@ public class DbManager
 				{
 					if(settingsRows.getString("name").equals("liveDirectory"))
 					{
-						Control.liveDirectory = Paths.get(settingsRows.getString("setting"));
+						Main.liveDirectory = Paths.get(settingsRows.getString("setting"));
 					}
 				}
 
 				// If we somehow didn't find it, something went horribly wrong. Assume this must
 				// actually be a first run
-				if(Control.liveDirectory == null)
+				if(Main.liveDirectory == null)
 				{
 					Errors.fatalError("Could not load the live directory from existing backup");
 				}
@@ -137,7 +143,7 @@ public class DbManager
 			Errors.fatalError("Database table creation failed", e);
 		}
 
-		Control.logger.debug("Database connection successfully initialized");
+		Main.logger.debug("Database connection successfully initialized");
 	}
 
 	/**
@@ -148,7 +154,7 @@ public class DbManager
 	 *            The file to obtain revisions on.
 	 * @return A list of RevisionInfo object
 	 */
-	public static List<RevisionInfo> getRevisionData(Path file)
+	public static List<RevisionInfo> getFileRevisions(Path file)
 	{
 		List<RevisionInfo> list = new LinkedList<>();
 
@@ -196,8 +202,8 @@ public class DbManager
 			Errors.fatalError("Could not create SQL statement", e);
 		}
 
-		Control.logger.debug("Fetched revision data for " + file.toString() + "(found "
-				+ list.size() + " entries)");
+		Main.logger.debug("Fetched revision data for " + file.toString() + "(found " + list.size()
+				+ " entries)");
 
 		return list;
 	}
@@ -211,7 +217,7 @@ public class DbManager
 	 *            The time stamp of the desired revision.
 	 * @return The revision in question if found or null if the revision does not exist.
 	 */
-	public static RevisionInfo getRevisionInfo(Path file, long timestamp)
+	public static RevisionInfo getSpecificRevision(Path file, long timestamp)
 	{
 		RevisionInfo revision = null;
 
@@ -252,12 +258,12 @@ public class DbManager
 				// time INTEGER
 				revision.time = revisionRows.getLong("time");
 
-				Control.logger.debug("Found revision entry for " + file.toString() + " (at T = "
+				Main.logger.debug("Found revision entry for " + file.toString() + " (at T = "
 						+ timestamp + ")");
 			}
 			else
 			{
-				Control.logger.debug("Failed to find a revision entry for " + file.toString()
+				Main.logger.debug("Failed to find a revision entry for " + file.toString()
 						+ " (at T = " + timestamp + ")");
 			}
 		}
@@ -312,8 +318,8 @@ public class DbManager
 			Errors.nonfatalError("Could not insert revision into database", e1);
 		}
 
-		Control.logger.debug("Successfully inserted revision " + file.toString() + " (delta: "
-				+ delta + "; filesize: " + filesize + ")");
+		Main.logger.debug("Successfully inserted revision " + file.toString() + " (delta: " + delta
+				+ "; filesize: " + filesize + ")");
 	}
 
 	/**
@@ -325,7 +331,7 @@ public class DbManager
 	 *            The new name of the file. Note this does not include the full path: just the file
 	 *            name (and extension).
 	 */
-	public static void renameFile(Path file, String newName)
+	public static void renameRevisions(Path file, String newName)
 	{
 		// Figure out the new name
 		Path newPath = file.resolveSibling(newName);
@@ -345,7 +351,7 @@ public class DbManager
 			Errors.nonfatalError("Could not rename revisions in database.", e);
 		}
 
-		Control.logger.debug("Renamed revisions in database " + file.toString() + " -> "
+		Main.logger.debug("Renamed revisions in database " + file.toString() + " -> "
 				+ newPath.toString());
 	}
 
@@ -378,7 +384,7 @@ public class DbManager
 			Errors.fatalError("Retrieval of setting value failed", e);
 		}
 
-		Control.logger.debug("Found configuration value for " + settingName + " = " + settingValue);
+		Main.logger.debug("Found configuration value for " + settingName + " = " + settingValue);
 
 		// Will end up returning either the setting value if it was found or null if it was not
 		// found
@@ -432,7 +438,7 @@ public class DbManager
 			Errors.fatalError("Unable to set requested value in settings.", e);
 		}
 
-		Control.logger.debug("Successfully set configuration value " + settingName + " = "
+		Main.logger.debug("Successfully set configuration value " + settingName + " = "
 				+ settingValue);
 	}
 
@@ -461,8 +467,8 @@ public class DbManager
 				Statement statement = connection.createStatement();
 				statement.execute("DELETE FROM revisions WHERE time < " + cutoffDate);
 
-				Control.logger.debug("Database trimmed of entries older than "
-						+ Data.formatDate(cutoffDate));
+				Main.logger.debug("Database trimmed of entries older than "
+						+ GuiUtility.formatDate(cutoffDate));
 			}
 			catch(SQLException e)
 			{
@@ -471,7 +477,7 @@ public class DbManager
 		}
 		else
 		{
-			Control.logger.debug("Database trim command encountered and ignored because trim is"
+			Main.logger.debug("Database trim command encountered and ignored because trim is"
 					+ " disabled or is set to an invalid value");
 		}
 	}
@@ -490,10 +496,10 @@ public class DbManager
 			}
 			catch(SQLException e)
 			{
-				Control.logger.error("Could not close database connection", e);
+				Main.logger.error("Could not close database connection", e);
 			}
 		}
 
-		Control.logger.debug("Database connection closed.");
+		Main.logger.debug("Database connection closed.");
 	}
 }

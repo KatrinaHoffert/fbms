@@ -15,7 +15,6 @@
 
 package cmpt370.fbms.GUI;
 
-
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -30,9 +29,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
-import cmpt370.fbms.Control;
 import cmpt370.fbms.Errors;
+import cmpt370.fbms.Main;
 
+/**
+ * This JToolBar-like object makes up the toolbar of the main frame.
+ */
 public class MainToolBar extends JToolBar
 {
 	// Icons
@@ -71,8 +73,8 @@ public class MainToolBar extends JToolBar
 			public void actionPerformed(ActionEvent e)
 			{
 				// Disable options that require a selected file
-				FrontEnd.frame.topMenu.copyToOption.setEnabled(false);
-				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
+				FrontEnd.frame.menubar.copyToOption.setEnabled(false);
+				FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
 
 				// Recreate the table
 				FrontEnd.frame.redrawTable(FrontEnd.frame.currentDirectory);
@@ -89,14 +91,14 @@ public class MainToolBar extends JToolBar
 				FrontEnd.frame.currentDirectory = FrontEnd.frame.currentDirectory.resolve("..").normalize();
 
 				// Disable the up button if we're in the backup directory
-				if(FrontEnd.frame.currentDirectory.equals(Control.backupDirectory))
+				if(FrontEnd.frame.currentDirectory.equals(Main.backupDirectory))
 				{
-					FrontEnd.frame.topTool.upButton.setEnabled(false);
+					FrontEnd.frame.toolbar.upButton.setEnabled(false);
 				}
 
 				// Disable options that require a selected file
-				FrontEnd.frame.topMenu.copyToOption.setEnabled(false);
-				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
+				FrontEnd.frame.menubar.copyToOption.setEnabled(false);
+				FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
 
 				// And recreate the table
 				FrontEnd.frame.redrawTable(FrontEnd.frame.currentDirectory);
@@ -120,7 +122,7 @@ public class MainToolBar extends JToolBar
 				Path enteredPath = null;
 				try
 				{
-					enteredPath = Control.backupDirectory.resolve(text).toFile().getCanonicalFile().toPath();
+					enteredPath = Main.backupDirectory.resolve(text).toFile().getCanonicalFile().toPath();
 				}
 				catch(IOException e1)
 				{
@@ -129,7 +131,7 @@ public class MainToolBar extends JToolBar
 
 				// Make sure that the path is a directory and not a parent of the backup directory
 				if(enteredPath.toFile().isDirectory()
-						&& (!Control.backupDirectory.startsWith(enteredPath.normalize()) || Control.backupDirectory.equals(enteredPath.normalize())))
+						&& (!Main.backupDirectory.startsWith(enteredPath.normalize()) || Main.backupDirectory.equals(enteredPath.normalize())))
 				{
 					FrontEnd.frame.redrawTable(enteredPath.normalize());
 					FrontEnd.frame.currentDirectory = enteredPath.normalize();
@@ -141,13 +143,13 @@ public class MainToolBar extends JToolBar
 				}
 
 				// Possible disable or enable the up button
-				if(FrontEnd.frame.currentDirectory.equals(Control.backupDirectory))
+				if(FrontEnd.frame.currentDirectory.equals(Main.backupDirectory))
 				{
-					FrontEnd.frame.topTool.upButton.setEnabled(false);
+					FrontEnd.frame.toolbar.upButton.setEnabled(false);
 				}
 				else
 				{
-					FrontEnd.frame.topTool.upButton.setEnabled(true);
+					FrontEnd.frame.toolbar.upButton.setEnabled(true);
 				}
 			}
 		});

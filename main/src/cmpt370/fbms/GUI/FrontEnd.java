@@ -31,14 +31,17 @@ import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import cmpt370.fbms.Control;
 import cmpt370.fbms.Errors;
+import cmpt370.fbms.Main;
 
+/**
+ * The bridge from Main to the GUI. Creates the system tray icon that allows the GUI to be accessed.
+ */
 public class FrontEnd
 {
 	public static MainFrame frame = null;
 
-	public static void createAndShowGUI()
+	public static void initGui()
 	{
 		// Alias the text and apply look and feel. Aliasing is not done on Windows, where text is
 		// already aliased in the system look and feel.
@@ -72,7 +75,7 @@ public class FrontEnd
 		}
 		catch(IOException e)
 		{
-			Control.logger.error("Could not load program icon", e);
+			Main.logger.error("Could not load program icon", e);
 		}
 
 		// And scale it to the appropriate size using smooth scaling

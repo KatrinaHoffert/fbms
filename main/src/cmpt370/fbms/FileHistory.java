@@ -24,6 +24,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Allows the modification and retrieval of revision data (the file history).
+ */
 public class FileHistory
 {
 	/**
@@ -36,10 +39,10 @@ public class FileHistory
 	 *            The time stamp of the specific revision.
 	 * @return A path to the temporary file containing the diff that makes up that revision.
 	 */
-	public static Path getRevision(Path file, long timestamp)
+	public static Path getRevisionInfo(Path file, long timestamp)
 	{
 		// Get the revision in question
-		RevisionInfo revision = DbManager.getRevisionInfo(file, timestamp);
+		RevisionInfo revision = DbManager.getSpecificRevision(file, timestamp);
 		Path pathToTempFile = null;
 		PrintWriter output = null;
 
@@ -52,7 +55,7 @@ public class FileHistory
 			output = new PrintWriter(pathToTempFile.toFile());
 			output.print(revision.diff);
 
-			Control.logger.info("Created temporary file at " + pathToTempFile.toString()
+			Main.logger.info("Created temporary file at " + pathToTempFile.toString()
 					+ " for revision " + file.toString() + " (" + timestamp + ")");
 		}
 		catch(IOException e)
@@ -97,16 +100,16 @@ public class FileHistory
 
 		DbManager.insertRevision(file, diffString, delta, filesize);
 
-		Control.logger.debug("Revision stored for file " + file.toString() + " (file size: "
+		Main.logger.debug("Revision stored for file " + file.toString() + " (file size: "
 				+ filesize + "; delta: " + delta + ")");
 	}
 
 	/**
-	 * Obtain a file revision by given time stamp.
-	 * <p>
+	 * Obtain the content of the file at a specific revision on the given time stamp.
+	 * 
 	 * The time stamp should be valid, otherwise this method will restore the file revision nearest
 	 * to the given time stamp.
-	 * <p>
+	 * 
 	 * Returns a Path to the patched file. If error occurs, null will be returned.
 	 * 
 	 * @param file
@@ -115,10 +118,10 @@ public class FileHistory
 	 *            a long representing the file version.
 	 * @return a Path of patched file. null if failed.
 	 */
-	public static Path obtainRevision(Path file, long timestamp)
+	public static Path obtainRevisionContent(Path file, long timestamp)
 	{
 		// Retrieve data from database
-		List<RevisionInfo> fileRevisionList = DbManager.getRevisionData(FileOp.convertPath(file));
+		List<RevisionInfo> fileRevisionList = DbManager.getFileRevisions(FileOp.convertPath(file));
 		LinkedList<RevisionInfo> patchList = new LinkedList<>();
 
 		// Add the records we needed to a linked list
@@ -169,7 +172,7 @@ public class FileHistory
 	 */
 	public static void renameRevision(Path file, String newName)
 	{
-		DbManager.renameFile(file, newName);
-		Control.logger.info("File " + file.toString() + " is renamed to " + newName);
+		DbManager.renameRevisions(file, newName);
+		Main.logger.info("File " + file.toString() + " is renamed to " + newName);
 	}
 }

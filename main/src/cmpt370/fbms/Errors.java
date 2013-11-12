@@ -32,6 +32,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+/**
+ * A utility class for reporting and logging of errors that the user should know about.
+ */
 public class Errors
 {
 	private static boolean errorBeingDisplayed = false;
@@ -48,7 +51,7 @@ public class Errors
 	 */
 	public static void fatalError(String message, Throwable error)
 	{
-		Control.logger.fatal(message, error);
+		Main.logger.fatal(message, error);
 
 		// Convert stack trace into a string
 		StackTraceElement stackTrace[] = error.getStackTrace();
@@ -71,7 +74,7 @@ public class Errors
 	 */
 	public static void fatalError(String message)
 	{
-		Control.logger.fatal(message);
+		Main.logger.fatal(message);
 
 		JOptionPane.showMessageDialog(null, message, "Fatal error", JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
@@ -97,11 +100,11 @@ public class Errors
 
 			if(error != null)
 			{
-				Control.logger.error(message, error);
+				Main.logger.error(message, error);
 			}
 			else
 			{
-				Control.logger.error(message);
+				Main.logger.error(message);
 			}
 
 			// The frame

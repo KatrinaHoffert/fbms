@@ -37,17 +37,21 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
-import cmpt370.fbms.Control;
-import cmpt370.fbms.Data;
+import cmpt370.fbms.DataRetriever;
 import cmpt370.fbms.Errors;
 import cmpt370.fbms.FileOp;
+import cmpt370.fbms.Main;
 
+/**
+ * Defines the JFrame-like object that makes up the main window of the GUI. This window consists of
+ * a toolbar, menu bar, and the file browser table.
+ */
 public class MainFrame extends JFrame
 {
 	public JTable table;
 	public Path currentDirectory;
-	public MainToolBar topTool;
-	public MainMenu topMenu;
+	public MainToolBar toolbar;
+	public MainMenu menubar;
 	public Path selectedFile = null;
 	public Vector<String> columns;
 
@@ -104,12 +108,12 @@ public class MainFrame extends JFrame
 		setIconImage(new ImageIcon("res/icon.png").getImage());
 
 		// Create menu
-		topMenu = new MainMenu();
-		setJMenuBar(topMenu);
+		menubar = new MainMenu();
+		setJMenuBar(menubar);
 
 		// Create toolbar
-		topTool = new MainToolBar();
-		add(topTool, BorderLayout.NORTH);
+		toolbar = new MainToolBar();
+		add(toolbar, BorderLayout.NORTH);
 
 		// Create table columns
 		columns = new Vector<>();
@@ -130,7 +134,8 @@ public class MainFrame extends JFrame
 
 		// Insert the data into a modified table model based on the default. This lets us disable
 		// editing of table cells.
-		table.setModel(new DefaultTableModel(Data.getTableData(Control.backupDirectory), columns)
+		table.setModel(new DefaultTableModel(
+				DataRetriever.getFolderContentsTable(Main.backupDirectory), columns)
 		{
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -139,7 +144,7 @@ public class MainFrame extends JFrame
 			}
 
 			@Override
-			public Class getColumnClass(int column)
+			public Class<?> getColumnClass(int column)
 			{
 				return getValueAt(0, column).getClass();
 			}
@@ -168,11 +173,11 @@ public class MainFrame extends JFrame
 		add(scrollPane, BorderLayout.CENTER);
 
 		// Set the current directory
-		currentDirectory = Control.backupDirectory;
+		currentDirectory = Main.backupDirectory;
 
 		// In the backup directory, the location bar is set to a single slash. The direction of the
 		// slash is platform dependent. Windows uses \\ while Unix and Mac use /.
-		topTool.locationBar.setText(File.separator);
+		toolbar.locationBar.setText(File.separator);
 
 		// Necessary to revalidate the frame so that we can see the table
 		revalidate();
@@ -184,7 +189,8 @@ public class MainFrame extends JFrame
 	public void redrawTable(Path directory)
 	{
 		// Recreate the data model
-		FrontEnd.frame.table.setModel(new DefaultTableModel(Data.getTableData(directory), columns)
+		FrontEnd.frame.table.setModel(new DefaultTableModel(
+				DataRetriever.getFolderContentsTable(directory), columns)
 		{
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -193,7 +199,7 @@ public class MainFrame extends JFrame
 			}
 
 			@Override
-			public Class getColumnClass(int column)
+			public Class<?> getColumnClass(int column)
 			{
 				return getValueAt(0, column).getClass();
 			}
@@ -209,8 +215,8 @@ public class MainFrame extends JFrame
 
 		// Set the location bar to the current directory relative to the
 		String locationBarText = directory.toString().substring(
-				Control.backupDirectory.toString().length());
-		FrontEnd.frame.topTool.locationBar.setText(locationBarText);
+				Main.backupDirectory.toString().length());
+		FrontEnd.frame.toolbar.locationBar.setText(locationBarText);
 
 		// Blank the selected file
 		FrontEnd.frame.selectedFile = null;
@@ -218,7 +224,7 @@ public class MainFrame extends JFrame
 		// If we're in the backup directory, set the location bar to a single slash
 		if(locationBarText.equals(""))
 		{
-			FrontEnd.frame.topTool.locationBar.setText(File.separator);
+			FrontEnd.frame.toolbar.locationBar.setText(File.separator);
 		}
 	}
 }
@@ -268,24 +274,24 @@ class TableSelectionListener implements MouseListener, KeyListener
 			// name.
 			FrontEnd.frame.selectedFile = FrontEnd.frame.currentDirectory.resolve((String) FrontEnd.frame.table.getValueAt(
 					FrontEnd.frame.table.getSelectedRow(), 1));
-			Control.logger.debug("Selected file/folder: " + FrontEnd.frame.selectedFile.toString());
+			Main.logger.debug("Selected file/folder: " + FrontEnd.frame.selectedFile.toString());
 
 			// Enable menu options that require a selected file (view revisions is only accessible
 			// if a file is selected
 			if(FrontEnd.frame.selectedFile.toFile().isFile())
 			{
-				FrontEnd.frame.topMenu.revisionsOption.setEnabled(true);
+				FrontEnd.frame.menubar.revisionsOption.setEnabled(true);
 			}
 			else
 			{
-				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
+				FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
 			}
-			FrontEnd.frame.topMenu.copyToOption.setEnabled(true);
+			FrontEnd.frame.menubar.copyToOption.setEnabled(true);
 		}
 		else
 		{
-			FrontEnd.frame.topMenu.copyToOption.setEnabled(false);
-			FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
+			FrontEnd.frame.menubar.copyToOption.setEnabled(false);
+			FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
 		}
 	}
 
@@ -301,8 +307,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 			// Go into directories
 			if(FrontEnd.frame.selectedFile.toFile().isDirectory())
 			{
-				Control.logger.debug("Activated on folder: "
-						+ FrontEnd.frame.selectedFile.toString());
+				Main.logger.debug("Activated on folder: " + FrontEnd.frame.selectedFile.toString());
 
 				// Set the new directory
 				FrontEnd.frame.currentDirectory = FrontEnd.frame.currentDirectory.resolve(FrontEnd.frame.selectedFile.getFileName());
@@ -311,15 +316,15 @@ class TableSelectionListener implements MouseListener, KeyListener
 				FrontEnd.frame.redrawTable(FrontEnd.frame.currentDirectory);
 
 				// Disable options that require a selected file
-				FrontEnd.frame.topMenu.copyToOption.setEnabled(false);
-				FrontEnd.frame.topMenu.revisionsOption.setEnabled(false);
+				FrontEnd.frame.menubar.copyToOption.setEnabled(false);
+				FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
 
-				FrontEnd.frame.topTool.upButton.setEnabled(true);
+				FrontEnd.frame.toolbar.upButton.setEnabled(true);
 			}
 			// Display revision window for files
 			else
 			{
-				Control.logger.debug("Activated on file: " + FrontEnd.frame.selectedFile.toString());
+				Main.logger.debug("Activated on file: " + FrontEnd.frame.selectedFile.toString());
 
 				RevisionDialog revisionWindow = new RevisionDialog(
 						FileOp.convertPath(FrontEnd.frame.selectedFile));

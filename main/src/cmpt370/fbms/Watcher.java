@@ -21,6 +21,9 @@ import java.nio.file.Paths;
 
 import net.contentobjects.jnotify.JNotifyListener;
 
+/**
+ * Interfaces with the JNotify library to catch changes to the file system as they happen.
+ */
 public class Watcher implements JNotifyListener
 {
 	/**
@@ -48,13 +51,13 @@ public class Watcher implements JNotifyListener
 		listObject.oldName = oldPath;
 		listObject.newName = newPath;
 
-		synchronized(Control.renamedFiles)
+		synchronized(Main.renamedFiles)
 		{
-			Control.renamedFiles.add(listObject);
+			Main.renamedFiles.add(listObject);
 		}
 
 		// Use the logger in Control to issue messages
-		Control.logger.info("Renamed file " + oldName + " to " + newName + " in " + rootPath);
+		Main.logger.info("Renamed file " + oldName + " to " + newName + " in " + rootPath);
 	}
 
 	/**
@@ -72,12 +75,12 @@ public class Watcher implements JNotifyListener
 	{
 		Path path = Paths.get(rootPath + File.separator + name);
 
-		synchronized(Control.modifiedFiles)
+		synchronized(Main.modifiedFiles)
 		{
-			Control.modifiedFiles.add(path);
+			Main.modifiedFiles.add(path);
 		}
 
-		Control.logger.info("Modified file " + path);
+		Main.logger.info("Modified file " + path);
 	}
 
 	/**
@@ -95,12 +98,12 @@ public class Watcher implements JNotifyListener
 	{
 		Path path = Paths.get(rootPath + File.separator + name);
 
-		synchronized(Control.deletedFiles)
+		synchronized(Main.deletedFiles)
 		{
-			Control.deletedFiles.add(path);
+			Main.deletedFiles.add(path);
 		}
 
-		Control.logger.info("Deleted file " + path);
+		Main.logger.info("Deleted file " + path);
 	}
 
 	/**
@@ -118,11 +121,11 @@ public class Watcher implements JNotifyListener
 	{
 		Path path = Paths.get(rootPath + File.separator + name);
 
-		synchronized(Control.createdFiles)
+		synchronized(Main.createdFiles)
 		{
-			Control.createdFiles.add(path);
+			Main.createdFiles.add(path);
 		}
 
-		Control.logger.info("Created file " + path);
+		Main.logger.info("Created file " + path);
 	}
 }

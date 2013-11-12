@@ -26,8 +26,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import cmpt370.fbms.Control;
-import cmpt370.fbms.Data;
+import cmpt370.fbms.Main;
+import cmpt370.fbms.DataRetriever;
 import cmpt370.fbms.DbManager;
 import cmpt370.fbms.FileInfo;
 import cmpt370.fbms.FileOp;
@@ -43,11 +43,11 @@ public class TesterServices
 	public void dataGetFolderContents() throws IOException
 	{
 		// Have to manually do the startup
-		Control.backupDirectory = Paths.get("").toAbsolutePath();
-		DbManager.init();
+		Main.backupDirectory = Paths.get("").toAbsolutePath();
+		DbManager.initConnection();
 
 		// Get the folder contents of this directory
-		List<FileInfo> list = Data.getFolderContents(Paths.get("").toAbsolutePath());
+		List<FileInfo> list = DataRetriever.getFolderContents(Paths.get("").toAbsolutePath());
 
 		// Find the readme and assert that the information on it is logical
 		boolean foundReadme = false;
@@ -68,7 +68,7 @@ public class TesterServices
 
 		// Manually clean up
 		DbManager.close();
-		Files.delete(Control.backupDirectory.resolve(".revisions.db"));
+		Files.delete(Main.backupDirectory.resolve(".revisions.db"));
 	}
 
 	// Test setting and getting config
@@ -76,8 +76,8 @@ public class TesterServices
 	public void dbManagerGetSetConfig() throws Exception
 	{
 		// Create database in current directory
-		Control.backupDirectory = Paths.get("").toAbsolutePath();
-		DbManager.init();
+		Main.backupDirectory = Paths.get("").toAbsolutePath();
+		DbManager.initConnection();
 
 		// Try to change the live directory
 		DbManager.setConfig("liveDirectory", "/some/other/path");
@@ -87,7 +87,7 @@ public class TesterServices
 
 		// Cleanup
 		DbManager.close();
-		Files.delete(Control.backupDirectory.resolve(".revisions.db"));
+		Files.delete(Main.backupDirectory.resolve(".revisions.db"));
 	}
 
 	// Test converting between live and backup directory paths
@@ -95,8 +95,8 @@ public class TesterServices
 	public void fileOpConvertPath()
 	{
 		// Manually setup
-		Control.backupDirectory = Paths.get("").toAbsolutePath().resolve("lib");
-		Control.liveDirectory = Paths.get("").toAbsolutePath().resolve("../util/demo/lib");
+		Main.backupDirectory = Paths.get("").toAbsolutePath().resolve("lib");
+		Main.liveDirectory = Paths.get("").toAbsolutePath().resolve("../util/demo/lib");
 
 		// Path is in backup directory, so should be converted to live directory path
 		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("lib/jnotify.dll")) != Paths.get(
@@ -146,8 +146,8 @@ public class TesterServices
 		// Manual setup (this copy method won't create folders, as the live directory is presumed to
 		// exist)
 		Path path = Paths.get("").toAbsolutePath();
-		Control.backupDirectory = path;
-		Control.liveDirectory = path.resolve("../test").normalize();
+		Main.backupDirectory = path;
+		Main.liveDirectory = path.resolve("../test").normalize();
 		Files.createDirectory(path.resolve("../test"));
 
 		// Create the list of files to copy

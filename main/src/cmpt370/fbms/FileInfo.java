@@ -15,6 +15,9 @@
 
 package cmpt370.fbms;
 
+/**
+ * Largely a plain old data class for grouping together information on files and folders.
+ */
 public class FileInfo implements Comparable<FileInfo>
 {
 	public String fileName = "";
