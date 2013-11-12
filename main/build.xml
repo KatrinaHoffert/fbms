@@ -11,56 +11,56 @@
         ==============================================================
 -->
 <project name="FBMS" default="help" basedir=".">
-        <!-- Folders -->
-        <property name="src" value="src" />
-        <property name="build" value="build" />
-        <property name="lib"  value="lib" />
-		<property name="res"  value="res" />
-		<property name="dist"  value="dist" />
-        <!-- Names -->
-        <property name="mainClass" value="cmpt370.fbms.Control" />
-        <!-- Classpath for libraries. Note the inclusion of the build dir
-                 so we can find the class files (since base dir is .) -->
-        <property name="classpath" value="lib/jnotify-0.94.jar:lib/sqlite-jdbc-3.7.15-M1.jar:lib/log4j-1.2.17.jar:${build}" />
+	<!-- Folders -->
+	<property name="src" value="src" />
+	<property name="build" value="build" />
+	<property name="lib"  value="lib" />
+	<property name="res"  value="res" />
+	<property name="dist"  value="dist" />
+	<!-- Names -->
+	<property name="mainClass" value="cmpt370.fbms.Control" />
+	<!-- Classpath for libraries. Note the inclusion of the build dir
+		so we can find the class files (since base dir is .) -->
+	<property name="classpath" value="lib/jnotify-0.94.jar:lib/sqlite-jdbc-3.7.15-M1.jar:lib/log4j-1.2.17.jar:${build}" />
 
-        <!-- Compiles the sources-->
-        <target name="make">        		
+	<!-- Compiles the sources-->
+	<target name="make">        		
 		<mkdir dir="${build}" />
-			<!-- Compile the java code from ${src} into ${build}. Don't include the 
-                         buggy ANT runtime. Classpath is crucial for libraries -->
-			<javac debug="true" 
-                srcdir="${src}" 
-                destdir="${build}" 
-                classpath="${classpath}" 
-                includeantruntime="false">
-                <exclude name="cmpt370/fbms/test/**"/>
-               </javac>
-        	<!-- Generate jar file -->
-    		<jar destfile="${build}/FBMS.jar" basedir="build">
-                <manifest>
-                    <attribute name="Main-Class" value="cmpt370.fbms.Control"/>
-                    <attribute name="Class-Path" value=". lib/jnotify-0.94.jar lib/log4j-1.2.17.jar lib/sqlite-jdbc-3.7.15-M1.jar"/>
-                </manifest>
-			</jar>
-    		<!-- Copy all libraries to ${build}/${lib} -->
+		<!-- Compile the java code from ${src} into ${build}. Don't include the 
+				buggy ANT runtime. Classpath is crucial for libraries -->
+		<javac debug="true" 
+				srcdir="${src}" 
+				destdir="${build}" 
+				classpath="${classpath}" 
+				includeantruntime="false">
+				<exclude name="cmpt370/fbms/test/**"/>
+		</javac>
+		<!-- Generate jar file -->
+		<jar destfile="${build}/FBMS.jar" basedir="build">
+			<manifest>
+				<attribute name="Main-Class" value="cmpt370.fbms.Control"/>
+				<attribute name="Class-Path" value=". lib/jnotify-0.94.jar lib/log4j-1.2.17.jar lib/sqlite-jdbc-3.7.15-M1.jar"/>
+			</manifest>
+		</jar>
+		<!-- Copy all libraries to ${build}/${lib} -->
 			<copy  todir="${build}/${lib}">
 				<fileset dir="${lib}"/>	
 			</copy>
-        	<!-- Move the libraries files -->
-            <move file="${build}/${lib}/jnotify.dll" todir="${build}"/>
-            <move file="${build}/${lib}/jnotify_64bit.dll" todir="${build}"/>
-            <move file="${build}/${lib}/libjnotify.so" todir="${build}"/>
-            <move file="${build}/${lib}/libjnotify.jnilib" todir="${build}"/>
-			<!-- Copy the logging property file -->
-			<copy file="${src}/log4j.xml" todir="${build}"/>
-
-        </target>
-		<!-- Copies the resources-->
-		<target name="copy_res">
+		<!-- Move the libraries files -->
+		<move file="${build}/${lib}/jnotify.dll" todir="${build}"/>
+		<move file="${build}/${lib}/jnotify_64bit.dll" todir="${build}"/>
+		<move file="${build}/${lib}/libjnotify.so" todir="${build}"/>
+		<move file="${build}/${lib}/libjnotify.jnilib" todir="${build}"/>
+		<!-- Copy the logging property file -->
+		<copy file="${src}/log4j.xml" todir="${build}"/>
+	</target>
+	
+	<!-- Copies the resources-->
+	<target name="copy_res">
 			<!-- Copy the images-->
-    		<copy  todir="${build}/${res}">
-    			<fileset dir="${res}"/>	
-    		</copy>
+			<copy  todir="${build}/${res}">
+				<fileset dir="${res}"/>	
+			</copy>
 			<!-- Copy the licenses-->
 			<copy todir="${build}/licenses">
 				<filelist id="licenses" 
@@ -72,37 +72,36 @@
 				</filelist>
 			</copy>
 			<!-- Copy README-->
-			<copy file="README.txt" todir="${build}"/>
-			
+			<copy file="README.txt" todir="${build}"/>			
 		</target>
 
-        <!-- Create distribution archive -->
-        <target name="dist" depends="make,copy_res">
-        	<mkdir dir="${dist}" />
+		<!-- Creates distribution archive -->
+		<target name="dist" depends="make,copy_res">
+		    <!-- Copy neceressary files -->
+			<mkdir dir="${dist}" />
 			<copy  todir="${dist}">
-				<fileset dir="${build}">
-					<exclude name="cmpt370/name" />
-				</fileset>
+				<fileset dir="${build}"></fileset>
 			</copy>
-        	<!-- Delete unnecessary folders -->
-        	<delete dir="${dist}/cmpt370"></delete>
-        	<delete dir="${dist}/name"></delete>
-        	<!-- Create archive -->
-            <zip destfile="FBMS.zip" basedir="${dist}"></zip>
-        </target>
+			<!-- Delete unnecessary folders -->
+			<delete dir="${dist}/cmpt370"></delete>
+			<delete dir="${dist}/name"></delete>
+			<!-- Create archive -->
+			<zip destfile="FBMS.zip" basedir="${dist}"></zip>
+		</target>
 
-        <target name="help">
+		<!-- Compile help -->
+		<target name="help">
 			<echo level="info">
 ---- How to compile using ANT ----
- ant dist             Create distribution archive.
- ant make             Compile program and create jar.
+ ant dist               Create distribution archive.
+ ant make            Compile program and create jar.
  ant clean            Remove created files (rebuild necessary to run program)
 			</echo>
-        </target>
+		</target>
 
-        <!-- Deletes junk. Note that nothing in the build or distribution folder is safe! -->
-        <target name="clean">
+		<!-- Deletes junk. Note that nothing in the build or distribution folder is safe! -->
+		<target name="clean">
 			<delete dir="${build}" />
-        	<delete dir="${dist}" />
-        </target>
+			<delete dir="${dist}" />
+		</target>
 </project>
