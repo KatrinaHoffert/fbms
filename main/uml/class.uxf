@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="12.1">
-  <zoom_level>6</zoom_level>
+  <help_text>Yo, this is the class diagram.
+
+- Check arrow directions
+- Make sure labels logically follow arrows
+- Multiplicties should be logical
+- Multiplicities on the correct side of arrow
+- Labels have to be placed where arrow is horizontal, otherwise
+  we can't tell shit because UMLet doesn't let us change
+  the text direction.
+- Overlapping sucks, but sometimes can't be helped. Minimize
+  occurances.
+- Should listeners be considered aggregation of their GUI?</help_text>
+  <zoom_level>5</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>6</x>
-      <y>0</y>
-      <w>162</w>
-      <h>258</h>
+      <x>210</x>
+      <y>95</y>
+      <w>135</w>
+      <h>185</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::DirectoryListener
 --
@@ -20,8 +32,7 @@
 -offset: int
 -backup: boolean
 --
-+WizardButtonListener(int): ctor
-+DirectoryListener(boolean): ctor
++DirectoryListener(boolean)
 +run(): void
 +introPanel(): JPanel
 +importPanel(): JPanel
@@ -29,7 +40,6 @@
 +selectOldDirPanel(): JPanel
 +finishPanel(): JPanel
 -writeBackupFile(): void
-+actionPerformed(ActionEvent): void
 +mouseClicked(MouseEvent): void
 +mouseReleased(MouseEvent): void
 +mousePressed(MouseEvent): void
@@ -42,10 +52,10 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>822</x>
-      <y>264</y>
-      <w>144</w>
-      <h>144</h>
+      <x>590</x>
+      <y>185</y>
+      <w>120</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::Main
 --
@@ -68,10 +78,10 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1488</x>
-      <y>738</y>
-      <w>324</w>
-      <h>144</h>
+      <x>1005</x>
+      <y>430</y>
+      <w>130</w>
+      <h>105</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::MainMenu
 --
@@ -81,68 +91,62 @@
 -settingsOption: JMenuItem
 -changeLiveDirOption: JMenuItem
 -changeBackupDirOption: JMenuItem
--exitOption =: JMenuItem
--helpOption =: JMenuItem
+-exitOption: JMenuItem
+-helpOption: JMenuItem
 --
-+MainMenu(): ctor
++MainMenu()
 -initFileActions(): void
--initHelpActions(): void
---
-</panel_attributes>
+-initHelpActions(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>294</x>
-      <y>1026</y>
-      <w>174</w>
-      <h>48</h>
+      <x>490</x>
+      <y>645</y>
+      <w>110</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::SettingsDialog
 --
 --
-~SettingsDialog(): ctor
--createSettings(): JPanel
---
-</panel_attributes>
+~SettingsDialog()
+-createSettings(): JPanel</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1806</x>
-      <y>1164</y>
-      <w>114</w>
-      <h>126</h>
+      <x>920</x>
+      <y>760</y>
+      <w>95</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::FileInfo
 --
-+fileName = "": String
-+folder = false: boolean
-+fileSize = 0: long
-+createdDate = 0: long
-+lastAccessedDate = 0: long
-+lastModifiedDate = 0: long
-+numberOfRevisions = 0: int
-+revisionSizes = 0: long
++fileName: String
++folder: boolean
++fileSize: long
++createdDate: long
++lastAccessedDate: long
++lastModifiedDate: long
++numberOfRevisions: int
++revisionSizes: long
 --
-+compareTo(FileInfo o): int
---
-</panel_attributes>
++compareTo(FileInfo): int</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>984</x>
-      <y>1218</y>
-      <w>264</w>
-      <h>108</h>
+      <x>195</x>
+      <y>630</y>
+      <w>155</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::Errors
 --
--errorBeingDisplayed = false: boolean
+-errorBeingDisplayed: boolean
 --
 +fatalError(String, Throwable): void
 +fatalError(String): void
@@ -156,10 +160,10 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1098</x>
-      <y>756</y>
-      <w>222</w>
-      <h>108</h>
+      <x>770</x>
+      <y>435</y>
+      <w>185</w>
+      <h>75</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::GuiController
 --
@@ -171,17 +175,16 @@
 +copyTo(Path, Path): void
 +changeLiveDirectory(Path): void
 +changeBackupDirectory(Path): void
---
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1314</x>
-      <y>1206</y>
-      <w>132</w>
-      <h>108</h>
+      <x>1070</x>
+      <y>765</y>
+      <w>105</w>
+      <h>75</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::RevisionInfo
 --
@@ -192,58 +195,53 @@
 +filesize: long
 +time: long
 --
-+compareTo(RevisionInfo o): int
---
-</panel_attributes>
++compareTo(RevisionInfo): int</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>786</x>
-      <y>762</y>
-      <w>234</w>
-      <h>96</h>
+      <x>610</x>
+      <y>445</y>
+      <w>125</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::MainToolBar
 --
--upIcon = new ImageIcon("res/up.png"): ImageIcon
--refreshIcon = new ImageIcon("res/refresh.png"): ImageIcon
-+upButton = new JButton(upIcon): JButton
--refreshButton = new JButton(refreshIcon): JButton
-+locationBar = new JTextField(5): JTextField
+-upIcon: ImageIcon
+-refreshIcon: ImageIcon
++upButton: JButton
+-refreshButton: JButton
++locationBar: JTextField
 --
-+MainToolBar(): ctor
---
-</panel_attributes>
++MainToolBar()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1152</x>
-      <y>306</y>
-      <w>144</w>
-      <h>72</h>
+      <x>780</x>
+      <y>210</y>
+      <w>120</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::FileChangeHandlers
 --
+
 --
 +handleCreatedFiles(): void
 +handleModifiedFiles(): void
 +handleRenamedFiles(): void
-+handleDeletedFiles(): void
---
-</panel_attributes>
++handleDeletedFiles(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>546</x>
-      <y>288</y>
-      <w>204</w>
-      <h>66</h>
+      <x>360</x>
+      <y>205</y>
+      <w>170</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::Startup
 --
@@ -258,10 +256,10 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1176</x>
-      <y>1122</y>
-      <w>300</w>
-      <h>72</h>
+      <x>465</x>
+      <y>95</y>
+      <w>250</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::Watcher
 --
@@ -269,18 +267,16 @@
 +fileRenamed(int wd, String rootPath, String oldName, String newName): void
 +fileModified(int wd, String rootPath, String name): void
 +fileDeleted(int wd, String rootPath, String name): void
-+fileCreated(int wd, String rootPath, String name): void
---
-</panel_attributes>
++fileCreated(int wd, String rootPath, String name): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1110</x>
-      <y>522</y>
-      <w>210</w>
-      <h>114</h>
+      <x>775</x>
+      <y>285</y>
+      <w>175</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::MainFrame
 --
@@ -292,77 +288,74 @@
 +columns: Vector&lt;String&gt;
 -contentPane: JPanel
 --
-+redrawTable(Path directory): void
---
-</panel_attributes>
++redrawTable(Path directory): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>780</x>
-      <y>1242</y>
-      <w>120</w>
-      <h>54</h>
+      <x>760</x>
+      <y>110</y>
+      <w>100</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::RenamedFile
 --
 +oldName: Path
 +newName: Path
 --
---
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>732</x>
-      <y>306</y>
-      <w>102</w>
-      <h>42</h>
+      <x>515</x>
+      <y>210</y>
+      <w>84</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=1
-&lt;Used by</panel_attributes>
-    <additional_attributes>90;30;18;30</additional_attributes>
+&lt;Initiates</panel_attributes>
+    <additional_attributes>75;25;15;25</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1002</x>
-      <y>780</y>
-      <w>108</w>
-      <h>42</h>
+      <x>720</x>
+      <y>455</y>
+      <w>59</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=1
 Uses&gt;</panel_attributes>
-    <additional_attributes>18;30;96;30</additional_attributes>
+    <additional_attributes>15;25;50;25</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1302</x>
-      <y>786</y>
-      <w>198</w>
-      <h>42</h>
+      <x>940</x>
+      <y>455</y>
+      <w>74</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=1
 &lt;Uses</panel_attributes>
-    <additional_attributes>186;30;18;30</additional_attributes>
+    <additional_attributes>65;25;15;25</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1200</x>
-      <y>942</y>
-      <w>144</w>
-      <h>84</h>
+      <x>880</x>
+      <y>560</y>
+      <w>120</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::RevisionDialog
 --
@@ -372,22 +365,22 @@ m2=1
 +viewChangesButton: Jbutton
 +selectedTimestamp: long
 --
-RevisionDialog(Path): ctor</panel_attributes>
+RevisionDialog(Path)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>924</x>
-      <y>900</y>
-      <w>222</w>
-      <h>144</h>
+      <x>605</x>
+      <y>525</y>
+      <w>180</w>
+      <h>115</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::RevisionTableSelectionListener
 --
 -dialog: RevisionDialog
 --
-+RevisionTableSelectionListener(RevisionDialog): ctor
++RevisionTableSelectionListener(RevisionDialog)
 +mouseClicked(MouseEvent): void
 +keyReleased(KeyEvent): void
 -selectRow(): void
@@ -403,52 +396,52 @@ RevisionDialog(Path): ctor</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1128</x>
-      <y>948</y>
-      <w>84</w>
-      <h>42</h>
+      <x>770</x>
+      <y>565</y>
+      <w>119</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-
 m1= 1
-m2= 2
+m2= 1
 &lt;Contains</panel_attributes>
-    <additional_attributes>72;30;18;30</additional_attributes>
+    <additional_attributes>110;25;15;25</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1194</x>
-      <y>846</y>
+      <x>860</x>
+      <y>495</y>
       <w>84</w>
-      <h>108</h>
+      <h>74</h>
     </coordinates>
     <panel_attributes>lt=-
 m1= 1
 m2= 1
 &lt;Uses</panel_attributes>
-    <additional_attributes>72;96;72;60;18;60;18;18</additional_attributes>
+    <additional_attributes>75;65;75;35;15;35;15;15</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>948</x>
-      <y>312</y>
-      <w>216</w>
-      <h>42</h>
+      <x>695</x>
+      <y>215</y>
+      <w>94</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=1
-&lt;Uses</panel_attributes>
-    <additional_attributes>18;30;204;30</additional_attributes>
+&lt;Accesses</panel_attributes>
+    <additional_attributes>15;25;85;25</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>810</x>
-      <y>546</y>
-      <w>144</w>
-      <h>42</h>
+      <x>595</x>
+      <y>330</y>
+      <w>120</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::FrontEnd
 --
@@ -462,28 +455,26 @@ m2=1
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>600</x>
-      <y>1020</y>
-      <w>210</w>
-      <h>66</h>
+      <x>715</x>
+      <y>680</y>
+      <w>175</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::GuiUtility
 --
 --
 +formatDate(long timestamp): String
 +unformatDate(String timestamp): long
-+humanReadableBytes(long bytes, boolean si): String
---
-</panel_attributes>
++humanReadableBytes(long bytes, boolean si): String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1482</x>
-      <y>516</y>
-      <w>192</w>
-      <h>126</h>
+      <x>1015</x>
+      <y>290</y>
+      <w>140</w>
+      <h>95</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::TableSelectionListener
 --
@@ -503,80 +494,78 @@ m2=1
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1302</x>
-      <y>558</y>
-      <w>192</w>
-      <h>42</h>
+      <x>935</x>
+      <y>300</y>
+      <w>89</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-
 m1= 1
-m2= 2
+m2= 1
 Contains&gt;</panel_attributes>
-    <additional_attributes>18;30;180;30</additional_attributes>
+    <additional_attributes>15;25;80;25</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>894</x>
-      <y>618</y>
-      <w>312</w>
-      <h>156</h>
+      <x>660</x>
+      <y>350</y>
+      <w>189</w>
+      <h>104</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
+    <panel_attributes>lt=&lt;&lt;&lt;-
 m1= 1
-m2= 1
-Shows&gt;</panel_attributes>
-    <additional_attributes>300;18;300;72;18;72;18;144</additional_attributes>
+m2= 1</panel_attributes>
+    <additional_attributes>180;15;180;70;15;70;15;95</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1224</x>
-      <y>618</y>
-      <w>450</w>
-      <h>132</h>
+      <x>870</x>
+      <y>350</y>
+      <w>214</w>
+      <h>89</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
+    <panel_attributes>lt=&lt;&lt;&lt;-
 m1= 1
-m2= 1
-&lt;Shows</panel_attributes>
-    <additional_attributes>18;18;18;72;438;72;438;120</additional_attributes>
+m2= 1</panel_attributes>
+    <additional_attributes>15;15;15;55;205;55;205;80</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>846</x>
-      <y>390</y>
-      <w>68</w>
-      <h>168</h>
+      <x>600</x>
+      <y>280</y>
+      <w>84</w>
+      <h>59</h>
     </coordinates>
     <panel_attributes>lt=-
 m1= 1
 m2= 1
-&lt;Used by</panel_attributes>
-    <additional_attributes>36;18;36;114;36;156</additional_attributes>
+&lt;Initiates</panel_attributes>
+    <additional_attributes>75;15;75;35;15;35;15;50</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>936</x>
-      <y>546</y>
-      <w>186</w>
-      <h>42</h>
+      <x>700</x>
+      <y>325</y>
+      <w>84</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=1
-&lt;Used by</panel_attributes>
-    <additional_attributes>18;30;174;30</additional_attributes>
+Creates&gt;</panel_attributes>
+    <additional_attributes>15;25;75;25</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>258</x>
-      <y>222</y>
-      <w>222</w>
-      <h>156</h>
+      <x>240</x>
+      <y>330</y>
+      <w>185</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::FirstStartWizard
 --
@@ -599,68 +588,68 @@ m2=1
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>462</x>
-      <y>294</y>
-      <w>96</w>
-      <h>42</h>
+      <x>340</x>
+      <y>240</y>
+      <w>79</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=-
 m1= 1
-m2= 0...1
-Creates&gt;</panel_attributes>
-    <additional_attributes>84;30;18;30</additional_attributes>
+m2= 1
+&lt;Creates</panel_attributes>
+    <additional_attributes>70;15;70;65;15;65;15;90</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>150</x>
-      <y>114</y>
-      <w>120</w>
-      <h>186</h>
+      <x>250</x>
+      <y>265</y>
+      <w>89</w>
+      <h>74</h>
     </coordinates>
     <panel_attributes>lt=-
-m1=1
-m2=1
-&lt;Used by</panel_attributes>
-    <additional_attributes>108;174;60;174;60;18;18;18</additional_attributes>
+m1= 1
+m2= 1
+Listens&gt;</panel_attributes>
+    <additional_attributes>80;65;80;40;15;40;15;15</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>0</x>
-      <y>324</y>
-      <w>174</w>
-      <h>66</h>
+      <x>195</x>
+      <y>525</y>
+      <w>145</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::WizardButtonListener
 --
 -offset: int
 --
-+WizardButtonListener(int): ctor
++WizardButtonListener(int)
 +actionPerformed(ActionEvent): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>156</x>
-      <y>306</y>
-      <w>114</w>
-      <h>60</h>
+      <x>245</x>
+      <y>435</y>
+      <w>79</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=-
-m1=1
-m2=1
-&lt;Used by</panel_attributes>
-    <additional_attributes>102;18;48;18;48;48;18;48</additional_attributes>
+m1= 1
+m2= 1
+Listens&gt;</panel_attributes>
+    <additional_attributes>70;15;70;60;15;60;15;90</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>480</x>
-      <y>600</y>
-      <w>198</w>
-      <h>120</h>
+      <x>350</x>
+      <y>495</y>
+      <w>165</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::DbManager
 --
@@ -682,134 +671,118 @@ m2=1
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>720</x>
-      <y>930</y>
-      <w>216</w>
-      <h>102</h>
+      <x>675</x>
+      <y>625</y>
+      <w>139</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=-
-
-Used by&gt;</panel_attributes>
-    <additional_attributes>204;30;36;30;36;90</additional_attributes>
+Uses&gt;
+m1= 1
+m2= 1</panel_attributes>
+    <additional_attributes>15;15;15;35;130;35;130;55</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>546</x>
-      <y>702</y>
-      <w>132</w>
-      <h>330</h>
+      <x>420</x>
+      <y>240</y>
+      <w>84</w>
+      <h>264</h>
     </coordinates>
     <panel_attributes>lt=-
-&lt;Used by</panel_attributes>
-    <additional_attributes>18;18;18;180;120;180;120;318</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>582</x>
-      <y>336</y>
-      <w>68</w>
-      <h>276</h>
-    </coordinates>
-    <panel_attributes>lt=-
-&lt;Used by</panel_attributes>
-    <additional_attributes>36;18;36;264</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>426</x>
-      <y>360</y>
-      <w>120</w>
-      <h>252</h>
-    </coordinates>
-    <panel_attributes>lt=-
-&lt;Used by</panel_attributes>
-    <additional_attributes>18;18;18;138;108;138;108;240</additional_attributes>
+&lt;Uses
+m1= 1
+m2= 1</panel_attributes>
+    <additional_attributes>75;15;75;120;15;120;15;255</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1446</x>
-      <y>1026</y>
-      <w>234</w>
-      <h>66</h>
+      <x>955</x>
+      <y>670</y>
+      <w>195</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::DataRetriever
 --
 --
 +getFolderContents(Path): List&lt;FileInfo&gt;
 +getRevisionInfo(Path): List&lt;RevisionInfo&gt;
-+getFolderContentsTable(Path): Vector&lt;Vector&lt;Object&gt;&gt;
-+getRevisionInfoTable(Path file): Vector&lt;Vector&lt;String&gt;&gt;  
---
++getFolderContentsTable(Path): Vector&lt;Vector&lt;Object\&gt;&gt;
++getRevisionInfoTable(Path file): Vector&lt;Vector&lt;String\&gt;&gt;
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>792</x>
-      <y>1032</y>
-      <w>666</w>
-      <h>42</h>
+      <x>875</x>
+      <y>675</y>
+      <w>89</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-
-&lt;Used by</panel_attributes>
-    <additional_attributes>654;30;18;30</additional_attributes>
+&lt;Uses
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>80;25;15;25</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1326</x>
-      <y>936</y>
-      <w>258</w>
-      <h>102</h>
+      <x>950</x>
+      <y>610</y>
+      <w>119</w>
+      <h>69</h>
     </coordinates>
     <panel_attributes>lt=-
-&lt;Used by</panel_attributes>
-    <additional_attributes>246;90;246;30;54;30;18;30</additional_attributes>
+Uses&gt;
+m1= 1
+m2= 1</panel_attributes>
+    <additional_attributes>110;60;110;40;15;40;15;15</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1248</x>
-      <y>384</y>
-      <w>662</w>
-      <h>690</h>
+      <x>935</x>
+      <y>255</y>
+      <w>249</w>
+      <h>454</h>
     </coordinates>
-    <panel_attributes>lt=-----
-&lt;Used by</panel_attributes>
-    <additional_attributes>432;678;630;678;630;30;18;30;18;138</additional_attributes>
+    <panel_attributes>lt=-
+Uses&gt;
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>215;445;240;445;240;25;35;25;35;50;15;50</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>270</x>
-      <y>660</y>
-      <w>174</w>
-      <h>60</h>
+      <x>975</x>
+      <y>210</y>
+      <w>145</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::FileHistory
+--
 --
 +getRevision(Path, long): Path
 +storeRevision(Path, long, long): void
 +obtainRevision(Path, long): Path
-+renameRevision(Path, String): void
---
-</panel_attributes>
++renameRevision(Path, String): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>228</x>
-      <y>828</y>
-      <w>216</w>
-      <h>162</h>
+      <x>920</x>
+      <y>60</y>
+      <w>115</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms::FileOp
+--
 --
 +copy(Path, Path): void
 +copy(List&lt;Path&gt;): void
@@ -825,35 +798,33 @@ Used by&gt;</panel_attributes>
 +convertPath(Path): Path
 +isEqual(Path, Path)
 +fileValid(Path): boolean
---
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>354</x>
-      <y>1230</y>
-      <w>180</w>
-      <h>54</h>
+      <x>385</x>
+      <y>725</y>
+      <w>130</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::CancelActionListener
 --
 -dialog: JDialog
 --
-+CancelActionListener(JDialog): ctor
++CancelActionListener(JDialog)
 +actionPerformed(ActionEvent): void
---
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>258</x>
-      <y>1104</y>
-      <w>294</w>
-      <h>90</h>
+      <x>550</x>
+      <y>735</y>
+      <w>235</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>cmpt370.fbms.Gui::AcceptActionListener
 --
@@ -862,10 +833,263 @@ Used by&gt;</panel_attributes>
 -scanField: JCheckBox
 -disableErrorsField: JCheckBox
 --
-+AcceptActionListener(JDialog, JTextField, JCheckBox, JCheckBox): ctor
-+actionPerformed(ActionEvent): void
---
-</panel_attributes>
++AcceptActionListener(JDialog, JTextField, JCheckBox, JCheckBox)
++actionPerformed(ActionEvent): void</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>885</x>
+      <y>215</y>
+      <w>99</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1
+Uses&gt;</panel_attributes>
+    <additional_attributes>15;25;90;25</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>920</x>
+      <y>245</y>
+      <w>94</w>
+      <h>199</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2= 1
+Uses&gt;</panel_attributes>
+    <additional_attributes>15;190;15;175;85;175;85;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>545</x>
+      <y>130</y>
+      <w>109</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2= 1
+Accesses&gt;</panel_attributes>
+    <additional_attributes>100;55;100;35;15;35;15;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>670</x>
+      <y>125</y>
+      <w>144</w>
+      <h>69</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+Contains&gt;
+m1=     0..*
+m2= 1</panel_attributes>
+    <additional_attributes>15;60;15;40;135;40;135;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>515</x>
+      <y>350</y>
+      <w>294</w>
+      <h>304</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2= 1
+&lt;Displays</panel_attributes>
+    <additional_attributes>15;295;15;55;285;55;285;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>965</x>
+      <y>370</y>
+      <w>189</w>
+      <h>199</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2= 1
+&lt;Creates</panel_attributes>
+    <additional_attributes>15;190;15;175;180;175;180;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>945</x>
+      <y>705</y>
+      <w>103</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+m1=0..*       .
+m2= 1</panel_attributes>
+    <additional_attributes>85;15;85;40;15;40;15;55</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1050</x>
+      <y>705</y>
+      <w>89</w>
+      <h>69</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+m1=    0..*
+m2= 1</panel_attributes>
+    <additional_attributes>15;15;15;40;80;40;80;60</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>555</x>
+      <y>660</y>
+      <w>129</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=-
+Listens&gt;
+m1= 1
+m2= 1</panel_attributes>
+    <additional_attributes>15;15;15;35;120;35;120;75</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>435</x>
+      <y>660</y>
+      <w>99</w>
+      <h>74</h>
+    </coordinates>
+    <panel_attributes>lt=-
+&lt;Listens
+m1= 1
+m2= 1</panel_attributes>
+    <additional_attributes>90;15;90;35;15;35;15;65</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>355</x>
+      <y>215</y>
+      <w>859</w>
+      <h>655</h>
+    </coordinates>
+    <panel_attributes>lt=-
+&lt;Uses
+m1=1
+m2= 1</panel_attributes>
+    <additional_attributes>765;15;850;15;850;645;295;645;15;645;15;380</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>770</x>
+      <y>495</y>
+      <w>94</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2= 1
+Uses&gt;</panel_attributes>
+    <additional_attributes>15;40;40;40;85;40;85;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>880</x>
+      <y>175</y>
+      <w>84</w>
+      <h>269</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2= 1
+Uses&gt;</panel_attributes>
+    <additional_attributes>15;260;15;215;75;215;75;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1020</x>
+      <y>120</y>
+      <w>79</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2=1
+&lt;Uses</panel_attributes>
+    <additional_attributes>70;90;70;25;35;25;15;25</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>835</x>
+      <y>135</y>
+      <w>94</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1= 1
+m2=1
+Uses&gt;</panel_attributes>
+    <additional_attributes>15;75;15;25;70;25;85;25</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>195</x>
+      <y>740</y>
+      <w>145</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Called by many of the classes when errors
+(fatal or non-fatal) are encountered to alert
+the user to the issue.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>255</x>
+      <y>685</y>
+      <w>24</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>15;15;15;55</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>405</x>
+      <y>165</y>
+      <w>130</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>The logger is accessed by most of the
+other classes to facilitate logging.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>505</x>
+      <y>170</y>
+      <w>94</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>85;35;15;15</additional_attributes>
   </element>
 </diagram>
