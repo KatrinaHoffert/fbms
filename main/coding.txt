@@ -1,0 +1,25 @@
+BUILDING WITH ANT:
+	- Apache Ant is required: https://ant.apache.org/
+	- Building with ant will create a folder named "build" with the
+	  distribution package (binaries, libraries, and the necessary files
+	  for distributing the program) and a zip file with the contents of the
+	  build folder.
+	-  To build the distribution package with debugging enabled, use
+	   "ant" or "ant debug".
+	- "ant release" will build without debugging.
+	- "ant clean" will remove all files created by ant.
+
+ECLIPSE DEVELOPMENT:
+	- Eclipse is required: http://www.eclipse.org/
+	- In Eclipse, go to File > Import
+	- Under "General", choose "Existing Projects into Workspace"
+	- As the root directory, choose the folder containing this file, which
+	  should also contain a file named ".classpath" and a file named
+	  ".project"
+	- Leave everything else at the default and choose "finish". The project
+	  should now be imported into the package explorer.
+	- To verify the importation was successful, attempt to run the program.
+
+NOTES:
+	- Eclipse has been configured to use the modified Java code style (demonstrated
+	  in part in the demo program). Changes to this should be discussed.
