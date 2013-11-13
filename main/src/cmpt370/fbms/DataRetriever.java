@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 
-import cmpt370.fbms.Gui.GuiUtility;
+import cmpt370.fbms.gui.GuiUtility;
 
 /**
  * DataRetriever fetches information for the GUI, bridging the gap between the GUI and data such as

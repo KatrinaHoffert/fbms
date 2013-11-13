@@ -27,7 +27,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-import cmpt370.fbms.Gui.GuiUtility;
+import cmpt370.fbms.gui.GuiUtility;
 
 /**
  * DbManager handles all the direct database activity, connecting and interfacing with the SQLite

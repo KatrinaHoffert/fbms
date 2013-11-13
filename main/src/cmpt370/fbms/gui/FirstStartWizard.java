@@ -13,7 +13,7 @@
  * not, see <http://www.gnu.org/licenses/>.
  */
 
-package cmpt370.fbms.Gui;
+package cmpt370.fbms.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

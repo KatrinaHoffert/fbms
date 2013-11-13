@@ -1,4 +1,4 @@
-package cmpt370.fbms.Gui;
+package cmpt370.fbms.gui;
 
 import java.text.DateFormat;
 import java.text.ParseException;
