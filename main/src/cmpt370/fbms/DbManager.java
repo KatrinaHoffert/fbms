@@ -129,13 +129,6 @@ public class DbManager
 						Main.liveDirectory = Paths.get(settingsRows.getString("setting"));
 					}
 				}
-
-				// If we somehow didn't find it, something went horribly wrong. Assume this must
-				// actually be a first run
-				if(Main.liveDirectory == null)
-				{
-					Errors.fatalError("Could not load the live directory from existing backup");
-				}
 			}
 		}
 		catch(SQLException e)
