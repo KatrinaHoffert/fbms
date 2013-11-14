@@ -70,7 +70,7 @@ public class Startup
 		else
 		{
 			// For subsequent runs, the backup directory has already been set and the live
-			// directory will be retreived during DbManager.init()
+			// directory will be retrieved during DbManager.init()
 			DbManager.initConnection();
 
 			// Live directory specified in database is invalid
@@ -98,6 +98,7 @@ public class Startup
 								&& !Main.backupDirectory.startsWith(chosenPath))
 						{
 							Main.liveDirectory = chosenPath;
+							DbManager.setConfig("liveDirectory", Main.liveDirectory.toString());
 						}
 						else
 						{
