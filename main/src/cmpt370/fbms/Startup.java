@@ -74,7 +74,7 @@ public class Startup
 			DbManager.initConnection();
 
 			// Live directory specified in database is invalid
-			if(!Main.liveDirectory.toFile().exists())
+			if(Main.liveDirectory == null || !Main.liveDirectory.toFile().exists())
 			{
 				int choice = JOptionPane.showConfirmDialog(
 						null,
