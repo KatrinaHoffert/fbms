@@ -75,6 +75,15 @@ public class GuiController
 		{
 			// Get the revision we want
 			Path revertedFile = FileHistory.obtainRevisionContent(file, timestamp);
+			Path diffFromCurrent = FileOp.createPatch(file, revertedFile);
+
+			// Get the filesize of our newly reverted file as well as the delta from the old
+			// file
+			long fileSize = FileOp.fileSize(revertedFile);
+			long delta = FileOp.fileSize(file) - fileSize;
+
+			// Store the revision and copy the reverted file over the backup directory
+			FileHistory.storeRevision(FileOp.convertPath(file), diffFromCurrent, fileSize, delta);
 
 			Main.logger.debug("Revert to: " + revertedFile.toFile().toString());
 			try
