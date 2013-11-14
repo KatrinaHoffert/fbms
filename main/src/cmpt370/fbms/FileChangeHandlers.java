@@ -151,7 +151,7 @@ public class FileChangeHandlers
 			}
 			if(!hit)
 			{
-				if(FileOp.fileValid(pathm))
+				if(pathm.toFile().isFile() && FileOp.fileValid(pathm))
 				{
 					if(!FileOp.convertPath(pathm).toFile().exists())
 					{
