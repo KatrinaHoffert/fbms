@@ -24,6 +24,7 @@ public class FileChangeHandlers
 		itrc = Main.createdFiles.listIterator(Main.createdFiles.size());
 		found = false;
 		Main.logger.debug("Handle Created Files has started.");
+
 		// Search through all elements of created files, comparing them to instances of renamed
 		// files and modified files.
 		while(itrc.hasPrevious())
@@ -36,7 +37,8 @@ public class FileChangeHandlers
 			while(itrr.hasPrevious())
 			{
 				toRename = itrr.previous();
-				if(pathc.toFile().equals(toRename.newName.toFile()))
+				if(pathc.toFile().equals(toRename.newName.toFile())
+						|| pathc.toFile().equals(toRename.oldName.toFile()))
 				{
 					// If we've hit a duplicate already, we've made the diff/backup and we can
 					// delete this one safely.
@@ -129,7 +131,7 @@ public class FileChangeHandlers
 			while(itrr.hasPrevious())
 			{
 				toRename = itrr.previous();
-				if(pathm.equals(toRename.newName))
+				if(pathm.equals(toRename.newName) || pathm.equals(toRename.oldName))
 				{
 					// Clean up additional copies, will only do this if its already made a
 					// diff/backup of the file.
@@ -163,18 +165,28 @@ public class FileChangeHandlers
 						// Make diff file.
 						diff = FileOp.createPatch(FileOp.convertPath(pathm), pathm);
 						// Look at size difference.
-						long delta = FileOp.fileSize(pathm)
-								- FileOp.fileSize(FileOp.convertPath(pathm));
 
-						// Store a revision
-						FileHistory.storeRevision(pathm, diff, FileOp.fileSize(pathm), delta);
+						if(diff.toFile().length() == 0)
+						{
+							Main.logger.info("File delta created in handleModified was 0 in size: "
+									+ pathm.toFile().toString() + " -- revision not made.");
 
-						// Copy file over.
-						Path targetDirectory = FileOp.convertPath(pathm).getParent();
-						FileOp.copy(pathm, targetDirectory);
+						}
+						else
+						{
+							long delta = FileOp.fileSize(pathm)
+									- FileOp.fileSize(FileOp.convertPath(pathm));
 
-						Main.logger.debug("Handle File Modified: Found existing modified file "
-								+ pathm.toFile().toString());
+							// Store a revision
+							FileHistory.storeRevision(pathm, diff, FileOp.fileSize(pathm), delta);
+
+							// Copy file over.
+							Path targetDirectory = FileOp.convertPath(pathm).getParent();
+							FileOp.copy(pathm, targetDirectory);
+
+							Main.logger.debug("Handle File Modified: Found existing modified file "
+									+ pathm.toFile().toString());
+						}
 					}
 				}
 				else
@@ -215,22 +227,34 @@ public class FileChangeHandlers
 					{
 						diff = FileOp.createPatch(FileOp.convertPath(toRename.oldName),
 								toRename.newName);
-						// Look at size difference.
-						long delta = FileOp.fileSize(toRename.newName)
-								- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
 
-						// Store a revision
-						FileHistory.storeRevision(toRename.newName, diff,
-								FileOp.fileSize(toRename.newName), delta);
+						if(diff.toFile().length() == 0)
+						{
+							Main.logger.info("File delte created in handleRename was 0 in size: "
+									+ toRename.oldName.toFile().toString()
+									+ " -- revision not made.");
 
-						// Copy file over.
-						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
-						FileOp.copy(toRename.newName, targetDirectory);
-						FileOp.delete(FileOp.convertPath(toRename.oldName));
-						FileHistory.renameRevision(toRename.oldName, newName);
+						}
+						else
+						{
+							// Look at size difference.
+							long delta = FileOp.fileSize(toRename.newName)
+									- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
 
-						Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-								+ "already existed and was updated.");
+							// Store a revision
+							FileHistory.storeRevision(toRename.newName, diff,
+									FileOp.fileSize(toRename.newName), delta);
+
+							// Copy file over.
+							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
+							FileOp.copy(toRename.newName, targetDirectory);
+							FileOp.delete(FileOp.convertPath(toRename.oldName));
+							FileHistory.renameRevision(toRename.oldName, newName);
+
+							Main.logger.debug("Handle Renamed: "
+									+ toRename.newName.toFile().toString()
+									+ "already existed and was updated.");
+						}
 					}
 					else
 					{
@@ -242,15 +266,20 @@ public class FileChangeHandlers
 								+ "existed but was not a valid file and was updated.");
 					}
 				}
+				else
+				{
+					FileOp.rename(toRename.oldName, newName);
+					FileHistory.renameRevision(toRename.oldName, newName);
+				}
 			}
 			else
 			{
 
 				Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 				FileOp.copy(toRename.newName, targetDirectory);
-
+				FileOp.delete(toRename.oldName);
 				Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-						+ "did not exist and was added.");
+						+ " did not exist and was added.");
 			}
 
 			// Remove entry to move onto the next.
