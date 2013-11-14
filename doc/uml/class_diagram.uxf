@@ -318,7 +318,7 @@
     <panel_attributes>lt=-
 m1=1
 m2=1
-&lt;Initiates</panel_attributes>
+&lt;Creates</panel_attributes>
     <additional_attributes>120;40;24;40</additional_attributes>
   </element>
   <element>
@@ -432,7 +432,7 @@ m2= 1
     <panel_attributes>lt=-
 m1=1
 m2=1
-&lt;Accesses</panel_attributes>
+&lt;Invoked-By</panel_attributes>
     <additional_attributes>24;40;136;40</additional_attributes>
   </element>
   <element>
@@ -542,7 +542,7 @@ m2= 1</panel_attributes>
     <panel_attributes>lt=-
 m1= 1
 m2= 1
-&lt;Initiates</panel_attributes>
+&lt;Creates</panel_attributes>
     <additional_attributes>120;24;120;48;24;48;24;64</additional_attributes>
   </element>
   <element>
@@ -848,7 +848,7 @@ m2=1</panel_attributes>
     <panel_attributes>lt=-
 m1=1
 m2=1
-Uses&gt;</panel_attributes>
+Retrieve File Info&gt;</panel_attributes>
     <additional_attributes>24;40;144;40</additional_attributes>
   </element>
   <element>
@@ -930,8 +930,10 @@ m2= 1
       <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
+Create List of
 m1=0..*       .
-m2= 1</panel_attributes>
+m2= 1
+</panel_attributes>
     <additional_attributes>136;24;136;56;24;56;24;80</additional_attributes>
   </element>
   <element>
@@ -943,6 +945,7 @@ m2= 1</panel_attributes>
       <h>112</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
+Create List of
 m1=    0..*
 m2= 1</panel_attributes>
     <additional_attributes>24;24;24;64;128;64;128;96</additional_attributes>
@@ -1022,28 +1025,28 @@ Uses&gt;</panel_attributes>
     <coordinates>
       <x>1320</x>
       <y>96</y>
-      <w>128</w>
+      <w>158</w>
       <h>160</h>
     </coordinates>
     <panel_attributes>lt=-
 m1= 1
 m2=1
-&lt;Uses</panel_attributes>
+&lt;Get specific revision</panel_attributes>
     <additional_attributes>112;144;112;40;56;40;24;40</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1024</x>
+      <x>1016</x>
       <y>120</y>
-      <w>152</w>
+      <w>160</w>
       <h>136</h>
     </coordinates>
     <panel_attributes>lt=-
 m1= 1
 m2=1
-Uses&gt;</panel_attributes>
-    <additional_attributes>24;120;24;40;112;40;136;40</additional_attributes>
+Backup files using&gt;</panel_attributes>
+    <additional_attributes>32;120;32;40;120;40;144;40</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Note</type>
@@ -1072,24 +1075,26 @@ the user to the issue.</panel_attributes>
   <element>
     <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>336</x>
-      <y>168</y>
-      <w>208</w>
-      <h>32</h>
+      <x>440</x>
+      <y>144</y>
+      <w>112</w>
+      <h>64</h>
     </coordinates>
-    <panel_attributes>The logger is accessed by most of the
-other classes to facilitate logging.</panel_attributes>
+    <panel_attributes>The logger is 
+accessed by most
+of the other classes
+to facilitate logging.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>496</x>
-      <y>176</y>
-      <w>152</w>
-      <h>72</h>
+      <x>528</x>
+      <y>184</y>
+      <w>120</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>136;56;24;24</additional_attributes>
+    <additional_attributes>104;48;24;24</additional_attributes>
   </element>
 </diagram>
