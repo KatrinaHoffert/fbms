@@ -349,6 +349,63 @@ public class DbManager
 	}
 
 	/**
+	 * Renames a single folder in a path to a new name. All revisions that contain the original
+	 * folder path will have the that folder updated to a new name.
+	 * 
+	 * @param folder
+	 *            The path of the folder we want to rename (in the live directory).
+	 * @param newName
+	 *            The new name for that one folder.
+	 */
+	public static void renameFolder(Path folder, String newName)
+	{
+		try
+		{
+			// We have to get revisions that have the path in them
+			String selectStatement = "SELECT * FROM revisions WHERE path LIKE ?";
+
+			PreparedStatement prepStatement = connection.prepareStatement(selectStatement);
+
+			// Note the added wild card, as revisions will have paths in the form [folder we
+			// want]/[possibly other paths]/[file name]
+			prepStatement.setString(1, folder.toString() + '%');
+
+			ResultSet result = prepStatement.executeQuery();
+
+			// Now loop through the found paths and update each one
+			while(result.next())
+			{
+				Path path = Paths.get(result.getString("path"));
+
+				// Get the "[folder we want]" part, but with our new name instead
+				Path prePath = folder.resolveSibling(newName);
+
+				// Get the part of the path after the folder we want (the "/[possibly other
+				// paths]/[file name]" part)
+				Path postPath = path.subpath(folder.toString().length(), path.toString().length());
+
+				// And put them together to get [renamed path]/[possibly other paths]/[file name]
+				Path renamedPath = prePath.resolve(postPath);
+
+				// Create the update statement to change this in the database
+				String updateStatement = "UPDATE revisions SET path = ? WHERE path = ?";
+
+				prepStatement = connection.prepareStatement(updateStatement);
+				prepStatement.setString(1, renamedPath.toString());
+				prepStatement.setString(2, path.toString());
+				prepStatement.executeUpdate();
+
+				Main.logger.debug("Renamed path " + path.toString() + " -> "
+						+ renamedPath.toString());
+			}
+		}
+		catch(SQLException e)
+		{
+			Errors.nonfatalError("Could not rename revisions in database.", e);
+		}
+	}
+
+	/**
 	 * Grabs the value of a specified setting from the settings database.
 	 * 
 	 * @param settingName
