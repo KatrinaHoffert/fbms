@@ -58,7 +58,7 @@ public class Startup
 			// Initialize the database, then set the live directory inside this database (for
 			// sequential program start-ups)
 			DbManager.initConnection();
-			DbManager.setConfig("Control.liveDirectory", Main.liveDirectory.toString());
+			DbManager.setConfig("liveDirectory", Main.liveDirectory.toString());
 
 			// Set some default settings
 			DbManager.setConfig("trimDate", "-1");
@@ -120,8 +120,8 @@ public class Startup
 
 			Main.logger.info("It is a subsequent run");
 		}
-		Main.logger.info("Control.liveDirectory = " + Main.liveDirectory);
-		Main.logger.info("Control.backupDirectory = " + Main.backupDirectory);
+		Main.logger.info("liveDirectory = " + Main.liveDirectory);
+		Main.logger.info("backupDirectory = " + Main.backupDirectory);
 
 		// JNotify watcher for files. The live directory is watched for all four types of files
 		// changes: creations, deletions, modifications, and renaming. We watch subfolders of the
