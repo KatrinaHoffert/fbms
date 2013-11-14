@@ -193,7 +193,7 @@ public class FileChangeHandlers
 						}
 					}
 				}
-				else
+				else if(pathm.toFile().isFile())
 				{
 					// If the file isn't valid, just copy (its binary or large).
 					Path targetDirectory = FileOp.convertPath(pathm).getParent();
@@ -276,7 +276,8 @@ public class FileChangeHandlers
 				{
 					FileOp.convertPath(toRename.oldName).toFile().renameTo(
 							FileOp.convertPath(toRename.newName).toFile());
-					DbManager.renameFolder(toRename.oldName, newName);
+					DbManager.renameFolder(toRename.oldName,
+							toRename.newName.getFileName().toString());
 				}
 			}
 			else

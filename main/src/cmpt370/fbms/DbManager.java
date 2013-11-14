@@ -382,7 +382,7 @@ public class DbManager
 
 				// Get the part of the path after the folder we want (the "/[possibly other
 				// paths]/[file name]" part)
-				Path postPath = path.subpath(folder.toString().length(), path.toString().length());
+				Path postPath = folder.relativize(path);
 
 				// And put them together to get [renamed path]/[possibly other paths]/[file name]
 				Path renamedPath = prePath.resolve(postPath);
