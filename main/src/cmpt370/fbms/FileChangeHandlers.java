@@ -90,13 +90,17 @@ public class FileChangeHandlers
 				Main.logger.info("Create Handle: file " + pathc.toFile().toString()
 						+ " was not found in any other list.");
 				// If the file doesn't exist we copy it over.
-				if(!FileOp.convertPath(pathc).toFile().exists())
+				if(!FileOp.isFolder(pathc) && !FileOp.convertPath(pathc).toFile().exists())
 				{
 					// If the file isn't a folder and is not in the backup folder, copy it over.
 					Path targetDirectory = FileOp.convertPath(pathc).getParent();
 					FileOp.copy(pathc, targetDirectory);
 
 					Main.logger.debug("Create Handle: Found new file " + pathc.toFile().toString());
+				}
+				else if(FileOp.isFolder(pathc) && !FileOp.convertPath(pathc).toFile().exists())
+				{
+					FileOp.copy(pathc, FileOp.convertPath(pathc));
 				}
 				// If it does exist, it was modified after creation and that takes priority.
 				else
@@ -230,9 +234,11 @@ public class FileChangeHandlers
 
 						if(diff.toFile().length() == 0)
 						{
-							Main.logger.info("File delte created in handleRename was 0 in size: "
+							Main.logger.info("File delta created in handleRename was 0 in size: "
 									+ toRename.oldName.toFile().toString()
 									+ " -- revision not made.");
+							FileOp.rename(FileOp.convertPath(toRename.oldName), newName);
+							FileHistory.renameRevision(toRename.oldName, newName);
 
 						}
 						else
@@ -268,8 +274,9 @@ public class FileChangeHandlers
 				}
 				else
 				{
-					FileOp.rename(toRename.oldName, newName);
-					FileHistory.renameRevision(toRename.oldName, newName);
+					FileOp.convertPath(toRename.oldName).toFile().renameTo(
+							FileOp.convertPath(toRename.newName).toFile());
+					DbManager.renameFolder(toRename.oldName, newName);
 				}
 			}
 			else
