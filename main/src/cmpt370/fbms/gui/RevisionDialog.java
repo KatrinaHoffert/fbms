@@ -35,6 +35,8 @@ public class RevisionDialog extends JDialog
 	public JTable table;
 	public JButton viewRevisionButton, revertRevisionButton, viewChangesButton;
 	public long selectedTimestamp = -1;
+	public Vector<String> columns;
+	public Path fileDisplayed;
 
 	/**
 	 * Create the frame.
@@ -46,11 +48,13 @@ public class RevisionDialog extends JDialog
 		setIconImage(new ImageIcon("res/icon.png").getImage());
 		setSize(450, 250);
 
+		fileDisplayed = file;
+
 		// Create main panel
 		JPanel contentPane = new JPanel(new BorderLayout());
 
 		// Create table columns
-		Vector<String> columns = new Vector<>();
+		columns = new Vector<>();
 		columns.add("Date");
 		columns.add("File size");
 		columns.add("Delta");
@@ -64,7 +68,8 @@ public class RevisionDialog extends JDialog
 		table.addKeyListener(new RevisionTableSelectionListener(this));
 
 		// Create the data model
-		table.setModel(new DefaultTableModel(DataRetriever.getRevisionInfoTable(file), columns)
+		table.setModel(new DefaultTableModel(DataRetriever.getRevisionInfoTable(fileDisplayed),
+				columns)
 		{
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -135,6 +140,7 @@ public class RevisionDialog extends JDialog
 				if(selectedTimestamp != -1)
 				{
 					GuiController.revertRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
+					redrawTable();
 
 					Main.logger.debug("Reverted revision of "
 							+ FrontEnd.frame.selectedFile.toString() + " @ T = "
@@ -160,6 +166,28 @@ public class RevisionDialog extends JDialog
 				}
 			}
 		});
+	}
+
+	public void redrawTable()
+	{
+		// Create the data model
+		table.setModel(new DefaultTableModel(DataRetriever.getRevisionInfoTable(fileDisplayed),
+				columns)
+		{
+			@Override
+			public boolean isCellEditable(int row, int column)
+			{
+				return false;
+			}
+		});
+
+		// Set the column widths
+		table.getColumnModel().getColumn(0).setMinWidth(115);
+
+		selectedTimestamp = -1;
+		revertRevisionButton.setEnabled(false);
+		viewRevisionButton.setEnabled(false);
+		viewChangesButton.setEnabled(false);
 	}
 }
 
