@@ -77,9 +77,12 @@
 		</copy>
 		<!-- Copy README-->
 		<copy file="README.txt" todir="${build}"/>
+		<!-- Copy script -->
 		<copy todir="${build}">
 			<fileset dir="${script}"/>	
 		</copy>
+		<!-- Add execute permission for unix based system -->
+		<chmod file="${build}\run.sh" perm="+x"></chmod>
 	</target>
 
 	<!-- Creates distribution archive -->
