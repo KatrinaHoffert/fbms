@@ -1,3 +1,3 @@
 !#/bin/bash
-java -Dawt.useSystemAAFontSettings=on -jar FBMS.jar
+java -Dawt.useSystemAAFontSettings=on -jar fbms.jar
 exit
