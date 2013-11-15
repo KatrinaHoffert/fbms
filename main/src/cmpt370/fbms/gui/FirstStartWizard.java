@@ -30,8 +30,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -46,7 +46,7 @@ import cmpt370.fbms.Main;
  */
 public class FirstStartWizard
 {
-	public static JDialog frame;
+	public static JFrame frame;
 	public static int currentPanel = 1;
 	public static JTextField liveDirectoryField;
 	public static JTextField backupDirectoryField;
@@ -59,7 +59,7 @@ public class FirstStartWizard
 		Main.logger.info("Started first run wizard");
 
 		// Create the dialog window
-		frame = new JDialog();
+		frame = new JFrame();
 		frame.setTitle("Welcome to FBMS");
 		frame.setSize(new Dimension(450, 250));
 		frame.setLocationRelativeTo(null);
