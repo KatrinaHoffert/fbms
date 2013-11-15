@@ -28,8 +28,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import cmpt370.fbms.Errors;
 import cmpt370.fbms.Main;
@@ -43,23 +41,6 @@ public class FrontEnd
 
 	public static void initGui()
 	{
-		// Alias the text and apply look and feel. Aliasing is not done on Windows, where text is
-		// already aliased in the system look and feel.
-		if(System.getProperty("os.name").toLowerCase().indexOf("win") == -1)
-		{
-			System.setProperty("awt.useSystemAAFontSettings", "on");
-			System.setProperty("swing.aatext", "true");
-		}
-		try
-		{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch(ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e)
-		{
-			Errors.nonfatalError("Could not apply look and feel.", e);
-		}
-
 		// Check the SystemTray support
 		if(!SystemTray.isSupported())
 		{

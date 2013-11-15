@@ -52,6 +52,7 @@ public class FirstStartWizard
 	public static JTextField backupDirectoryField;
 	public static JButton selectDirsNextButton;
 	public static WindowListener listener;
+	public static JButton nextButton;
 
 	public static void run()
 	{
@@ -82,6 +83,10 @@ public class FirstStartWizard
 			}
 		};
 		frame.addWindowListener(listener);
+
+		// Request the focus be on the next button (needs to be one of the last methods called)
+		frame.getRootPane().setDefaultButton(nextButton);
+		nextButton.requestFocus();
 	}
 
 	/**
@@ -106,7 +111,7 @@ public class FirstStartWizard
 		JButton prevButton = new JButton("Previous");
 		prevButton.setEnabled(false);
 		buttonPanel.add(prevButton);
-		JButton nextButton = new JButton("Next");
+		nextButton = new JButton("Next");
 		buttonPanel.add(nextButton);
 		panel.add(buttonPanel, BorderLayout.SOUTH);
 

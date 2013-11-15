@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
@@ -29,6 +31,23 @@ public class Startup
 	{
 		// And print a testing message to the log
 		Main.logger.info("Program started");
+
+		// Alias the text and apply look and feel. Aliasing is not done on Windows, where text is
+		// already aliased in the system look and feel.
+		if(System.getProperty("os.name").toLowerCase().indexOf("windows") == -1)
+		{
+			System.setProperty("awt.useSystemAAFontSettings", "on");
+			System.setProperty("swing.aatext", "true");
+		}
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch(ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e)
+		{
+			Errors.nonfatalError("Could not apply look and feel.", e);
+		}
 
 		resolveBackupDirectory();
 
