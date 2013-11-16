@@ -1,3 +1,2 @@
-@echo off
-start javaw -jar FBMS.jar
+start javaw -jar fbms.jar
 exit
