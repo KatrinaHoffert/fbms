@@ -125,7 +125,7 @@ public class FileHistory
 	 * Returns a Path to the patched file. If error occurs, null will be returned.
 	 * 
 	 * @param file
-	 *            a Path to a file in backup directory.
+	 *            a Path to a file in live directory.
 	 * @param timestamp
 	 *            a long representing the file version.
 	 * @return a Path of patched file. null if failed.

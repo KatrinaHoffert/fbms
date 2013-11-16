@@ -321,7 +321,6 @@ public class FileChangeHandlers
 			// Remove entry to move onto the next.
 			itrr.remove();
 		}
-
 	}
 
 	/**

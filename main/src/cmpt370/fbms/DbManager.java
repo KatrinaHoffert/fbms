@@ -234,8 +234,7 @@ public class DbManager
 			if(revisionRows.next())
 			{
 				// Table structure: (id INTEGER, path STRING, diff STRING, binary BLOB, delta
-				// INTEGER, filesize
-				// INTEGER, time INTEGER)
+				// INTEGER, filesize INTEGER, time INTEGER)
 				revision = new RevisionInfo();
 
 				// id INTEGER
