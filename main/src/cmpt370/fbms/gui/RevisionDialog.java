@@ -33,7 +33,7 @@ import cmpt370.fbms.Main;
 public class RevisionDialog extends JDialog
 {
 	public JTable table;
-	public JButton viewRevisionButton, revertRevisionButton, viewChangesButton;
+	public JButton viewRevisionButton, revertRevisionButton;
 	public long selectedTimestamp = -1;
 	public Vector<String> columns;
 	public Path fileDisplayed;
@@ -90,13 +90,10 @@ public class RevisionDialog extends JDialog
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		viewRevisionButton = new JButton("View revision");
 		revertRevisionButton = new JButton("Revert revision");
-		viewChangesButton = new JButton("View changes");
-		revertRevisionButton.setEnabled(false);
 		viewRevisionButton.setEnabled(false);
-		viewChangesButton.setEnabled(false);
+		revertRevisionButton.setEnabled(false);
 		buttonPanel.add(viewRevisionButton);
 		buttonPanel.add(revertRevisionButton);
-		buttonPanel.add(viewChangesButton);
 
 		// And add to the main panel
 		contentPane.add(scrollPane, BorderLayout.CENTER);
@@ -148,24 +145,6 @@ public class RevisionDialog extends JDialog
 				}
 			}
 		});
-
-		// Handler for view changes button
-		viewChangesButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				if(selectedTimestamp != -1)
-				{
-					GuiController.displayRevisionChanges(FrontEnd.frame.selectedFile,
-							selectedTimestamp);
-
-					Main.logger.debug("Viewed revision changes of "
-							+ FrontEnd.frame.selectedFile.toString() + " @ T = "
-							+ selectedTimestamp);
-				}
-			}
-		});
 	}
 
 	public void redrawTable()
@@ -187,7 +166,6 @@ public class RevisionDialog extends JDialog
 		selectedTimestamp = -1;
 		revertRevisionButton.setEnabled(false);
 		viewRevisionButton.setEnabled(false);
-		viewChangesButton.setEnabled(false);
 	}
 }
 
@@ -244,7 +222,6 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 
 			dialog.revertRevisionButton.setEnabled(true);
 			dialog.viewRevisionButton.setEnabled(true);
-			dialog.viewChangesButton.setEnabled(true);
 
 			Main.logger.debug("Selected revision: " + FrontEnd.frame.selectedFile.toString()
 					+ " (timestamp: " + dialog.selectedTimestamp + ")");
@@ -254,7 +231,6 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 			dialog.selectedTimestamp = -1;
 			dialog.revertRevisionButton.setEnabled(false);
 			dialog.viewRevisionButton.setEnabled(false);
-			dialog.viewChangesButton.setEnabled(false);
 		}
 	}
 

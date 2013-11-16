@@ -15,7 +15,6 @@
 
 package cmpt370.fbms.test;
 
-import java.awt.Desktop;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -206,22 +205,5 @@ public class TesterVisual
 		// Clean up
 		DbManager.close();
 		FileOp.delete(path.resolve(".revisions.db"));
-	}
-
-	@Test
-	@Ignore
-	public void fileOpPrettyPrintPatch() throws IOException
-	{
-		Path original = Paths.get("").resolve("lgpl-v2.txt");
-		Path modified = Paths.get("").resolve("license.txt");
-
-		// Create the diff
-		Path patch = FileOp.createPatch(original, modified);
-
-		// Apply the diff
-		Path htmlPage = FileOp.prettyPrintPatch(patch);
-
-		Desktop desktop = Desktop.getDesktop();
-		desktop.open(htmlPage.toFile());
 	}
 }

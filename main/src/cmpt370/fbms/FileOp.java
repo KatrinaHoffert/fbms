@@ -38,7 +38,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import name.fraser.neil.plaintext.diff_match_patch;
-import name.fraser.neil.plaintext.diff_match_patch.Diff;
 import name.fraser.neil.plaintext.diff_match_patch.Patch;
 import net.sf.jmimemagic.Magic;
 import net.sf.jmimemagic.MagicException;
@@ -285,56 +284,6 @@ public class FileOp
 		{
 			Errors.nonfatalError("Could not apply patch " + patchFile.toString() + " to "
 					+ currentRevision.toString(), e);
-		}
-
-		return null;
-	}
-
-	public static Path prettyPrintPatch(Path patchFile)
-	{
-		try
-		{
-			String patchString = FileOp.fileToString(patchFile);
-
-			// Parse the patch
-			diff_match_patch patchEngine = new diff_match_patch();
-			List<Patch> patch = patchEngine.patch_fromText(patchString);
-
-			Path tempFile = null;
-
-			// If there was changes, get the pretty diff
-			if(patch.size() > 0)
-			{
-				// Cleanup the diff
-				LinkedList<Diff> diffs = patch.get(0).diffs;
-				patchEngine.diff_cleanupSemantic(diffs);
-				patchEngine.diff_cleanupSemanticLossless(diffs);
-				patchEngine.diff_cleanupMerge(diffs);
-
-				String html = patchEngine.diff_prettyHtml(diffs);
-
-				// Write the new text to a file
-				tempFile = Files.createTempFile("pretty-print", ".html");
-				PrintWriter writer = new PrintWriter(tempFile.toFile());
-				writer.write(html);
-				writer.close();
-			}
-			// Otherwise tell the user there were no changes
-			else
-			{
-				tempFile = Files.createTempFile("revision", ".html");
-
-				PrintWriter writer = new PrintWriter(tempFile.toFile());
-				writer.write("There were no changes.");
-				writer.close();
-			}
-
-			return tempFile;
-		}
-		catch(IOException e)
-		{
-			Errors.nonfatalError("Could not create HTML pretty-print for " + patchFile.toString(),
-					e);
 		}
 
 		return null;
