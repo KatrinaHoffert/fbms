@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
@@ -106,68 +105,6 @@ public class TesterServices
 
 		// Path is in neither the backup nor live directory, so should return null
 		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("../doc/classes.txt")) == null);
-	}
-
-	// Test copying and deleting folders with files inside
-	@Test
-	public void fileOpCopyFolder() throws IOException
-	{
-		// Copy the source directory into a new directory named test
-		Path path = Paths.get("").toAbsolutePath();
-		FileOp.copy(path.resolve("src"), path.resolve("test"));
-
-		assertTrue(path.resolve("test").toFile().exists());
-
-		// And delete it
-		FileOp.delete(path.resolve("test"));
-
-		assertTrue(!path.resolve("test").toFile().exists());
-	}
-
-	// Test copying and deleting a single file
-	@Test
-	public void fileOpCopyFile() throws IOException
-	{
-		// Copy the authors.txt file into a new folder named test
-		Path path = Paths.get("").toAbsolutePath();
-		FileOp.copy(path.resolve("authors.txt"), path.resolve("test"));
-
-		assertTrue(path.resolve("test/authors.txt").toFile().exists());
-
-		// And delete it, then the folder
-		FileOp.delete(path.resolve("test/authors.txt"));
-		assertTrue(!path.resolve("test/authors.txt").toFile().exists());
-
-		FileOp.delete(path.resolve("test"));
-	}
-
-	// Test copying multiple files from the live directory to the backup directory
-	@Test
-	public void fileOpCopyMultiple() throws IOException
-	{
-		// Manual setup (this copy method won't create folders, as the live directory is presumed to
-		// exist)
-		Path path = Paths.get("").toAbsolutePath();
-		Main.backupDirectory = path;
-		Main.liveDirectory = path.resolve("../test").normalize();
-		Files.createDirectory(path.resolve("../test"));
-
-		// Create the list of files to copy
-		List<Path> filesToCopy = new LinkedList<>();
-		filesToCopy.add(path.resolve("src/cmpt370/fbms/Main.java"));
-		filesToCopy.add(path.resolve("src/log4j.xml"));
-		filesToCopy.add(path.resolve("README.txt"));
-
-		FileOp.copy(filesToCopy);
-
-		// And check that they're all there
-		assertTrue(path.resolve("../test/src/cmpt370/fbms/Main.java").toFile().exists());
-		assertTrue(path.resolve("../test/src/log4j.xml").toFile().exists());
-		assertTrue(path.resolve("../test/README.txt").toFile().exists());
-
-		// Cleanup
-		FileOp.delete(path.resolve("../test").normalize());
-		assertTrue(!path.resolve("../test").normalize().toFile().exists());
 	}
 
 	// Test file equivalence
