@@ -441,21 +441,15 @@ public class FileOp
 	}
 
 	/**
-	 * Check the given file. If it is a text file and < 5 MB, returns true.
+	 * Checks if the given file is a plain text file.
 	 * 
 	 * @param file
 	 *            the file to be checked.
-	 * @return true if file is text file and <= 5MB
+	 * @return true if file is plain text (as determined by MIME type)
 	 */
-	public static boolean fileValid(Path file)
+	public static boolean isPlainText(Path file)
 	{
 		String fileTypeString = null;
-
-		// Non-existant files cannot be valid
-		if(!file.toFile().exists())
-		{
-			return false;
-		}
 
 		// Check the file's MIME type
 		try
@@ -472,15 +466,9 @@ public class FileOp
 
 		Main.logger.debug(file.toString() + " has an MIME type of " + fileTypeString);
 
-		if(fileSize(file) > 5242880)
-		{
-			Main.logger.debug(file.toString() + " is larger than 5 MB");
-			return false;
-		}
-
 		if(fileTypeString == null)
 		{
-			// Couldn't figure it out
+			// Couldn't figure it out, assume binary
 			return false;
 		}
 

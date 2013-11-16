@@ -299,7 +299,7 @@ public class Startup
 							- FileOp.fileSize(FileOp.convertPath(file.toPath()));
 
 					// Store the revision
-					FileHistory.storeRevision(file.toPath(), diffFile,
+					FileHistory.storeRevision(file.toPath(), diffFile, null,
 							FileOp.fileSize(file.toPath()), delta);
 
 					// Finally, copy the file over

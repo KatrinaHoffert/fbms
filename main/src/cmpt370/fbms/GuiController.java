@@ -20,13 +20,13 @@ public class GuiController
 	 * Obtains the specified revision and displays it in the default program for that type of file.
 	 * 
 	 * @param file
-	 *            The file's path (in the live directory).
+	 *            The file's path (in the backup directory).
 	 * @param timestamp
 	 *            The Unix time stamp (seconds since Unix epoch).
 	 */
 	public static void displayRevision(Path file, long timestamp)
 	{
-		Path fileToOpen = FileHistory.obtainRevisionContent(file, timestamp);
+		Path fileToOpen = FileHistory.obtainRevisionContent(FileOp.convertPath(file), timestamp);
 		try
 		{
 			Desktop.getDesktop().open(fileToOpen.toFile());
@@ -50,22 +50,26 @@ public class GuiController
 		if(file.toFile().exists())
 		{
 			// Get the revision we want
-			Path revertedFile = FileHistory.obtainRevisionContent(file, timestamp);
+			Path revertedFile = FileHistory.obtainRevisionContent(FileOp.convertPath(file),
+					timestamp);
 			Path diffFromCurrent = FileOp.createPatch(file, revertedFile);
 
 			// Get the filesize of our newly reverted file as well as the delta from the old
 			// file
 			long fileSize = FileOp.fileSize(revertedFile);
-			long delta = FileOp.fileSize(file) - fileSize;
+			long delta = fileSize - FileOp.fileSize(file);
 
 			// Store the revision and copy the reverted file over the backup directory
-			FileHistory.storeRevision(FileOp.convertPath(file), diffFromCurrent, fileSize, delta);
+			FileHistory.storeRevision(FileOp.convertPath(file), diffFromCurrent, null, fileSize,
+					delta);
 
 			Main.logger.debug("Revert to: " + revertedFile.toFile().toString());
 			try
 			{
+				// Copy into both live and backup directories
 				Files.copy(revertedFile, FileOp.convertPath(file),
 						StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(revertedFile, file, StandardCopyOption.REPLACE_EXISTING);
 
 				Main.logger.debug("Copied " + revertedFile.toFile().toString() + " as "
 						+ FileOp.convertPath(file).toFile().toString());

@@ -46,14 +46,23 @@ public class FileHistory
 		Path pathToTempFile = null;
 		PrintWriter output = null;
 
+		String[] fileNameSplit = file.getFileName().toString().split("\\.");
+		String extension = fileNameSplit[fileNameSplit.length - 1];
+
 		try
 		{
 			// Create a temporary file for the revision
-			pathToTempFile = Files.createTempFile("revision", ".txt");
+			pathToTempFile = Files.createTempFile("revision", extension);
 
-			// Write the diff to that temp file
-			output = new PrintWriter(pathToTempFile.toFile());
-			output.print(revision.diff);
+			// Write the diff or binary content to that temp file
+			if(revision.diff != null)
+			{
+				Files.write(pathToTempFile, revision.diff.getBytes());
+			}
+			else
+			{
+				Files.write(pathToTempFile, revision.binary);
+			}
 
 			Main.logger.info("Created temporary file at " + pathToTempFile.toString()
 					+ " for revision " + file.toString() + " (" + timestamp + ")");
@@ -85,20 +94,26 @@ public class FileHistory
 	 * @param delta
 	 *            change in file size.
 	 */
-	public static void storeRevision(Path file, Path diff, long filesize, long delta)
+	public static void storeRevision(Path file, Path diff, byte[] binary, long filesize, long delta)
 	{
 		// Get the diff as a String
 		String diffString = null;
-		try
+		if(diff != null)
 		{
-			diffString = FileOp.fileToString(diff);
-		}
-		catch(IOException e)
-		{
-			Errors.nonfatalError("Could not store " + file.toString() + " to database.");
+			try
+			{
+				diffString = FileOp.fileToString(diff);
+			}
+			catch(IOException e)
+			{
+				Errors.nonfatalError("Could not store " + file.toString() + " to database.");
+			}
+
+			// Fail safe to prevent a revision from somehow having both text and binary data
+			binary = null;
 		}
 
-		DbManager.insertRevision(file, diffString, delta, filesize);
+		DbManager.insertRevision(file, diffString, binary, delta, filesize);
 
 		Main.logger.debug("Revision stored for file " + file.toString() + " (file size: "
 				+ filesize + "; delta: " + delta + ")");
@@ -113,38 +128,51 @@ public class FileHistory
 	 * Returns a Path to the patched file. If error occurs, null will be returned.
 	 * 
 	 * @param file
-	 *            a Path to a file in backup directory.
+	 *            a Path to a file in live directory.
 	 * @param timestamp
 	 *            a long representing the file version.
 	 * @return a Path of patched file. null if failed.
 	 */
 	public static Path obtainRevisionContent(Path file, long timestamp)
 	{
+		// Check first if the specific revision is a binary revision. If it is, we're done.
+		Path specificRevision = getRevisionInfo(file, timestamp);
+		if(!FileOp.isPlainText(specificRevision))
+		{
+			Main.logger.debug("Revision for file " + file.toString() + " (" + timestamp
+					+ ") is binary");
+			return specificRevision;
+		}
+
+		Main.logger.debug("Revision for file " + file.toString() + " (" + timestamp
+				+ ") is plain text");
+
 		// Retrieve data from database
-		List<RevisionInfo> fileRevisionList = DbManager.getFileRevisions(FileOp.convertPath(file));
+		List<RevisionInfo> fileRevisionList = DbManager.getFileRevisions(file);
 		LinkedList<RevisionInfo> patchList = new LinkedList<>();
 
 		// Add the records we needed to a linked list
 		for(RevisionInfo revisionInfo : fileRevisionList)
 		{
-			if(revisionInfo.time > timestamp)
+			if(revisionInfo.time > timestamp && revisionInfo.diff != null)
 			{
 				patchList.add(revisionInfo);
 			}
 		}
 
-
 		// Sort the linked list in reverse order
 		Collections.sort(patchList);
 		Collections.reverse(patchList);
-
 
 		// Apply diff to the file. return null if error occurs
 		Path newestFile = file;
 		Path tempPatchFile = null;
 		try
 		{
-			tempPatchFile = Files.createTempFile("FBMS", ".tmp");
+			// Get the extension for the file (ensures the correct program is used to display the
+			// file)
+			String[] fileNameSplit = file.getFileName().toString().split("\\.");
+			tempPatchFile = Files.createTempFile("FBMS", fileNameSplit[fileNameSplit.length - 1]);
 
 			for(RevisionInfo revisionInfo : patchList)
 			{

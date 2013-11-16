@@ -95,7 +95,7 @@ public class TesterVisual
 
 		// Insert a "revision" with filler content
 		DbManager.insertRevision(path.resolve("README.txt"),
-				FileOp.fileToString(path.resolve("README.txt")), 100, 50);
+				FileOp.fileToString(path.resolve("README.txt")), null, 100, 50);
 
 		// Now rename that revision
 		DbManager.renameRevisions(path.resolve("README.txt"), "not-readme.txt");
@@ -186,9 +186,12 @@ public class TesterVisual
 		DbManager.initConnection();
 
 		// Insert revisions for a file
-		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("README.txt"), 100, 200);
-		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("license.txt"), 300, 400);
-		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("authors.txt"), 500, 600);
+		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("README.txt"), null,
+				100, 200);
+		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("license.txt"), null,
+				300, 400);
+		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("authors.txt"), null,
+				500, 600);
 
 		// Get the revision table for that file
 		Vector<Vector<String>> tableData = DataRetriever.getRevisionInfoTable(path.resolve("README.txt"));

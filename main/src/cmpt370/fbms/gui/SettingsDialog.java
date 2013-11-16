@@ -29,7 +29,7 @@ class SettingsDialog extends JDialog
 	SettingsDialog()
 	{
 		setTitle("Settings");
-		setSize(new Dimension(300, 150));
+		setSize(new Dimension(325, 175));
 		setResizable(false);
 
 		add(createSettings());
@@ -46,18 +46,37 @@ class SettingsDialog extends JDialog
 		setIconImage(new ImageIcon("res/icon.png").getImage());
 
 		// Create the options panel
-		JPanel optionsPanel = new JPanel(new GridLayout(3, 1));
+		JPanel optionsPanel = new JPanel(new GridLayout(4, 1));
 
 		// Trim panel
 		JPanel trimPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel trimLabel1 = new JLabel("Remove revisions older than ");
 		JTextField trimOption = new JTextField(3);
 		trimOption.setText(DbManager.getConfig("trimDate"));
-		JLabel trimLabel2 = new JLabel(" days.");
+		JLabel trimLabel2 = new JLabel(" days");
 		trimPanel.add(trimLabel1);
 		trimPanel.add(trimOption);
 		trimPanel.add(trimLabel2);
 		optionsPanel.add(trimPanel);
+
+		// Max size panel
+		JPanel maxSizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel maxSizeLabel1 = new JLabel("Don't revision files larger than ");
+		JTextField maxSizeOption = new JTextField(3);
+		String maxSize = DbManager.getConfig("maxSize");
+		if(maxSize == null)
+		{
+			maxSizeOption.setText("5");
+		}
+		else
+		{
+			maxSizeOption.setText(maxSize);
+		}
+		JLabel maxSizeLabel2 = new JLabel("MB");
+		maxSizePanel.add(maxSizeLabel1);
+		maxSizePanel.add(maxSizeOption);
+		maxSizePanel.add(maxSizeLabel2);
+		optionsPanel.add(maxSizePanel);
 
 		// Startup scan panel
 		JPanel scanPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -71,7 +90,7 @@ class SettingsDialog extends JDialog
 		scanPanel.add(scanCheck);
 		optionsPanel.add(scanPanel);
 
-		// Startup scan panel
+		// disable errors panel
 		JPanel disableErrorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JCheckBox disableErrorsCheck = new JCheckBox("Don't display non-fatal errors");
 		// Figure out if the box is checked
@@ -93,6 +112,12 @@ class SettingsDialog extends JDialog
 		trimLabel1.setToolTipText(trimToolTip);
 		trimLabel2.setToolTipText(trimToolTip);
 		trimOption.setToolTipText(trimToolTip);
+
+		String maxSizeToolTip = "<html>Files larger than this will not be revisioned, and will just be<br />"
+				+ " copied to the backup directory.";
+		maxSizeLabel1.setToolTipText(maxSizeToolTip);
+		maxSizeLabel2.setToolTipText(maxSizeToolTip);
+		maxSizeOption.setToolTipText(maxSizeToolTip);
 
 		String scanToolTip = "<html>If enabled, the program will scan for changes when the program is<br />"
 				+ " first started, allowing detection of file changes that occured while the<br />"
@@ -116,8 +141,8 @@ class SettingsDialog extends JDialog
 
 		// Listeners for the buttons
 		cancelButton.addActionListener(new CancelActionListener(this));
-		acceptButton.addActionListener(new AcceptActionListener(this, trimOption, scanCheck,
-				disableErrorsCheck));
+		acceptButton.addActionListener(new AcceptActionListener(this, trimOption, maxSizeOption,
+				scanCheck, disableErrorsCheck));
 
 		return panel;
 	}
@@ -152,13 +177,16 @@ class AcceptActionListener implements ActionListener
 {
 	private JDialog dialog;
 	private JTextField trimField;
+	private JTextField maxSizeField;
 	private JCheckBox scanField;
 	private JCheckBox disableErrorsField;
 
-	public AcceptActionListener(JDialog frame, JTextField trim, JCheckBox scan, JCheckBox errors)
+	public AcceptActionListener(JDialog frame, JTextField trim, JTextField maxSize, JCheckBox scan,
+			JCheckBox errors)
 	{
 		dialog = frame;
 		trimField = trim;
+		maxSizeField = maxSize;
 		scanField = scan;
 		disableErrorsField = errors;
 	}
@@ -183,6 +211,27 @@ class AcceptActionListener implements ActionListener
 			DbManager.setConfig("trimDate", "-1");
 		}
 		Main.logger.info("Set trimDate to: " + DbManager.getConfig("trimDate"));
+
+		// Parse the maxSize field
+		if(maxSizeField.getText().matches("[0-9]+\\.?[0-9]*"))
+		{
+			try
+			{
+				float maxSizeInMb = Float.parseFloat(maxSizeField.getText());
+				DbManager.setConfig("maxSize", Float.toString(maxSizeInMb));
+			}
+			catch(NumberFormatException e1)
+			{
+				// Invalid numbers will fallback to the default
+				DbManager.setConfig("maxSize", "5");
+			}
+		}
+		else
+		{
+			// Invalid number
+			DbManager.setConfig("maxSize", "5");
+		}
+		Main.logger.info("Set maxSize to: " + DbManager.getConfig("maxSize"));
 
 		// Parse the scan field
 		if(scanField.isSelected())

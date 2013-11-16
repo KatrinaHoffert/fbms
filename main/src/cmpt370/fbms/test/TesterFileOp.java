@@ -126,13 +126,13 @@ public class TesterFileOp extends TestCase
 	public void testfileValid()
 	{
 		assertTrue("fileValid() reported false for small text file.",
-				FileOp.fileValid(new File("TestFileOp\\SmallSize.txt").toPath()));
+				FileOp.isPlainText(new File("TestFileOp\\SmallSize.txt").toPath()));
 
 		assertFalse("fileValid() reported true for large text file.",
-				FileOp.fileValid(new File("TestFileOp\\LargeSize.txt").toPath()));
+				FileOp.isPlainText(new File("TestFileOp\\LargeSize.txt").toPath()));
 
 		assertFalse("fileValid() reported true for binary file.",
-				FileOp.fileValid(new File("TestFileOp\\BinaryFile.bin").toPath()));
+				FileOp.isPlainText(new File("TestFileOp\\BinaryFile.bin").toPath()));
 	}
 
 	public void testcopySingleFile() throws IOException

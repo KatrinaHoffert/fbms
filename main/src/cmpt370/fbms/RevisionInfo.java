@@ -15,6 +15,7 @@
 
 package cmpt370.fbms;
 
+
 /**
  * Largely a plain old data class for grouping together information on revisions.
  */
@@ -24,6 +25,7 @@ public class RevisionInfo implements Comparable<RevisionInfo>
 	public String path;
 	public String diff;
 	public long delta;
+	public byte[] binary;
 	public long filesize;
 	public long time;
 

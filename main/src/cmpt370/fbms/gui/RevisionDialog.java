@@ -24,6 +24,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
 import cmpt370.fbms.DataRetriever;
+import cmpt370.fbms.FileOp;
 import cmpt370.fbms.GuiController;
 import cmpt370.fbms.Main;
 
@@ -122,8 +123,8 @@ public class RevisionDialog extends JDialog
 					GuiController.displayRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
 
 					Main.logger.debug("Viewed revision of "
-							+ FrontEnd.frame.selectedFile.toString() + " @ T = "
-							+ selectedTimestamp);
+							+ FileOp.convertPath(FrontEnd.frame.selectedFile).toString()
+							+ " @ T = " + selectedTimestamp);
 				}
 			}
 		});
@@ -244,8 +245,9 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 		{
 			GuiController.displayRevision(FrontEnd.frame.selectedFile, dialog.selectedTimestamp);
 
-			Main.logger.debug("Viewed revision of " + FrontEnd.frame.selectedFile.toString()
-					+ " @ T = " + dialog.selectedTimestamp);
+			Main.logger.debug("Viewed revision of "
+					+ FileOp.convertPath(FrontEnd.frame.selectedFile).toString() + " @ T = "
+					+ dialog.selectedTimestamp);
 		}
 	}
 

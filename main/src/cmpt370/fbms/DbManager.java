@@ -92,7 +92,7 @@ public class DbManager
 			if(!revisionsTableExists.next())
 			{
 				statement.executeUpdate("CREATE TABLE revisions (id INTEGER PRIMARY KEY ASC,"
-						+ " path STRING, diff STRING, delta INTEGER, filesize INTEGER, time INTEGER)");
+						+ " path STRING, diff STRING, binary BLOB, delta INTEGER, filesize INTEGER, time INTEGER)");
 				firstRun = true;
 
 				Main.logger.info("Existing revisions table not found; new table created");
@@ -165,7 +165,8 @@ public class DbManager
 
 			while(revisionRows.next())
 			{
-				// Table structure: (id INTEGER, path STRING, diff STRING, delta INTEGER, filesize
+				// Table structure: (id INTEGER, path STRING, diff STRING, binary BLOB, delta
+				// INTEGER, filesize
 				// INTEGER, time INTEGER)
 				RevisionInfo newRevision = new RevisionInfo();
 
@@ -177,6 +178,9 @@ public class DbManager
 
 				// diff STRING
 				newRevision.diff = revisionRows.getString("diff");
+
+				// binary BLOB
+				newRevision.binary = revisionRows.getBytes("binary");
 
 				// delta INTEGER
 				newRevision.delta = revisionRows.getLong("delta");
@@ -229,8 +233,8 @@ public class DbManager
 
 			if(revisionRows.next())
 			{
-				// Table structure: (id INTEGER, path STRING, diff STRING, delta INTEGER, filesize
-				// INTEGER, time INTEGER)
+				// Table structure: (id INTEGER, path STRING, diff STRING, binary BLOB, delta
+				// INTEGER, filesize INTEGER, time INTEGER)
 				revision = new RevisionInfo();
 
 				// id INTEGER
@@ -243,7 +247,10 @@ public class DbManager
 				revision.diff = revisionRows.getString("diff");
 
 				// delta INTEGER
-				revision.delta = revisionRows.getLong("delta");
+				revision.binary = revisionRows.getBytes("binary");
+
+				// filesize INTEGER
+				revision.filesize = revisionRows.getLong("filesize");
 
 				// filesize INTEGER
 				revision.filesize = revisionRows.getLong("filesize");
@@ -282,12 +289,13 @@ public class DbManager
 	 *            this revision increased the file size of the file, while negative means the file
 	 *            size decreased).
 	 */
-	public static void insertRevision(Path file, String diff, long delta, long filesize)
+	public static void insertRevision(Path file, String diff, byte[] binary, long delta,
+			long filesize)
 	{
 		// Using prepared statements because the diff string can be very long
 		PreparedStatement revision = null;
-		String insertStatment = "INSERT INTO revisions (path, diff, delta, filesize, time) VALUES("
-				+ "?, ?, ?, ?, ?)";
+		String insertStatment = "INSERT INTO revisions (path, diff, binary, delta, filesize, time) VALUES("
+				+ "?, ?, ?, ?, ?, ?)";
 
 		try
 		{
@@ -297,12 +305,14 @@ public class DbManager
 			revision.setString(1, file.toString());
 			// diff
 			revision.setString(2, diff);
+			// binary
+			revision.setBytes(3, binary);
 			// delta
-			revision.setLong(3, delta);
+			revision.setLong(4, delta);
 			// filesize
-			revision.setLong(4, filesize);
+			revision.setLong(5, filesize);
 			// time
-			revision.setLong(5, System.currentTimeMillis() / 1000L);
+			revision.setLong(6, System.currentTimeMillis() / 1000L);
 
 			revision.executeUpdate();
 		}
@@ -386,6 +396,9 @@ public class DbManager
 
 				// And put them together to get [renamed path]/[possibly other paths]/[file name]
 				Path renamedPath = prePath.resolve(postPath);
+
+				// Make sure the path is consistent
+				renamedPath = renamedPath.normalize();
 
 				// Create the update statement to change this in the database
 				String updateStatement = "UPDATE revisions SET path = ? WHERE path = ?";
