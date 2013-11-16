@@ -112,7 +112,14 @@ public class DataRetriever
 					for(RevisionInfo revisionInfo : revisionInfoList)
 					{
 						totalRevisions++;
-						totalSizes += revisionInfo.diff.length() * 2; // characters are 2 bytes
+						if(revisionInfo.diff != null)
+						{
+							totalSizes += revisionInfo.diff.length() * 2; // characters are 2 bytes
+						}
+						else
+						{
+							totalSizes += revisionInfo.binary.length;
+						}
 					}
 
 					// int numberOfRevisions

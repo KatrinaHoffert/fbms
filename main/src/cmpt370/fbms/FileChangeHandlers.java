@@ -1,5 +1,7 @@
 package cmpt370.fbms;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ListIterator;
 
@@ -194,13 +196,38 @@ public class FileChangeHandlers
 						}
 					}
 				}
-				else if(pathm.toFile().isFile())
+				// It's a binary file, so revisions are handled differently
+				// TODO: Change temporary max file size
+				else if(pathm.toFile().isFile() && FileOp.fileSize(pathm) < 999999
+						&& FileOp.convertPath(pathm).toFile().exists())
 				{
-					// If the file isn't valid, just copy (its binary or large).
+					// No diffs, just store the revision
+					long delta = FileOp.fileSize(pathm)
+							- FileOp.fileSize(FileOp.convertPath(pathm));
+
+					try
+					{
+						FileHistory.storeRevision(pathm, null, Files.readAllBytes(pathm),
+								FileOp.fileSize(pathm), delta);
+					}
+					catch(IOException e)
+					{
+						Errors.nonfatalError("Failed to revision " + pathm.toString(), e);
+					}
+
+					// Copy it over
 					Path targetDirectory = FileOp.convertPath(pathm).getParent();
 					FileOp.copy(pathm, targetDirectory);
 
-					Main.logger.debug("Create File Handle: Found new large or binary file "
+					Main.logger.debug("Create File Handle: Found binary file "
+							+ pathm.toFile().toString());
+				}
+				// It doesn't exist in the backup directory, so just copy
+				{
+					Path targetDirectory = FileOp.convertPath(pathm).getParent();
+					FileOp.copy(pathm, targetDirectory);
+
+					Main.logger.debug("Create File Handle: Found new unrevisioned or large file "
 							+ pathm.toFile().toString());
 				}
 			}
