@@ -29,7 +29,16 @@ public class GuiController
 		Path fileToOpen = FileHistory.obtainRevisionContent(file, timestamp);
 		try
 		{
-			Desktop.getDesktop().open(fileToOpen.toFile());
+			if(fileToOpen.toFile().exists())
+			{
+				Desktop.getDesktop().open(fileToOpen.toFile());
+			}
+			// Viewing the most recent revision will be the file in the backup directory
+			else if(FileOp.convertPath(fileToOpen).toFile().exists())
+			{
+				System.out.println(FileOp.convertPath(fileToOpen).toString());
+				Desktop.getDesktop().open(FileOp.convertPath(fileToOpen).toFile());
+			}
 		}
 		catch(IOException e)
 		{

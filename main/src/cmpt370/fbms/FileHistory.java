@@ -161,7 +161,8 @@ public class FileHistory
 		Path tempPatchFile = null;
 		try
 		{
-			tempPatchFile = Files.createTempFile("FBMS", ".tmp");
+			String[] fileNameSplit = file.getFileName().toString().split("\\.");
+			tempPatchFile = Files.createTempFile("FBMS", fileNameSplit[fileNameSplit.length - 1]);
 
 			for(RevisionInfo revisionInfo : patchList)
 			{
