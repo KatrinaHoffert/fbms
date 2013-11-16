@@ -85,7 +85,7 @@ public class FileHistory
 	 * @param delta
 	 *            change in file size.
 	 */
-	public static void storeRevision(Path file, Path diff, long filesize, long delta)
+	public static void storeRevision(Path file, Path diff, byte[] binary, long filesize, long delta)
 	{
 		// Get the diff as a String
 		String diffString = null;
@@ -98,7 +98,7 @@ public class FileHistory
 			Errors.nonfatalError("Could not store " + file.toString() + " to database.");
 		}
 
-		DbManager.insertRevision(file, diffString, null, delta, filesize);
+		DbManager.insertRevision(file, diffString, binary, delta, filesize);
 
 		Main.logger.debug("Revision stored for file " + file.toString() + " (file size: "
 				+ filesize + "; delta: " + delta + ")");

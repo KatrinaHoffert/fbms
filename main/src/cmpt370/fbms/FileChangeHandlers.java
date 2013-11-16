@@ -151,7 +151,7 @@ public class FileChangeHandlers
 			}
 			if(!hit)
 			{
-				if(pathm.toFile().isFile() && FileOp.fileValid(pathm))
+				if(pathm.toFile().isFile() && FileOp.isPlainText(pathm))
 				{
 					if(!FileOp.convertPath(pathm).toFile().exists())
 					{
@@ -182,7 +182,8 @@ public class FileChangeHandlers
 									- FileOp.fileSize(FileOp.convertPath(pathm));
 
 							// Store a revision
-							FileHistory.storeRevision(pathm, diff, FileOp.fileSize(pathm), delta);
+							FileHistory.storeRevision(pathm, diff, null, FileOp.fileSize(pathm),
+									delta);
 
 							// Copy file over.
 							Path targetDirectory = FileOp.convertPath(pathm).getParent();
@@ -227,7 +228,7 @@ public class FileChangeHandlers
 				// If this is a file we're renaming update database and rename file.
 				if(!FileOp.isFolder(FileOp.convertPath(toRename.oldName)))
 				{
-					if(FileOp.fileValid(toRename.newName))
+					if(toRename.newName.toFile().exists() && FileOp.isPlainText(toRename.newName))
 					{
 						diff = FileOp.createPatch(FileOp.convertPath(toRename.oldName),
 								toRename.newName);
@@ -248,7 +249,7 @@ public class FileChangeHandlers
 									- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
 
 							// Store a revision
-							FileHistory.storeRevision(toRename.newName, diff,
+							FileHistory.storeRevision(toRename.newName, diff, null,
 									FileOp.fileSize(toRename.newName), delta);
 
 							// Copy file over.
