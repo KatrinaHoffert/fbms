@@ -125,10 +125,17 @@ public class FileChangeHandlers
 	{
 		ListIterator<Path> itrm = Main.modifiedFiles.listIterator(Main.modifiedFiles.size());
 		ListIterator<RenamedFile> itrr;
+
 		Path pathm, diff;
 		RenamedFile toRename;
 		boolean hit = false;
+
+		// Figure out the maximum size that gets revisioned (note the config is in MB, so is
+		// multiplied by 1024^2 to get bytes
+		long maxSizeInBytes = (long) Math.round(Float.parseFloat(DbManager.getConfig("maxSize")) * 1024 * 1024);
+
 		Main.logger.debug("Handle Modified Files has started.");
+
 		while(itrm.hasPrevious())
 		{
 			pathm = itrm.previous();
@@ -197,8 +204,7 @@ public class FileChangeHandlers
 					}
 				}
 				// It's a binary file, so revisions are handled differently
-				// TODO: Change temporary max file size
-				else if(pathm.toFile().isFile() && FileOp.fileSize(pathm) < 999999
+				else if(pathm.toFile().isFile() && FileOp.fileSize(pathm) < maxSizeInBytes
 						&& FileOp.convertPath(pathm).toFile().exists())
 				{
 					// No diffs, just store the revision
@@ -238,13 +244,19 @@ public class FileChangeHandlers
 	public static void handleRenamedFiles()
 	{
 		ListIterator<RenamedFile> itrr = Main.renamedFiles.listIterator(Main.renamedFiles.size());
+
 		RenamedFile toRename;
 		Path diff;
 		String newName;
+
+		// Figure out the maximum size that gets revisioned (note the config is in MB, so is
+		// multiplied by 1024^2 to get bytes
+		long maxSizeInBytes = (long) Math.round(Float.parseFloat(DbManager.getConfig("maxSize")) * 1024 * 1024);
+
+		Main.logger.debug("Handle Renamed Files has started.");
+
 		// Since this is last to call all modified/created files should be dealt with.
 		// We just iterate through the list and rename files.
-		// All files on the list should by convention already exist.
-		Main.logger.debug("Handle Renamed Files has started.");
 		while(itrr.hasPrevious())
 		{
 			toRename = itrr.previous();
@@ -279,11 +291,14 @@ public class FileChangeHandlers
 						}
 						else
 						{
-							// Store the revision
-							long delta = FileOp.fileSize(toRename.newName)
-									- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
-							FileHistory.storeRevision(toRename.newName, diff, null,
-									FileOp.fileSize(toRename.newName), delta);
+							// Store the revision if the file is below the max size
+							if(FileOp.fileSize(toRename.newName) < maxSizeInBytes)
+							{
+								long delta = FileOp.fileSize(toRename.newName)
+										- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
+								FileHistory.storeRevision(toRename.newName, diff, null,
+										FileOp.fileSize(toRename.newName), delta);
+							}
 
 							// Copy file over
 							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
@@ -307,7 +322,8 @@ public class FileChangeHandlers
 							// In the event of moving a file within the live directory, the old name
 							// won't exist. In this case, there are no changes and no revision is
 							// necessary (or even possible, since the old file == the new file)
-							if(toRename.oldName.toFile().exists())
+							if(toRename.oldName.toFile().exists()
+									&& FileOp.fileSize(toRename.newName) < maxSizeInBytes)
 							{
 								FileHistory.storeRevision(toRename.newName, null,
 										Files.readAllBytes(toRename.oldName),
@@ -376,11 +392,14 @@ public class FileChangeHandlers
 						}
 						else
 						{
-							// Store the revision
-							long delta = FileOp.fileSize(toRename.newName)
-									- FileOp.fileSize(FileOp.convertPath(toRename.newName));
-							FileHistory.storeRevision(toRename.newName, diff, null,
-									FileOp.fileSize(toRename.newName), delta);
+							// Store the revision if it's within the size limits
+							if(FileOp.fileSize(toRename.newName) < maxSizeInBytes)
+							{
+								long delta = FileOp.fileSize(toRename.newName)
+										- FileOp.fileSize(FileOp.convertPath(toRename.newName));
+								FileHistory.storeRevision(toRename.newName, diff, null,
+										FileOp.fileSize(toRename.newName), delta);
+							}
 
 							// Copy file over
 							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
@@ -394,19 +413,23 @@ public class FileChangeHandlers
 					// Binary files
 					else
 					{
-						// Store the revision
-						long delta = FileOp.fileSize(toRename.newName)
-								- FileOp.fileSize(FileOp.convertPath(toRename.newName));
-						try
+						// Store the revision if it's within size limits
+						if(FileOp.fileSize(toRename.newName) < maxSizeInBytes)
 						{
-							FileHistory.storeRevision(toRename.newName, null,
-									Files.readAllBytes(toRename.newName),
-									FileOp.fileSize(toRename.newName), delta);
-						}
-						catch(IOException e)
-						{
-							Errors.nonfatalError("Could not insert revision for renamed, existing "
-									+ "binary file " + toRename.newName.toString(), e);
+							long delta = FileOp.fileSize(toRename.newName)
+									- FileOp.fileSize(FileOp.convertPath(toRename.newName));
+							try
+							{
+								FileHistory.storeRevision(toRename.newName, null,
+										Files.readAllBytes(toRename.newName),
+										FileOp.fileSize(toRename.newName), delta);
+							}
+							catch(IOException e)
+							{
+								Errors.nonfatalError(
+										"Could not insert revision for renamed, existing "
+												+ "binary file " + toRename.newName.toString(), e);
+							}
 						}
 
 						// And copy the file
