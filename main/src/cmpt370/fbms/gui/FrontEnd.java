@@ -63,6 +63,7 @@ public class FrontEnd
 		int trayIconWidth = new TrayIcon(trayIconImage).getSize().width;
 		final TrayIcon trayIcon = new TrayIcon(trayIconImage.getScaledInstance(trayIconWidth, -1,
 				Image.SCALE_SMOOTH));
+		trayIcon.setToolTip("FBMS: Running");
 
 		final SystemTray tray = SystemTray.getSystemTray();
 
