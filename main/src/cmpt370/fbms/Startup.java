@@ -33,7 +33,7 @@ public class Startup
 	 * Manages all the startup functionality. First, we check if the backup directory has been set.
 	 * If not, we begin the first run
 	 */
-	public static void startup()
+	public void startup()
 	{
 		// Redirect standard error to the log (needs to be done first so that any errors encountered
 		// reach the log; we'll still miss any possible errors that could occur before this line is
@@ -183,7 +183,7 @@ public class Startup
 	 *            The output stream to send to the log.
 	 * @return The passed in print stream, which is logged AND sent to standard error.
 	 */
-	public static PrintStream createLoggingProxy(final PrintStream realPrintStream)
+	private PrintStream createLoggingProxy(final PrintStream realPrintStream)
 	{
 		return new PrintStream(realPrintStream)
 		{
@@ -200,7 +200,7 @@ public class Startup
 	 * The parsed path is set as the backup directory. If the path is invalid, the backup directory
 	 * is not set.
 	 */
-	public static void resolveBackupDirectory()
+	public void resolveBackupDirectory()
 	{
 		// Load the backup_location file to get the backup folder path. If it doesn't exist, it's
 		// the first run
@@ -267,7 +267,7 @@ public class Startup
 	 * @param directory
 	 *            The directory to base the scan on (ie, the live directory)
 	 */
-	public static void startupScan(Path directory)
+	public void startupScan(Path directory)
 	{
 		String status = db.getConfig("startupScan");
 		// Check if user disabled the scan

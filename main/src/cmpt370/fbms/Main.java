@@ -60,9 +60,15 @@ public class Main
 	 */
 	public static void main(String[] args)
 	{
-		Startup.startup();
-		Startup.startupScan(liveDirectory);
+		// Perform startup and initialization
+		Startup startup = new Startup();
+		startup.startup();
+		startup.startupScan(liveDirectory);
+
+		// Start the file handler
 		fileHandler();
+
+		// Create the GUI
 		FrontEnd.initGui();
 	}
 

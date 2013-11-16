@@ -178,7 +178,7 @@ public class GuiController
 		}
 
 		// Copy any existing files in the live directory to the backup directory.
-		Startup.startupScan(Main.liveDirectory);
+		new Startup().startupScan(Main.liveDirectory);
 
 		// And add a new watcher
 		try
