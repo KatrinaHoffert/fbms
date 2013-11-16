@@ -139,11 +139,16 @@ public class FileHistory
 		Path specificRevision = getRevisionInfo(file, timestamp);
 		if(!FileOp.isPlainText(specificRevision))
 		{
+			Main.logger.debug("Revision for file " + file.toString() + " (" + timestamp
+					+ ") is binary");
 			return specificRevision;
 		}
 
+		Main.logger.debug("Revision for file " + file.toString() + " (" + timestamp
+				+ ") is plain text");
+
 		// Retrieve data from database
-		List<RevisionInfo> fileRevisionList = DbManager.getFileRevisions(FileOp.convertPath(file));
+		List<RevisionInfo> fileRevisionList = DbManager.getFileRevisions(file);
 		LinkedList<RevisionInfo> patchList = new LinkedList<>();
 
 		// Add the records we needed to a linked list
@@ -164,6 +169,8 @@ public class FileHistory
 		Path tempPatchFile = null;
 		try
 		{
+			// Get the extension for the file (ensures the correct program is used to display the
+			// file)
 			String[] fileNameSplit = file.getFileName().toString().split("\\.");
 			tempPatchFile = Files.createTempFile("FBMS", fileNameSplit[fileNameSplit.length - 1]);
 

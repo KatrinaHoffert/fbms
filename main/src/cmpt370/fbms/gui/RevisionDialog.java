@@ -120,8 +120,7 @@ public class RevisionDialog extends JDialog
 			{
 				if(selectedTimestamp != -1)
 				{
-					GuiController.displayRevision(FileOp.convertPath(FrontEnd.frame.selectedFile),
-							selectedTimestamp);
+					GuiController.displayRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
 
 					Main.logger.debug("Viewed revision of "
 							+ FileOp.convertPath(FrontEnd.frame.selectedFile).toString()
@@ -244,8 +243,7 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 	{
 		if(dialog.selectedTimestamp != -1)
 		{
-			GuiController.displayRevision(FileOp.convertPath(FrontEnd.frame.selectedFile),
-					dialog.selectedTimestamp);
+			GuiController.displayRevision(FrontEnd.frame.selectedFile, dialog.selectedTimestamp);
 
 			Main.logger.debug("Viewed revision of "
 					+ FileOp.convertPath(FrontEnd.frame.selectedFile).toString() + " @ T = "
