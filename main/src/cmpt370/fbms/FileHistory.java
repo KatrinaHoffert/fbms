@@ -46,10 +46,13 @@ public class FileHistory
 		Path pathToTempFile = null;
 		PrintWriter output = null;
 
+		String[] fileNameSplit = file.getFileName().toString().split("\\.");
+		String extension = fileNameSplit[fileNameSplit.length - 1];
+
 		try
 		{
 			// Create a temporary file for the revision
-			pathToTempFile = Files.createTempFile("revision", ".txt");
+			pathToTempFile = Files.createTempFile("revision", extension);
 
 			// Write the diff or binary content to that temp file
 			if(revision.diff != null)

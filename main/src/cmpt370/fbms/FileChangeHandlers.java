@@ -255,11 +255,14 @@ public class FileChangeHandlers
 				// If this is a file we're renaming update database and rename file.
 				if(!FileOp.isFolder(FileOp.convertPath(toRename.oldName)))
 				{
-					if(toRename.newName.toFile().exists() && FileOp.isPlainText(toRename.newName))
+					// When the new name exists in the backup directory and is plain text
+					if(FileOp.convertPath(toRename.newName).toFile().exists()
+							&& FileOp.isPlainText(toRename.newName))
 					{
 						diff = FileOp.createPatch(FileOp.convertPath(toRename.oldName),
 								toRename.newName);
 
+						// Don't add empty revisions
 						if(diff.toFile().length() == 0)
 						{
 							Main.logger.info("File delta created in handleRename was 0 in size: "
@@ -267,22 +270,25 @@ public class FileChangeHandlers
 									+ " -- revision not made.");
 							FileOp.rename(FileOp.convertPath(toRename.oldName), newName);
 							FileHistory.renameRevision(toRename.oldName, newName);
-
 						}
 						else
 						{
-							// Look at size difference.
+							// Store the revision
 							long delta = FileOp.fileSize(toRename.newName)
 									- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
-
-							// Store a revision
 							FileHistory.storeRevision(toRename.newName, diff, null,
 									FileOp.fileSize(toRename.newName), delta);
 
-							// Copy file over.
+							// Copy file over
 							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 							FileOp.copy(toRename.newName, targetDirectory);
-							FileOp.delete(FileOp.convertPath(toRename.oldName));
+
+							// And remove the old file (rename = copy to new name and delete old
+							// name)
+							if(FileOp.convertPath(toRename.oldName).toFile().exists())
+							{
+								FileOp.delete(FileOp.convertPath(toRename.oldName));
+							}
 							FileHistory.renameRevision(toRename.oldName, newName);
 
 							Main.logger.debug("Handle Renamed: "
@@ -290,6 +296,33 @@ public class FileChangeHandlers
 									+ "already existed and was updated.");
 						}
 					}
+					// Binary files (which exist in the backup directory)
+					else if(toRename.newName.toFile().exists())
+					{
+						// Store the revision
+						long delta = FileOp.fileSize(toRename.newName)
+								- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
+						try
+						{
+							FileHistory.storeRevision(toRename.newName, null,
+									Files.readAllBytes(toRename.oldName),
+									FileOp.fileSize(toRename.newName), delta);
+						}
+						catch(IOException e)
+						{
+							Errors.nonfatalError("Could not insert revision for renamed, existing "
+									+ "binary file.", e);
+						}
+
+						// And copy the file
+						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
+						FileOp.copy(toRename.newName, targetDirectory);
+						FileOp.delete(FileOp.convertPath(toRename.oldName));
+						FileHistory.renameRevision(toRename.oldName, newName);
+						Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+								+ "existed but was not a valid file and was updated.");
+					}
+					// Files that don't exist in the backup directory
 					else
 					{
 						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
@@ -310,7 +343,6 @@ public class FileChangeHandlers
 			}
 			else
 			{
-
 				Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 				FileOp.copy(toRename.newName, targetDirectory);
 				FileOp.delete(toRename.oldName);
