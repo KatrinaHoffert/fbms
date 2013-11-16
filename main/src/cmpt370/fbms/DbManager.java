@@ -397,6 +397,9 @@ public class DbManager
 				// And put them together to get [renamed path]/[possibly other paths]/[file name]
 				Path renamedPath = prePath.resolve(postPath);
 
+				// Make sure the path is consistent
+				renamedPath = renamedPath.normalize();
+
 				// Create the update statement to change this in the database
 				String updateStatement = "UPDATE revisions SET path = ? WHERE path = ?";
 
