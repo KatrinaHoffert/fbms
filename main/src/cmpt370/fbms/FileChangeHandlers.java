@@ -311,7 +311,7 @@ public class FileChangeHandlers
 						catch(IOException e)
 						{
 							Errors.nonfatalError("Could not insert revision for renamed, existing "
-									+ "binary file.", e);
+									+ "binary file " + toRename.newName.toString(), e);
 						}
 
 						// And copy the file
@@ -330,7 +330,7 @@ public class FileChangeHandlers
 						FileOp.delete(FileOp.convertPath(toRename.oldName));
 						FileHistory.renameRevision(toRename.oldName, newName);
 						Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-								+ "existed but was not a valid file and was updated.");
+								+ " existed but was not a valid file and was updated.");
 					}
 				}
 				else
@@ -343,11 +343,87 @@ public class FileChangeHandlers
 			}
 			else
 			{
-				Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
-				FileOp.copy(toRename.newName, targetDirectory);
-				FileOp.delete(toRename.oldName);
-				Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-						+ " did not exist and was added.");
+				// Case for renaming a file where the old name did not exist in the backup, but the
+				// new name does, meaning that we're going to be overwriting some existing file.
+				// This is a crucial use case for editors that create a swap file and copy that over
+				// the real file.
+				if(FileOp.convertPath(toRename.newName).toFile().exists())
+				{
+					// TODO
+
+					// Plain text files get diffed
+					if(FileOp.isPlainText(toRename.newName))
+					{
+						// The patch is now from the new name in the backup directory to the new
+						// name in the live directory
+						diff = FileOp.createPatch(FileOp.convertPath(toRename.newName),
+								toRename.newName);
+
+						// Don't add empty revisions
+						if(diff.toFile().length() == 0)
+						{
+							Main.logger.info("File delta created in handleRename was 0 in size: "
+									+ toRename.newName.toFile().toString()
+									+ " -- revision not made.");
+						}
+						else
+						{
+							// Store the revision
+							long delta = FileOp.fileSize(toRename.newName)
+									- FileOp.fileSize(FileOp.convertPath(toRename.newName));
+							FileHistory.storeRevision(toRename.newName, diff, null,
+									FileOp.fileSize(toRename.newName), delta);
+
+							// Copy file over
+							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
+							FileOp.copy(toRename.newName, targetDirectory);
+
+							Main.logger.debug("Handle Renamed: "
+									+ toRename.newName.toFile().toString()
+									+ "already existed and was updated.");
+						}
+					}
+					// Binary files
+					else
+					{
+						// Store the revision
+						long delta = FileOp.fileSize(toRename.newName)
+								- FileOp.fileSize(FileOp.convertPath(toRename.newName));
+						try
+						{
+							FileHistory.storeRevision(toRename.newName, null,
+									Files.readAllBytes(toRename.newName),
+									FileOp.fileSize(toRename.newName), delta);
+						}
+						catch(IOException e)
+						{
+							Errors.nonfatalError("Could not insert revision for renamed, existing "
+									+ "binary file " + toRename.newName.toString(), e);
+						}
+
+						// And copy the file
+						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
+						FileOp.copy(toRename.newName, targetDirectory);
+
+						Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+								+ " only new name existed.");
+					}
+
+					// TODO
+					Main.logger.debug("Handle Renamed: "
+							+ toRename.newName.toFile().toString()
+							+ " existed in the backup directory and a revision was created when overwriting");
+				}
+				// Finally, we have renamed files that are not being overwritten and are not
+				// renaming an existing file
+				else
+				{
+					Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
+					FileOp.copy(toRename.newName, targetDirectory);
+					FileOp.delete(toRename.oldName);
+					Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+							+ " did not exist and was added.");
+				}
 			}
 
 			// Remove entry to move onto the next.
