@@ -33,7 +33,11 @@ public class Startup
 	 */
 	public static void startup()
 	{
-		// And print a testing message to the log
+		// Redirect standard error to the log (needs to be done first so that any errors encountered
+		// reach the log; we'll still miss any possible errors that could occur before this line is
+		// reached)
+		System.setErr(createLoggingProxy(System.err));
+
 		Main.logger.info("Program started");
 
 		// Alias the text and apply look and feel. Aliasing is not done on Windows, where text is
@@ -168,9 +172,6 @@ public class Startup
 		{
 			Errors.fatalError("Could not start file watcher module", e);
 		}
-
-		// Redirect standard error to the log
-		System.setErr(createLoggingProxy(System.err));
 	}
 
 	/**
