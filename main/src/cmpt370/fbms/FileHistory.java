@@ -98,7 +98,7 @@ public class FileHistory
 			Errors.nonfatalError("Could not store " + file.toString() + " to database.");
 		}
 
-		DbManager.insertRevision(file, diffString, delta, filesize);
+		DbManager.insertRevision(file, diffString, null, delta, filesize);
 
 		Main.logger.debug("Revision stored for file " + file.toString() + " (file size: "
 				+ filesize + "; delta: " + delta + ")");

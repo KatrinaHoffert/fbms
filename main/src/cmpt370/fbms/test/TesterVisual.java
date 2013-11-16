@@ -79,7 +79,6 @@ public class TesterVisual
 
 	// Insert a revision, rename it, and then obtain it
 	@Test
-	@Ignore
 	public void dbManagerInsertRevision() throws IOException
 	{
 		// Setup
@@ -95,7 +94,7 @@ public class TesterVisual
 
 		// Insert a "revision" with filler content
 		DbManager.insertRevision(path.resolve("README.txt"),
-				FileOp.fileToString(path.resolve("README.txt")), 100, 50);
+				FileOp.fileToString(path.resolve("README.txt")), null, 100, 50);
 
 		// Now rename that revision
 		DbManager.renameRevisions(path.resolve("README.txt"), "not-readme.txt");
