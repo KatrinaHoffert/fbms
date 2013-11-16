@@ -93,7 +93,8 @@ public class Errors
 	 */
 	public static void nonfatalError(String message, String header, Throwable error)
 	{
-		String disableNonFatalErrors = DbManager.getConfig("disableNonFatalErrors");
+		DbManager db = DbManager.getInstance();
+		String disableNonFatalErrors = db.getConfig("disableNonFatalErrors");
 		if(disableNonFatalErrors == null)
 		{
 			disableNonFatalErrors = "false";

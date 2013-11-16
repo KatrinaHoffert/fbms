@@ -27,6 +27,8 @@ import cmpt370.fbms.gui.FirstStartWizard;
  */
 public class Startup
 {
+	private static DbManager db = DbManager.getInstance();
+
 	/**
 	 * Manages all the startup functionality. First, we check if the backup directory has been set.
 	 * If not, we begin the first run
@@ -92,13 +94,13 @@ public class Startup
 
 			// Initialize the database, then set the live directory inside this database (for
 			// sequential program start-ups)
-			DbManager.initConnection();
-			DbManager.setConfig("liveDirectory", Main.liveDirectory.toString());
+			db.initConnection();
+			db.setConfig("liveDirectory", Main.liveDirectory.toString());
 
 			// Set some default settings
-			DbManager.setConfig("trimDate", "-1");
-			DbManager.setConfig("startupScan", "true");
-			DbManager.setConfig("disableNonFatalErrors", "false");
+			db.setConfig("trimDate", "-1");
+			db.setConfig("startupScan", "true");
+			db.setConfig("disableNonFatalErrors", "false");
 
 			Main.logger.info("First run wizard completed");
 		}
@@ -106,7 +108,7 @@ public class Startup
 		{
 			// For subsequent runs, the backup directory has already been set and the live
 			// directory will be retrieved during DbManager.init()
-			DbManager.initConnection();
+			db.initConnection();
 
 			// Live directory specified in database is invalid
 			if(Main.liveDirectory == null || !Main.liveDirectory.toFile().exists())
@@ -133,7 +135,7 @@ public class Startup
 								&& !Main.backupDirectory.startsWith(chosenPath))
 						{
 							Main.liveDirectory = chosenPath;
-							DbManager.setConfig("liveDirectory", Main.liveDirectory.toString());
+							db.setConfig("liveDirectory", Main.liveDirectory.toString());
 						}
 						else
 						{
@@ -267,7 +269,7 @@ public class Startup
 	 */
 	public static void startupScan(Path directory)
 	{
-		String status = DbManager.getConfig("startupScan");
+		String status = db.getConfig("startupScan");
 		// Check if user disabled the scan
 		if(status != null && !status.equals("true"))
 		{

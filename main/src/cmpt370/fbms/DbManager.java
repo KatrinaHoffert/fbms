@@ -36,8 +36,26 @@ import cmpt370.fbms.gui.GuiUtility;
  */
 public class DbManager
 {
-	// Holds the active connection
-	private static Connection connection = null;
+	private static DbManager instance = null;
+	private Connection connection = null;
+
+	/**
+	 * Private constructor as this class is a singleton.
+	 */
+	private DbManager()
+	{}
+
+	/**
+	 * Gets the current instance of the object (singleton pattern).
+	 */
+	public static synchronized DbManager getInstance()
+	{
+		if(instance == null)
+		{
+			instance = new DbManager();
+		}
+		return instance;
+	}
 
 	/**
 	 * Initializes the database connection and creates tables if necessary. Returns true if it is
@@ -50,7 +68,7 @@ public class DbManager
 	 * 
 	 * @return True if first run, false otherwise
 	 */
-	public static void initConnection()
+	public void initConnection()
 	{
 		// We need to be able to detect if the program has been run for the first time or not
 		boolean firstRun = false;
@@ -147,7 +165,7 @@ public class DbManager
 	 *            The file to obtain revisions on.
 	 * @return A list of RevisionInfo object
 	 */
-	public static List<RevisionInfo> getFileRevisions(Path file)
+	public List<RevisionInfo> getFileRevisions(Path file)
 	{
 		List<RevisionInfo> list = new LinkedList<>();
 
@@ -214,7 +232,7 @@ public class DbManager
 	 *            The time stamp of the desired revision.
 	 * @return The revision in question if found or null if the revision does not exist.
 	 */
-	public static RevisionInfo getSpecificRevision(Path file, long timestamp)
+	public RevisionInfo getSpecificRevision(Path file, long timestamp)
 	{
 		RevisionInfo revision = null;
 
@@ -289,8 +307,7 @@ public class DbManager
 	 *            this revision increased the file size of the file, while negative means the file
 	 *            size decreased).
 	 */
-	public static void insertRevision(Path file, String diff, byte[] binary, long delta,
-			long filesize)
+	public void insertRevision(Path file, String diff, byte[] binary, long delta, long filesize)
 	{
 		// Using prepared statements because the diff string can be very long
 		PreparedStatement revision = null;
@@ -334,7 +351,7 @@ public class DbManager
 	 *            The new name of the file. Note this does not include the full path: just the file
 	 *            name (and extension).
 	 */
-	public static void renameRevisions(Path file, String newName)
+	public void renameRevisions(Path file, String newName)
 	{
 		// Figure out the new name
 		Path newPath = file.resolveSibling(newName);
@@ -367,7 +384,7 @@ public class DbManager
 	 * @param newName
 	 *            The new name for that one folder.
 	 */
-	public static void renameFolder(Path folder, String newName)
+	public void renameFolder(Path folder, String newName)
 	{
 		try
 		{
@@ -425,7 +442,7 @@ public class DbManager
 	 *            Name of the setting you want the value of.
 	 * @return Returns the value of the setting or null if it does not exist.
 	 */
-	public static String getConfig(String settingName)
+	public String getConfig(String settingName)
 	{
 		String settingValue = null;
 
@@ -463,7 +480,7 @@ public class DbManager
 	 * @param settingValue
 	 *            The value for the named setting to be updated or inserted into the table.
 	 */
-	public static void setConfig(String settingName, String settingValue)
+	public void setConfig(String settingName, String settingValue)
 	{
 		String insertStatment = "INSERT INTO settings(name, setting) VALUES(?, ?)";
 		String updateStatement = "UPDATE settings SET setting = ? WHERE name = ?";
@@ -511,7 +528,7 @@ public class DbManager
 	 * the user specified to remove revisions older than 30 days (155,520,000 seconds), then all
 	 * revisions matching that time stamp and older will be deleted.
 	 */
-	public static void trimDatabase()
+	public void trimDatabase()
 	{
 		// Get the trim date from the database
 		String timeDateConfig = getConfig("trimDate");
@@ -549,13 +566,15 @@ public class DbManager
 	 * Closes the database connection. Meant for tests where the connection is opened and closed for
 	 * each test (as there's no way to be certain of the order the tests will be run in).
 	 */
-	public static void close()
+	public void close()
 	{
 		if(connection != null)
 		{
 			try
 			{
 				connection.close();
+				connection = null;
+				instance = null;
 			}
 			catch(SQLException e)
 			{

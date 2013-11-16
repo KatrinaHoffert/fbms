@@ -111,7 +111,8 @@ public class Main
 						// Every 500 loops, we run the command to trim the database
 						if(loop % 500 == 0)
 						{
-							DbManager.trimDatabase();
+							DbManager db = DbManager.getInstance();
+							db.trimDatabase();
 						}
 
 						// Time to wait before "polling" the file lists again.

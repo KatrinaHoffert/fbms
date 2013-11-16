@@ -103,7 +103,8 @@ public class DataRetriever
 					Errors.nonfatalError("Could not read file size of " + file.getName(), e);
 				}
 
-				List<RevisionInfo> revisionInfoList = DbManager.getFileRevisions(FileOp.convertPath(file.toPath()));
+				DbManager db = DbManager.getInstance();
+				List<RevisionInfo> revisionInfoList = db.getFileRevisions(FileOp.convertPath(file.toPath()));
 				int totalRevisions = 0;
 				long totalSizes = 0;
 
@@ -147,7 +148,8 @@ public class DataRetriever
 	 */
 	public static List<RevisionInfo> getRevisionInfo(Path file)
 	{
-		return DbManager.getFileRevisions(file);
+		DbManager db = DbManager.getInstance();
+		return db.getFileRevisions(file);
 	}
 
 	/**

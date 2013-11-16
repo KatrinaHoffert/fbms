@@ -145,7 +145,8 @@ public class GuiController
 	{
 		// Set the new directory in the database
 		Main.liveDirectory = newDirectory;
-		DbManager.setConfig("liveDirectory", Main.liveDirectory.toString());
+		DbManager db = DbManager.getInstance();
+		db.setConfig("liveDirectory", Main.liveDirectory.toString());
 
 		// Remove the old watcher
 		try

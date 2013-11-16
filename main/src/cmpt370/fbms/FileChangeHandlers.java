@@ -132,7 +132,8 @@ public class FileChangeHandlers
 
 		// Figure out the maximum size that gets revisioned (note the config is in MB, so is
 		// multiplied by 1024^2 to get bytes
-		long maxSizeInBytes = (long) Math.round(Float.parseFloat(DbManager.getConfig("maxSize")) * 1024 * 1024);
+		DbManager db = DbManager.getInstance();
+		long maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
 
 		Main.logger.debug("Handle Modified Files has started.");
 
@@ -251,7 +252,8 @@ public class FileChangeHandlers
 
 		// Figure out the maximum size that gets revisioned (note the config is in MB, so is
 		// multiplied by 1024^2 to get bytes
-		long maxSizeInBytes = (long) Math.round(Float.parseFloat(DbManager.getConfig("maxSize")) * 1024 * 1024);
+		DbManager db = DbManager.getInstance();
+		long maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
 
 		Main.logger.debug("Handle Renamed Files has started.");
 
@@ -364,7 +366,7 @@ public class FileChangeHandlers
 					String newFolderName = toRename.oldName.relativize(toRename.newName).toString().substring(
 							3);
 
-					DbManager.renameFolder(toRename.oldName, newFolderName);
+					db.renameFolder(toRename.oldName, newFolderName);
 				}
 			}
 			else

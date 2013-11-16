@@ -23,6 +23,8 @@ import cmpt370.fbms.Main;
  */
 class SettingsDialog extends JDialog
 {
+	private DbManager db = DbManager.getInstance();
+
 	/**
 	 * Initializes the settings dialog
 	 */
@@ -52,7 +54,7 @@ class SettingsDialog extends JDialog
 		JPanel trimPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel trimLabel1 = new JLabel("Remove revisions older than ");
 		JTextField trimOption = new JTextField(3);
-		trimOption.setText(DbManager.getConfig("trimDate"));
+		trimOption.setText(db.getConfig("trimDate"));
 		JLabel trimLabel2 = new JLabel(" days");
 		trimPanel.add(trimLabel1);
 		trimPanel.add(trimOption);
@@ -63,7 +65,7 @@ class SettingsDialog extends JDialog
 		JPanel maxSizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel maxSizeLabel1 = new JLabel("Don't revision files larger than ");
 		JTextField maxSizeOption = new JTextField(3);
-		String maxSize = DbManager.getConfig("maxSize");
+		String maxSize = db.getConfig("maxSize");
 		if(maxSize == null)
 		{
 			maxSizeOption.setText("5");
@@ -82,7 +84,7 @@ class SettingsDialog extends JDialog
 		JPanel scanPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JCheckBox scanCheck = new JCheckBox("Scan for file changes on startup");
 		// Figure out if the box is checked
-		String statusStartupScan = DbManager.getConfig("startupScan");
+		String statusStartupScan = db.getConfig("startupScan");
 		if(statusStartupScan == null || statusStartupScan.equals("true"))
 		{
 			scanCheck.setSelected(true);
@@ -94,7 +96,7 @@ class SettingsDialog extends JDialog
 		JPanel disableErrorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JCheckBox disableErrorsCheck = new JCheckBox("Don't display non-fatal errors");
 		// Figure out if the box is checked
-		String statusErrors = DbManager.getConfig("disableNonFatalErrors");
+		String statusErrors = db.getConfig("disableNonFatalErrors");
 		if(statusErrors != null && statusErrors.equals("true"))
 		{
 			disableErrorsCheck.setSelected(true);
@@ -175,6 +177,7 @@ class CancelActionListener implements ActionListener
  */
 class AcceptActionListener implements ActionListener
 {
+	private DbManager db = DbManager.getInstance();
 	private JDialog dialog;
 	private JTextField trimField;
 	private JTextField maxSizeField;
@@ -199,18 +202,18 @@ class AcceptActionListener implements ActionListener
 		{
 			if(Integer.parseInt(trimField.getText()) < 0)
 			{
-				DbManager.setConfig("trimDate", "-1");
+				db.setConfig("trimDate", "-1");
 			}
 			else
 			{
-				DbManager.setConfig("trimDate", trimField.getText());
+				db.setConfig("trimDate", trimField.getText());
 			}
 		}
 		else
 		{
-			DbManager.setConfig("trimDate", "-1");
+			db.setConfig("trimDate", "-1");
 		}
-		Main.logger.info("Set trimDate to: " + DbManager.getConfig("trimDate"));
+		Main.logger.info("Set trimDate to: " + db.getConfig("trimDate"));
 
 		// Parse the maxSize field
 		if(maxSizeField.getText().matches("[0-9]+\\.?[0-9]*"))
@@ -218,43 +221,42 @@ class AcceptActionListener implements ActionListener
 			try
 			{
 				float maxSizeInMb = Float.parseFloat(maxSizeField.getText());
-				DbManager.setConfig("maxSize", Float.toString(maxSizeInMb));
+				db.setConfig("maxSize", Float.toString(maxSizeInMb));
 			}
 			catch(NumberFormatException e1)
 			{
 				// Invalid numbers will fallback to the default
-				DbManager.setConfig("maxSize", "5");
+				db.setConfig("maxSize", "5");
 			}
 		}
 		else
 		{
 			// Invalid number
-			DbManager.setConfig("maxSize", "5");
+			db.setConfig("maxSize", "5");
 		}
-		Main.logger.info("Set maxSize to: " + DbManager.getConfig("maxSize"));
+		Main.logger.info("Set maxSize to: " + db.getConfig("maxSize"));
 
 		// Parse the scan field
 		if(scanField.isSelected())
 		{
-			DbManager.setConfig("startupScan", "true");
+			db.setConfig("startupScan", "true");
 		}
 		else
 		{
-			DbManager.setConfig("startupScan", "false");
+			db.setConfig("startupScan", "false");
 		}
-		Main.logger.info("Set startupScan to: " + DbManager.getConfig("startupScan"));
+		Main.logger.info("Set startupScan to: " + db.getConfig("startupScan"));
 
 		// Parse the disable errors field
 		if(disableErrorsField.isSelected())
 		{
-			DbManager.setConfig("disableNonFatalErrors", "true");
+			db.setConfig("disableNonFatalErrors", "true");
 		}
 		else
 		{
-			DbManager.setConfig("disableNonFatalErrors", "false");
+			db.setConfig("disableNonFatalErrors", "false");
 		}
-		Main.logger.info("Set disableNonFatalErrors to: "
-				+ DbManager.getConfig("disableNonFatalErrors"));
+		Main.logger.info("Set disableNonFatalErrors to: " + db.getConfig("disableNonFatalErrors"));
 
 		// Close the window
 		dialog.dispose();

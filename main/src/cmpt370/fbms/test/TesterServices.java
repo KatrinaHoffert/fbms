@@ -26,11 +26,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import cmpt370.fbms.Main;
 import cmpt370.fbms.DataRetriever;
 import cmpt370.fbms.DbManager;
 import cmpt370.fbms.FileInfo;
 import cmpt370.fbms.FileOp;
+import cmpt370.fbms.Main;
 
 /**
  * This class runs tests that can be automated. There must not be any output that has to be examined
@@ -44,7 +44,8 @@ public class TesterServices
 	{
 		// Have to manually do the startup
 		Main.backupDirectory = Paths.get("").toAbsolutePath();
-		DbManager.initConnection();
+		DbManager db = DbManager.getInstance();
+		db.initConnection();
 
 		// Get the folder contents of this directory
 		List<FileInfo> list = DataRetriever.getFolderContents(Paths.get("").toAbsolutePath());
@@ -67,7 +68,7 @@ public class TesterServices
 		assertTrue(foundReadme);
 
 		// Manually clean up
-		DbManager.close();
+		db.close();
 		Files.delete(Main.backupDirectory.resolve(".revisions.db"));
 	}
 
@@ -77,16 +78,17 @@ public class TesterServices
 	{
 		// Create database in current directory
 		Main.backupDirectory = Paths.get("").toAbsolutePath();
-		DbManager.initConnection();
+		DbManager db = DbManager.getInstance();
+		db.initConnection();
 
 		// Try to change the live directory
-		DbManager.setConfig("liveDirectory", "/some/other/path");
+		db.setConfig("liveDirectory", "/some/other/path");
 
 		// Verify it worked
-		assertTrue(DbManager.getConfig("liveDirectory").equals("/some/other/path"));
+		assertTrue(db.getConfig("liveDirectory").equals("/some/other/path"));
 
 		// Cleanup
-		DbManager.close();
+		db.close();
 		Files.delete(Main.backupDirectory.resolve(".revisions.db"));
 	}
 
@@ -152,14 +154,14 @@ public class TesterServices
 
 		// Create the list of files to copy
 		List<Path> filesToCopy = new LinkedList<>();
-		filesToCopy.add(path.resolve("src/cmpt370/fbms/Control.java"));
+		filesToCopy.add(path.resolve("src/cmpt370/fbms/Main.java"));
 		filesToCopy.add(path.resolve("src/log4j.xml"));
 		filesToCopy.add(path.resolve("README.txt"));
 
 		FileOp.copy(filesToCopy);
 
 		// And check that they're all there
-		assertTrue(path.resolve("../test/src/cmpt370/fbms/Control.java").toFile().exists());
+		assertTrue(path.resolve("../test/src/cmpt370/fbms/Main.java").toFile().exists());
 		assertTrue(path.resolve("../test/src/log4j.xml").toFile().exists());
 		assertTrue(path.resolve("../test/README.txt").toFile().exists());
 

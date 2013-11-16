@@ -50,7 +50,8 @@ public class TesterVisual
 		// Manual setup
 		Path path = Paths.get("").toAbsolutePath();
 		Main.backupDirectory = path;
-		DbManager.initConnection();
+		DbManager db = DbManager.getInstance();
+		db.initConnection();
 
 		// Get the contents of this directory
 		List<FileInfo> list = DataRetriever.getFolderContents(path);
@@ -73,7 +74,7 @@ public class TesterVisual
 
 		// Cleanup
 		Files.delete(path.resolve(".revisions.db"));
-		DbManager.close();
+		db.close();
 	}
 
 
@@ -86,7 +87,9 @@ public class TesterVisual
 		Path path = Paths.get("").toAbsolutePath();
 		Main.backupDirectory = path;
 		Main.liveDirectory = path;
-		DbManager.initConnection();
+
+		DbManager db = DbManager.getInstance();
+		db.initConnection();
 
 		// Print out the database size
 		System.out.println("\n--------------------------------");
@@ -94,14 +97,14 @@ public class TesterVisual
 				+ FileOp.fileSize(path.resolve(".revisions.db")));
 
 		// Insert a "revision" with filler content
-		DbManager.insertRevision(path.resolve("README.txt"),
+		db.insertRevision(path.resolve("README.txt"),
 				FileOp.fileToString(path.resolve("README.txt")), null, 100, 50);
 
 		// Now rename that revision
-		DbManager.renameRevisions(path.resolve("README.txt"), "not-readme.txt");
+		db.renameRevisions(path.resolve("README.txt"), "not-readme.txt");
 
 		// Finally, obtain it and print it out
-		List<RevisionInfo> list = DbManager.getFileRevisions(path.resolve("not-readme.txt"));
+		List<RevisionInfo> list = db.getFileRevisions(path.resolve("not-readme.txt"));
 		for(RevisionInfo revision : list)
 		{
 			System.out.println("Found revision id = " + revision.id);
@@ -116,7 +119,7 @@ public class TesterVisual
 
 		// Cleanup
 		Files.delete(path.resolve(".revisions.db"));
-		DbManager.close();
+		db.close();
 	}
 
 	// Demonstrates a fatal error with just a message
@@ -183,7 +186,8 @@ public class TesterVisual
 		Path path = Paths.get("").toAbsolutePath();
 		Main.backupDirectory = path;
 		Main.liveDirectory = path;
-		DbManager.initConnection();
+		DbManager db = DbManager.getInstance();
+		db.initConnection();
 
 		// Insert revisions for a file
 		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("README.txt"), null,
@@ -206,7 +210,7 @@ public class TesterVisual
 		}
 
 		// Clean up
-		DbManager.close();
+		db.close();
 		FileOp.delete(path.resolve(".revisions.db"));
 	}
 }
