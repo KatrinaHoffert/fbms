@@ -492,7 +492,7 @@ public class FileOp
 	}
 
 	/**
-	 * Check the given file. If it is a text file and <5 MB, returns true.
+	 * Check the given file. If it is a text file and < 5 MB, returns true.
 	 * 
 	 * @param file
 	 *            the file to be checked.
@@ -521,12 +521,13 @@ public class FileOp
 			return false;
 		}
 
+		Main.logger.debug(file.toString() + " has an MIME type of " + fileTypeString);
+
 		if(fileSize(file) > 5242880)
 		{
 			Main.logger.debug(file.toString() + " is larger than 5 MB");
 			return false;
 		}
-		Main.logger.debug(file.toString() + " has an MIME type of " + fileTypeString);
 
 		if(fileTypeString == null)
 		{
@@ -594,9 +595,10 @@ public class FileOp
 	 * Checks the bytes of a file to determine if a given file is equal to another.
 	 * 
 	 * @param file1
+	 *            File to compare.
 	 * @param file2
-	 * @return
-	 * @throws IOException
+	 *            The file to compare it to.
+	 * @return True if they're equal, false if they ain't.
 	 */
 	public static boolean isEqual(Path file1, Path file2)
 	{
