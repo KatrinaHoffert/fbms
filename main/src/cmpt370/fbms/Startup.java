@@ -16,6 +16,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.gui.FirstStartWizard;
 
 /**
@@ -48,6 +52,14 @@ public class Startup
 		{
 			Errors.nonfatalError("Could not apply look and feel.", e);
 		}
+
+		// Disable the internal logging of the MIME Magic library. We already log the exceptions
+		// from it. We don't care about the internals.
+		Logger.getLogger(net.sf.jmimemagic.Magic.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.MagicParser.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.MagicMatch.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.MagicMatcher.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.detectors.TextFileDetector.class).setLevel(Level.OFF);
 
 		resolveBackupDirectory();
 

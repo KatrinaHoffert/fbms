@@ -40,6 +40,11 @@ import java.util.List;
 import name.fraser.neil.plaintext.diff_match_patch;
 import name.fraser.neil.plaintext.diff_match_patch.Diff;
 import name.fraser.neil.plaintext.diff_match_patch.Patch;
+import net.sf.jmimemagic.Magic;
+import net.sf.jmimemagic.MagicException;
+import net.sf.jmimemagic.MagicMatch;
+import net.sf.jmimemagic.MagicMatchNotFoundException;
+import net.sf.jmimemagic.MagicParseException;
 
 /**
  * A utility class for the various file operations that are performed by other methods.
@@ -496,29 +501,42 @@ public class FileOp
 	public static boolean fileValid(Path file)
 	{
 		String fileTypeString = null;
-		try
+
+		// Non-existant files cannot be valid
+		if(!file.toFile().exists())
 		{
-			fileTypeString = Files.probeContentType(file);
-		}
-		catch(Exception e)
-		{
-			// when failed, return false.
-			Main.logger.info("Could not probe file due to: " + e.getMessage());
 			return false;
 		}
+
+		// Check the file's MIME type
+		try
+		{
+			MagicMatch magicMatch = Magic.getMagicMatch(file.toFile(), true);
+			fileTypeString = magicMatch.getMimeType();
+		}
+		catch(MagicParseException | MagicMatchNotFoundException | MagicException e)
+		{
+			// When we cannot get the MIME type, return false (binary or large file)
+			Main.logger.info("Could not determine file MIME type ", e);
+			return false;
+		}
+
 		if(fileSize(file) > 5242880)
 		{
 			Main.logger.debug(file.toString() + " is larger than 5 MB");
 			return false;
 		}
-		Main.logger.debug(file.toString() + " is " + fileTypeString);
+		Main.logger.debug(file.toString() + " has an MIME type of " + fileTypeString);
 
 		if(fileTypeString == null)
 		{
+			// Couldn't figure it out
 			return false;
 		}
 
-		return fileTypeString.startsWith("text");
+		// Plain text files will have an MIME type of text/*. For example, HTML files have an MIME
+		// type of text/html
+		return fileTypeString.toLowerCase().startsWith("text");
 	}
 
 	/**

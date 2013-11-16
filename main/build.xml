@@ -24,7 +24,7 @@
 	<!-- Classpath for libraries. Note the inclusion of the build dir
 		so we can find the class files (since base dir is .) -->
 	<property name="classpath"
-		value="lib/jnotify-0.94.jar:lib/sqlite-jdbc-3.7.15-M1.jar:lib/log4j-1.2.17.jar:${build}" />
+		value="lib/jnotify-0.94.jar:lib/sqlite-jdbc-3.7.15-M1.jar:lib/log4j-1.2.17.jar:lib/commons-io-2.1.jar:lib/commons-logging-1.0.4.jar:lib/jmimemagic-0.1.3-SNAPSHOT.jar:lib/oro-2.0.8.jar:lib/xercesImpl-2.4.0.jar:lib/xml-apis-1.0.b2.jar:lib/xmlParserAPIs-2.0.2.jar:${build}" />
 	<!-- Sets whether the binaries are compiled with the debug flag or not -->
 	<property name="debug" value="on" />
 
@@ -42,7 +42,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="${mainClass}"/>
 				<attribute name="Class-Path"
-					value=". lib/jnotify-0.94.jar lib/log4j-1.2.17.jar lib/sqlite-jdbc-3.7.15-M1.jar"/>
+					value=". lib/jnotify-0.94.jar lib/log4j-1.2.17.jar lib/sqlite-jdbc-3.7.15-M1.jar lib/commons-io-2.1.jar lib/commons-logging-1.0.4.jar lib/jmimemagic-0.1.3-SNAPSHOT.jar lib/oro-2.0.8.jar lib/xercesImpl-2.4.0.jar lib/xml-apis-1.0.b2.jar lib/xmlParserAPIs-2.0.2.jar"/>
 			</manifest>
 		</jar>
 		<!-- Copy all libraries to ${build}/${lib} -->
