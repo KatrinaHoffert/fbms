@@ -15,15 +15,12 @@
 
 package cmpt370.fbms.test;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.junit.Test;
-
+import junit.framework.TestCase;
 import cmpt370.fbms.DataRetriever;
 import cmpt370.fbms.DbConnection;
 import cmpt370.fbms.FileInfo;
@@ -33,19 +30,26 @@ import cmpt370.fbms.Main;
  * This class runs tests that can be automated. There must not be any output that has to be examined
  * or such. This allows us to simply run the file and JUnit will report a success or failure.
  */
-public class TesterServices
+public class TesterServices extends TestCase
 {
-	// Test getting folder contents
-	@Test
-	public void dataGetFolderContents() throws IOException
+	DbConnection db;
+
+	// Set up DbConnection for test
+	public void setUp()
 	{
-		// Have to manually do the startup
 		Main.backupDirectory = Paths.get("").toAbsolutePath();
-		DbConnection db = DbConnection.getInstance();
+		Main.liveDirectory = Paths.get("").toAbsolutePath();
+		db = DbConnection.getInstance();
 		db.initConnection();
+	}
+
+	// Test getting folder contents
+	public void testDataGetFolderContents() throws IOException
+	{
 
 		// Get the folder contents of this directory
 		DataRetriever revisionRetriever = new DataRetriever(Paths.get("").toAbsolutePath());
+		System.out.println(revisionRetriever.getFolderContents());
 		List<FileInfo> list = revisionRetriever.getFolderContents();
 
 		// Find the readme and assert that the information on it is logical
@@ -65,72 +69,31 @@ public class TesterServices
 
 		assertTrue(foundReadme);
 
-		// Manually clean up
-		db.close();
-		Files.delete(Main.backupDirectory.resolve(".revisions.db"));
 	}
 
-	// Test setting and getting config
-	@Test
-	public void dbManagerGetSetConfig() throws Exception
+	public void testDbConnectionGetSetConfig() throws Exception
 	{
-		// Create database in current directory
-		Main.backupDirectory = Paths.get("").toAbsolutePath();
-		DbConnection db = DbConnection.getInstance();
-		db.initConnection();
-
 		// Try to change the live directory
 		db.setConfig("liveDirectory", "/some/other/path");
 
 		// Verify it worked
 		assertTrue(db.getConfig("liveDirectory").equals("/some/other/path"));
 
-		// Cleanup
-		db.close();
-		Files.delete(Main.backupDirectory.resolve(".revisions.db"));
 	}
 
-	// // Test converting between live and backup directory paths
-	// @Test
-	// public void fileOpConvertPath()
-	// {
-	// // Manually setup
-	// Main.backupDirectory = Paths.get("").toAbsolutePath().resolve("lib");
-	// Main.liveDirectory = Paths.get("").toAbsolutePath().resolve("../util/demo/lib");
-	//
-	// // Path is in backup directory, so should be converted to live directory path
-	// assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("lib/jnotify.dll")) !=
-	// Paths.get(
-	// "").toAbsolutePath().resolve("../util/demo/lib/jnotify.dll"));
-	//
-	// // Path is in neither the backup nor live directory, so should return null
-	// assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("../doc/classes.txt"))
-	// == null);
-	// }
 
-	// // Test file equivalence
-	// @Test
-	// public void fileOpIsEqual() throws IOException
-	// {
-	// Path path = Paths.get("").toAbsolutePath();
-	//
-	// // Compare some files
-	// assertTrue(FileOp.isEqual(path.resolve("authors.txt"), path.resolve("authors.txt")));
-	// assertTrue(!FileOp.isEqual(path.resolve("authors.txt"), path.resolve("license.txt")));
-	// }
-
-	// @Test
-	// public void fileOpApplyDiff() throws IOException
-	// {
-	// Path original = Paths.get("").resolve("authors.txt");
-	// Path modified = Paths.get("").resolve("README.txt");
-	//
-	// // Create the diff
-	// Path diff = FileOp.createPatch(original, modified);
-	//
-	// // Apply the diff
-	// Path applied = FileOp.applyPatch(modified, diff);
-	//
-	// assertTrue(FileOp.isEqual(original, applied));
-	// }
+	// Close Dbconnection and clean up
+	public void tearDown()
+	{
+		db.close();
+		try
+		{
+			Files.delete(Main.backupDirectory.resolve(".revisions.db"));
+		}
+		catch(IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
