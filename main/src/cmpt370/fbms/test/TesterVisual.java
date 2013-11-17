@@ -54,7 +54,8 @@ public class TesterVisual
 		db.initConnection();
 
 		// Get the contents of this directory
-		List<FileInfo> list = DataRetriever.getFolderContents(path);
+		DataRetriever folderRetriever = new DataRetriever(path);
+		List<FileInfo> list = folderRetriever.getFolderContents();
 
 
 		// And print out what we know
@@ -196,7 +197,8 @@ public class TesterVisual
 		fileHist.storeRevision(path.resolve("authors.txt"), null, 500, 600);
 
 		// Get the revision table for that file
-		Vector<Vector<String>> tableData = DataRetriever.getRevisionInfoTable(path.resolve("README.txt"));
+		DataRetriever dataRetriever = new DataRetriever(path.resolve("README.txt"));
+		Vector<Vector<String>> tableData = dataRetriever.getRevisionInfoTable();
 
 		// And print it out
 		for(Vector<String> rows : tableData)

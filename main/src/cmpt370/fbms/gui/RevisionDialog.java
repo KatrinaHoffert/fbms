@@ -69,8 +69,9 @@ public class RevisionDialog extends JDialog
 		table.addKeyListener(new RevisionTableSelectionListener(this));
 
 		// Create the data model
-		table.setModel(new DefaultTableModel(DataRetriever.getRevisionInfoTable(fileDisplayed),
-				columns)
+		DataRetriever revisionRetriever = new DataRetriever(fileDisplayed);
+		Vector<Vector<String>> rows = revisionRetriever.getRevisionInfoTable();
+		table.setModel(new DefaultTableModel(rows, columns)
 		{
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -153,8 +154,9 @@ public class RevisionDialog extends JDialog
 	public void redrawTable()
 	{
 		// Create the data model
-		table.setModel(new DefaultTableModel(DataRetriever.getRevisionInfoTable(fileDisplayed),
-				columns)
+		DataRetriever revisionRetriever = new DataRetriever(fileDisplayed);
+		Vector<Vector<String>> rows = revisionRetriever.getRevisionInfoTable();
+		table.setModel(new DefaultTableModel(rows, columns)
 		{
 			@Override
 			public boolean isCellEditable(int row, int column)

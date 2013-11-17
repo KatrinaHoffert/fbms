@@ -134,8 +134,9 @@ public class MainFrame extends JFrame
 
 		// Insert the data into a modified table model based on the default. This lets us disable
 		// editing of table cells.
-		table.setModel(new DefaultTableModel(
-				DataRetriever.getFolderContentsTable(Main.backupDirectory), columns)
+		DataRetriever folderRetriever = new DataRetriever(Main.backupDirectory);
+		Vector<Vector<Object>> rows = folderRetriever.getFolderContentsTable();
+		table.setModel(new DefaultTableModel(rows, columns)
 		{
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -189,8 +190,9 @@ public class MainFrame extends JFrame
 	public void redrawTable(Path directory)
 	{
 		// Recreate the data model
-		FrontEnd.frame.table.setModel(new DefaultTableModel(
-				DataRetriever.getFolderContentsTable(directory), columns)
+		DataRetriever folderRetriever = new DataRetriever(directory);
+		Vector<Vector<Object>> rows = folderRetriever.getFolderContentsTable();
+		table.setModel(new DefaultTableModel(rows, columns)
 		{
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -206,12 +208,12 @@ public class MainFrame extends JFrame
 		});
 
 		// Set the appropriate widths
-		FrontEnd.frame.table.getColumnModel().getColumn(0).setMinWidth(25);
-		FrontEnd.frame.table.getColumnModel().getColumn(0).setMaxWidth(25);
-		FrontEnd.frame.table.getColumnModel().getColumn(1).setMinWidth(100);
-		FrontEnd.frame.table.getColumnModel().getColumn(3).setMinWidth(115);
-		FrontEnd.frame.table.getColumnModel().getColumn(4).setMinWidth(115);
-		FrontEnd.frame.table.getColumnModel().getColumn(5).setMinWidth(115);
+		table.getColumnModel().getColumn(0).setMinWidth(25);
+		table.getColumnModel().getColumn(0).setMaxWidth(25);
+		table.getColumnModel().getColumn(1).setMinWidth(100);
+		table.getColumnModel().getColumn(3).setMinWidth(115);
+		table.getColumnModel().getColumn(4).setMinWidth(115);
+		table.getColumnModel().getColumn(5).setMinWidth(115);
 
 		// Set the location bar to the current directory relative to the
 		String locationBarText = directory.toString().substring(

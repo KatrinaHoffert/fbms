@@ -36,17 +36,24 @@ import cmpt370.fbms.gui.GuiUtility;
  */
 public class DataRetriever
 {
+	private Path path;
+
+	public DataRetriever(Path inPath)
+	{
+		path = inPath;
+	}
+
 	/**
 	 * Loops through all the files in a specified folder and returns a list of information about
 	 * these files (and folders).
 	 * 
-	 * @param folder
+	 * @param path
 	 *            The folder to search in
 	 * @return A list of FileInfo objects that detail
 	 */
-	public static List<FileInfo> getFolderContents(Path folder)
+	public List<FileInfo> getFolderContents()
 	{
-		File[] folderContents = folder.toFile().listFiles();
+		File[] folderContents = path.toFile().listFiles();
 
 		if(folderContents == null)
 		{
@@ -57,7 +64,7 @@ public class DataRetriever
 
 		for(File file : folderContents)
 		{
-			if(folder.equals(Main.backupDirectory)
+			if(path.equals(Main.backupDirectory)
 					&& file.toPath().getFileName().toString().equals(".revisions.db"))
 			{
 				continue;
@@ -141,34 +148,34 @@ public class DataRetriever
 	/**
 	 * Just a wrapper so that the FrontEnd can access the revision info for a file easily.
 	 * 
-	 * @param file
+	 * @param path
 	 *            The path of the file revision info is required for.
 	 * @return A list of RevisionInfo objects containing ALL the revision information about the
 	 *         file.
 	 */
-	public static List<RevisionInfo> getRevisionInfo(Path file)
+	public List<RevisionInfo> getRevisionInfo()
 	{
 		DbManager db = DbManager.getInstance();
-		return db.getFileRevisions(file);
+		return db.getFileRevisions(path);
 	}
 
 	/**
 	 * Takes in a path to a folder and outputs a Vector of Vectors. The parent vector is the rows.
 	 * The vector inside this is the columns.
 	 * 
-	 * @param folder
+	 * @param path
 	 *            The folder to create a table of vectors for.
 	 * @return A vector of vectors of strings (a 2D vector of Strings) that the JTable can be
 	 *         created from.
 	 */
-	public static Vector<Vector<Object>> getFolderContentsTable(Path folder)
+	public Vector<Vector<Object>> getFolderContentsTable()
 	{
 		Vector<Vector<Object>> tableData = new Vector<>();
 
 		// Get the contents of the folder
-		List<FileInfo> files = DataRetriever.getFolderContents(folder);
+		List<FileInfo> files = getFolderContents();
 
-		Main.logger.debug("Found " + files.size() + " entries for " + folder.toString());
+		Main.logger.debug("Found " + files.size() + " entries for " + path.toString());
 
 		// Add folders
 		for(FileInfo file : files)
@@ -220,19 +227,20 @@ public class DataRetriever
 	/**
 	 * Taking in path of a file and returning a vector that can be used to populate a table.
 	 * 
-	 * @param file
+	 * @param path
 	 *            path to a file for which all the data needs to be generated.
 	 * @return A vector of vectors of strings (a 2D vector of Strings) that the JTable can be
 	 *         created from.
 	 */
-	public static Vector<Vector<String>> getRevisionInfoTable(Path file)
+	public Vector<Vector<String>> getRevisionInfoTable()
 	{
 		Vector<Vector<String>> revisionData = new Vector<>();
-		List<RevisionInfo> revisions = getRevisionInfo(file);
+
+		List<RevisionInfo> revisions = getRevisionInfo();
 
 		Collections.sort(revisions);
 
-		Main.logger.debug("Found " + revisions.size() + " entries for " + file.toString());
+		Main.logger.debug("Found " + revisions.size() + " entries for " + path.toString());
 
 		for(RevisionInfo revision : revisions)
 		{

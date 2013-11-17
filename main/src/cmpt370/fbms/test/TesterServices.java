@@ -47,7 +47,8 @@ public class TesterServices
 		db.initConnection();
 
 		// Get the folder contents of this directory
-		List<FileInfo> list = DataRetriever.getFolderContents(Paths.get("").toAbsolutePath());
+		DataRetriever revisionRetriever = new DataRetriever(Paths.get("").toAbsolutePath());
+		List<FileInfo> list = revisionRetriever.getFolderContents();
 
 		// Find the readme and assert that the information on it is logical
 		boolean foundReadme = false;
