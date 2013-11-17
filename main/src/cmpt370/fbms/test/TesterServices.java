@@ -19,7 +19,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -28,7 +27,6 @@ import org.junit.Test;
 import cmpt370.fbms.DataRetriever;
 import cmpt370.fbms.DbConnection;
 import cmpt370.fbms.FileInfo;
-import cmpt370.fbms.FileOp;
 import cmpt370.fbms.Main;
 
 /**
@@ -92,45 +90,47 @@ public class TesterServices
 		Files.delete(Main.backupDirectory.resolve(".revisions.db"));
 	}
 
-	// Test converting between live and backup directory paths
-	@Test
-	public void fileOpConvertPath()
-	{
-		// Manually setup
-		Main.backupDirectory = Paths.get("").toAbsolutePath().resolve("lib");
-		Main.liveDirectory = Paths.get("").toAbsolutePath().resolve("../util/demo/lib");
+	// // Test converting between live and backup directory paths
+	// @Test
+	// public void fileOpConvertPath()
+	// {
+	// // Manually setup
+	// Main.backupDirectory = Paths.get("").toAbsolutePath().resolve("lib");
+	// Main.liveDirectory = Paths.get("").toAbsolutePath().resolve("../util/demo/lib");
+	//
+	// // Path is in backup directory, so should be converted to live directory path
+	// assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("lib/jnotify.dll")) !=
+	// Paths.get(
+	// "").toAbsolutePath().resolve("../util/demo/lib/jnotify.dll"));
+	//
+	// // Path is in neither the backup nor live directory, so should return null
+	// assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("../doc/classes.txt"))
+	// == null);
+	// }
 
-		// Path is in backup directory, so should be converted to live directory path
-		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("lib/jnotify.dll")) != Paths.get(
-				"").toAbsolutePath().resolve("../util/demo/lib/jnotify.dll"));
+	// // Test file equivalence
+	// @Test
+	// public void fileOpIsEqual() throws IOException
+	// {
+	// Path path = Paths.get("").toAbsolutePath();
+	//
+	// // Compare some files
+	// assertTrue(FileOp.isEqual(path.resolve("authors.txt"), path.resolve("authors.txt")));
+	// assertTrue(!FileOp.isEqual(path.resolve("authors.txt"), path.resolve("license.txt")));
+	// }
 
-		// Path is in neither the backup nor live directory, so should return null
-		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("../doc/classes.txt")) == null);
-	}
-
-	// Test file equivalence
-	@Test
-	public void fileOpIsEqual() throws IOException
-	{
-		Path path = Paths.get("").toAbsolutePath();
-
-		// Compare some files
-		assertTrue(FileOp.isEqual(path.resolve("authors.txt"), path.resolve("authors.txt")));
-		assertTrue(!FileOp.isEqual(path.resolve("authors.txt"), path.resolve("license.txt")));
-	}
-
-	@Test
-	public void fileOpApplyDiff() throws IOException
-	{
-		Path original = Paths.get("").resolve("authors.txt");
-		Path modified = Paths.get("").resolve("README.txt");
-
-		// Create the diff
-		Path diff = FileOp.createPatch(original, modified);
-
-		// Apply the diff
-		Path applied = FileOp.applyPatch(modified, diff);
-
-		assertTrue(FileOp.isEqual(original, applied));
-	}
+	// @Test
+	// public void fileOpApplyDiff() throws IOException
+	// {
+	// Path original = Paths.get("").resolve("authors.txt");
+	// Path modified = Paths.get("").resolve("README.txt");
+	//
+	// // Create the diff
+	// Path diff = FileOp.createPatch(original, modified);
+	//
+	// // Apply the diff
+	// Path applied = FileOp.applyPatch(modified, diff);
+	//
+	// assertTrue(FileOp.isEqual(original, applied));
+	// }
 }

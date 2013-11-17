@@ -25,6 +25,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -179,6 +180,43 @@ public class TesterFileOp extends TestCase
 		FileOp.rename((new File("TestFileOp\\SmallSize2.txt")).toPath(), "SmallSize.txt");
 		assertTrue("TestFileOp\\SmallSize2.txt is not renamed to SmallSize.txt", new File(
 				"TestFileOp\\SmallSize.txt").exists());
+	}
+
+	public void testIsEqual()
+	{
+		Path path = Paths.get("").toAbsolutePath();
+
+		// Compare some files
+		assertTrue(FileOp.isEqual(path.resolve("authors.txt"), path.resolve("authors.txt")));
+		assertTrue(!FileOp.isEqual(path.resolve("authors.txt"), path.resolve("license.txt")));
+	}
+
+	public void testConvertPath()
+	{
+		// Manually setup
+		Main.backupDirectory = Paths.get("").toAbsolutePath().resolve("lib");
+		Main.liveDirectory = Paths.get("").toAbsolutePath().resolve("../util/demo/lib");
+
+		// Path is in backup directory, so should be converted to live directory path
+		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("lib/jnotify.dll")) != Paths.get(
+				"").toAbsolutePath().resolve("../util/demo/lib/jnotify.dll"));
+
+		// Path is in neither the backup nor live directory, so should return null
+		assertTrue(FileOp.convertPath(Paths.get("").toAbsolutePath().resolve("../doc/classes.txt")) == null);
+	}
+
+	public void testPatch()
+	{
+		Path original = Paths.get("").resolve("authors.txt");
+		Path modified = Paths.get("").resolve("README.txt");
+
+		// Create the diff
+		Path diff = FileOp.createPatch(original, modified);
+
+		// Apply the diff
+		Path applied = FileOp.applyPatch(modified, diff);
+
+		assertTrue(FileOp.isEqual(original, applied));
 	}
 
 	@Override
