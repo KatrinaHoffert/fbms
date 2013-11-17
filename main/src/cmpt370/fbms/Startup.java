@@ -101,6 +101,7 @@ public class Startup
 			db.setConfig("trimDate", "-1");
 			db.setConfig("startupScan", "true");
 			db.setConfig("disableNonFatalErrors", "false");
+			db.setConfig("maxSize", "5");
 
 			logger.info("First run wizard completed");
 		}

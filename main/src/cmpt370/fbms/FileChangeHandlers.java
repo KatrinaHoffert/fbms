@@ -214,7 +214,15 @@ public class FileChangeHandlers
 		// Figure out the maximum size that gets revisioned (note the config is in MB, so is
 		// multiplied by 1024^2 to get bytes
 		DbConnection db = DbConnection.getInstance();
-		long maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
+		long maxSizeInBytes;
+		try
+		{
+			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
+		}
+		catch(NumberFormatException e)
+		{
+			maxSizeInBytes = 5 * 1024 * 1024;
+		}
 
 		logger.debug("Handle Modified Files has started.");
 
@@ -335,7 +343,15 @@ public class FileChangeHandlers
 		// Figure out the maximum size that gets revisioned (note the config is in MB, so is
 		// multiplied by 1024^2 to get bytes
 		DbConnection db = DbConnection.getInstance();
-		long maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
+		long maxSizeInBytes;
+		try
+		{
+			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
+		}
+		catch(NumberFormatException e)
+		{
+			maxSizeInBytes = 5 * 1024 * 1024;
+		}
 
 		logger.debug("Handle Renamed Files has started.");
 
