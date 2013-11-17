@@ -7,7 +7,6 @@ import java.io.PrintStream;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
@@ -26,41 +25,6 @@ import cmpt370.fbms.gui.FirstStartWizard;
 public class Startup
 {
 	private static DbConnection db = DbConnection.getInstance();
-
-	private List<Path> createdFiles;
-	private List<Path> modifiedFiles;
-	private List<RenamedFile> renamedFiles;
-	private List<Path> deletedFiles;
-
-	/**
-	 * Alternative constructor for accessing startupScan() only! Will not allow access to startup()
-	 * or resolveBackupDirectory().
-	 */
-	public Startup()
-	{
-
-	}
-
-	/**
-	 * Passes in the supplied lists for the Watcher creation.
-	 * 
-	 * @param createdFiles
-	 *            List of created files.
-	 * @param modifiedFiles
-	 *            List of modified files.
-	 * @param renamedFiles
-	 *            List of renamed files.
-	 * @param deletedFiles
-	 *            List of deleted files.
-	 */
-	public Startup(List<Path> createdFiles, List<Path> modifiedFiles,
-			List<RenamedFile> renamedFiles, List<Path> deletedFiles)
-	{
-		this.createdFiles = createdFiles;
-		this.modifiedFiles = modifiedFiles;
-		this.renamedFiles = renamedFiles;
-		this.deletedFiles = deletedFiles;
-	}
 
 	/**
 	 * Manages all the startup functionality. First, we check if the backup directory has been set.
@@ -112,7 +76,7 @@ public class Startup
 		if(Main.backupDirectory == null)
 		{
 			// Run the first run wizard. Keep the program open until that is done
-			FirstStartWizard.run();
+			new FirstStartWizard().run();
 			while(!Main.getInstance().getFirstRunWizardDone())
 			{
 				try

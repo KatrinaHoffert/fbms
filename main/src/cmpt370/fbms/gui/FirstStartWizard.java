@@ -54,7 +54,7 @@ public class FirstStartWizard
 	public static WindowListener listener;
 	public static JButton nextButton;
 
-	public static void run()
+	public void run()
 	{
 		Main.logger.info("Started first run wizard");
 
@@ -94,7 +94,7 @@ public class FirstStartWizard
 	 * 
 	 * @return A panel for display.
 	 */
-	public static JPanel introPanel()
+	public JPanel introPanel()
 	{
 		// Create panel contents
 		JPanel panel = new JPanel(new BorderLayout());
@@ -116,9 +116,9 @@ public class FirstStartWizard
 		panel.add(buttonPanel, BorderLayout.SOUTH);
 
 		// Event handler for next button press
-		nextButton.addActionListener(new WizardButtonListener(1));
+		nextButton.addActionListener(new WizardButtonListener(this, 1));
 
-		prevButton.addActionListener(new WizardButtonListener(-1));
+		prevButton.addActionListener(new WizardButtonListener(this, -1));
 
 		// Event handler for quit button press
 		quitButton.addActionListener(new ActionListener()
@@ -142,7 +142,7 @@ public class FirstStartWizard
 	 * 
 	 * @return A panel for display
 	 */
-	public static JPanel importPanel()
+	public JPanel importPanel()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel("<html>FBMS allows you to recover import old backups. "
@@ -162,9 +162,9 @@ public class FirstStartWizard
 		panel.add(buttonPanel, BorderLayout.SOUTH);
 
 		// Event handler for next button press
-		nextButton.addActionListener(new WizardButtonListener(10));
+		nextButton.addActionListener(new WizardButtonListener(this, 10));
 
-		prevButton.addActionListener(new WizardButtonListener(1));
+		prevButton.addActionListener(new WizardButtonListener(this, 1));
 
 		// Event handler for quit button press
 		quitButton.addActionListener(new ActionListener()
@@ -188,7 +188,7 @@ public class FirstStartWizard
 	 * 
 	 * @return A panel for display
 	 */
-	public static JPanel selectDirsPanel()
+	public JPanel selectDirsPanel()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel("<html>Select a live directory to monitor and a backup "
@@ -227,8 +227,8 @@ public class FirstStartWizard
 
 		// Event handler for next and previous buttons. Note the global next button, to allow the
 		// event handler to modify the button's state
-		selectDirsNextButton.addActionListener(new WizardButtonListener(1));
-		prevButton.addActionListener(new WizardButtonListener(-1));
+		selectDirsNextButton.addActionListener(new WizardButtonListener(this, 1));
+		prevButton.addActionListener(new WizardButtonListener(this, -1));
 
 		// Event handler for directory choices
 		backupDirectoryField.addMouseListener(new DirectoryListener(true));
@@ -256,7 +256,7 @@ public class FirstStartWizard
 	 * 
 	 * @return A panel for display
 	 */
-	public static JPanel selectOldDirPanel()
+	public JPanel selectOldDirPanel()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel("<html>Specify the directory which held the existing backup"
@@ -286,8 +286,8 @@ public class FirstStartWizard
 		panel.add(buttonPanel, BorderLayout.SOUTH);
 
 		// Event handler for next and previous button
-		selectDirsNextButton.addActionListener(new WizardButtonListener(-8));
-		prevButton.addActionListener(new WizardButtonListener(-10));
+		selectDirsNextButton.addActionListener(new WizardButtonListener(this, -8));
+		prevButton.addActionListener(new WizardButtonListener(this, -10));
 
 		// Event handler for directory choices
 		backupDirectoryField.addMouseListener(new MouseListener()
@@ -366,7 +366,7 @@ public class FirstStartWizard
 	 * 
 	 * @return A panel for display
 	 */
-	public static JPanel finishPanel()
+	public JPanel finishPanel()
 	{
 		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel("<html>Congratulations, the backup and live directories"
@@ -420,7 +420,7 @@ public class FirstStartWizard
 	 * run either when you click the "finish" button on the last panel or if you close the window at
 	 * the last panel. It writes the backup location to the disk
 	 */
-	private static void writeBackupFile()
+	private void writeBackupFile()
 	{
 		// Write the backup path to the disk
 		FileOutputStream out;
@@ -450,17 +450,19 @@ public class FirstStartWizard
 class WizardButtonListener implements ActionListener
 {
 	private int offset;
+	private FirstStartWizard target;
 
 	/**
 	 * Just a way to get the direction forward or back a button takes us.
 	 * 
-	 * @param inOffset
+	 * @param offset
 	 *            The panel offset to move in (note that panels aren't entirely linear, since they
 	 *            must branch based on whether the user wants to import an existing backup or not
 	 */
-	public WizardButtonListener(int inOffset)
+	public WizardButtonListener(FirstStartWizard target, int offset)
 	{
-		offset = inOffset;
+		this.offset = offset;
+		this.target = target;
 	}
 
 	@Override
@@ -470,31 +472,31 @@ class WizardButtonListener implements ActionListener
 		{
 			// We need to set the content pane with the new panel, then *validate* so it renders
 			// correctly
-			FirstStartWizard.frame.setContentPane(FirstStartWizard.introPanel());
+			FirstStartWizard.frame.setContentPane(target.introPanel());
 			FirstStartWizard.frame.validate();
 			FirstStartWizard.currentPanel = 1;
 		}
 		else if(FirstStartWizard.currentPanel + offset == 2)
 		{
-			FirstStartWizard.frame.setContentPane(FirstStartWizard.importPanel());
+			FirstStartWizard.frame.setContentPane(target.importPanel());
 			FirstStartWizard.frame.validate();
 			FirstStartWizard.currentPanel = 2;
 		}
 		else if(FirstStartWizard.currentPanel + offset == 3)
 		{
-			FirstStartWizard.frame.setContentPane(FirstStartWizard.selectDirsPanel());
+			FirstStartWizard.frame.setContentPane(target.selectDirsPanel());
 			FirstStartWizard.frame.validate();
 			FirstStartWizard.currentPanel = 3;
 		}
 		else if(FirstStartWizard.currentPanel + offset == 4)
 		{
-			FirstStartWizard.frame.setContentPane(FirstStartWizard.finishPanel());
+			FirstStartWizard.frame.setContentPane(target.finishPanel());
 			FirstStartWizard.frame.validate();
 			FirstStartWizard.currentPanel = 4;
 		}
 		else if(FirstStartWizard.currentPanel + offset == 12)
 		{
-			FirstStartWizard.frame.setContentPane(FirstStartWizard.selectOldDirPanel());
+			FirstStartWizard.frame.setContentPane(target.selectOldDirPanel());
 			FirstStartWizard.frame.validate();
 			FirstStartWizard.currentPanel = 12;
 		}
