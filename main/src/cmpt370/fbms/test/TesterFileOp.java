@@ -124,12 +124,12 @@ public class TesterFileOp extends TestCase
 				FileOp.fileSize(new File("TestFileOp\\LargeSize.txt").toPath()));
 	}
 
-	public void testfileValid()
+	public void testisPlainText()
 	{
 		assertTrue("fileValid() reported false for small text file.",
 				FileOp.isPlainText(new File("TestFileOp\\SmallSize.txt").toPath()));
 
-		assertFalse("fileValid() reported true for large text file.",
+		assertTrue("fileValid() reported false for large text file.",
 				FileOp.isPlainText(new File("TestFileOp\\LargeSize.txt").toPath()));
 
 		assertFalse("fileValid() reported true for binary file.",
