@@ -21,6 +21,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.contentobjects.jnotify.JNotify;
+import net.contentobjects.jnotify.JNotifyException;
+
 import org.apache.log4j.Logger;
 
 import cmpt370.fbms.gui.FrontEnd;
@@ -37,23 +40,27 @@ public class Main
 	// Various public variables shared amongst components
 	public static Path liveDirectory = null;
 	public static Path backupDirectory = null;
-	public static List<Path> createdFiles = Collections.synchronizedList(new LinkedList<Path>());
-	public static List<Path> modifiedFiles = Collections.synchronizedList(new LinkedList<Path>());
-	public static List<RenamedFile> renamedFiles = Collections.synchronizedList(new LinkedList<RenamedFile>());
-	public static List<Path> deletedFiles = Collections.synchronizedList(new LinkedList<Path>());
-	public static boolean firstRunWizardDone = false;
+
+	// Instance variable for singleton pattern
+	private static Main instance = null;
 
 	// Logger object is linked to the class
 	public static Logger logger = Logger.getLogger(Main.class);
 
-	// Watch ID for JNotify
-	public static int watchId = 0;
-	public static long loop = 0;
+	// Lists for file changes
+	private final List<Path> createdFiles = Collections.synchronizedList(new LinkedList<Path>());
+	private final List<Path> modifiedFiles = Collections.synchronizedList(new LinkedList<Path>());
+	private final List<RenamedFile> renamedFiles = Collections.synchronizedList(new LinkedList<RenamedFile>());
+	private final List<Path> deletedFiles = Collections.synchronizedList(new LinkedList<Path>());
+
+	private boolean firstRunWizardDone = false;
+	private int watchId = 0;
+	private long loop = 0;
 
 	/**
 	 * The main method runs the startup code, initializing the database, checking for the first run,
 	 * etc. The main method then loops through the watched files at intervals, checking for changes
-	 * and acting appropriately
+	 * and acting appropriately.
 	 * 
 	 * @param args
 	 *            Command line arguments, not currently used
@@ -66,19 +73,96 @@ public class Main
 		startup.startupScan(liveDirectory);
 
 		// Start the file handler
-		fileHandler();
+		Main.getInstance().fileHandler();
 
 		// Create the GUI
 		FrontEnd.initGui();
 	}
 
+	/**
+	 * Instantiation not allowed, use Main.getInstance().
+	 */
+	private Main()
+	{}
+
+	/**
+	 * Gets an instance of the Main class (singleton pattern).
+	 * 
+	 * @return The single instance of the Main object.
+	 */
+	public static synchronized Main getInstance()
+	{
+		if(instance == null)
+		{
+			instance = new Main();
+		}
+		return instance;
+	}
+
+	/**
+	 * Creates the watcher.
+	 */
+	public void createWatcher()
+	{
+		// JNotify watcher for files. The live directory is watched for all four types of files
+		// changes: creations, deletions, modifications, and renaming. We watch subfolders of the
+		// live directory for changes as well. The Watcher class forms the listener for these
+		// changes
+		try
+		{
+			watchId = JNotify.addWatch(Main.liveDirectory.toString(), JNotify.FILE_CREATED
+					| JNotify.FILE_DELETED | JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true,
+					new Watcher(createdFiles, modifiedFiles, renamedFiles, deletedFiles));
+		}
+		catch(JNotifyException e)
+		{
+			Errors.fatalError("Could not start file watcher module", e);
+		}
+	}
+
+	/**
+	 * Removes the watcher.
+	 */
+	public void removeWatcher()
+	{
+		try
+		{
+			JNotify.removeWatch(watchId);
+		}
+		catch(JNotifyException e)
+		{
+			Errors.fatalError(
+					"Could not remove old watcher. This problem might be fixed by a restart.", e);
+		}
+	}
+
+	/**
+	 * Checks if the first run wizard has been completed.
+	 * 
+	 * @return True if first run wizard has been done in the past.
+	 */
+	public boolean getFirstRunWizardDone()
+	{
+		return firstRunWizardDone;
+	}
+
+	/**
+	 * Sets whether the first run wizard has been completed.
+	 * 
+	 * @param done
+	 *            True if we've completed the wizard.
+	 */
+	public void setFirstRunWizardDone(boolean done)
+	{
+		firstRunWizardDone = done;
+	}
 
 	/**
 	 * This method sets up the loop for going through the array lists that the Watcher module
 	 * populates. It also creates an infinite loop in a separate thread, allowing the program to run
 	 * indefinitely in the background.
 	 */
-	private static void fileHandler()
+	private void fileHandler()
 	{
 		// Run this stuff in a new thread
 		new Thread()

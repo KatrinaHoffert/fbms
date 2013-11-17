@@ -8,9 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-import net.contentobjects.jnotify.JNotify;
-import net.contentobjects.jnotify.JNotifyException;
-
 /**
  * Controller class for handling the GUI functionality.
  */
@@ -149,30 +146,13 @@ public class GuiController
 		db.setConfig("liveDirectory", Main.liveDirectory.toString());
 
 		// Remove the old watcher
-		try
-		{
-			JNotify.removeWatch(Main.watchId);
-		}
-		catch(JNotifyException e)
-		{
-			Errors.fatalError(
-					"Could not remove old watcher. This problem might be fixed by a restart.", e);
-		}
+		Main.getInstance().removeWatcher();
 
 		// Copy any existing files in the live directory to the backup directory.
 		new Startup().startupScan(Main.liveDirectory);
 
 		// And add a new watcher
-		try
-		{
-			Main.watchId = JNotify.addWatch(Main.liveDirectory.toString(), JNotify.FILE_CREATED
-					| JNotify.FILE_DELETED | JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true,
-					new Watcher());
-		}
-		catch(JNotifyException e)
-		{
-			Errors.fatalError("Could not add a file watcher.", e);
-		}
+		Main.getInstance().createWatcher();
 	}
 
 	/**

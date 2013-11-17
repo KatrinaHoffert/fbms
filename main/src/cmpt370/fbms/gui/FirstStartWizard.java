@@ -438,7 +438,7 @@ public class FirstStartWizard
 					"Could not write backup path to disk. Is the program folder writeable?", e);
 		}
 		// And end the wizard
-		Main.firstRunWizardDone = true;
+		Main.getInstance().setFirstRunWizardDone(true);
 		frame.dispose();
 	}
 }

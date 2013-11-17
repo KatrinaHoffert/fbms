@@ -7,15 +7,13 @@ import java.io.PrintStream;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import net.contentobjects.jnotify.JNotify;
-import net.contentobjects.jnotify.JNotifyException;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -28,6 +26,41 @@ import cmpt370.fbms.gui.FirstStartWizard;
 public class Startup
 {
 	private static DbManager db = DbManager.getInstance();
+
+	private List<Path> createdFiles;
+	private List<Path> modifiedFiles;
+	private List<RenamedFile> renamedFiles;
+	private List<Path> deletedFiles;
+
+	/**
+	 * Alternative constructor for accessing startupScan() only! Will not allow access to startup()
+	 * or resolveBackupDirectory().
+	 */
+	public Startup()
+	{
+
+	}
+
+	/**
+	 * Passes in the supplied lists for the Watcher creation.
+	 * 
+	 * @param createdFiles
+	 *            List of created files.
+	 * @param modifiedFiles
+	 *            List of modified files.
+	 * @param renamedFiles
+	 *            List of renamed files.
+	 * @param deletedFiles
+	 *            List of deleted files.
+	 */
+	public Startup(List<Path> createdFiles, List<Path> modifiedFiles,
+			List<RenamedFile> renamedFiles, List<Path> deletedFiles)
+	{
+		this.createdFiles = createdFiles;
+		this.modifiedFiles = modifiedFiles;
+		this.renamedFiles = renamedFiles;
+		this.deletedFiles = deletedFiles;
+	}
 
 	/**
 	 * Manages all the startup functionality. First, we check if the backup directory has been set.
@@ -80,7 +113,7 @@ public class Startup
 		{
 			// Run the first run wizard. Keep the program open until that is done
 			FirstStartWizard.run();
-			while(!Main.firstRunWizardDone)
+			while(!Main.getInstance().getFirstRunWizardDone())
 			{
 				try
 				{
@@ -160,20 +193,7 @@ public class Startup
 		Main.logger.info("liveDirectory = " + Main.liveDirectory);
 		Main.logger.info("backupDirectory = " + Main.backupDirectory);
 
-		// JNotify watcher for files. The live directory is watched for all four types of files
-		// changes: creations, deletions, modifications, and renaming. We watch subfolders of the
-		// live directory for changes as well. The Watcher class forms the listener for these
-		// changes
-		try
-		{
-			Main.watchId = JNotify.addWatch(Main.liveDirectory.toString(), JNotify.FILE_CREATED
-					| JNotify.FILE_DELETED | JNotify.FILE_MODIFIED | JNotify.FILE_RENAMED, true,
-					new Watcher());
-		}
-		catch(JNotifyException e)
-		{
-			Errors.fatalError("Could not start file watcher module", e);
-		}
+		Main.getInstance().createWatcher();
 	}
 
 	/**

@@ -18,6 +18,7 @@ package cmpt370.fbms;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import net.contentobjects.jnotify.JNotifyListener;
 
@@ -26,6 +27,32 @@ import net.contentobjects.jnotify.JNotifyListener;
  */
 public class Watcher implements JNotifyListener
 {
+	private List<Path> createdFiles;
+	private List<Path> modifiedFiles;
+	private List<RenamedFile> renamedFiles;
+	private List<Path> deletedFiles;
+
+	/**
+	 * Creates a file watcher for the supplied lists.
+	 * 
+	 * @param createdFiles
+	 *            List of created files.
+	 * @param modifiedFiles
+	 *            List of modified files.
+	 * @param renamedFiles
+	 *            List of renamed files.
+	 * @param deletedFiles
+	 *            List of deleted files.
+	 */
+	public Watcher(List<Path> createdFiles, List<Path> modifiedFiles,
+			List<RenamedFile> renamedFiles, List<Path> deletedFiles)
+	{
+		this.createdFiles = createdFiles;
+		this.modifiedFiles = modifiedFiles;
+		this.renamedFiles = renamedFiles;
+		this.deletedFiles = deletedFiles;
+	}
+
 	/**
 	 * Event handler for files that are renamed. The JNotify watcher will call this method if it
 	 * detects a file rename operation. Such files will be added to the appropriate list in Control.
@@ -51,9 +78,9 @@ public class Watcher implements JNotifyListener
 		listObject.oldName = oldPath;
 		listObject.newName = newPath;
 
-		synchronized(Main.renamedFiles)
+		synchronized(renamedFiles)
 		{
-			Main.renamedFiles.add(listObject);
+			renamedFiles.add(listObject);
 		}
 
 		// Use the logger in Control to issue messages
@@ -75,9 +102,9 @@ public class Watcher implements JNotifyListener
 	{
 		Path path = Paths.get(rootPath + File.separator + name);
 
-		synchronized(Main.modifiedFiles)
+		synchronized(modifiedFiles)
 		{
-			Main.modifiedFiles.add(path);
+			modifiedFiles.add(path);
 		}
 
 		Main.logger.info("Modified file " + path);
@@ -98,9 +125,9 @@ public class Watcher implements JNotifyListener
 	{
 		Path path = Paths.get(rootPath + File.separator + name);
 
-		synchronized(Main.deletedFiles)
+		synchronized(deletedFiles)
 		{
-			Main.deletedFiles.add(path);
+			deletedFiles.add(path);
 		}
 
 		Main.logger.info("Deleted file " + path);
@@ -121,9 +148,9 @@ public class Watcher implements JNotifyListener
 	{
 		Path path = Paths.get(rootPath + File.separator + name);
 
-		synchronized(Main.createdFiles)
+		synchronized(createdFiles)
 		{
-			Main.createdFiles.add(path);
+			createdFiles.add(path);
 		}
 
 		Main.logger.info("Created file " + path);
