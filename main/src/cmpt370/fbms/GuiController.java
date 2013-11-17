@@ -159,24 +159,6 @@ public class GuiController
 					"Could not remove old watcher. This problem might be fixed by a restart.", e);
 		}
 
-		// Empty the lists, since those files aren't the live directory, anymore
-		synchronized(Main.deletedFiles)
-		{
-			synchronized(Main.createdFiles)
-			{
-				synchronized(Main.modifiedFiles)
-				{
-					synchronized(Main.renamedFiles)
-					{
-						Main.deletedFiles.clear();
-						Main.createdFiles.clear();
-						Main.modifiedFiles.clear();
-						Main.renamedFiles.clear();
-					}
-				}
-			}
-		}
-
 		// Copy any existing files in the live directory to the backup directory.
 		new Startup().startupScan(Main.liveDirectory);
 

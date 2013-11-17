@@ -107,6 +107,7 @@ public class Main
 								{
 									synchronized(renamedFiles)
 									{
+										handlers.validateLists();
 										handlers.handleDeletedFiles();
 										handlers.handleCreatedFiles();
 										handlers.handleModifiedFiles();

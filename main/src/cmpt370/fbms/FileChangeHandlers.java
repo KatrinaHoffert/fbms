@@ -38,6 +38,55 @@ public class FileChangeHandlers
 	}
 
 	/**
+	 * Removes entries from lists where files do not exist anymore.
+	 */
+	// TODO: This is the first step of refactoring this class by means of breaking up the list
+	// handlers into helper methods. Other forms of validation can be moved here, and validation
+	// that takes place inside the handlers can be removed.
+	public void validateLists()
+	{
+		// Remove non-existant creations
+		ListIterator<Path> createdIterator = createdFiles.listIterator();
+		while(createdIterator.hasNext())
+		{
+			if(!createdIterator.next().toFile().exists())
+			{
+				createdIterator.remove();
+			}
+		}
+
+		// Remove non-existant modifications
+		ListIterator<Path> modifiedIterator = modifiedFiles.listIterator();
+		while(modifiedIterator.hasNext())
+		{
+			if(!modifiedIterator.next().toFile().exists())
+			{
+				modifiedIterator.remove();
+			}
+		}
+
+		// Remove non-existant renames (we only care about the new name)
+		ListIterator<RenamedFile> renamedIterator = renamedFiles.listIterator();
+		while(renamedIterator.hasNext())
+		{
+			if(!renamedIterator.next().newName.toFile().exists())
+			{
+				renamedIterator.remove();
+			}
+		}
+
+		// Remove non-existant deletions
+		ListIterator<Path> deletedIterator = deletedFiles.listIterator();
+		while(deletedIterator.hasNext())
+		{
+			if(!deletedIterator.next().toFile().exists())
+			{
+				deletedIterator.remove();
+			}
+		}
+	}
+
+	/**
 	 * Handles all created files identified by the watcher. Also handles recurrent entries between
 	 * modified, and renamed files. All iterations start from the back of the list, that way we
 	 * handle the most recent events first. This is more important for file renames but I kept it
