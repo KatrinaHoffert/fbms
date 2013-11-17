@@ -18,8 +18,8 @@ package cmpt370.fbms;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import net.contentobjects.jnotify.JNotify;
 import net.contentobjects.jnotify.JNotifyException;
@@ -48,10 +48,10 @@ public class Main
 	private static Logger logger = Logger.getLogger(Main.class);
 
 	// Lists for file changes
-	private final List<Path> createdFiles = Collections.synchronizedList(new LinkedList<Path>());
-	private final List<Path> modifiedFiles = Collections.synchronizedList(new LinkedList<Path>());
-	private final List<RenamedFile> renamedFiles = Collections.synchronizedList(new LinkedList<RenamedFile>());
-	private final List<Path> deletedFiles = Collections.synchronizedList(new LinkedList<Path>());
+	private final Set<Path> createdFiles = Collections.synchronizedSet(new LinkedHashSet<Path>());
+	private final Set<Path> modifiedFiles = Collections.synchronizedSet(new LinkedHashSet<Path>());
+	private final Set<RenamedFile> renamedFiles = Collections.synchronizedSet(new LinkedHashSet<RenamedFile>());
+	private final Set<Path> deletedFiles = Collections.synchronizedSet(new LinkedHashSet<Path>());
 
 	private boolean firstRunWizardDone = false;
 	private int watchId = 0;

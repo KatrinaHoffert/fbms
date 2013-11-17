@@ -3,8 +3,8 @@ package cmpt370.fbms;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -16,10 +16,10 @@ public class FileChangeHandlers
 	// Logger instance
 	private static Logger logger = Logger.getLogger(Main.class);
 
-	private List<Path> createdFiles;
-	private List<Path> modifiedFiles;
-	private List<RenamedFile> renamedFiles;
-	private List<Path> deletedFiles;
+	private Set<Path> createdFiles;
+	private Set<Path> modifiedFiles;
+	private Set<RenamedFile> renamedFiles;
+	private Set<Path> deletedFiles;
 
 	/**
 	 * Creates a file change listener for the supplied lists.
@@ -33,8 +33,8 @@ public class FileChangeHandlers
 	 * @param deletedFiles
 	 *            List of deleted files.
 	 */
-	public FileChangeHandlers(List<Path> createdFiles, List<Path> modifiedFiles,
-			List<RenamedFile> renamedFiles, List<Path> deletedFiles)
+	public FileChangeHandlers(Set<Path> createdFiles, Set<Path> modifiedFiles,
+			Set<RenamedFile> renamedFiles, Set<Path> deletedFiles)
 	{
 		this.createdFiles = createdFiles;
 		this.modifiedFiles = modifiedFiles;
@@ -51,7 +51,7 @@ public class FileChangeHandlers
 	public void validateLists()
 	{
 		// Remove non-existant creations
-		ListIterator<Path> createdIterator = createdFiles.listIterator();
+		Iterator<Path> createdIterator = createdFiles.iterator();
 		while(createdIterator.hasNext())
 		{
 			if(!createdIterator.next().toFile().exists())
@@ -61,7 +61,7 @@ public class FileChangeHandlers
 		}
 
 		// Remove non-existant modifications
-		ListIterator<Path> modifiedIterator = modifiedFiles.listIterator();
+		Iterator<Path> modifiedIterator = modifiedFiles.iterator();
 		while(modifiedIterator.hasNext())
 		{
 			if(!modifiedIterator.next().toFile().exists())
@@ -71,7 +71,7 @@ public class FileChangeHandlers
 		}
 
 		// Remove non-existant renames (we only care about the new name)
-		ListIterator<RenamedFile> renamedIterator = renamedFiles.listIterator();
+		Iterator<RenamedFile> renamedIterator = renamedFiles.iterator();
 		while(renamedIterator.hasNext())
 		{
 			if(!renamedIterator.next().newName.toFile().exists())
@@ -81,7 +81,7 @@ public class FileChangeHandlers
 		}
 
 		// Remove non-existant deletions
-		ListIterator<Path> deletedIterator = deletedFiles.listIterator();
+		Iterator<Path> deletedIterator = deletedFiles.iterator();
 		while(deletedIterator.hasNext())
 		{
 			if(!deletedIterator.next().toFile().exists())
@@ -99,27 +99,27 @@ public class FileChangeHandlers
 	 */
 	public void handleCreatedFiles()
 	{
-		ListIterator<Path> itrc, itrm;
-		ListIterator<RenamedFile> itrr;
+		Iterator<Path> itrc, itrm;
+		Iterator<RenamedFile> itrr;
 		boolean hit, found;
 		Path pathc, pathm;
 		RenamedFile toRename;
-		itrc = createdFiles.listIterator(createdFiles.size());
+		itrc = createdFiles.iterator();
 		found = false;
 		logger.debug("Handle Created Files has started.");
 
 		// Search through all elements of created files, comparing them to instances of renamed
 		// files and modified files.
-		while(itrc.hasPrevious())
+		while(itrc.hasNext())
 		{
-			pathc = itrc.previous();
+			pathc = itrc.next();
 			hit = false; // If we've hit a duplicate already in this list.
 			found = false;
-			itrr = renamedFiles.listIterator(renamedFiles.size());
+			itrr = renamedFiles.iterator();
 			// Check renamed files for created files duplicates.
-			while(itrr.hasPrevious())
+			while(itrr.hasNext())
 			{
-				toRename = itrr.previous();
+				toRename = itrr.next();
 				if(pathc.toFile().equals(toRename.newName.toFile())
 						|| pathc.toFile().equals(toRename.oldName.toFile()))
 				{
@@ -142,11 +142,11 @@ public class FileChangeHandlers
 			}
 
 			hit = false;
-			itrm = modifiedFiles.listIterator(modifiedFiles.size());
+			itrm = modifiedFiles.iterator();
 			// Now we cycle through the modified list.
-			while(itrm.hasPrevious())
+			while(itrm.hasNext())
 			{
-				pathm = itrm.previous();
+				pathm = itrm.next();
 				if(pathc.toFile().equals(pathm.toFile()))
 				{
 					// If we find a duplicate but already have made a diff/backup just delete the
@@ -204,8 +204,8 @@ public class FileChangeHandlers
 	 */
 	public void handleModifiedFiles()
 	{
-		ListIterator<Path> itrm = modifiedFiles.listIterator(modifiedFiles.size());
-		ListIterator<RenamedFile> itrr;
+		Iterator<Path> itrm = modifiedFiles.iterator();
+		Iterator<RenamedFile> itrr;
 
 		Path pathm, diff;
 		RenamedFile toRename;
@@ -226,14 +226,14 @@ public class FileChangeHandlers
 
 		logger.debug("Handle Modified Files has started.");
 
-		while(itrm.hasPrevious())
+		while(itrm.hasNext())
 		{
-			pathm = itrm.previous();
-			itrr = renamedFiles.listIterator(renamedFiles.size());
+			pathm = itrm.next();
+			itrr = renamedFiles.iterator();
 			hit = false;
-			while(itrr.hasPrevious())
+			while(itrr.hasNext())
 			{
-				toRename = itrr.previous();
+				toRename = itrr.next();
 				if(pathm.equals(toRename.newName) || pathm.equals(toRename.oldName))
 				{
 					// Clean up additional copies, will only do this if its already made a
@@ -334,7 +334,7 @@ public class FileChangeHandlers
 
 	public void handleRenamedFiles()
 	{
-		ListIterator<RenamedFile> itrr = renamedFiles.listIterator(renamedFiles.size());
+		Iterator<RenamedFile> itrr = renamedFiles.iterator();
 
 		RenamedFile toRename;
 		Path diff;
@@ -357,9 +357,9 @@ public class FileChangeHandlers
 
 		// Since this is last to call all modified/created files should be dealt with.
 		// We just iterate through the list and rename files.
-		while(itrr.hasPrevious())
+		while(itrr.hasNext())
 		{
-			toRename = itrr.previous();
+			toRename = itrr.next();
 			newName = toRename.oldName.getParent().relativize(toRename.newName).toString();
 			if(FileOp.convertPath(toRename.oldName).toFile().exists())
 			{
@@ -577,38 +577,37 @@ public class FileChangeHandlers
 	 */
 	public void handleDeletedFiles()
 	{
-
-		ListIterator<Path> itrd = deletedFiles.listIterator(deletedFiles.size());
-		ListIterator<Path> itrc = createdFiles.listIterator(createdFiles.size());
-		ListIterator<Path> itrm = modifiedFiles.listIterator(modifiedFiles.size());
-		ListIterator<RenamedFile> itrr = renamedFiles.listIterator(renamedFiles.size());
+		Iterator<Path> itrd = deletedFiles.iterator();
+		Iterator<Path> itrc = createdFiles.iterator();
+		Iterator<Path> itrm = modifiedFiles.iterator();
+		Iterator<RenamedFile> itrr = renamedFiles.iterator();
 		RenamedFile toRename;
 		Path pathm, pathc, pathd;
 		logger.debug("Handle Deleted Files has started.");
 
-		while(itrd.hasPrevious())
+		while(itrd.hasNext())
 		{
-			pathd = itrd.previous();
-			while(itrc.hasPrevious())
+			pathd = itrd.next();
+			while(itrc.hasNext())
 			{
-				pathc = itrc.previous();
+				pathc = itrc.next();
 				if(pathd.equals(pathc))
 				{
 					itrc.remove();
 				}
 			}
-			while(itrm.hasPrevious())
+			while(itrm.hasNext())
 			{
-				pathm = itrm.previous();
+				pathm = itrm.next();
 				if(pathd.equals(pathm))
 				{
 					itrm.remove();
 				}
 
 			}
-			while(itrr.hasPrevious())
+			while(itrr.hasNext())
 			{
-				toRename = itrr.previous();
+				toRename = itrr.next();
 				if(pathd.equals(toRename.oldName))
 				{
 					itrr.remove();

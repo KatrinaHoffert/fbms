@@ -18,7 +18,7 @@ package cmpt370.fbms;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Set;
 
 import net.contentobjects.jnotify.JNotifyListener;
 
@@ -32,10 +32,10 @@ public class Watcher implements JNotifyListener
 	// Logger instance
 	private static Logger logger = Logger.getLogger(Main.class);
 
-	private List<Path> createdFiles;
-	private List<Path> modifiedFiles;
-	private List<RenamedFile> renamedFiles;
-	private List<Path> deletedFiles;
+	private Set<Path> createdFiles;
+	private Set<Path> modifiedFiles;
+	private Set<RenamedFile> renamedFiles;
+	private Set<Path> deletedFiles;
 
 	/**
 	 * Creates a file watcher for the supplied lists.
@@ -49,8 +49,8 @@ public class Watcher implements JNotifyListener
 	 * @param deletedFiles
 	 *            List of deleted files.
 	 */
-	public Watcher(List<Path> createdFiles, List<Path> modifiedFiles,
-			List<RenamedFile> renamedFiles, List<Path> deletedFiles)
+	public Watcher(Set<Path> createdFiles, Set<Path> modifiedFiles, Set<RenamedFile> renamedFiles,
+			Set<Path> deletedFiles)
 	{
 		this.createdFiles = createdFiles;
 		this.modifiedFiles = modifiedFiles;
