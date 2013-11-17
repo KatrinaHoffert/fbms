@@ -8,11 +8,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+import org.apache.log4j.Logger;
+
 /**
  * Controller class for handling the GUI functionality.
  */
 public class GuiController
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	/**
 	 * Obtains the specified revision and displays it in the default program for that type of file.
 	 * 
@@ -60,7 +65,7 @@ public class GuiController
 			// Store the revision and copy the reverted file over the backup directory
 			fileHist.storeRevision(diffFromCurrent, null, fileSize, delta);
 
-			Main.logger.debug("Revert to: " + revertedFile.toFile().toString());
+			logger.debug("Revert to: " + revertedFile.toFile().toString());
 			try
 			{
 				// Copy into both live and backup directories
@@ -68,7 +73,7 @@ public class GuiController
 						StandardCopyOption.REPLACE_EXISTING);
 				Files.copy(revertedFile, file, StandardCopyOption.REPLACE_EXISTING);
 
-				Main.logger.debug("Copied " + revertedFile.toFile().toString() + " as "
+				logger.debug("Copied " + revertedFile.toFile().toString() + " as "
 						+ FileOp.convertPath(file).toFile().toString());
 			}
 			catch(IOException e)
@@ -196,8 +201,7 @@ public class GuiController
 			out.write(Main.backupDirectory.toString().getBytes());
 			out.close();
 
-			Main.logger.info("Backup location file modified, set to: "
-					+ Main.backupDirectory.toString());
+			logger.info("Backup location file modified, set to: " + Main.backupDirectory.toString());
 		}
 		catch(IOException e)
 		{

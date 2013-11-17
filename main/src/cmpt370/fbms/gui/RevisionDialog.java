@@ -23,6 +23,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.DataRetriever;
 import cmpt370.fbms.FileOp;
 import cmpt370.fbms.GuiController;
@@ -33,6 +35,9 @@ import cmpt370.fbms.Main;
  */
 public class RevisionDialog extends JDialog
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	public JTable table;
 	public JButton viewRevisionButton, revertRevisionButton;
 	public long selectedTimestamp = -1;
@@ -124,7 +129,7 @@ public class RevisionDialog extends JDialog
 					new GuiController().displayRevision(MainFrame.getInstance().selectedFile,
 							selectedTimestamp);
 
-					Main.logger.debug("Viewed revision of "
+					logger.debug("Viewed revision of "
 							+ FileOp.convertPath(MainFrame.getInstance().selectedFile).toString()
 							+ " @ T = " + selectedTimestamp);
 				}
@@ -143,7 +148,7 @@ public class RevisionDialog extends JDialog
 							selectedTimestamp);
 					redrawTable();
 
-					Main.logger.debug("Reverted revision of "
+					logger.debug("Reverted revision of "
 							+ MainFrame.getInstance().selectedFile.toString() + " @ T = "
 							+ selectedTimestamp);
 				}
@@ -180,6 +185,9 @@ public class RevisionDialog extends JDialog
  */
 class RevisionTableSelectionListener implements MouseListener, KeyListener
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private RevisionDialog dialog;
 
 	RevisionTableSelectionListener(RevisionDialog dialogRef)
@@ -228,9 +236,8 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 			dialog.revertRevisionButton.setEnabled(true);
 			dialog.viewRevisionButton.setEnabled(true);
 
-			Main.logger.debug("Selected revision: "
-					+ MainFrame.getInstance().selectedFile.toString() + " (timestamp: "
-					+ dialog.selectedTimestamp + ")");
+			logger.debug("Selected revision: " + MainFrame.getInstance().selectedFile.toString()
+					+ " (timestamp: " + dialog.selectedTimestamp + ")");
 		}
 		else
 		{
@@ -251,7 +258,7 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 			new GuiController().displayRevision(MainFrame.getInstance().selectedFile,
 					dialog.selectedTimestamp);
 
-			Main.logger.debug("Viewed revision of "
+			logger.debug("Viewed revision of "
 					+ FileOp.convertPath(MainFrame.getInstance().selectedFile).toString()
 					+ " @ T = " + dialog.selectedTimestamp);
 		}

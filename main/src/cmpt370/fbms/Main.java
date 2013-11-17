@@ -45,7 +45,7 @@ public class Main
 	private static Main instance = null;
 
 	// Logger object is linked to the class
-	public static Logger logger = Logger.getLogger(Main.class);
+	private static Logger logger = Logger.getLogger(Main.class);
 
 	// Lists for file changes
 	private final List<Path> createdFiles = Collections.synchronizedList(new LinkedList<Path>());

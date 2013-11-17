@@ -24,6 +24,9 @@ import cmpt370.fbms.gui.FirstStartWizard;
  */
 public class Startup
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private static DbConnection db = DbConnection.getInstance();
 
 	/**
@@ -37,7 +40,7 @@ public class Startup
 		// reached)
 		System.setErr(createLoggingProxy(System.err));
 
-		Main.logger.info("Program started");
+		logger.info("Program started");
 
 		// Alias the text and apply look and feel. Aliasing is not done on Windows, where text is
 		// already aliased in the system look and feel.
@@ -85,7 +88,7 @@ public class Startup
 				}
 				catch(InterruptedException e)
 				{
-					Main.logger.error(e);
+					logger.error(e);
 				}
 			}
 
@@ -99,7 +102,7 @@ public class Startup
 			db.setConfig("startupScan", "true");
 			db.setConfig("disableNonFatalErrors", "false");
 
-			Main.logger.info("First run wizard completed");
+			logger.info("First run wizard completed");
 		}
 		else
 		{
@@ -152,10 +155,10 @@ public class Startup
 				}
 			}
 
-			Main.logger.info("It is a subsequent run");
+			logger.info("It is a subsequent run");
 		}
-		Main.logger.info("liveDirectory = " + Main.liveDirectory);
-		Main.logger.info("backupDirectory = " + Main.backupDirectory);
+		logger.info("liveDirectory = " + Main.liveDirectory);
+		logger.info("backupDirectory = " + Main.backupDirectory);
 
 		Main.getInstance().createWatcher();
 	}
@@ -174,7 +177,7 @@ public class Startup
 			public void print(final String string)
 			{
 				realPrintStream.print(string);
-				Main.logger.error(string);
+				logger.error(string);
 			}
 		};
 	}
@@ -202,23 +205,23 @@ public class Startup
 				if(backupLocation.exists())
 				{
 					Main.backupDirectory = backupLocation.toPath();
-					Main.logger.info("Located backup location: " + Main.backupDirectory);
+					logger.info("Located backup location: " + Main.backupDirectory);
 				}
 			}
 			catch(IOException e)
 			{
 				// If an exception occurs, we couldn't retrieve the backup directory, so must set it
 				// to null
-				Main.logger.error("Could not read in backup_location file", e);
+				logger.error("Could not read in backup_location file", e);
 			}
 			catch(InvalidPathException e)
 			{
-				Main.logger.error("Backup directory path is invalid", e);
+				logger.error("Backup directory path is invalid", e);
 				Main.backupDirectory = null;
 			}
 			catch(SecurityException e)
 			{
-				Main.logger.error("Security error: cannot access backup directory", e);
+				logger.error("Security error: cannot access backup directory", e);
 				Main.backupDirectory = null;
 			}
 			finally
@@ -233,7 +236,7 @@ public class Startup
 			if(Main.backupDirectory == null
 					|| !Main.backupDirectory.resolve(".revisions.db").toFile().exists())
 			{
-				Main.logger.error("The backup directory linked in \"backup_location\" is invalid: "
+				logger.error("The backup directory linked in \"backup_location\" is invalid: "
 						+ Main.backupDirectory);
 				Main.backupDirectory = null;
 				JOptionPane.showMessageDialog(null,
@@ -257,7 +260,7 @@ public class Startup
 		// Check if user disabled the scan
 		if(status != null && !status.equals("true"))
 		{
-			Main.logger.info("Startup scan is disabled.");
+			logger.info("Startup scan is disabled.");
 			return;
 		}
 
@@ -271,7 +274,7 @@ public class Startup
 					Path targetDirectory = FileOp.convertPath(file.toPath()).getParent();
 					FileOp.copy(file.toPath(), targetDirectory);
 
-					Main.logger.info("Startup: Found new file " + file.toString());
+					logger.info("Startup: Found new file " + file.toString());
 				}
 				// The file does exist, so determine if the file has been changed. If it
 				// hasn't, we need to create a revision for this file.
@@ -292,7 +295,7 @@ public class Startup
 					Path targetDirectory = FileOp.convertPath(file.toPath()).getParent();
 					FileOp.copy(file.toPath(), targetDirectory);
 
-					Main.logger.info("Startup: Found modified file " + file.toString());
+					logger.info("Startup: Found modified file " + file.toString());
 				}
 			}
 			else

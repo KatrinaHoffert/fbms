@@ -24,11 +24,16 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 /**
  * Allows the modification and retrieval of revision data (the file history).
  */
 public class FileHistory
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private Path file;
 
 	/**
@@ -78,8 +83,8 @@ public class FileHistory
 				Files.write(pathToTempFile, revision.binary);
 			}
 
-			Main.logger.info("Created temporary file at " + pathToTempFile.toString()
-					+ " for revision " + file.toString() + " (" + timestamp + ")");
+			logger.info("Created temporary file at " + pathToTempFile.toString() + " for revision "
+					+ file.toString() + " (" + timestamp + ")");
 		}
 		catch(IOException e)
 		{
@@ -130,8 +135,8 @@ public class FileHistory
 		DbConnection db = DbConnection.getInstance();
 		db.insertRevision(file, diffString, binary, delta, filesize);
 
-		Main.logger.debug("Revision stored for file " + file.toString() + " (file size: "
-				+ filesize + "; delta: " + delta + ")");
+		logger.debug("Revision stored for file " + file.toString() + " (file size: " + filesize
+				+ "; delta: " + delta + ")");
 	}
 
 	/**
@@ -154,13 +159,11 @@ public class FileHistory
 		Path specificRevision = getRevisionInfo(timestamp);
 		if(!FileOp.isPlainText(specificRevision))
 		{
-			Main.logger.debug("Revision for file " + file.toString() + " (" + timestamp
-					+ ") is binary");
+			logger.debug("Revision for file " + file.toString() + " (" + timestamp + ") is binary");
 			return specificRevision;
 		}
 
-		Main.logger.debug("Revision for file " + file.toString() + " (" + timestamp
-				+ ") is plain text");
+		logger.debug("Revision for file " + file.toString() + " (" + timestamp + ") is plain text");
 
 		// Retrieve data from database
 		DbConnection db = DbConnection.getInstance();
@@ -218,6 +221,6 @@ public class FileHistory
 	{
 		DbConnection db = DbConnection.getInstance();
 		db.renameRevisions(file, newName);
-		Main.logger.info("File " + file.toString() + " is renamed to " + newName);
+		logger.info("File " + file.toString() + " is renamed to " + newName);
 	}
 }

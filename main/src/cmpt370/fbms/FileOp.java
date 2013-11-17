@@ -45,11 +45,16 @@ import net.sf.jmimemagic.MagicMatch;
 import net.sf.jmimemagic.MagicMatchNotFoundException;
 import net.sf.jmimemagic.MagicParseException;
 
+import org.apache.log4j.Logger;
+
 /**
  * A utility class for the various file operations that are performed by other methods.
  */
 public class FileOp
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	/**
 	 * Copies the specified source (file or directory) into the specified destination directory. New
 	 * directories are created as necessary. If a directory is copied, all its contents are also
@@ -94,14 +99,14 @@ public class FileOp
 								{
 									Files.copy(dir, targetDir);
 
-									Main.logger.debug("Copied " + dir.toString() + " to "
+									logger.debug("Copied " + dir.toString() + " to "
 											+ targetDir.toString());
 								}
 								catch(FileAlreadyExistsException e)
 								{
 									if(!Files.isDirectory(targetDir))
 									{
-										Main.logger.error("Could not copy " + targetDir.toString()
+										logger.error("Could not copy " + targetDir.toString()
 												+ "; Not actually a directory.", e);
 									}
 								}
@@ -127,7 +132,7 @@ public class FileOp
 									Files.copy(file, targetFile,
 											StandardCopyOption.REPLACE_EXISTING);
 
-									Main.logger.debug("Copied " + file.toString() + " to "
+									logger.debug("Copied " + file.toString() + " to "
 											+ targetFile.toString());
 								}
 								catch(IOException e)
@@ -305,7 +310,7 @@ public class FileOp
 		// Can't rename a file that doesn't exist
 		if(!mFile.exists())
 		{
-			Main.logger.warn("Could not rename non-existed file: " + mFile.getAbsolutePath());
+			logger.warn("Could not rename non-existed file: " + mFile.getAbsolutePath());
 			return;
 		}
 		// If the new name already exists, it must be deleted to make way for our renamed file
@@ -314,7 +319,7 @@ public class FileOp
 			newFile.delete();
 			mFile.renameTo(newFile);
 
-			Main.logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString()
+			logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString()
 					+ " (had to delete existing file)");
 		}
 		// Otherwise we can just rename it
@@ -324,7 +329,7 @@ public class FileOp
 					+ newFile.getAbsolutePath());
 		}
 
-		Main.logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString());
+		logger.debug("Renamed " + mFile.toString() + " -> " + newFile.toString());
 	}
 
 	/**
@@ -340,16 +345,14 @@ public class FileOp
 		// If a bad path is given...
 		if(!targetFile.exists())
 		{
-			Main.logger.warn("Unable to delete " + targetFile.toString()
-					+ "  as it does not exist.");
+			logger.warn("Unable to delete " + targetFile.toString() + "  as it does not exist.");
 			return;
 		}
 
 		// If a folder is given, recursively delete its sub-directories first.
 		if(targetFile.isDirectory())
 		{
-			Main.logger.debug(targetFile.toString()
-					+ " is a directory, recursively deleting contents");
+			logger.debug(targetFile.toString() + " is a directory, recursively deleting contents");
 
 			for(File childFile : targetFile.listFiles())
 			{
@@ -364,7 +367,7 @@ public class FileOp
 		}
 		catch(NoSuchFileException e)
 		{
-			Main.logger.info("Could not delete non-existed file: " + file.toString());
+			logger.info("Could not delete non-existed file: " + file.toString());
 		}
 		catch(IOException e)
 		{
@@ -382,7 +385,7 @@ public class FileOp
 	public static long fileSize(Path file)
 	{
 		File targetFile = file.toFile();
-		Main.logger.debug("Size of " + file + " is " + targetFile.length());
+		logger.debug("Size of " + file + " is " + targetFile.length());
 		return targetFile.length();
 	}
 
@@ -460,11 +463,11 @@ public class FileOp
 		catch(MagicParseException | MagicMatchNotFoundException | MagicException e)
 		{
 			// When we cannot get the MIME type, return false (binary or large file)
-			Main.logger.info("Could not determine file MIME type ", e);
+			logger.info("Could not determine file MIME type ", e);
 			return false;
 		}
 
-		Main.logger.debug(file.toString() + " has an MIME type of " + fileTypeString);
+		logger.debug(file.toString() + " has an MIME type of " + fileTypeString);
 
 		if(fileTypeString == null)
 		{
@@ -539,11 +542,11 @@ public class FileOp
 	 */
 	public static boolean isEqual(Path file1, Path file2)
 	{
-		Main.logger.debug("Comparing file: " + file1.toString() + " and " + file2.toString());
+		logger.debug("Comparing file: " + file1.toString() + " and " + file2.toString());
 		// Can't be equal if the file size is different
 		if(file1.toFile().length() != file2.toFile().length())
 		{
-			Main.logger.debug("Files have different length.");
+			logger.debug("Files have different length.");
 			return false;
 		}
 
@@ -557,18 +560,17 @@ public class FileOp
 		}
 		catch(IOException e)
 		{
-			Main.logger.error(
-					"Could not compare files " + file1.toString() + " " + file2.toString(), e);
+			logger.error("Could not compare files " + file1.toString() + " " + file2.toString(), e);
 		}
 
 		if(Arrays.equals(file1Bytes, file2Bytes))
 		{
-			Main.logger.debug("Files are equal.");
+			logger.debug("Files are equal.");
 			return true;
 		}
 		else
 		{
-			Main.logger.debug("Files are different.");
+			logger.debug("Files are different.");
 			return false;
 		}
 	}

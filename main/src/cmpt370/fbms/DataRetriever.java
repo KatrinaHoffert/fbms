@@ -28,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.gui.GuiUtility;
 
 /**
@@ -36,6 +38,9 @@ import cmpt370.fbms.gui.GuiUtility;
  */
 public class DataRetriever
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private Path path;
 
 	public DataRetriever(Path inPath)
@@ -175,7 +180,7 @@ public class DataRetriever
 		// Get the contents of the folder
 		List<FileInfo> files = getFolderContents();
 
-		Main.logger.debug("Found " + files.size() + " entries for " + path.toString());
+		logger.debug("Found " + files.size() + " entries for " + path.toString());
 
 		// Add folders
 		for(FileInfo file : files)
@@ -240,7 +245,7 @@ public class DataRetriever
 
 		Collections.sort(revisions);
 
-		Main.logger.debug("Found " + revisions.size() + " entries for " + path.toString());
+		logger.debug("Found " + revisions.size() + " entries for " + path.toString());
 
 		for(RevisionInfo revision : revisions)
 		{

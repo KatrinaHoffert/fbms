@@ -27,6 +27,8 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.gui.GuiUtility;
 
 /**
@@ -36,6 +38,9 @@ import cmpt370.fbms.gui.GuiUtility;
  */
 public class DbConnection
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private static DbConnection instance = null;
 	private Connection connection = null;
 
@@ -113,11 +118,11 @@ public class DbConnection
 						+ " path STRING, diff STRING, binary BLOB, delta INTEGER, filesize INTEGER, time INTEGER)");
 				firstRun = true;
 
-				Main.logger.info("Existing revisions table not found; new table created");
+				logger.info("Existing revisions table not found; new table created");
 			}
 			else
 			{
-				Main.logger.info("Existing revisions table found");
+				logger.info("Existing revisions table found");
 			}
 
 			// Likewise for the settings table
@@ -126,11 +131,11 @@ public class DbConnection
 				statement.executeUpdate("CREATE TABLE settings (name STRING, setting STRING)");
 				firstRun = true;
 
-				Main.logger.info("Existing settings table not found; new table created");
+				logger.info("Existing settings table not found; new table created");
 			}
 			else
 			{
-				Main.logger.info("Existing settings table found");
+				logger.info("Existing settings table found");
 			}
 
 			// If this isn't the first run, fetch the live directory. If it is the first run, that's
@@ -154,7 +159,7 @@ public class DbConnection
 			Errors.fatalError("Database table creation failed", e);
 		}
 
-		Main.logger.debug("Database connection successfully initialized");
+		logger.debug("Database connection successfully initialized");
 	}
 
 	/**
@@ -217,7 +222,7 @@ public class DbConnection
 			Errors.fatalError("Could not create SQL statement", e);
 		}
 
-		Main.logger.debug("Fetched revision data for " + file.toString() + "(found " + list.size()
+		logger.debug("Fetched revision data for " + file.toString() + "(found " + list.size()
 				+ " entries)");
 
 		return list;
@@ -276,13 +281,13 @@ public class DbConnection
 				// time INTEGER
 				revision.time = revisionRows.getLong("time");
 
-				Main.logger.debug("Found revision entry for " + file.toString() + " (at T = "
+				logger.debug("Found revision entry for " + file.toString() + " (at T = "
 						+ timestamp + ")");
 			}
 			else
 			{
-				Main.logger.debug("Failed to find a revision entry for " + file.toString()
-						+ " (at T = " + timestamp + ")");
+				logger.debug("Failed to find a revision entry for " + file.toString() + " (at T = "
+						+ timestamp + ")");
 			}
 		}
 		catch(SQLException e)
@@ -338,7 +343,7 @@ public class DbConnection
 			Errors.nonfatalError("Could not insert revision into database", e1);
 		}
 
-		Main.logger.debug("Successfully inserted revision " + file.toString() + " (delta: " + delta
+		logger.debug("Successfully inserted revision " + file.toString() + " (delta: " + delta
 				+ "; filesize: " + filesize + ")");
 	}
 
@@ -371,7 +376,7 @@ public class DbConnection
 			Errors.nonfatalError("Could not rename revisions in database.", e);
 		}
 
-		Main.logger.debug("Renamed revisions in database " + file.toString() + " -> "
+		logger.debug("Renamed revisions in database " + file.toString() + " -> "
 				+ newPath.toString());
 	}
 
@@ -425,8 +430,7 @@ public class DbConnection
 				prepStatement.setString(2, path.toString());
 				prepStatement.executeUpdate();
 
-				Main.logger.debug("Renamed path " + path.toString() + " -> "
-						+ renamedPath.toString());
+				logger.debug("Renamed path " + path.toString() + " -> " + renamedPath.toString());
 			}
 		}
 		catch(SQLException e)
@@ -464,7 +468,7 @@ public class DbConnection
 			Errors.fatalError("Retrieval of setting value failed", e);
 		}
 
-		Main.logger.debug("Found configuration value for " + settingName + " = " + settingValue);
+		logger.debug("Found configuration value for " + settingName + " = " + settingValue);
 
 		// Will end up returning either the setting value if it was found or null if it was not
 		// found
@@ -518,8 +522,7 @@ public class DbConnection
 			Errors.fatalError("Unable to set requested value in settings.", e);
 		}
 
-		Main.logger.debug("Successfully set configuration value " + settingName + " = "
-				+ settingValue);
+		logger.debug("Successfully set configuration value " + settingName + " = " + settingValue);
 	}
 
 	/**
@@ -547,7 +550,7 @@ public class DbConnection
 				Statement statement = connection.createStatement();
 				statement.execute("DELETE FROM revisions WHERE time < " + cutoffDate);
 
-				Main.logger.debug("Database trimmed of entries older than "
+				logger.debug("Database trimmed of entries older than "
 						+ GuiUtility.formatDate(cutoffDate));
 			}
 			catch(SQLException e)
@@ -557,7 +560,7 @@ public class DbConnection
 		}
 		else
 		{
-			Main.logger.debug("Database trim command encountered and ignored because trim is"
+			logger.debug("Database trim command encountered and ignored because trim is"
 					+ " disabled or is set to an invalid value");
 		}
 	}
@@ -578,10 +581,10 @@ public class DbConnection
 			}
 			catch(SQLException e)
 			{
-				Main.logger.error("Could not close database connection", e);
+				logger.error("Could not close database connection", e);
 			}
 		}
 
-		Main.logger.debug("Database connection closed.");
+		logger.debug("Database connection closed.");
 	}
 }

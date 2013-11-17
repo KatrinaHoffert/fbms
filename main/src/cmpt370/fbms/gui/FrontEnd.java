@@ -29,6 +29,8 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.Errors;
 import cmpt370.fbms.Main;
 
@@ -37,6 +39,9 @@ import cmpt370.fbms.Main;
  */
 public class FrontEnd
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private MainFrame frame;
 
 	public FrontEnd()
@@ -56,7 +61,7 @@ public class FrontEnd
 		}
 		catch(IOException e)
 		{
-			Main.logger.error("Could not load program icon", e);
+			logger.error("Could not load program icon", e);
 		}
 
 		// And scale it to the appropriate size using smooth scaling

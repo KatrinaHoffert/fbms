@@ -32,11 +32,18 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+
 /**
  * A utility class for reporting and logging of errors that the user should know about.
  */
 public class Errors
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
+	// We only want to display one error at a time, so keep track of whether or not an error is
+	// being displayed
 	private static boolean errorBeingDisplayed = false;
 
 	/**
@@ -51,7 +58,7 @@ public class Errors
 	 */
 	public static void fatalError(String message, Throwable error)
 	{
-		Main.logger.fatal(message, error);
+		logger.fatal(message, error);
 
 		// Convert stack trace into a string
 		StackTraceElement stackTrace[] = error.getStackTrace();
@@ -74,7 +81,7 @@ public class Errors
 	 */
 	public static void fatalError(String message)
 	{
-		Main.logger.fatal(message);
+		logger.fatal(message);
 
 		JOptionPane.showMessageDialog(null, message, "Fatal error", JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
@@ -107,11 +114,11 @@ public class Errors
 
 			if(error != null)
 			{
-				Main.logger.error(message, error);
+				logger.error(message, error);
 			}
 			else
 			{
-				Main.logger.error(message);
+				logger.error(message);
 			}
 
 			// The frame

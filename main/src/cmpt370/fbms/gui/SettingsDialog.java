@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.DbConnection;
 import cmpt370.fbms.Main;
 
@@ -23,6 +25,9 @@ import cmpt370.fbms.Main;
  */
 class SettingsDialog extends JDialog
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private DbConnection db = DbConnection.getInstance();
 
 	/**
@@ -177,6 +182,9 @@ class CancelActionListener implements ActionListener
  */
 class AcceptActionListener implements ActionListener
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private DbConnection db = DbConnection.getInstance();
 	private JDialog dialog;
 	private JTextField trimField;
@@ -213,7 +221,7 @@ class AcceptActionListener implements ActionListener
 		{
 			db.setConfig("trimDate", "-1");
 		}
-		Main.logger.info("Set trimDate to: " + db.getConfig("trimDate"));
+		logger.info("Set trimDate to: " + db.getConfig("trimDate"));
 
 		// Parse the maxSize field
 		if(maxSizeField.getText().matches("[0-9]+\\.?[0-9]*"))
@@ -234,7 +242,7 @@ class AcceptActionListener implements ActionListener
 			// Invalid number
 			db.setConfig("maxSize", "5");
 		}
-		Main.logger.info("Set maxSize to: " + db.getConfig("maxSize"));
+		logger.info("Set maxSize to: " + db.getConfig("maxSize"));
 
 		// Parse the scan field
 		if(scanField.isSelected())
@@ -245,7 +253,7 @@ class AcceptActionListener implements ActionListener
 		{
 			db.setConfig("startupScan", "false");
 		}
-		Main.logger.info("Set startupScan to: " + db.getConfig("startupScan"));
+		logger.info("Set startupScan to: " + db.getConfig("startupScan"));
 
 		// Parse the disable errors field
 		if(disableErrorsField.isSelected())
@@ -256,7 +264,7 @@ class AcceptActionListener implements ActionListener
 		{
 			db.setConfig("disableNonFatalErrors", "false");
 		}
-		Main.logger.info("Set disableNonFatalErrors to: " + db.getConfig("disableNonFatalErrors"));
+		logger.info("Set disableNonFatalErrors to: " + db.getConfig("disableNonFatalErrors"));
 
 		// Close the window
 		dialog.dispose();

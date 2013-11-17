@@ -22,11 +22,16 @@ import java.util.List;
 
 import net.contentobjects.jnotify.JNotifyListener;
 
+import org.apache.log4j.Logger;
+
 /**
  * Interfaces with the JNotify library to catch changes to the file system as they happen.
  */
 public class Watcher implements JNotifyListener
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private List<Path> createdFiles;
 	private List<Path> modifiedFiles;
 	private List<RenamedFile> renamedFiles;
@@ -84,7 +89,7 @@ public class Watcher implements JNotifyListener
 		}
 
 		// Use the logger in Control to issue messages
-		Main.logger.info("Renamed file " + oldName + " to " + newName + " in " + rootPath);
+		logger.info("Renamed file " + oldName + " to " + newName + " in " + rootPath);
 	}
 
 	/**
@@ -107,7 +112,7 @@ public class Watcher implements JNotifyListener
 			modifiedFiles.add(path);
 		}
 
-		Main.logger.info("Modified file " + path);
+		logger.info("Modified file " + path);
 	}
 
 	/**
@@ -130,7 +135,7 @@ public class Watcher implements JNotifyListener
 			deletedFiles.add(path);
 		}
 
-		Main.logger.info("Deleted file " + path);
+		logger.info("Deleted file " + path);
 	}
 
 	/**
@@ -153,6 +158,6 @@ public class Watcher implements JNotifyListener
 			createdFiles.add(path);
 		}
 
-		Main.logger.info("Created file " + path);
+		logger.info("Created file " + path);
 	}
 }

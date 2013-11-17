@@ -37,6 +37,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.DataRetriever;
 import cmpt370.fbms.Errors;
 import cmpt370.fbms.FileOp;
@@ -48,6 +50,9 @@ import cmpt370.fbms.Main;
  */
 public class MainFrame extends JFrame
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private static MainFrame instance = null;
 
 	public JTable table;
@@ -252,6 +257,9 @@ public class MainFrame extends JFrame
  */
 class TableSelectionListener implements MouseListener, KeyListener
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
@@ -291,8 +299,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 			// name.
 			MainFrame.getInstance().selectedFile = MainFrame.getInstance().currentDirectory.resolve((String) MainFrame.getInstance().table.getValueAt(
 					MainFrame.getInstance().table.getSelectedRow(), 1));
-			Main.logger.debug("Selected file/folder: "
-					+ MainFrame.getInstance().selectedFile.toString());
+			logger.debug("Selected file/folder: " + MainFrame.getInstance().selectedFile.toString());
 
 			// Enable menu options that require a selected file (view revisions is only accessible
 			// if a file is selected
@@ -326,7 +333,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 			// Go into directories
 			if(MainFrame.getInstance().selectedFile.toFile().isDirectory())
 			{
-				Main.logger.debug("Activated on folder: "
+				logger.debug("Activated on folder: "
 						+ MainFrame.getInstance().selectedFile.toString());
 
 				// Set the new directory
@@ -344,7 +351,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 			// Display revision window for files
 			else
 			{
-				Main.logger.debug("Activated on file: "
+				logger.debug("Activated on file: "
 						+ MainFrame.getInstance().selectedFile.toString());
 
 				RevisionDialog revisionWindow = new RevisionDialog(

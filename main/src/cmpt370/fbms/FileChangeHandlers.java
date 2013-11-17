@@ -6,11 +6,16 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.apache.log4j.Logger;
+
 /**
  * Handles all the changes to the files that the watcher detects by taking appropriate actions.
  */
 public class FileChangeHandlers
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private List<Path> createdFiles;
 	private List<Path> modifiedFiles;
 	private List<RenamedFile> renamedFiles;
@@ -101,7 +106,7 @@ public class FileChangeHandlers
 		RenamedFile toRename;
 		itrc = createdFiles.listIterator(createdFiles.size());
 		found = false;
-		Main.logger.debug("Handle Created Files has started.");
+		logger.debug("Handle Created Files has started.");
 
 		// Search through all elements of created files, comparing them to instances of renamed
 		// files and modified files.
@@ -123,13 +128,13 @@ public class FileChangeHandlers
 					if(hit == true)
 					{
 						itrr.remove();
-						Main.logger.debug("Create Handle: Found duplicate in renamed, removing.");
+						logger.debug("Create Handle: Found duplicate in renamed, removing.");
 					}
 					// Otherwise we set found and hit to be true. It will be then removed from
 					// created and left on renamed to be handled there.
 					else
 					{
-						Main.logger.debug("Create Handle: Found same entry in renamed, leaving and deleting in created.");
+						logger.debug("Create Handle: Found same entry in renamed, leaving and deleting in created.");
 						hit = true;
 						found = true;
 					}
@@ -149,13 +154,13 @@ public class FileChangeHandlers
 					if(hit == true || found == true)
 					{
 						itrm.remove();
-						Main.logger.debug("Create File Handle: Found duplicate in modified, removing:"
+						logger.debug("Create File Handle: Found duplicate in modified, removing:"
 								+ pathm.toFile().toString());
 					}
 					// Otherwise we make backups/entries and set hit/found to true.
 					else
 					{
-						Main.logger.debug("Create Handle: Found same entry in modified, leaving and deleting in created.");
+						logger.debug("Create Handle: Found same entry in modified, leaving and deleting in created.");
 						hit = true;
 						found = true;
 					}
@@ -165,7 +170,7 @@ public class FileChangeHandlers
 			// make a diff/backup and remove it from the created list.
 			if(!found)
 			{
-				Main.logger.info("Create Handle: file " + pathc.toFile().toString()
+				logger.info("Create Handle: file " + pathc.toFile().toString()
 						+ " was not found in any other list.");
 				// If the file doesn't exist we copy it over.
 				if(!FileOp.isFolder(pathc) && !FileOp.convertPath(pathc).toFile().exists())
@@ -174,7 +179,7 @@ public class FileChangeHandlers
 					Path targetDirectory = FileOp.convertPath(pathc).getParent();
 					FileOp.copy(pathc, targetDirectory);
 
-					Main.logger.debug("Create Handle: Found new file " + pathc.toFile().toString());
+					logger.debug("Create Handle: Found new file " + pathc.toFile().toString());
 				}
 				else if(FileOp.isFolder(pathc) && !FileOp.convertPath(pathc).toFile().exists())
 				{
@@ -184,7 +189,7 @@ public class FileChangeHandlers
 				else
 				{
 					modifiedFiles.add(pathc);
-					Main.logger.debug("Create Handle: Move " + pathc.toFile().toString()
+					logger.debug("Create Handle: Move " + pathc.toFile().toString()
 							+ "to modified, it exists.");
 				}
 			}
@@ -211,7 +216,7 @@ public class FileChangeHandlers
 		DbConnection db = DbConnection.getInstance();
 		long maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
 
-		Main.logger.debug("Handle Modified Files has started.");
+		logger.debug("Handle Modified Files has started.");
 
 		while(itrm.hasPrevious())
 		{
@@ -245,7 +250,7 @@ public class FileChangeHandlers
 						Path targetDirectory = FileOp.convertPath(pathm).getParent();
 						FileOp.copy(pathm, targetDirectory);
 
-						Main.logger.debug("Create File Handle: Found new file "
+						logger.debug("Create File Handle: Found new file "
 								+ pathm.toFile().toString());
 					}
 					else
@@ -258,7 +263,7 @@ public class FileChangeHandlers
 
 						if(diff.toFile().length() == 0)
 						{
-							Main.logger.info("File delta created in handleModified was 0 in size: "
+							logger.info("File delta created in handleModified was 0 in size: "
 									+ pathm.toFile().toString() + " -- revision not made.");
 
 						}
@@ -275,7 +280,7 @@ public class FileChangeHandlers
 							Path targetDirectory = FileOp.convertPath(pathm).getParent();
 							FileOp.copy(pathm, targetDirectory);
 
-							Main.logger.debug("Handle File Modified: Found existing modified file "
+							logger.debug("Handle File Modified: Found existing modified file "
 									+ pathm.toFile().toString());
 						}
 					}
@@ -303,7 +308,7 @@ public class FileChangeHandlers
 					Path targetDirectory = FileOp.convertPath(pathm).getParent();
 					FileOp.copy(pathm, targetDirectory);
 
-					Main.logger.debug("Create File Handle: Found binary file "
+					logger.debug("Create File Handle: Found binary file "
 							+ pathm.toFile().toString());
 				}
 				// It doesn't exist in the backup directory, so just copy
@@ -311,7 +316,7 @@ public class FileChangeHandlers
 					Path targetDirectory = FileOp.convertPath(pathm).getParent();
 					FileOp.copy(pathm, targetDirectory);
 
-					Main.logger.debug("Create File Handle: Found new unrevisioned or large file "
+					logger.debug("Create File Handle: Found new unrevisioned or large file "
 							+ pathm.toFile().toString());
 				}
 			}
@@ -332,7 +337,7 @@ public class FileChangeHandlers
 		DbConnection db = DbConnection.getInstance();
 		long maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
 
-		Main.logger.debug("Handle Renamed Files has started.");
+		logger.debug("Handle Renamed Files has started.");
 
 		// Since this is last to call all modified/created files should be dealt with.
 		// We just iterate through the list and rename files.
@@ -357,7 +362,7 @@ public class FileChangeHandlers
 						// Don't add empty revisions
 						if(diff.toFile().length() == 0)
 						{
-							Main.logger.info("File delta created in handleRename was 0 in size: "
+							logger.info("File delta created in handleRename was 0 in size: "
 									+ toRename.oldName.toFile().toString()
 									+ " -- revision not made.");
 
@@ -389,8 +394,7 @@ public class FileChangeHandlers
 							FileHistory fileHist = new FileHistory(toRename.oldName);
 							fileHist.renameRevision(newName);
 
-							Main.logger.debug("Handle Renamed: "
-									+ toRename.newName.toFile().toString()
+							logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
 									+ "already existed and was updated.");
 						}
 					}
@@ -426,7 +430,7 @@ public class FileChangeHandlers
 						FileHistory fileHist = new FileHistory(toRename.oldName);
 						fileHist.renameRevision(newName);
 
-						Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+						logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
 								+ " existed and was updated.");
 					}
 					// Files that don't exist in the backup directory
@@ -438,7 +442,7 @@ public class FileChangeHandlers
 						FileHistory fileHist = new FileHistory(toRename.oldName);
 						fileHist.renameRevision(newName);
 
-						Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+						logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
 								+ " existed but was not a valid file and was updated.");
 					}
 				}
@@ -475,7 +479,7 @@ public class FileChangeHandlers
 						// Don't add empty revisions
 						if(diff.toFile().length() == 0)
 						{
-							Main.logger.info("File delta created in handleRename was 0 in size: "
+							logger.info("File delta created in handleRename was 0 in size: "
 									+ toRename.newName.toFile().toString()
 									+ " -- revision not made.");
 						}
@@ -496,8 +500,7 @@ public class FileChangeHandlers
 							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 							FileOp.copy(toRename.newName, targetDirectory);
 
-							Main.logger.debug("Handle Renamed: "
-									+ toRename.newName.toFile().toString()
+							logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
 									+ "already existed and was updated.");
 						}
 					}
@@ -527,11 +530,11 @@ public class FileChangeHandlers
 						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 						FileOp.copy(toRename.newName, targetDirectory);
 
-						Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+						logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
 								+ " only new name existed.");
 					}
 
-					Main.logger.debug("Handle Renamed: "
+					logger.debug("Handle Renamed: "
 							+ toRename.newName.toFile().toString()
 							+ " existed in the backup directory and a revision was created when overwriting");
 				}
@@ -541,7 +544,7 @@ public class FileChangeHandlers
 				{
 					Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 					FileOp.copy(toRename.newName, targetDirectory);
-					Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
+					logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
 							+ " did not exist and was added.");
 				}
 			}
@@ -565,7 +568,7 @@ public class FileChangeHandlers
 		ListIterator<RenamedFile> itrr = renamedFiles.listIterator(renamedFiles.size());
 		RenamedFile toRename;
 		Path pathm, pathc, pathd;
-		Main.logger.debug("Handle Deleted Files has started.");
+		logger.debug("Handle Deleted Files has started.");
 
 		while(itrd.hasPrevious())
 		{

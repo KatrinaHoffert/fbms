@@ -38,6 +38,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.Errors;
 import cmpt370.fbms.Main;
 
@@ -46,6 +48,9 @@ import cmpt370.fbms.Main;
  */
 public class FirstStartWizard
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	public static JFrame frame;
 	public static int currentPanel = 1;
 	public static JTextField liveDirectoryField;
@@ -56,7 +61,7 @@ public class FirstStartWizard
 
 	public void run()
 	{
-		Main.logger.info("Started first run wizard");
+		logger.info("Started first run wizard");
 
 		// Create the dialog window
 		frame = new JFrame();
@@ -77,8 +82,7 @@ public class FirstStartWizard
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				Main.logger.debug("First run wizard closed in panel "
-						+ FirstStartWizard.currentPanel);
+				logger.debug("First run wizard closed in panel " + FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		};
@@ -126,13 +130,12 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				Main.logger.debug("First run wizard closed in panel "
-						+ FirstStartWizard.currentPanel);
+				logger.debug("First run wizard closed in panel " + FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		});
 
-		Main.logger.debug("First run wizard introduction panel drawn");
+		logger.debug("First run wizard introduction panel drawn");
 
 		return panel;
 	}
@@ -172,13 +175,12 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				Main.logger.debug("First run wizard closed in panel "
-						+ FirstStartWizard.currentPanel);
+				logger.debug("First run wizard closed in panel " + FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		});
 
-		Main.logger.debug("First run wizard import panel drawn");
+		logger.debug("First run wizard import panel drawn");
 
 		return panel;
 	}
@@ -240,13 +242,12 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				Main.logger.debug("First run wizard closed in panel "
-						+ FirstStartWizard.currentPanel);
+				logger.debug("First run wizard closed in panel " + FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		});
 
-		Main.logger.debug("First run wizard directory choice panel drawn");
+		logger.debug("First run wizard directory choice panel drawn");
 
 		return panel;
 	}
@@ -312,7 +313,7 @@ public class FirstStartWizard
 						Main.backupDirectory = fileChooser.getSelectedFile().toPath();
 						FirstStartWizard.selectDirsNextButton.setEnabled(true);
 
-						Main.logger.debug("First run wizard existing backup folder chosen: "
+						logger.debug("First run wizard existing backup folder chosen: "
 								+ Main.backupDirectory);
 					}
 					else
@@ -348,13 +349,12 @@ public class FirstStartWizard
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				Main.logger.debug("First run wizard closed in panel "
-						+ FirstStartWizard.currentPanel);
+				logger.debug("First run wizard closed in panel " + FirstStartWizard.currentPanel);
 				System.exit(0);
 			}
 		});
 
-		Main.logger.debug("First run wizard import existing backup panel drawn");
+		logger.debug("First run wizard import existing backup panel drawn");
 
 		return panel;
 	}
@@ -410,7 +410,7 @@ public class FirstStartWizard
 			}
 		});
 
-		Main.logger.debug("First run wizard final panel drawn");
+		logger.debug("First run wizard final panel drawn");
 
 		return panel;
 	}
@@ -430,7 +430,7 @@ public class FirstStartWizard
 			out.write(Main.backupDirectory.toString().getBytes());
 			out.close();
 
-			Main.logger.debug("Backup location file created, set to: " + Main.backupDirectory);
+			logger.debug("Backup location file created, set to: " + Main.backupDirectory);
 		}
 		catch(IOException e)
 		{
@@ -449,6 +449,9 @@ public class FirstStartWizard
  */
 class WizardButtonListener implements ActionListener
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	private int offset;
 	private FirstStartWizard target;
 
@@ -510,7 +513,7 @@ class WizardButtonListener implements ActionListener
 			Main.liveDirectory = null;
 		}
 
-		Main.logger.debug("Moved to panel number " + FirstStartWizard.currentPanel);
+		logger.debug("Moved to panel number " + FirstStartWizard.currentPanel);
 	}
 }
 
@@ -519,6 +522,9 @@ class WizardButtonListener implements ActionListener
  */
 class DirectoryListener implements MouseListener
 {
+	// Logger instance
+	private static Logger logger = Logger.getLogger(Main.class);
+
 	// True = backup directory, false = live directory
 	private boolean backup;
 
@@ -549,7 +555,7 @@ class DirectoryListener implements MouseListener
 				FirstStartWizard.backupDirectoryField.setText(fileChooser.getSelectedFile().toString());
 				Main.backupDirectory = fileChooser.getSelectedFile().toPath();
 
-				Main.logger.info("First run wizard backup folder chosen: " + Main.backupDirectory);
+				logger.info("First run wizard backup folder chosen: " + Main.backupDirectory);
 			}
 		}
 		// Otherwise we're choosing the live directory
@@ -564,7 +570,7 @@ class DirectoryListener implements MouseListener
 				FirstStartWizard.liveDirectoryField.setText(fileChooser.getSelectedFile().toString());
 				Main.liveDirectory = fileChooser.getSelectedFile().toPath();
 
-				Main.logger.info("First run wizard live folder chosen: " + Main.liveDirectory);
+				logger.info("First run wizard live folder chosen: " + Main.liveDirectory);
 			}
 		}
 
@@ -591,7 +597,7 @@ class DirectoryListener implements MouseListener
 								"The backup directory cannot be a child of the live directory and vice versa.",
 								"Error", JOptionPane.WARNING_MESSAGE);
 
-						Main.logger.debug("Chosen backup directory is a child or parent of live directory");
+						logger.debug("Chosen backup directory is a child or parent of live directory");
 					}
 					else
 					{
@@ -602,7 +608,7 @@ class DirectoryListener implements MouseListener
 								"The live directory cannot be a child of the backup directory and vice versa.",
 								"Error", JOptionPane.WARNING_MESSAGE);
 
-						Main.logger.debug("Chosen live directory is a child or parent of backup directory");
+						logger.debug("Chosen live directory is a child or parent of backup directory");
 					}
 				}
 				// Otherwise paths are valid: Enable next button
@@ -610,7 +616,7 @@ class DirectoryListener implements MouseListener
 				{
 					FirstStartWizard.selectDirsNextButton.setEnabled(true);
 
-					Main.logger.debug("Chosen directories are valid");
+					logger.debug("Chosen directories are valid");
 				}
 			}
 		}
