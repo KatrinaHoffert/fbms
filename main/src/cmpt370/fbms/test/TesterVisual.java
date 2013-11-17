@@ -28,7 +28,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import cmpt370.fbms.DataRetriever;
-import cmpt370.fbms.DbManager;
+import cmpt370.fbms.DbConnection;
 import cmpt370.fbms.Errors;
 import cmpt370.fbms.FileHistory;
 import cmpt370.fbms.FileInfo;
@@ -50,7 +50,7 @@ public class TesterVisual
 		// Manual setup
 		Path path = Paths.get("").toAbsolutePath();
 		Main.backupDirectory = path;
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		db.initConnection();
 
 		// Get the contents of this directory
@@ -89,7 +89,7 @@ public class TesterVisual
 		Main.backupDirectory = path;
 		Main.liveDirectory = path;
 
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		db.initConnection();
 
 		// Print out the database size
@@ -187,7 +187,7 @@ public class TesterVisual
 		Path path = Paths.get("").toAbsolutePath();
 		Main.backupDirectory = path;
 		Main.liveDirectory = path;
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		db.initConnection();
 
 		// Insert revisions for a file

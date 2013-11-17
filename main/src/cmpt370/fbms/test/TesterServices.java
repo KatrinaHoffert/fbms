@@ -26,7 +26,7 @@ import java.util.List;
 import org.junit.Test;
 
 import cmpt370.fbms.DataRetriever;
-import cmpt370.fbms.DbManager;
+import cmpt370.fbms.DbConnection;
 import cmpt370.fbms.FileInfo;
 import cmpt370.fbms.FileOp;
 import cmpt370.fbms.Main;
@@ -43,7 +43,7 @@ public class TesterServices
 	{
 		// Have to manually do the startup
 		Main.backupDirectory = Paths.get("").toAbsolutePath();
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		db.initConnection();
 
 		// Get the folder contents of this directory
@@ -78,7 +78,7 @@ public class TesterServices
 	{
 		// Create database in current directory
 		Main.backupDirectory = Paths.get("").toAbsolutePath();
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		db.initConnection();
 
 		// Try to change the live directory

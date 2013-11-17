@@ -55,7 +55,7 @@ public class FileHistory
 	public Path getRevisionInfo(long timestamp)
 	{
 		// Get the revision in question
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		RevisionInfo revision = db.getSpecificRevision(file, timestamp);
 		Path pathToTempFile = null;
 		PrintWriter output = null;
@@ -127,7 +127,7 @@ public class FileHistory
 			binary = null;
 		}
 
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		db.insertRevision(file, diffString, binary, delta, filesize);
 
 		Main.logger.debug("Revision stored for file " + file.toString() + " (file size: "
@@ -163,7 +163,7 @@ public class FileHistory
 				+ ") is plain text");
 
 		// Retrieve data from database
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		List<RevisionInfo> fileRevisionList = db.getFileRevisions(file);
 		LinkedList<RevisionInfo> patchList = new LinkedList<>();
 
@@ -216,7 +216,7 @@ public class FileHistory
 	 */
 	public void renameRevision(String newName)
 	{
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		db.renameRevisions(file, newName);
 		Main.logger.info("File " + file.toString() + " is renamed to " + newName);
 	}

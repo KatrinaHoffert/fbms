@@ -34,25 +34,25 @@ import cmpt370.fbms.gui.GuiUtility;
  * database. No other class calls database queries directly, so changes to the database only require
  * changes to this class.
  */
-public class DbManager
+public class DbConnection
 {
-	private static DbManager instance = null;
+	private static DbConnection instance = null;
 	private Connection connection = null;
 
 	/**
 	 * Private constructor as this class is a singleton.
 	 */
-	private DbManager()
+	private DbConnection()
 	{}
 
 	/**
 	 * Gets the current instance of the object (singleton pattern).
 	 */
-	public static synchronized DbManager getInstance()
+	public static synchronized DbConnection getInstance()
 	{
 		if(instance == null)
 		{
-			instance = new DbManager();
+			instance = new DbConnection();
 		}
 		return instance;
 	}

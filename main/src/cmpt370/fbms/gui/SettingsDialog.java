@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import cmpt370.fbms.DbManager;
+import cmpt370.fbms.DbConnection;
 import cmpt370.fbms.Main;
 
 /**
@@ -23,7 +23,7 @@ import cmpt370.fbms.Main;
  */
 class SettingsDialog extends JDialog
 {
-	private DbManager db = DbManager.getInstance();
+	private DbConnection db = DbConnection.getInstance();
 
 	/**
 	 * Initializes the settings dialog
@@ -177,7 +177,7 @@ class CancelActionListener implements ActionListener
  */
 class AcceptActionListener implements ActionListener
 {
-	private DbManager db = DbManager.getInstance();
+	private DbConnection db = DbConnection.getInstance();
 	private JDialog dialog;
 	private JTextField trimField;
 	private JTextField maxSizeField;

@@ -204,7 +204,7 @@ public class Main
 						// Every 500 loops, we run the command to trim the database
 						if(loop % 500 == 0)
 						{
-							DbManager db = DbManager.getInstance();
+							DbConnection db = DbConnection.getInstance();
 							db.trimDatabase();
 						}
 

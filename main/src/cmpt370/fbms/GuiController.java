@@ -142,7 +142,7 @@ public class GuiController
 	{
 		// Set the new directory in the database
 		Main.liveDirectory = newDirectory;
-		DbManager db = DbManager.getInstance();
+		DbConnection db = DbConnection.getInstance();
 		db.setConfig("liveDirectory", Main.liveDirectory.toString());
 
 		// Remove the old watcher

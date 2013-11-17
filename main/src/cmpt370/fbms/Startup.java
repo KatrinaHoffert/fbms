@@ -25,7 +25,7 @@ import cmpt370.fbms.gui.FirstStartWizard;
  */
 public class Startup
 {
-	private static DbManager db = DbManager.getInstance();
+	private static DbConnection db = DbConnection.getInstance();
 
 	private List<Path> createdFiles;
 	private List<Path> modifiedFiles;
