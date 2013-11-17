@@ -36,6 +36,7 @@ import cmpt370.fbms.Main;
 /**
  * This JMenuBar-like class makes up the menu bar of the main frame.
  */
+@SuppressWarnings("serial")
 class MainMenu extends JMenuBar
 {
 	public JMenuItem copyToOption = new JMenuItem("Copy to");

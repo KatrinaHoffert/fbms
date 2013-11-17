@@ -23,6 +23,7 @@ import cmpt370.fbms.Main;
 /**
  * Extends a JDialog to create the window that allows settings to be chosen.
  */
+@SuppressWarnings("serial")
 class SettingsDialog extends JDialog
 {
 	// Logger instance
@@ -40,6 +41,8 @@ class SettingsDialog extends JDialog
 		setResizable(false);
 
 		add(createSettings());
+
+		logger.info("Setting dialog drawn");
 	}
 
 	/**

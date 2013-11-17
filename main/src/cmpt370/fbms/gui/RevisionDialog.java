@@ -33,6 +33,7 @@ import cmpt370.fbms.Main;
 /**
  * Extends a JDialog to make up the revision window, which consists of a JTable and some buttons.
  */
+@SuppressWarnings("serial")
 public class RevisionDialog extends JDialog
 {
 	// Logger instance

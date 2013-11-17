@@ -35,6 +35,7 @@ import cmpt370.fbms.Main;
 /**
  * This JToolBar-like object makes up the toolbar of the main frame.
  */
+@SuppressWarnings("serial")
 public class MainToolBar extends JToolBar
 {
 	// Icons

@@ -48,6 +48,7 @@ import cmpt370.fbms.Main;
  * Defines the JFrame-like object that makes up the main window of the GUI. This window consists of
  * a toolbar, menu bar, and the file browser table.
  */
+@SuppressWarnings("serial")
 public class MainFrame extends JFrame
 {
 	// Logger instance
@@ -205,6 +206,8 @@ public class MainFrame extends JFrame
 
 		table.addMouseListener(new TableSelectionListener());
 		table.addKeyListener(new TableSelectionListener());
+
+		logger.info("Main frame drawn");
 	}
 
 	public void redrawTable(Path directory)
