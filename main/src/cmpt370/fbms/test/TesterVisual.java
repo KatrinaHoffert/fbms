@@ -190,12 +190,10 @@ public class TesterVisual
 		db.initConnection();
 
 		// Insert revisions for a file
-		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("README.txt"), null,
-				100, 200);
-		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("license.txt"), null,
-				300, 400);
-		FileHistory.storeRevision(path.resolve("README.txt"), path.resolve("authors.txt"), null,
-				500, 600);
+		FileHistory fileHist = new FileHistory(path.resolve("README.txt"));
+		fileHist.storeRevision(path.resolve("README.txt"), null, 100, 200);
+		fileHist.storeRevision(path.resolve("license.txt"), null, 300, 400);
+		fileHist.storeRevision(path.resolve("authors.txt"), null, 500, 600);
 
 		// Get the revision table for that file
 		Vector<Vector<String>> tableData = DataRetriever.getRevisionInfoTable(path.resolve("README.txt"));

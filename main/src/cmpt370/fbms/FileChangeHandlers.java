@@ -192,8 +192,8 @@ public class FileChangeHandlers
 									- FileOp.fileSize(FileOp.convertPath(pathm));
 
 							// Store a revision
-							FileHistory.storeRevision(pathm, diff, null, FileOp.fileSize(pathm),
-									delta);
+							FileHistory fileHist = new FileHistory(pathm);
+							fileHist.storeRevision(diff, null, FileOp.fileSize(pathm), delta);
 
 							// Copy file over.
 							Path targetDirectory = FileOp.convertPath(pathm).getParent();
@@ -214,7 +214,8 @@ public class FileChangeHandlers
 
 					try
 					{
-						FileHistory.storeRevision(pathm, null, Files.readAllBytes(pathm),
+						FileHistory fileHist = new FileHistory(pathm);
+						fileHist.storeRevision(null, Files.readAllBytes(pathm),
 								FileOp.fileSize(pathm), delta);
 					}
 					catch(IOException e)
@@ -289,7 +290,8 @@ public class FileChangeHandlers
 							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 							FileOp.copy(FileOp.convertPath(toRename.oldName), targetDirectory);
 
-							FileHistory.renameRevision(toRename.oldName, newName);
+							FileHistory fileHist = new FileHistory(toRename.oldName);
+							fileHist.renameRevision(newName);
 						}
 						else
 						{
@@ -298,7 +300,9 @@ public class FileChangeHandlers
 							{
 								long delta = FileOp.fileSize(toRename.newName)
 										- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
-								FileHistory.storeRevision(toRename.newName, diff, null,
+
+								FileHistory fileHist = new FileHistory(toRename.newName);
+								fileHist.storeRevision(diff, null,
 										FileOp.fileSize(toRename.newName), delta);
 							}
 
@@ -306,7 +310,8 @@ public class FileChangeHandlers
 							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 							FileOp.copy(toRename.newName, targetDirectory);
 
-							FileHistory.renameRevision(toRename.oldName, newName);
+							FileHistory fileHist = new FileHistory(toRename.oldName);
+							fileHist.renameRevision(newName);
 
 							Main.logger.debug("Handle Renamed: "
 									+ toRename.newName.toFile().toString()
@@ -327,8 +332,8 @@ public class FileChangeHandlers
 							if(toRename.oldName.toFile().exists()
 									&& FileOp.fileSize(toRename.newName) < maxSizeInBytes)
 							{
-								FileHistory.storeRevision(toRename.newName, null,
-										Files.readAllBytes(toRename.oldName),
+								FileHistory fileHist = new FileHistory(toRename.newName);
+								fileHist.storeRevision(null, Files.readAllBytes(toRename.oldName),
 										FileOp.fileSize(toRename.newName), delta);
 							}
 						}
@@ -341,7 +346,10 @@ public class FileChangeHandlers
 						// And copy the file
 						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 						FileOp.copy(toRename.newName, targetDirectory);
-						FileHistory.renameRevision(toRename.oldName, newName);
+
+						FileHistory fileHist = new FileHistory(toRename.oldName);
+						fileHist.renameRevision(newName);
+
 						Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
 								+ " existed and was updated.");
 					}
@@ -350,7 +358,10 @@ public class FileChangeHandlers
 					{
 						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
 						FileOp.copy(toRename.newName, targetDirectory);
-						FileHistory.renameRevision(toRename.oldName, newName);
+
+						FileHistory fileHist = new FileHistory(toRename.oldName);
+						fileHist.renameRevision(newName);
+
 						Main.logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
 								+ " existed but was not a valid file and was updated.");
 					}
@@ -399,7 +410,9 @@ public class FileChangeHandlers
 							{
 								long delta = FileOp.fileSize(toRename.newName)
 										- FileOp.fileSize(FileOp.convertPath(toRename.newName));
-								FileHistory.storeRevision(toRename.newName, diff, null,
+
+								FileHistory fileHist = new FileHistory(toRename.newName);
+								fileHist.storeRevision(diff, null,
 										FileOp.fileSize(toRename.newName), delta);
 							}
 
@@ -422,8 +435,8 @@ public class FileChangeHandlers
 									- FileOp.fileSize(FileOp.convertPath(toRename.newName));
 							try
 							{
-								FileHistory.storeRevision(toRename.newName, null,
-										Files.readAllBytes(toRename.newName),
+								FileHistory fileHist = new FileHistory(toRename.newName);
+								fileHist.storeRevision(null, Files.readAllBytes(toRename.newName),
 										FileOp.fileSize(toRename.newName), delta);
 							}
 							catch(IOException e)

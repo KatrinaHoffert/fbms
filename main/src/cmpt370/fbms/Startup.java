@@ -301,8 +301,8 @@ public class Startup
 							- FileOp.fileSize(FileOp.convertPath(file.toPath()));
 
 					// Store the revision
-					FileHistory.storeRevision(file.toPath(), diffFile, null,
-							FileOp.fileSize(file.toPath()), delta);
+					FileHistory fileHist = new FileHistory(file.toPath());
+					fileHist.storeRevision(diffFile, null, FileOp.fileSize(file.toPath()), delta);
 
 					// Finally, copy the file over
 					Path targetDirectory = FileOp.convertPath(file.toPath()).getParent();

@@ -26,7 +26,8 @@ public class GuiController
 	 */
 	public static void displayRevision(Path file, long timestamp)
 	{
-		Path fileToOpen = FileHistory.obtainRevisionContent(FileOp.convertPath(file), timestamp);
+		FileHistory fileHist = new FileHistory(FileOp.convertPath(file));
+		Path fileToOpen = fileHist.obtainRevisionContent(timestamp);
 		try
 		{
 			Desktop.getDesktop().open(fileToOpen.toFile());
@@ -50,8 +51,8 @@ public class GuiController
 		if(file.toFile().exists())
 		{
 			// Get the revision we want
-			Path revertedFile = FileHistory.obtainRevisionContent(FileOp.convertPath(file),
-					timestamp);
+			FileHistory fileHist = new FileHistory(FileOp.convertPath(file));
+			Path revertedFile = fileHist.obtainRevisionContent(timestamp);
 			Path diffFromCurrent = FileOp.createPatch(file, revertedFile);
 
 			// Get the filesize of our newly reverted file as well as the delta from the old
@@ -60,8 +61,7 @@ public class GuiController
 			long delta = fileSize - FileOp.fileSize(file);
 
 			// Store the revision and copy the reverted file over the backup directory
-			FileHistory.storeRevision(FileOp.convertPath(file), diffFromCurrent, null, fileSize,
-					delta);
+			fileHist.storeRevision(diffFromCurrent, null, fileSize, delta);
 
 			Main.logger.debug("Revert to: " + revertedFile.toFile().toString());
 			try

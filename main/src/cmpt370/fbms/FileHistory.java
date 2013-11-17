@@ -29,6 +29,19 @@ import java.util.List;
  */
 public class FileHistory
 {
+	private Path file;
+
+	/**
+	 * Sets the file that is being affected by member methods.
+	 * 
+	 * @param inFile
+	 *            The file whose history we desire to interact with.
+	 */
+	public FileHistory(Path inFile)
+	{
+		file = inFile;
+	}
+
 	/**
 	 * Gets the specified revision and outputs it to a temporary file, returning the path to this
 	 * file.
@@ -39,7 +52,7 @@ public class FileHistory
 	 *            The time stamp of the specific revision.
 	 * @return A path to the temporary file containing the diff that makes up that revision.
 	 */
-	public static Path getRevisionInfo(Path file, long timestamp)
+	public Path getRevisionInfo(long timestamp)
 	{
 		// Get the revision in question
 		DbManager db = DbManager.getInstance();
@@ -95,7 +108,7 @@ public class FileHistory
 	 * @param delta
 	 *            change in file size.
 	 */
-	public static void storeRevision(Path file, Path diff, byte[] binary, long filesize, long delta)
+	public void storeRevision(Path diff, byte[] binary, long filesize, long delta)
 	{
 		// Get the diff as a String
 		String diffString = null;
@@ -135,10 +148,10 @@ public class FileHistory
 	 *            a long representing the file version.
 	 * @return a Path of patched file. null if failed.
 	 */
-	public static Path obtainRevisionContent(Path file, long timestamp)
+	public Path obtainRevisionContent(long timestamp)
 	{
 		// Check first if the specific revision is a binary revision. If it is, we're done.
-		Path specificRevision = getRevisionInfo(file, timestamp);
+		Path specificRevision = getRevisionInfo(timestamp);
 		if(!FileOp.isPlainText(specificRevision))
 		{
 			Main.logger.debug("Revision for file " + file.toString() + " (" + timestamp
@@ -201,7 +214,7 @@ public class FileHistory
 	 *            The new name of the file. Note this does not include the full path: just the file
 	 *            name (and extension).
 	 */
-	public static void renameRevision(Path file, String newName)
+	public void renameRevision(String newName)
 	{
 		DbManager db = DbManager.getInstance();
 		db.renameRevisions(file, newName);
