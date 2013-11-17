@@ -24,7 +24,7 @@ public class GuiController
 	 * @param timestamp
 	 *            The Unix time stamp (seconds since Unix epoch).
 	 */
-	public static void displayRevision(Path file, long timestamp)
+	public void displayRevision(Path file, long timestamp)
 	{
 		FileHistory fileHist = new FileHistory(FileOp.convertPath(file));
 		Path fileToOpen = fileHist.obtainRevisionContent(timestamp);
@@ -46,7 +46,7 @@ public class GuiController
 	 * @param timestamp
 	 *            The time stamp (in Unix time stamp format) of the revision we want.
 	 */
-	public static void revertRevision(Path file, long timestamp)
+	public void revertRevision(Path file, long timestamp)
 	{
 		if(file.toFile().exists())
 		{
@@ -89,7 +89,7 @@ public class GuiController
 	/**
 	 * Copies all files in the backup directory to the live directory.
 	 */
-	public static void restoreBackup(Path directory)
+	public void restoreBackup(Path directory)
 	{
 		// Iterate through all files in the backup folder, copying them to the live directory
 		for(File child : Main.backupDirectory.toFile().listFiles())
@@ -114,7 +114,7 @@ public class GuiController
 	 * @param destFolder
 	 *            The folder we want to copy this file to.
 	 */
-	public static void copyTo(Path sourceFile, Path destFolder)
+	public void copyTo(Path sourceFile, Path destFolder)
 	{
 		// If we're copying a directory, we must specify the folder name instead of destination
 		if(sourceFile.toFile().isDirectory())
@@ -141,7 +141,7 @@ public class GuiController
 	 * @param newDirectory
 	 *            The new directory to use for the live directory.
 	 */
-	public static void changeLiveDirectory(Path newDirectory)
+	public void changeLiveDirectory(Path newDirectory)
 	{
 		// Set the new directory in the database
 		Main.liveDirectory = newDirectory;
@@ -209,7 +209,7 @@ public class GuiController
 	 * 
 	 * @param newDirectory
 	 */
-	public static void changeBackupDirectory(Path newDirectory)
+	public void changeBackupDirectory(Path newDirectory)
 	{
 		// Iterate through all files in the backup folder, copying them to the new backup directory
 		for(File child : Main.backupDirectory.toFile().listFiles())

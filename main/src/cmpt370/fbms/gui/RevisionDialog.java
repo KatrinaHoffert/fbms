@@ -120,7 +120,8 @@ public class RevisionDialog extends JDialog
 			{
 				if(selectedTimestamp != -1)
 				{
-					GuiController.displayRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
+					new GuiController().displayRevision(FrontEnd.frame.selectedFile,
+							selectedTimestamp);
 
 					Main.logger.debug("Viewed revision of "
 							+ FileOp.convertPath(FrontEnd.frame.selectedFile).toString()
@@ -137,7 +138,8 @@ public class RevisionDialog extends JDialog
 			{
 				if(selectedTimestamp != -1)
 				{
-					GuiController.revertRevision(FrontEnd.frame.selectedFile, selectedTimestamp);
+					new GuiController().revertRevision(FrontEnd.frame.selectedFile,
+							selectedTimestamp);
 					redrawTable();
 
 					Main.logger.debug("Reverted revision of "
@@ -243,7 +245,8 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 	{
 		if(dialog.selectedTimestamp != -1)
 		{
-			GuiController.displayRevision(FrontEnd.frame.selectedFile, dialog.selectedTimestamp);
+			new GuiController().displayRevision(FrontEnd.frame.selectedFile,
+					dialog.selectedTimestamp);
 
 			Main.logger.debug("Viewed revision of "
 					+ FileOp.convertPath(FrontEnd.frame.selectedFile).toString() + " @ T = "

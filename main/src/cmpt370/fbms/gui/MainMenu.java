@@ -100,7 +100,7 @@ class MainMenu extends JMenuBar
 				// We're a go
 				if(returnVal == JFileChooser.APPROVE_OPTION)
 				{
-					GuiController.copyTo(FrontEnd.frame.selectedFile,
+					new GuiController().copyTo(FrontEnd.frame.selectedFile,
 							fileChooser.getSelectedFile().toPath());
 				}
 			}
@@ -133,7 +133,7 @@ class MainMenu extends JMenuBar
 				// We're a go
 				if(returnVal == JFileChooser.APPROVE_OPTION)
 				{
-					GuiController.restoreBackup(fileChooser.getSelectedFile().toPath());
+					new GuiController().restoreBackup(fileChooser.getSelectedFile().toPath());
 					JOptionPane.showMessageDialog(FrontEnd.frame,
 							"All files in the backup directory have been restored to "
 									+ fileChooser.getSelectedFile().toString());
@@ -163,7 +163,7 @@ class MainMenu extends JMenuBar
 					if(!chosenPath.startsWith(Main.liveDirectory)
 							&& !Main.liveDirectory.startsWith(chosenPath))
 					{
-						GuiController.changeBackupDirectory(fileChooser.getSelectedFile().toPath());
+						new GuiController().changeBackupDirectory(fileChooser.getSelectedFile().toPath());
 					}
 					else
 					{
@@ -196,7 +196,7 @@ class MainMenu extends JMenuBar
 					if(!chosenPath.startsWith(Main.backupDirectory)
 							&& !Main.backupDirectory.startsWith(chosenPath))
 					{
-						GuiController.changeLiveDirectory(fileChooser.getSelectedFile().toPath());
+						new GuiController().changeLiveDirectory(fileChooser.getSelectedFile().toPath());
 						FrontEnd.frame.redrawTable(Main.liveDirectory);
 					}
 					else
