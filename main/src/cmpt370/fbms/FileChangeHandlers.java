@@ -3,6 +3,7 @@ package cmpt370.fbms;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.ListIterator;
 
 /**
@@ -10,20 +11,46 @@ import java.util.ListIterator;
  */
 public class FileChangeHandlers
 {
+	private List<Path> createdFiles;
+	private List<Path> modifiedFiles;
+	private List<RenamedFile> renamedFiles;
+	private List<Path> deletedFiles;
+
+	/**
+	 * Creates a file change listener for the supplied lists.
+	 * 
+	 * @param createdFiles
+	 *            List of created files.
+	 * @param modifiedFiles
+	 *            List of modified files.
+	 * @param renamedFiles
+	 *            List of renamed files.
+	 * @param deletedFiles
+	 *            List of deleted files.
+	 */
+	public FileChangeHandlers(List<Path> createdFiles, List<Path> modifiedFiles,
+			List<RenamedFile> renamedFiles, List<Path> deletedFiles)
+	{
+		this.createdFiles = createdFiles;
+		this.modifiedFiles = modifiedFiles;
+		this.renamedFiles = renamedFiles;
+		this.deletedFiles = deletedFiles;
+	}
+
 	/**
 	 * Handles all created files identified by the watcher. Also handles recurrent entries between
 	 * modified, and renamed files. All iterations start from the back of the list, that way we
 	 * handle the most recent events first. This is more important for file renames but I kept it
 	 * consistent.
 	 */
-	public static void handleCreatedFiles()
+	public void handleCreatedFiles()
 	{
 		ListIterator<Path> itrc, itrm;
 		ListIterator<RenamedFile> itrr;
 		boolean hit, found;
 		Path pathc, pathm;
 		RenamedFile toRename;
-		itrc = Main.createdFiles.listIterator(Main.createdFiles.size());
+		itrc = createdFiles.listIterator(createdFiles.size());
 		found = false;
 		Main.logger.debug("Handle Created Files has started.");
 
@@ -34,7 +61,7 @@ public class FileChangeHandlers
 			pathc = itrc.previous();
 			hit = false; // If we've hit a duplicate already in this list.
 			found = false;
-			itrr = Main.renamedFiles.listIterator(Main.renamedFiles.size());
+			itrr = renamedFiles.listIterator(renamedFiles.size());
 			// Check renamed files for created files duplicates.
 			while(itrr.hasPrevious())
 			{
@@ -61,7 +88,7 @@ public class FileChangeHandlers
 			}
 
 			hit = false;
-			itrm = Main.modifiedFiles.listIterator(Main.modifiedFiles.size());
+			itrm = modifiedFiles.listIterator(modifiedFiles.size());
 			// Now we cycle through the modified list.
 			while(itrm.hasPrevious())
 			{
@@ -107,7 +134,7 @@ public class FileChangeHandlers
 				// If it does exist, it was modified after creation and that takes priority.
 				else
 				{
-					Main.modifiedFiles.add(pathc);
+					modifiedFiles.add(pathc);
 					Main.logger.debug("Create Handle: Move " + pathc.toFile().toString()
 							+ "to modified, it exists.");
 				}
@@ -121,9 +148,9 @@ public class FileChangeHandlers
 	 * those that have been renamed. Renamed entries take priority, removes duplicate entry in its
 	 * own list. Creates new copies or diffs of files when necessary.
 	 */
-	public static void handleModifiedFiles()
+	public void handleModifiedFiles()
 	{
-		ListIterator<Path> itrm = Main.modifiedFiles.listIterator(Main.modifiedFiles.size());
+		ListIterator<Path> itrm = modifiedFiles.listIterator(modifiedFiles.size());
 		ListIterator<RenamedFile> itrr;
 
 		Path pathm, diff;
@@ -140,7 +167,7 @@ public class FileChangeHandlers
 		while(itrm.hasPrevious())
 		{
 			pathm = itrm.previous();
-			itrr = Main.renamedFiles.listIterator(Main.renamedFiles.size());
+			itrr = renamedFiles.listIterator(renamedFiles.size());
 			hit = false;
 			while(itrr.hasPrevious())
 			{
@@ -243,9 +270,9 @@ public class FileChangeHandlers
 		}
 	}
 
-	public static void handleRenamedFiles()
+	public void handleRenamedFiles()
 	{
-		ListIterator<RenamedFile> itrr = Main.renamedFiles.listIterator(Main.renamedFiles.size());
+		ListIterator<RenamedFile> itrr = renamedFiles.listIterator(renamedFiles.size());
 
 		RenamedFile toRename;
 		Path diff;
@@ -480,13 +507,13 @@ public class FileChangeHandlers
 	 * found in deleted. DOES NOT delete files, only list entries. We want to keep the last version
 	 * of a file.
 	 */
-	public static void handleDeletedFiles()
+	public void handleDeletedFiles()
 	{
 
-		ListIterator<Path> itrd = Main.deletedFiles.listIterator(Main.deletedFiles.size());
-		ListIterator<Path> itrc = Main.createdFiles.listIterator(Main.createdFiles.size());
-		ListIterator<Path> itrm = Main.modifiedFiles.listIterator(Main.modifiedFiles.size());
-		ListIterator<RenamedFile> itrr = Main.renamedFiles.listIterator(Main.renamedFiles.size());
+		ListIterator<Path> itrd = deletedFiles.listIterator(deletedFiles.size());
+		ListIterator<Path> itrc = createdFiles.listIterator(createdFiles.size());
+		ListIterator<Path> itrm = modifiedFiles.listIterator(modifiedFiles.size());
+		ListIterator<RenamedFile> itrr = renamedFiles.listIterator(renamedFiles.size());
 		RenamedFile toRename;
 		Path pathm, pathc, pathd;
 		Main.logger.debug("Handle Deleted Files has started.");

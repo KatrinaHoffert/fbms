@@ -88,6 +88,8 @@ public class Main
 			{
 				try
 				{
+					FileChangeHandlers handlers = new FileChangeHandlers(createdFiles,
+							modifiedFiles, renamedFiles, deletedFiles);
 					while(true)
 					{
 						logger.debug("Main service loop running at T = " + new Date().getTime()
@@ -105,10 +107,10 @@ public class Main
 								{
 									synchronized(renamedFiles)
 									{
-										FileChangeHandlers.handleDeletedFiles();
-										FileChangeHandlers.handleCreatedFiles();
-										FileChangeHandlers.handleModifiedFiles();
-										FileChangeHandlers.handleRenamedFiles();
+										handlers.handleDeletedFiles();
+										handlers.handleCreatedFiles();
+										handlers.handleModifiedFiles();
+										handlers.handleRenamedFiles();
 									}
 								}
 							}
