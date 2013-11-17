@@ -228,8 +228,20 @@ public class FileOp
 			diff_match_patch patchEngine = new diff_match_patch();
 			List<Patch> patch = patchEngine.patch_make(modifiedFile, originalFile);
 
+			// Figure out the extension. However, we only add the period (making it a "real"
+			// extension)
+			// if there actually was an extension (since splitting on periods will return a size 1
+			// array
+			// if there are no periods)
+			String[] fileNameSplit = currentRevision.getFileName().toString().split("\\.");
+			String extension = fileNameSplit[fileNameSplit.length - 1];
+			if(fileNameSplit.length > 1)
+			{
+				extension = "." + extension;
+			}
+
 			// Write the patch to a file
-			Path tempFile = Files.createTempFile("revision", ".txt");
+			Path tempFile = Files.createTempFile("revision", extension);
 			PrintWriter writer = new PrintWriter(tempFile.toFile());
 
 			for(Patch patchLine : patch)
@@ -277,8 +289,20 @@ public class FileOp
 			LinkedList<Patch> linkedListPatch = new LinkedList<>(patch);
 			String text = (String) patchEngine.patch_apply(linkedListPatch, originalFile)[0];
 
+			// Figure out the extension. However, we only add the period (making it a "real"
+			// extension)
+			// if there actually was an extension (since splitting on periods will return a size 1
+			// array
+			// if there are no periods)
+			String[] fileNameSplit = currentRevision.getFileName().toString().split("\\.");
+			String extension = fileNameSplit[fileNameSplit.length - 1];
+			if(fileNameSplit.length > 1)
+			{
+				extension = "." + extension;
+			}
+
 			// Write the new text to a file
-			Path tempFile = Files.createTempFile("revision", ".txt");
+			Path tempFile = Files.createTempFile("revision", extension);
 			PrintWriter writer = new PrintWriter(tempFile.toFile());
 			writer.write(text);
 			writer.close();

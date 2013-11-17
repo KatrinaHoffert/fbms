@@ -65,13 +65,20 @@ public class FileHistory
 		Path pathToTempFile = null;
 		PrintWriter output = null;
 
+		// Figure out the extension. However, we only add the period (making it a "real" extension)
+		// if there actually was an extension (since splitting on periods will return a size 1 array
+		// if there are no periods)
 		String[] fileNameSplit = file.getFileName().toString().split("\\.");
 		String extension = fileNameSplit[fileNameSplit.length - 1];
+		if(fileNameSplit.length > 1)
+		{
+			extension = "." + extension;
+		}
 
 		try
 		{
 			// Create a temporary file for the revision
-			pathToTempFile = Files.createTempFile("revision", extension);
+			pathToTempFile = Files.createTempFile("revision", "." + extension);
 
 			// Write the diff or binary content to that temp file
 			if(revision.diff != null)
@@ -191,7 +198,13 @@ public class FileHistory
 			// Get the extension for the file (ensures the correct program is used to display the
 			// file)
 			String[] fileNameSplit = file.getFileName().toString().split("\\.");
-			tempPatchFile = Files.createTempFile("FBMS", fileNameSplit[fileNameSplit.length - 1]);
+			String extension = fileNameSplit[fileNameSplit.length - 1];
+			if(fileNameSplit.length > 1)
+			{
+				extension = "." + extension;
+			}
+
+			tempPatchFile = Files.createTempFile("FBMS", extension);
 
 			for(RevisionInfo revisionInfo : patchList)
 			{

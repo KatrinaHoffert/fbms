@@ -366,8 +366,6 @@ public class FileChangeHandlers
 				// If this is a file we're renaming update database and rename file.
 				if(!FileOp.isFolder(FileOp.convertPath(toRename.oldName)))
 				{
-					System.out.println(toRename.oldName.toString() + " --> "
-							+ toRename.newName.toString());
 					// When the new name exists in the backup directory and is plain text
 					if(FileOp.convertPath(toRename.newName).toFile().exists()
 							&& FileOp.isPlainText(toRename.newName))
