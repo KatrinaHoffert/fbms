@@ -74,6 +74,14 @@ public class GuiUtility
 	 */
 	public static String humanReadableBytes(long bytes, boolean si)
 	{
+		// This algorithm doesn't like negatives
+		boolean positive = true;
+		if(bytes < 0)
+		{
+			bytes = -bytes;
+			positive = false;
+		}
+
 		// Figure out if we're using powers of 2 (non-SI) or 10 (SI)
 		int unit = si ? 1000 : 1024;
 		if(bytes < unit)
@@ -86,6 +94,12 @@ public class GuiUtility
 		String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
 
 		// Return as a formatted string
-		return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+		String result = String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+
+		if(!positive)
+		{
+			result = "-" + result;
+		}
+		return result;
 	}
 }

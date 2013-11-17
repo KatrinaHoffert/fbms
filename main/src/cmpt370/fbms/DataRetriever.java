@@ -129,7 +129,7 @@ public class DataRetriever
 						{
 							totalSizes += revisionInfo.diff.length() * 2; // characters are 2 bytes
 						}
-						else
+						else if(revisionInfo.binary != null) // Watch out for empty revisions!
 						{
 							totalSizes += revisionInfo.binary.length;
 						}
