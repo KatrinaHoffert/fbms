@@ -49,7 +49,6 @@ public class TesterServices extends TestCase
 
 		// Get the folder contents of this directory
 		DataRetriever revisionRetriever = new DataRetriever(Paths.get("").toAbsolutePath());
-		System.out.println(revisionRetriever.getFolderContents());
 		List<FileInfo> list = revisionRetriever.getFolderContents();
 
 		// Find the readme and assert that the information on it is logical
