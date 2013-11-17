@@ -73,11 +73,11 @@ public class MainToolBar extends JToolBar
 			public void actionPerformed(ActionEvent e)
 			{
 				// Disable options that require a selected file
-				FrontEnd.frame.menubar.copyToOption.setEnabled(false);
-				FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
+				MainFrame.getInstance().menubar.copyToOption.setEnabled(false);
+				MainFrame.getInstance().menubar.revisionsOption.setEnabled(false);
 
 				// Recreate the table
-				FrontEnd.frame.redrawTable(FrontEnd.frame.currentDirectory);
+				MainFrame.getInstance().redrawTable(MainFrame.getInstance().currentDirectory);
 			}
 		});
 
@@ -88,20 +88,21 @@ public class MainToolBar extends JToolBar
 			public void actionPerformed(ActionEvent e)
 			{
 				// Figure out the new path
-				FrontEnd.frame.currentDirectory = FrontEnd.frame.currentDirectory.resolve("..").normalize();
+				MainFrame.getInstance().currentDirectory = MainFrame.getInstance().currentDirectory.resolve(
+						"..").normalize();
 
 				// Disable the up button if we're in the backup directory
-				if(FrontEnd.frame.currentDirectory.equals(Main.backupDirectory))
+				if(MainFrame.getInstance().currentDirectory.equals(Main.backupDirectory))
 				{
-					FrontEnd.frame.toolbar.upButton.setEnabled(false);
+					MainFrame.getInstance().toolbar.upButton.setEnabled(false);
 				}
 
 				// Disable options that require a selected file
-				FrontEnd.frame.menubar.copyToOption.setEnabled(false);
-				FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
+				MainFrame.getInstance().menubar.copyToOption.setEnabled(false);
+				MainFrame.getInstance().menubar.revisionsOption.setEnabled(false);
 
 				// And recreate the table
-				FrontEnd.frame.redrawTable(FrontEnd.frame.currentDirectory);
+				MainFrame.getInstance().redrawTable(MainFrame.getInstance().currentDirectory);
 			}
 		});
 
@@ -133,23 +134,23 @@ public class MainToolBar extends JToolBar
 				if(enteredPath.toFile().isDirectory()
 						&& (!Main.backupDirectory.startsWith(enteredPath.normalize()) || Main.backupDirectory.equals(enteredPath.normalize())))
 				{
-					FrontEnd.frame.redrawTable(enteredPath.normalize());
-					FrontEnd.frame.currentDirectory = enteredPath.normalize();
+					MainFrame.getInstance().redrawTable(enteredPath.normalize());
+					MainFrame.getInstance().currentDirectory = enteredPath.normalize();
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(FrontEnd.frame,
+					JOptionPane.showMessageDialog(MainFrame.getInstance(),
 							"The entered directory does not exist or is outside of the backup directory.");
 				}
 
 				// Possible disable or enable the up button
-				if(FrontEnd.frame.currentDirectory.equals(Main.backupDirectory))
+				if(MainFrame.getInstance().currentDirectory.equals(Main.backupDirectory))
 				{
-					FrontEnd.frame.toolbar.upButton.setEnabled(false);
+					MainFrame.getInstance().toolbar.upButton.setEnabled(false);
 				}
 				else
 				{
-					FrontEnd.frame.toolbar.upButton.setEnabled(true);
+					MainFrame.getInstance().toolbar.upButton.setEnabled(true);
 				}
 			}
 		});

@@ -121,11 +121,11 @@ public class RevisionDialog extends JDialog
 			{
 				if(selectedTimestamp != -1)
 				{
-					new GuiController().displayRevision(FrontEnd.frame.selectedFile,
+					new GuiController().displayRevision(MainFrame.getInstance().selectedFile,
 							selectedTimestamp);
 
 					Main.logger.debug("Viewed revision of "
-							+ FileOp.convertPath(FrontEnd.frame.selectedFile).toString()
+							+ FileOp.convertPath(MainFrame.getInstance().selectedFile).toString()
 							+ " @ T = " + selectedTimestamp);
 				}
 			}
@@ -139,12 +139,12 @@ public class RevisionDialog extends JDialog
 			{
 				if(selectedTimestamp != -1)
 				{
-					new GuiController().revertRevision(FrontEnd.frame.selectedFile,
+					new GuiController().revertRevision(MainFrame.getInstance().selectedFile,
 							selectedTimestamp);
 					redrawTable();
 
 					Main.logger.debug("Reverted revision of "
-							+ FrontEnd.frame.selectedFile.toString() + " @ T = "
+							+ MainFrame.getInstance().selectedFile.toString() + " @ T = "
 							+ selectedTimestamp);
 				}
 			}
@@ -228,8 +228,9 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 			dialog.revertRevisionButton.setEnabled(true);
 			dialog.viewRevisionButton.setEnabled(true);
 
-			Main.logger.debug("Selected revision: " + FrontEnd.frame.selectedFile.toString()
-					+ " (timestamp: " + dialog.selectedTimestamp + ")");
+			Main.logger.debug("Selected revision: "
+					+ MainFrame.getInstance().selectedFile.toString() + " (timestamp: "
+					+ dialog.selectedTimestamp + ")");
 		}
 		else
 		{
@@ -247,12 +248,12 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 	{
 		if(dialog.selectedTimestamp != -1)
 		{
-			new GuiController().displayRevision(FrontEnd.frame.selectedFile,
+			new GuiController().displayRevision(MainFrame.getInstance().selectedFile,
 					dialog.selectedTimestamp);
 
 			Main.logger.debug("Viewed revision of "
-					+ FileOp.convertPath(FrontEnd.frame.selectedFile).toString() + " @ T = "
-					+ dialog.selectedTimestamp);
+					+ FileOp.convertPath(MainFrame.getInstance().selectedFile).toString()
+					+ " @ T = " + dialog.selectedTimestamp);
 		}
 	}
 

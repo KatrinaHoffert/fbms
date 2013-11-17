@@ -48,6 +48,8 @@ import cmpt370.fbms.Main;
  */
 public class MainFrame extends JFrame
 {
+	private static MainFrame instance = null;
+
 	public JTable table;
 	public Path currentDirectory;
 	public MainToolBar toolbar;
@@ -57,14 +59,56 @@ public class MainFrame extends JFrame
 
 	private JPanel contentPane;
 
+	public static synchronized MainFrame getInstance()
+	{
+		if(instance == null)
+		{
+			instance = new MainFrame();
+		}
+		return instance;
+	}
+
 	/**
 	 * Create the frame.
 	 */
-	public MainFrame()
+	private MainFrame()
 	{
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
 		setTitle("FBMS: File Backup and Management System");
+
+		addWindowListener(new WindowListener()
+		{
+			@Override
+			public void windowClosed(WindowEvent arg0)
+			{
+				instance = null;
+			}
+
+			@Override
+			public void windowOpened(WindowEvent arg0)
+			{}
+
+			@Override
+			public void windowIconified(WindowEvent arg0)
+			{}
+
+			@Override
+			public void windowDeiconified(WindowEvent arg0)
+			{}
+
+			@Override
+			public void windowDeactivated(WindowEvent arg0)
+			{}
+
+			@Override
+			public void windowClosing(WindowEvent arg0)
+			{}
+
+			@Override
+			public void windowActivated(WindowEvent arg0)
+			{}
+		});
 
 		// Set size and position
 		setSize(900, 400);
@@ -74,35 +118,6 @@ public class MainFrame extends JFrame
 		contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-
-		// Set the frame variable to null when the frame is closed, so we can keep track of whether
-		// or not a frame is open
-		addWindowListener(new WindowListener()
-		{
-			@Override
-			public void windowClosed(WindowEvent arg0)
-			{
-				FrontEnd.frame = null;
-			}
-
-			public void windowActivated(WindowEvent e)
-			{}
-
-			public void windowClosing(WindowEvent e)
-			{}
-
-			public void windowDeactivated(WindowEvent e)
-			{}
-
-			public void windowDeiconified(WindowEvent e)
-			{}
-
-			public void windowIconified(WindowEvent e)
-			{}
-
-			public void windowOpened(WindowEvent e)
-			{}
-		});
 
 		// Set the icon
 		setIconImage(new ImageIcon("res/icon.png").getImage());
@@ -218,15 +233,15 @@ public class MainFrame extends JFrame
 		// Set the location bar to the current directory relative to the
 		String locationBarText = directory.toString().substring(
 				Main.backupDirectory.toString().length());
-		FrontEnd.frame.toolbar.locationBar.setText(locationBarText);
+		MainFrame.getInstance().toolbar.locationBar.setText(locationBarText);
 
 		// Blank the selected file
-		FrontEnd.frame.selectedFile = null;
+		MainFrame.getInstance().selectedFile = null;
 
 		// If we're in the backup directory, set the location bar to a single slash
 		if(locationBarText.equals(""))
 		{
-			FrontEnd.frame.toolbar.locationBar.setText(File.separator);
+			MainFrame.getInstance().toolbar.locationBar.setText(File.separator);
 		}
 	}
 }
@@ -243,7 +258,7 @@ class TableSelectionListener implements MouseListener, KeyListener
 		selectRow();
 
 		// Get double clicks (and make sure that we actually clicked a row)
-		if(e.getClickCount() == 2 && FrontEnd.frame.table.rowAtPoint(e.getPoint()) != -1)
+		if(e.getClickCount() == 2 && MainFrame.getInstance().table.rowAtPoint(e.getPoint()) != -1)
 		{
 			activateRow();
 		}
@@ -270,30 +285,31 @@ class TableSelectionListener implements MouseListener, KeyListener
 	private void selectRow()
 	{
 		// If we have selected a valid row
-		if(FrontEnd.frame.table.getSelectedRow() != -1)
+		if(MainFrame.getInstance().table.getSelectedRow() != -1)
 		{
 			// table.getValueAt() will get the value in the selected row. Use that to get the file
 			// name.
-			FrontEnd.frame.selectedFile = FrontEnd.frame.currentDirectory.resolve((String) FrontEnd.frame.table.getValueAt(
-					FrontEnd.frame.table.getSelectedRow(), 1));
-			Main.logger.debug("Selected file/folder: " + FrontEnd.frame.selectedFile.toString());
+			MainFrame.getInstance().selectedFile = MainFrame.getInstance().currentDirectory.resolve((String) MainFrame.getInstance().table.getValueAt(
+					MainFrame.getInstance().table.getSelectedRow(), 1));
+			Main.logger.debug("Selected file/folder: "
+					+ MainFrame.getInstance().selectedFile.toString());
 
 			// Enable menu options that require a selected file (view revisions is only accessible
 			// if a file is selected
-			if(FrontEnd.frame.selectedFile.toFile().isFile())
+			if(MainFrame.getInstance().selectedFile.toFile().isFile())
 			{
-				FrontEnd.frame.menubar.revisionsOption.setEnabled(true);
+				MainFrame.getInstance().menubar.revisionsOption.setEnabled(true);
 			}
 			else
 			{
-				FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
+				MainFrame.getInstance().menubar.revisionsOption.setEnabled(false);
 			}
-			FrontEnd.frame.menubar.copyToOption.setEnabled(true);
+			MainFrame.getInstance().menubar.copyToOption.setEnabled(true);
 		}
 		else
 		{
-			FrontEnd.frame.menubar.copyToOption.setEnabled(false);
-			FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
+			MainFrame.getInstance().menubar.copyToOption.setEnabled(false);
+			MainFrame.getInstance().menubar.revisionsOption.setEnabled(false);
 		}
 	}
 
@@ -304,38 +320,41 @@ class TableSelectionListener implements MouseListener, KeyListener
 	private void activateRow()
 	{
 		// Make sure the file exists (and that something is selected)
-		if(FrontEnd.frame.selectedFile != null && FrontEnd.frame.selectedFile.toFile().exists())
+		if(MainFrame.getInstance().selectedFile != null
+				&& MainFrame.getInstance().selectedFile.toFile().exists())
 		{
 			// Go into directories
-			if(FrontEnd.frame.selectedFile.toFile().isDirectory())
+			if(MainFrame.getInstance().selectedFile.toFile().isDirectory())
 			{
-				Main.logger.debug("Activated on folder: " + FrontEnd.frame.selectedFile.toString());
+				Main.logger.debug("Activated on folder: "
+						+ MainFrame.getInstance().selectedFile.toString());
 
 				// Set the new directory
-				FrontEnd.frame.currentDirectory = FrontEnd.frame.currentDirectory.resolve(FrontEnd.frame.selectedFile.getFileName());
+				MainFrame.getInstance().currentDirectory = MainFrame.getInstance().currentDirectory.resolve(MainFrame.getInstance().selectedFile.getFileName());
 
 				// And recreate the table
-				FrontEnd.frame.redrawTable(FrontEnd.frame.currentDirectory);
+				MainFrame.getInstance().redrawTable(MainFrame.getInstance().currentDirectory);
 
 				// Disable options that require a selected file
-				FrontEnd.frame.menubar.copyToOption.setEnabled(false);
-				FrontEnd.frame.menubar.revisionsOption.setEnabled(false);
+				MainFrame.getInstance().menubar.copyToOption.setEnabled(false);
+				MainFrame.getInstance().menubar.revisionsOption.setEnabled(false);
 
-				FrontEnd.frame.toolbar.upButton.setEnabled(true);
+				MainFrame.getInstance().toolbar.upButton.setEnabled(true);
 			}
 			// Display revision window for files
 			else
 			{
-				Main.logger.debug("Activated on file: " + FrontEnd.frame.selectedFile.toString());
+				Main.logger.debug("Activated on file: "
+						+ MainFrame.getInstance().selectedFile.toString());
 
 				RevisionDialog revisionWindow = new RevisionDialog(
-						FileOp.convertPath(FrontEnd.frame.selectedFile));
-				revisionWindow.setLocationRelativeTo(FrontEnd.frame);
+						FileOp.convertPath(MainFrame.getInstance().selectedFile));
+				revisionWindow.setLocationRelativeTo(MainFrame.getInstance());
 				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
 				revisionWindow.setVisible(true);
 			}
 		}
-		else if(FrontEnd.frame.selectedFile != null)
+		else if(MainFrame.getInstance().selectedFile != null)
 		{
 			Errors.nonfatalError("The selected file no longer exists.");
 		}

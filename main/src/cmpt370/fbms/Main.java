@@ -76,7 +76,7 @@ public class Main
 		Main.getInstance().fileHandler();
 
 		// Create the GUI
-		FrontEnd.initGui();
+		new FrontEnd();
 	}
 
 	/**

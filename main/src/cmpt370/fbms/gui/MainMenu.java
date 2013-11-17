@@ -100,7 +100,7 @@ class MainMenu extends JMenuBar
 				// We're a go
 				if(returnVal == JFileChooser.APPROVE_OPTION)
 				{
-					new GuiController().copyTo(FrontEnd.frame.selectedFile,
+					new GuiController().copyTo(MainFrame.getInstance().selectedFile,
 							fileChooser.getSelectedFile().toPath());
 				}
 			}
@@ -111,8 +111,9 @@ class MainMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				RevisionDialog revisionWindow = new RevisionDialog(FrontEnd.frame.selectedFile);
-				revisionWindow.setLocationRelativeTo(FrontEnd.frame);
+				RevisionDialog revisionWindow = new RevisionDialog(
+						MainFrame.getInstance().selectedFile);
+				revisionWindow.setLocationRelativeTo(MainFrame.getInstance());
 				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
 				revisionWindow.setVisible(true);
 			}
@@ -134,7 +135,7 @@ class MainMenu extends JMenuBar
 				if(returnVal == JFileChooser.APPROVE_OPTION)
 				{
 					new GuiController().restoreBackup(fileChooser.getSelectedFile().toPath());
-					JOptionPane.showMessageDialog(FrontEnd.frame,
+					JOptionPane.showMessageDialog(MainFrame.getInstance(),
 							"All files in the backup directory have been restored to "
 									+ fileChooser.getSelectedFile().toString());
 				}
@@ -167,7 +168,7 @@ class MainMenu extends JMenuBar
 					}
 					else
 					{
-						JOptionPane.showMessageDialog(FrontEnd.frame,
+						JOptionPane.showMessageDialog(MainFrame.getInstance(),
 								"Backup directory cannot be a child of the live directory and vice versa.");
 					}
 				}
@@ -197,11 +198,11 @@ class MainMenu extends JMenuBar
 							&& !Main.backupDirectory.startsWith(chosenPath))
 					{
 						new GuiController().changeLiveDirectory(fileChooser.getSelectedFile().toPath());
-						FrontEnd.frame.redrawTable(Main.liveDirectory);
+						MainFrame.getInstance().redrawTable(Main.liveDirectory);
 					}
 					else
 					{
-						JOptionPane.showMessageDialog(FrontEnd.frame,
+						JOptionPane.showMessageDialog(MainFrame.getInstance(),
 								"Live directory cannot be a child of the live directory and vice versa.");
 					}
 				}
@@ -216,7 +217,7 @@ class MainMenu extends JMenuBar
 				// Create the setting dialog, position it in the center of the current window, and
 				// lock the current window while the settings window is open.
 				SettingsDialog settingsDialog = new SettingsDialog();
-				settingsDialog.setLocationRelativeTo(FrontEnd.frame);
+				settingsDialog.setLocationRelativeTo(MainFrame.getInstance());
 				settingsDialog.setModalityType(ModalityType.APPLICATION_MODAL);
 				settingsDialog.setVisible(true);
 			}
@@ -227,7 +228,7 @@ class MainMenu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				int choice = JOptionPane.showConfirmDialog(FrontEnd.frame,
+				int choice = JOptionPane.showConfirmDialog(MainFrame.getInstance(),
 						"Are you sure you want to quit?", "Confirmation", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.YES_OPTION)
 				{

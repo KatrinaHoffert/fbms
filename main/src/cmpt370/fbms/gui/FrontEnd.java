@@ -37,9 +37,9 @@ import cmpt370.fbms.Main;
  */
 public class FrontEnd
 {
-	public static MainFrame frame = null;
+	private MainFrame frame;
 
-	public static void initGui()
+	public FrontEnd()
 	{
 		// Check the SystemTray support
 		if(!SystemTray.isSupported())
@@ -96,16 +96,8 @@ public class FrontEnd
 			{
 				// If the window doesn't exist, create it. If it already exists, bring it to the
 				// front (on some OSes, this will just make it blink in the taskbar)
-				if(frame == null)
-				{
-					frame = new MainFrame();
-					frame.setVisible(true);
-				}
-				else
-				{
-					frame.toFront();
-					frame.repaint();
-				}
+				frame = MainFrame.getInstance();
+				frame.setVisible(true);
 			}
 		});
 
@@ -114,16 +106,8 @@ public class FrontEnd
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if(frame == null)
-				{
-					frame = new MainFrame();
-					frame.setVisible(true);
-				}
-				else
-				{
-					frame.toFront();
-					frame.repaint();
-				}
+				frame = MainFrame.getInstance();
+				frame.setVisible(true);
 			}
 		});
 
