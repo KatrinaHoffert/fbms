@@ -43,7 +43,7 @@
 \begin{titlepage}
 	\vspace*{\fill}
 		\begin{center}
-			{\Huge{\textbf{Title}}} \\
+			{\huge{\textbf{File Backup and Management System}}} \\
 			\bigskip
 			{\Large{\textbf{Milestone 6}}} \\
 			\bigskip
@@ -51,20 +51,20 @@
 			\bigskip
 			\bigskip
 			{\Large{\textbf{Submitted by: } \\
-			Group name}} \\
-			\begin{description}[labelindent=4cm]
-				\item Group member 1
-				\item Group member 2
-				\item Group member 3
-				\item Group member 4
-				\item Group member 5
+			Group 06}} \\
+			\begin{description}[labelindent=5cm]
+				\item Mike Hoffert - mlh374
+				\item Syed Ahsan Rizvi - sar457
+				\item Hattan Alsharif - haa775
+				\item Da Tao - dat293
+				\item Michael Butler - mdb815
 			\end{description}
 			\bigskip
 			\bigskip
 			\bigskip
 			\bigskip
 			\Large{\textbf{Date:} \\
-			Date}
+			November 23, 2013}
 		\end{center}
 	\vspace*{\fill}
 \end{titlepage}
@@ -72,9 +72,11 @@
 
 %% Abstract
 \begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+The \textit{File Backup or Management System}, henceforth referred to as \textbf{FBMS}, is a system for backing up files while maintaining revisions. FBMS monitors the file operations that take place within the folder that the user wants to backup (called the "live directory"). Not only are file changes copied to the specified backup directory, but revisions (the instance of the file at a given time) are stored in a database, allowing the program to restore the file's state from any point of time. \\
 
-\textbf{Bold text}, \textit{italic text}, cited text\cite{label1} and another citation\cite{label2} et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+FBMS works on all locally accessible drives, including external drives and network drives. The revisioning creates a patch file for plain text, keeping file size down. For binary files, the entire file is stored as the revision. This revisioning ensures not only are the user's files safe, but erroneous changes can be reverted. \\
+
+FBMS has a focus on ease of use. A wizard guides the user through the setup, where the backup and live directories are chosen. With that complete, the program will run in the background and needs no user interaction until the use desires to restore or view files from the backup.
 \end{abstract}
 \clearpage
 
@@ -96,28 +98,93 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 \section{Introduction}
 
 \subsection{System description}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+FBMS is an automated backup and revision program. The user specifies a folder that they want to keep backed up (the "live directory") and the location to store the backup (the "backup directory"). The program automatically copies changes in the live directory to the backup directory. Revisions are automatically created by creating "patch" files for every change. \\
+
+Thus, not only is the user's data backed up, but older versions of the data are also backed up. FBMS can be thought of as a hybrid of a local-only Dropbox\cite{dropbox} and a version control system. While it's not as customizable as a version control system like SVN\cite{svn} or git\cite{git}, FBMS is easy to use and runs in the background without the need for user interaction. \\
+
+FBMS backs up and revisions both plain text and binary files. A maximum file size to backup can be set. It's also possible to configure the system to remove revisions older than a certain date.
 
 \subsection{Business case}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+FBMS helps ensure the user's files are safely backed up without having to depend on limited cloud-based services or the complexity of programs like SVN\cite{svn}. Programs like Dropbox\cite{dropbox} keep revisions of files, but are limited in their ability to do so. FBMS removes these shackles, limiting you only by your hard drive capacity. FBMS currently supports multiple drive systems, including network drives, filling in the blanks of programs like Dropbox, which are online only.
+
+FBMS differs itself from other backup systems in how it doesn't just backup files, but keeps revisions for safety. FBMS is targeted as the semi-casual audience, who know enough to understand the need for backups, but don't want to use a version control system (or perhaps don't like using such systems). The program is low effort to setup and requires no struggling with command line utilities. Once it's setup, it can run quietly in the background until you need it.
 
 \subsection{User-level goals for the system}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\textbf{A simple to use backup solution for a user's files.}
+\begin{enumerate}
+\item Ability to back up a folder easily.
+\item Iterative backup that allows specific versions to be restored.
+\item User can specify any locally available drive (including external and network drives) to serve as the backup or live directory.
+\end{enumerate}
+
+\noindent{\textbf{A file versioning and backup solution for their files.}}
+\begin{enumerate}
+\item User can recover deleted/lost files.
+\item User can revert to a prior version of a file.
+\item User can view a revision history of the file.
+\end{enumerate}
+
+\noindent{\textbf{Gives users a lightweight multi-platform software solution.}}
+\begin{enumerate}
+\item Able to use this same software on various operating systems due to Java architecture.
+\item Once setup, it runs in the background unobtrusively until needed.
+\item Tested on Windows, Linux, and Mac.
+\end{enumerate}
 
 \subsection{User scenarios}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\textbf{A user wants to backup files:} \\
+\noindent{The user will start up the software. The first start wizard will guide the user through setting the live and backup directories. With that done, the system will perform a startup scan, grabbing any files not already in the backup directory. With this done, the software can monitor the file system for changes and act accordingly.} \\
+
+\noindent{\textbf{User has lost the live directory:}} \\
+\noindent{User can reinstall the software and specify the existing backup directory. From the GUI, the user can restore the entire backup directory and can set the live directory again.} \\
+
+\noindent{\textbf{User has accidentally deleted a file:}} \\
+\noindent{The user can bring up the user interface for our program. They then select the file in question which brings up a list of prior revisions that have been stored. The user can then select the revision they desire to restore and the program will restore it to its directory.} \\
+
+\noindent{\textbf{User wants to minimize file sizes:}} \\
+\noindent{The program offers two features to reduce the storage impact of the system. One is to set the maximum file size that is revisioned (defaults to 5 MB). Files larger than this will be backed up, but will not have versions stored. Another is to enable the trim features (disabled by default). Trim will remove all revisions older than a specified number of days. Both of these features are configured in the settings dialog, accessed via the GUI menus.} \\
 
 \subsection{Scope document}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\begin{itemize}
+\item A front end GUI for the user to specify files to be watched or restored.
+\item File monitoring system that makes notes of changes including creation, deletion and renaming.
+\item Database that stores file change history and relevant details about the file.
+\item Patch creation and application engine (for handling revisions of text files).
+\item Ability to maintain a backup of the latest revision to a designated drive.
+\item Ability to restore a file from a specified revision. This includes deleted or renamed files.
+\item Option to restore all files from the backup.
+\item Ability to revision binary files (the full content of the file is stored).
+\item A settings dialog for managing configuration for the program.
+\item Ability to change the live and backup directories.
+\item Features for removing old revisions and not revisioning up large files.
+\end{itemize}
 
 \subsection{Project plan / Rough estimates}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Our plan for our project was to take a concurrent engineering approach with some agile methods, such as SCRUM-like meetings and iterative design. We split the project into stages based on the estimated priority of certain features. For example, the file patching was a high priority feature, since the system revolved that feature. With priority figured out, the project was further subdivided amongst our group members. \\
+
+For the most part, group members worked alone. The assignment of components was made to try and balance familiarity with diversity. We wanted the group members to focus on some areas, allowing them to become proficient at that area. For example, Butler focused on the file change handlers, while Rizvi focused on the GUI. But to prevent the group members from being too specific (and thus blind to the other areas of the project), we also diversified our sections. For example, Butler also worked with the database and Rizvi also worked with the data retriever. \\
+
+We only had initial estimates for version 1.0 of the program, which was our base goal. In that, we estimated approximately 25 hours of work per group member for a total of 125 man hours of work on the project. \\
+
+However, we ended up adding many features to our project that were not originally planned. For example, we had not allocated time for the first run wizard, initially. These extra features caused the actual time spent on the project to well exceed the initial estimate. The rough estimate was a slight overestimate for the initially planned features.
 
 \subsection{User involvement plan}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+We designed the system with rational uses in mind. Thus, we are not just the system's creators, but also the system's users. This eliminates the need for a dedicated user. Planning was done both individually and together, collaborating on ideas for both the system's use cases and interior workings. \\
+
+The time used from these users was heavily invested in the planning stage, going through several thousand words of planning. We also used user feedback heavily in revising the project. We made many changes to the project based on user feedback, including better display of errors, a wizard for the first run, and a greater deal of configuration.
 
 \subsection{Low fidelity prototypes}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Our initial prototype was created by editing images of windows. With that, we obtained these early prototype: \\
+
+\noindent{\includegraphics[width=\linewidth]{images/concept.png}} \\
+
+\noindent{\includegraphics[width=\linewidth]{images/concept2.png}} \\
+
+Our final result is very similar to the mockups: \\
+
+\noindent{\includegraphics[width=\linewidth]{images/real.png}} \\
+
+\noindent{\includegraphics[width=\linewidth]{images/real2.png}}
 
 \section{Requirements and early design}
 
@@ -310,11 +377,15 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
 \begin{thebibliography}{9}
 
-\bibitem{label1}
-  That first label I put in the abstract. \url{http://google.com/}
+\bibitem{dropbox}
+  Dropbox: \url{https://www.dropbox.com/}
   
-\bibitem{label2}
-  The second label from the abstract. \url{http://example.com/}
+\bibitem{svn}
+  Subversion: \url{https://subversion.apache.org/}
+
+\bibitem{git}
+  Git: \url{http://git-scm.com/}
+
 
 \end{thebibliography}
 
