@@ -10,6 +10,8 @@ import java.nio.file.StandardCopyOption;
 
 import org.apache.log4j.Logger;
 
+import cmpt370.fbms.gui.MainFrame;
+
 /**
  * Controller class for handling the GUI functionality.
  */
@@ -147,6 +149,7 @@ public class GuiController
 	{
 		// Set the new directory in the database
 		Main.liveDirectory = newDirectory;
+		MainFrame.getInstance().currentDirectory = newDirectory;
 		DbConnection db = DbConnection.getInstance();
 		db.setConfig("liveDirectory", Main.liveDirectory.toString());
 
@@ -192,6 +195,7 @@ public class GuiController
 		}
 
 		Main.backupDirectory = newDirectory;
+		MainFrame.getInstance().currentDirectory = newDirectory;
 
 		// Write the backup path to the disk
 		FileOutputStream out;
