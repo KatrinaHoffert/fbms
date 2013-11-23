@@ -256,7 +256,32 @@ Our final result is very similar to the mockups: \\
 \end{itemize}
 
 \subsection{Supplementary specification}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\subsubsection{Vision}
+\todonote{Done by Michael. Adapt from M4.}
+
+\subsubsection{Interfaces}
+\todonote{Done by Ahsen. Adapt from M4. Add settings dialog, mention the revisions dialog more, other menu bar options.}
+
+\subsubsection{Reliability}
+\todonote{Done by Hattan. Adapt from M4. Mention some of the checks in file change handlers.}
+
+\subsubsection{Supportability}
+\todonote{Done by Da. Adapt from M4. Mention usage of system L and F, AA.}
+
+\subsubsection{Third party components}
+The project uses third party components for several areas, allowing the project to be completed in a reasonable span of time, as well as assisting in functionality beyond our current skills. Currently, we use:
+
+\begin{itemize}
+\item \textbf{JNotify}: This library is used to detect changes in the live directory. It is capable of running event handlers when file changes occur. This allows us to efficiently find the changes in the directory. JNotify binds with the operating system (in which it supports all the major operating systems), allowing it to function similar to an interrupt-style listener. The program will then use a polling system to perform file operations on changes that occurred since the last poll. This makes spotting changes fast while minimizing file operations (which often occur in multiples even if the operation appeared atomic to the user).
+\item \textbf{Log4j}: The well known logging library is used to making logging efficient and configurable. Most importantly, it allows us to set levels to our logging. When the logging is set to DEBUG, the logging system is very verbose. This is useful when we need to know exactly what the program is doing, but for general usage, this slows the program down and floods the logs with irrelevant information. Normally, the user will have the logging set to either WARN or ERROR, which will limit the logging to things that are of actual use to the user.
+\item \textbf{Diff match patch}: This library is used to generate patch files, which is what our revisioning system is based on. The library is also used to apply the patches, restoring the originals. To restore files several revisions old, the patch files are daisy-chained, restoring revisions until we get to the one we want.
+\item \textbf{SQLite}: We use the SQLite JDBC driver to allow our databases to be well organized into an efficient, minimal file.
+\item \textbf{Java MIME Magic}: This library is used to maximize our ability to detect the difference between binary and text files (since they are revisioned differently).
+\end{itemize}
+
+We originally planned to use Java-diff-utils as the patching engine, but the library appears to be either bugged or the documentation is incorrect. We switched to the diff match patch library instead, which performed all the functionality we need and was better documented. \\
+
+These components integrate with our program and were chosen with efficiency in mind.
 
 \subsection{System sequence diagrams}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
