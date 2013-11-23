@@ -1,0 +1,321 @@
+%% Regular, article-style document with 12pt font and A4 sized paper
+\documentclass[12pt,a4paper]{article}
+
+%% UTF-8 support
+\usepackage[utf8]{inputenc}
+
+%% Basic packages for formulas, symbols, etc
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+%% Use 1 inch margins
+\usepackage{fullpage}
+
+%% Hyperlink support
+\usepackage{hyperref}
+
+%% Image support
+\usepackage{graphicx}
+
+%% For description sections (indentable lists)
+\usepackage{enumitem}
+
+%% Header and footer styles (page number centered at the bottom)
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+%% Makes the tables break over multiple pages. If you don't like this
+%% behavior, remove this line and replace all instances of "longtable"
+%% with "tabular"
+\usepackage{longtable}
+
+%% Don't indent tables (we need every centimeter we can get)
+\let\TAB\tabular
+\renewcommand\tabular{\noindent\TAB}  
+
+\begin{document}
+
+%% No page numbering until we get to the main section
+\pagenumbering{gobble}
+
+%% Title page
+\begin{titlepage}
+	\vspace*{\fill}
+		\begin{center}
+			{\Huge{\textbf{Title}}} \\
+			\bigskip
+			{\Large{\textbf{Milestone 6}}} \\
+			\bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			{\Large{\textbf{Submitted by: } \\
+			Group name}} \\
+			\begin{description}[labelindent=4cm]
+				\item Group member 1
+				\item Group member 2
+				\item Group member 3
+				\item Group member 4
+				\item Group member 5
+			\end{description}
+			\bigskip
+			\bigskip
+			\bigskip
+			\bigskip
+			\Large{\textbf{Date:} \\
+			Date}
+		\end{center}
+	\vspace*{\fill}
+\end{titlepage}
+\clearpage
+
+%% Abstract
+\begin{abstract}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\textbf{Bold text}, \textit{italic text}, cited text\cite{label1} and another citation\cite{label2} et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\end{abstract}
+\clearpage
+
+%% Table of contents
+\tableofcontents
+\setcounter{tocdepth}{3}
+\clearpage
+
+%% Page numbering starts here. We begin using the "fancy" page style to allow us to
+%% have "page x of y" in the footer. We also have to remove the default headers.
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\fancyhf{} %% Remove the default text
+\renewcommand{\headrulewidth}{0pt} %% Remove the header bar
+\cfoot{\thepage\ of \pageref{LastPage}} %% New footer content
+
+%% Various content sections. \section denotes level 1 headers, \subsection is level 2,
+%% \subsubsection is level 3. All sections automatically added to ToC.
+\section{Introduction}
+
+\subsection{System description}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Business case}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{User-level goals for the system}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{User scenarios}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Scope document}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Project plan / Rough estimates}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{User involvement plan}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Low fidelity prototypes}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section{Requirements and early design}
+
+\subsection{Summary use cases}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Fully-dressed use cases}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Use case diagram}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Domain model}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Glossary}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Supplementary specification}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{System sequence diagrams}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Operation contracts}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Obtaining user feedback}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section{Updated design and unit testing}
+
+\subsection{System operations}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Sequence or communication diagrams with GRASP patterns}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Class diagram}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Unit testing}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section{Re-engineering}
+
+\subsection{Code smells}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. \\
+
+\begin{longtable}{| p{2.75cm} | p{4cm} | p{8cm} |}
+  \hline
+  \textbf{Clone Pair / Class ID} & \textbf{Root causes} & \textbf{Further comments} \\ \hline
+    &  &   \\ \hline
+    &  &   \\ \hline
+    &  &   \\ \hline
+\end{longtable}
+
+\begin{longtable}{| p{2.75cm} | p{12.5cm} |}
+  \hline
+  \textbf{Clone Pair / Class ID} & \textbf{Why not refactorable / risks in refactoring} \\ \hline
+    &   \\ \hline
+    &   \\ \hline
+    &   \\ \hline
+\end{longtable}
+
+\subsection{Refactoring}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Gang of Four design patterns}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section{Complete implementation and product delivery}
+
+\subsection{Naming conventions}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Commenting}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Pretty-printing of the source}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Usability engineering}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{Complete implementation}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\subsection{User manual}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section{Project plan, budget justification, and performance evaluation}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. \\
+
+%% The first column is a tiny little column for the section number.
+%% The next column is the actual section name and subsection numbers.
+%% Then we have the completed by column. Use \newline to create a new
+%% paragraph line inside a table cell.
+\begin{longtable}{| p{0.2cm} p{6.25cm} | p{3cm}| p{5cm} |}
+  \hline
+  \multicolumn{2}{|l|}{\textbf{List of tasks}} & \textbf{Completed by} & \textbf{Comments} \\ \hline
+   & Abstract &  &  \\ \hline
+  1. & Introduction &  &  \\ \hline
+   & 1.1. System description &  &  \\ \hline
+   & 1.2. Business case &  &  \\ \hline
+   & 1.3. User-level goals &  &  \\ \hline
+   & 1.4. User scenarios &  &  \\ \hline
+   & 1.5. Scope document &  &  \\ \hline
+   & 1.6. Project plan &  &  \\ \hline
+   & 1.7. User involvement plan &  &  \\ \hline
+   & 1.8. Low fidelity prototypes &  &  \\ \hline
+  2. & Requirements and early design &  &  \\ \hline
+   & 2.1. Summary use cases &  &  \\ \hline
+   & 2.2. Fully-dressed use cases &  &  \\ \hline
+   & 2.3. Use case diagram &  &  \\ \hline
+   & 2.4. Domain model &  &  \\ \hline
+   & 2.5. Glossary &  &  \\ \hline
+   & 2.6. Supplementary specification &  &  \\ \hline
+   & 2.7. System sequence diagrams &  &  \\ \hline
+   & 2.8. Operation contracts &  &  \\ \hline
+   & 2.9. Obtaining user feedback &  &  \\ \hline
+  3. & Updated design and unit testing &  &  \\ \hline
+   & 3.1. System operations &  &  \\ \hline
+   & 3.2. Sequence diagrams &  &  \\ \hline
+   & 3.3. Class diagram &  &  \\ \hline
+   & 3.4. Unit testing &  &  \\ \hline
+  4. & Re-engineering &  &  \\ \hline
+   & 4.1. Code smells &  &  \\ \hline
+   & 4.2. Refactoring &  &  \\ \hline
+   & 4.3. Gang of Four design patterns &  &  \\ \hline
+  5. & Complete implementation &  &  \\ \hline
+   & 5.1. Naming conventions &  &  \\ \hline
+   & 5.2. Commenting &  &  \\ \hline
+   & 5.3. Pretty-printing &  &  \\ \hline
+   & 5.4. Usability engineering &  &  \\ \hline
+   & 5.5. Complete implementation &  &  \\ \hline
+   & 5.6. User manual &  &  \\ \hline
+  6. & Project plan, evaluation &  &  \\ \hline
+  7. & Conclusion &  &  \\ \hline
+  8. & Acknowledgements &  &  \\ \hline
+   & References &  &  \\ \hline
+    & \textbf{Total member contributions} & \textbf{Member1} & \\ \cline{3-4}
+    &  & \textbf{Member2} & \\ \cline{3-4}
+    &  & \textbf{Member3} & \\ \cline{3-4}
+    &  & \textbf{Member4} & \\ \cline{3-4}
+    &  & \textbf{Member5} & \\ \hline
+    & \textbf{Grand total} &  &  \\ \hline
+\end{longtable}
+
+%% In this table, the first column is the member name (gonna wanna leave
+%% that blank on subsequent rows for a member). Then we have the tasks
+%% ("responsible for") column (overriden on the total row). Finally,
+%% contributions and comments. This table will probably be cramped, so keep
+%% it short and sweet.
+\begin{longtable}{| p{4cm} | p{3.5cm} | p{3.5cm}| p{3.5cm} |}
+  \hline
+  \textbf{Group member} & \textbf{Responsible for} & \textbf{Contributions} & \textbf{Comments} \\ \hline
+  Member1 &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Member1}}  &  & \\ \hline \hline
+  Member2 &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Member2}}  &  & \\ \hline \hline
+  Member3 &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Member3}}  &  & \\ \hline \hline
+  Member4 &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Member4}}  &  & \\ \hline \hline
+  Member5 &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \cline{2-4}
+   &  &  & \\ \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Member5}}  &  & \\ \hline
+\end{longtable}
+
+\section{Conclusion}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\section{Acknowledgements}
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+\begin{thebibliography}{9}
+
+\bibitem{label1}
+  That first label I put in the abstract. \url{http://google.com/}
+  
+\bibitem{label2}
+  The second label from the abstract. \url{http://example.com/}
+
+\end{thebibliography}
+
+\end{document}
