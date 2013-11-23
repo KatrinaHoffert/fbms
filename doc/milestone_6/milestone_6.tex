@@ -393,13 +393,35 @@ Another area where feedback was crucial was in the GUI development. We had to ai
 \section{Updated design and unit testing}
 
 \subsection{System operations}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\begin{itemize}
+\item \texttt{Startup.resolveBackupDirectory()}
+\item \texttt{DbConnection.insertRevision()}
+\item \texttt{DbConnection.getFileRevisions()}
+\item \texttt{DbConnection.getSpecificRevision()}
+\item \texttt{DbConnection.renameRevisions()}
+\item \texttt{DbConnection.setConfig()}
+\item \texttt{DbConnection.getConfig()}
+\item \texttt{FileOp.createPatch()}
+\item \texttt{FileOp.applyPatch()}
+\item \texttt{GuiController.revertRevision()}
+\item \texttt{GuiController.viewRevision()}
+\item \texttt{GuiController.changeLiveDirectory()}
+\item \texttt{GuiController.changeBackupDirectory()}
+\item \texttt{FileChangeHandlers.handleRenamedFiles()}
+\item \texttt{FileChangeHandlers.handleCreatedFiles()}
+\item \texttt{FileChangeHandlers.handleModifiedFiles()}
+\item \texttt{FileChangeHandlers.handleDeletedFiles()}
+\item \texttt{FileHistory.getRevisionInfo()}
+\item \texttt{FileHistory.storeRevision()}
+\item \texttt{FileHistory.obtainRevision()}
+\item \texttt{FileHistory.renameRevision()}
+\end{itemize}
 
 \subsection{Sequence or communication diagrams with GRASP patterns}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\todonote{Need 2 sequence diagrams per member.\\ Da: FileOp.applyPatch() and FileOp.createPatch();\\ Mike: GuiController.revertRevision() and GuiController.viewRevision();\\ Michael: GuiController.changeLiveDirectory() and GuiController.change\-BackupDirectory();\\ Hattan: FileHistory.getRevisionInfo() and FileHistory.storeRevision();\\ Ahsen: Startup.resolveBackupDirectory() and DbConnection.getConfig().\\ Don't spend too much time on this, it's worth very little marks.}
 
 \subsection{Class diagram}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\todonote{Mike's job}
 
 \subsection{Unit testing}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
