@@ -21,6 +21,10 @@
 %% For description sections (indentable lists)
 \usepackage{enumitem}
 
+%% Font improvements
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
 %% Custom command to create todo notes. This is a red framed box that contains
 %% wrapped, bold, red text.
 \usepackage{xcolor}
@@ -284,10 +288,102 @@ We originally planned to use Java-diff-utils as the patching engine, but the lib
 These components integrate with our program and were chosen with efficiency in mind.
 
 \subsection{System sequence diagrams}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\todonote{Delete files needs to be redone (Rizvi), rename folder needs to be more detailed (Alsharif); all of them will require renaming since the objectification}
 
 \subsection{Operation contracts}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+%% This section is a bit messy due to the complex formatting. In particular, we
+%% need to manually add line breaks to some of the cross references, which are too
+%% long to wrap
+\textbf{\texttt{FileOp.createPatch(Path oldRevision, Path currentRevision)}}
+\begin{description}
+\item[Cross references:] \texttt{FileChangeHandlers.handleModifiedFiles()}, \texttt{FileChangeHandlers.} \texttt{handleRenamedFiles()}, \texttt{Startup.startupScan()}
+\item[Precondition:] \texttt{oldRevision} and \texttt{currentRevision} exist
+\item[Postconditions:] Creates a temporary file containing the patch to patch \texttt{currentRevision} to \texttt{oldRevision}.
+\end{description}
+
+\vspace{0.75cm}
+
+\noindent{\textbf{\texttt{FileOp.applyPatch(Path currentRevision, Path patchFile)}}}
+\begin{description}
+\item[Cross references:] \texttt{FileHistory.displayRevision(Path, long)}
+\item[Precondition:] \texttt{currentRevision} and \texttt{patchFile} exist
+\item[Postconditions:] Creates a temporary file, which contains the contents of the \texttt{currentRevision} with \texttt{patchFile} applied to it.
+\end{description}
+
+\vspace{0.75cm}
+
+\noindent{\textbf{\texttt{DataRetriever.getFolderContents(Path folder)}}}
+\begin{description}
+\item[Cross references:] \texttt{Data.getTableData(Path)}
+\item[Precondition:] Path \texttt{folder} exists
+\item[Postconditions:] None
+\end{description}
+
+\vspace{0.75cm}
+
+\noindent{\textbf{\texttt{GuiController.displayRevision(Path file, long timestamp)}}}
+\begin{description}
+\item[Cross references:] \texttt{RevisionTableSelectionListener.activateRow()}
+\item[Precondition:] A revision exists in the database for the specified file and time stamp
+\item[Postconditions:] A temporary file of the specific revision is created. System will open the file with default application for the file type
+\end{description}
+
+\vspace{0.75cm}
+
+\noindent{\textbf{\texttt{GuiController.changeLiveDirectory(Path newDirectory)}}}
+\begin{description}
+\item[Cross references:] \texttt{MainMenu.initFileActions()}
+\item[Precondition:] \texttt{newDirectory} exists and is valid (not a parent or child of backup directory)
+\item[Postconditions:] \texttt{Main.liveDirectory} is changed to \texttt{newDirectory}. The previous file watcher is cancelled. A new file watcher is created for the new live directory. Files in the live directory are scanned once to backup
+\end{description}
+
+\vspace{0.75cm}
+
+\noindent{\textbf{\texttt{Startup.resolveBackupDirectory()}}}
+\begin{description}
+\item[Cross references:] \texttt{Main.main(String[])}
+\item[Precondition:] None
+\item[Postconditions:] \texttt{Main.backupDirectory} is set to contents of \texttt{backup\_{}location} file if it exists and is valid. First run will begin if backup directory cannot be resolved
+\end{description}
+
+\vspace{0.75cm}
+
+\noindent{\textbf{\texttt{DbManager.getFileRevisions(Path file)}}}
+\begin{description}
+\item[Cross references:] \texttt{DataRetriever.getFolderContents(Path)}, \texttt{DataRetriever.} \\\texttt{getRevisionInfo(Path)}, \texttt{FileHistory.obtainRevisionContent(Path, long)}
+\item[Precondition:] None
+\item[Postconditions:] None
+\end{description}
+
+\vspace{0.75cm}
+
+\noindent{\textbf{\texttt{DbManager.setConfig(String settingName, String settingValue)}}}
+\begin{description}
+\item[Cross references:] \texttt{GuiController.changeLiveDirectory(Path)}, \texttt{Startup.startup()}
+\item[Precondition:] None
+\item[Postconditions:] None
+\end{description}
+
+\vspace{0.75cm}
+
+\noindent{\textbf{\texttt{FileOp.copy(Path file, Path destinationFolder)}}}
+\begin{description}
+\item[Cross references:] \texttt{GuiController.changeBackupDirectory(Path)}, \texttt{GuiController.} \texttt{copyTo(Path, Path)}, \texttt{FileChangeHandlers.handleCreatedFiles()}, \\ \texttt{FileChangeHandlers.handleModifiedFiles()}, \texttt{FileChangeHandlers.} \\ \texttt{handleRenamedFiles()}, \texttt{GuiController.restoreBackup(Path)}, \texttt{Startup.} \\ \texttt{startupScan(Path)}
+\item[Precondition:] File exists
+\item[Postconditions:] \texttt{file} will be copied to the \texttt{destinationFolder}. If \texttt{destinationFolder} does not exist, it will be created. Any non-existant parent folders up to \texttt{destinationFolder} will be created
+\end{description}
+
+\vspace{0.75cm}
+
+\noindent{\textbf{\texttt{FileHistory.storeRevision(Path file, Path diff, long filesize, long delta)}}}
+\begin{description}
+\item[Cross references:] \texttt{FileChangeHandlers.handleModifiedFiles()}, \texttt{FileChangeHandlers.}
+\texttt{handleRenamedFiles()}, \texttt{GuiController.revertRevision(Path, long)}
+\item[Precondition:] \texttt{file} and \texttt{diff} exist
+\item[Postconditions:] A row is inserted into the database containing information about the revision. In addition to the path of the file, the contents of the diff, the file size, and the delta (change in file size), the time will also be stored.
+\end{description}
+
+\todonote{Revise these. We only got a 7/10 here last time. What can we improve?}
 
 \subsection{Obtaining user feedback}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
