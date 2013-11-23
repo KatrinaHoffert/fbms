@@ -21,6 +21,11 @@
 %% For description sections (indentable lists)
 \usepackage{enumitem}
 
+%% Custom command to create todo notes. This is a red framed box that contains
+%% wrapped, bold, red text.
+\usepackage{xcolor}
+\newcommand\todonote[1]{\noindent{\color{red}\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\textit\large{\textbf{TODO: #1}}}}}}
+
 %% Header and footer styles (page number centered at the bottom)
 \usepackage{fancyhdr}
 \usepackage{lastpage}
@@ -77,6 +82,8 @@ The \textit{File Backup or Management System}, henceforth referred to as \textbf
 FBMS works on all locally accessible drives, including external drives and network drives. The revisioning creates a patch file for plain text, keeping file size down. For binary files, the entire file is stored as the revision. This revisioning ensures not only are the user's files safe, but erroneous changes can be reverted. \\
 
 FBMS has a focus on ease of use. A wizard guides the user through the setup, where the backup and live directories are chosen. With that complete, the program will run in the background and needs no user interaction until the use desires to restore or view files from the backup.
+
+\todonote{Review and revise}
 \end{abstract}
 \clearpage
 
@@ -186,19 +193,39 @@ Our final result is very similar to the mockups: \\
 
 \noindent{\includegraphics[width=\linewidth]{images/real2.png}}
 
+\todonote{Add linux and mac images of the above cases here (try to get full windows that show off the program well)}
+
 \section{Requirements and early design}
 
 \subsection{Summary use cases}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\textbf{All use cases:}
+\begin{itemize}
+\item Create file
+\item Create folder
+\item Modify file
+\item Rename file
+\item Rename folder
+\item Delete file
+\item Delete folder
+\item Revert revision
+\item View revision
+\item First run setup
+\item Startup
+\item Change live directory
+\item Change backup directory
+\item Change settings
+\end{itemize}
+
+\todonote{Need 2 summary use cases per group member. Adapt from M4.}
 
 \subsection{Fully-dressed use cases}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\todonote{Need 1 fully dressed use case per group member. Adapt from M4.}
 
 \subsection{Use case diagram}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\todonote{This one's Da's}
 
 \subsection{Domain model}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\todonote{This one's Michael's}
 
 \subsection{Glossary}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
