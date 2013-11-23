@@ -228,7 +228,32 @@ Our final result is very similar to the mockups: \\
 \todonote{This one's Michael's}
 
 \subsection{Glossary}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\begin{itemize}
+\item \textbf{Live directory}: The directory that the program monitors for changes. In other words, the directory that is being backed up.
+\item \textbf{Backup directory}: The directory where the backed up files and revisions from the live directory are placed.
+\item \textbf{Revision}: A snapshot of a file at a given time.
+\item \textbf{Patch}: Data that details what changed from one revision of a file to another. Also called a ``diff''.
+\item \textbf{Raw data}: The contents of a file as bytes, without any kind of interpretation.
+\item \textbf{Revision database}: The database where revisions are stored as patch files (for plain text) or raw data (for binary).
+\item \textbf{File operations}: Operations that change a file's content, name, or location. This includes operations such as file creation, renaming, moving, or deletion.
+\item \textbf{Error alerts}: GUI dialogs that alert the user to an error. They are split into two branches:
+	\begin{itemize}
+	\item \textbf{Fatal alerts}: Obtrusive dialogs that indicate that the program cannot proceed.
+	\item \textbf{Non-fatal alerts}: Non-obtrusive dialogs that appear in the bottom right corner of the screen and automatically disappear after some time. These indicate something has gone wrong and cannot be recovered, but do not halt the progress of the program. For example, a file that cannot be backed up (perhaps due to permission issues).
+	\end{itemize}
+\item \textbf{Front end}: The visible portions of the program, including the main GUI window, the toolbar icon, and dialogs.
+	\begin{itemize}
+	\item \textbf{Main frame}: The large window that is opened by double clicking the program's system tray icon. It lists the files and folders inside the backup directory and offers actions on these files.
+	\item \textbf{Revisions dialog}: The modal opened by double clicking on a file in the main frame's list of files. It displays a list of revisions for that file, and offers actions on these revisions.
+	\item \textbf{Settings dialog}: The modal opened by from the ``settings'' option in the main frame's menus. It offers customization of some features such as trim, whether or not to perform the startup scan, and the display of errors.
+	\end{itemize}
+\item \textbf{Watcher}: The program component that watches the live directory for changes. It operates concurrently from the rest of the program.
+\item \textbf{File change handlers}: The section of the program that handles changes in files (file operations). Runs concurrently from the rest of the program.
+\item \textbf{Data retriever}: The program component that fetches data about revisions or the file system for the front end.
+\item \textbf{First start wizard}: A wizard that is shown on the first start (or if normal startup cannot occur). It guides the user in choosing the live and backup directories.
+\item \textbf{Trim}: A program feature that removes revisions older than a configured date.
+\item \textbf{Startup scan}: The one-time scan that occurs when starting the program up (or after the live directory is changed). This allows the backup of files that were changes when the system was not running, but is an unnecessary overhead if the system is always running. Can be disabled in the settings dialog.
+\end{itemize}
 
 \subsection{Supplementary specification}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
