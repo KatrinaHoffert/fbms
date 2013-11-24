@@ -457,7 +457,11 @@ Another area where feedback was crucial was in the GUI development. We had to ai
 \todonote{Everyone needs to point out at least one instance of refactoring, file and lines, why we did it, etc. Take a look at my objectification changes from revision 436 to 448 if you need ideas.}
 
 \subsection{Gang of Four design patterns}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+We used several Gang of Four design patterns in our project. One of the most notable is the use of a singleton for the \texttt{DbConnection} class. We used a singleton here because it's very slow to create and close connections at whim. The SQLite database manager we used supports serialized access, so the singleton is thread-safe. \\
+
+The \texttt{FileOp} class, which performs file operations, is a facade. It provides easier access to modifications of the Java \texttt{Files} class and the libraries that we used. This makes the parameters and return values easier to work with and reduces the code present in other files. For example, we could copy a file with \texttt{Files.copy()}, but that doesn't handle directories well. \texttt{FileOp.copy()} cleanly handles both directories and files. It also allows us to just specify the directory to copy to, not the destination file name. \\
+
+Or for another example, \texttt{isPlainText()} provides a simple way to get the MIME type from Java MIME magic and determine if the MIME type starts with ``text''. Without the use of \texttt{FileOp}, we'd be repeating a large block of code that is not as easily understood as ``is plain text''.
 
 \section{Complete implementation and product delivery}
 
