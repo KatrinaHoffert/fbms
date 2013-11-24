@@ -11,14 +11,17 @@ Some code derived from work by:
 
 Resources:
  * Program and refresh icons by oxygen (CC-BY-SA 3.0)
+   http://www.oxygen-icons.org/
  * Up icon by crystal (LGPL-2.1)
+   http://www.everaldo.com/
  * File and folder icons by nuovext2 (LGPL-2.1)
+   http://nuovext.pwsp.net/
 
 FBMS is licensed under GPL v3
 https://code.google.com/p/fbms
 
-Java-diff-utils is licensed under the Apache License v2
-https://code.google.com/p/java-diff-utils/
+google-diff-match-patch is licensed under the Apache License v2
+https://code.google.com/p/google-diff-match-patch/
 
 Log4j is licensed under the Apache License v2
 https://logging.apache.org/log4j/1.2/
@@ -28,3 +31,6 @@ https://bitbucket.org/xerial/sqlite-jdbc
 
 JNotify is licensed under the LGPL v2
 http://jnotify.sourceforge.net/
+
+Java MIME Magic is licensed under GPL v2:
+https://github.com/arimus/jmimemagic
