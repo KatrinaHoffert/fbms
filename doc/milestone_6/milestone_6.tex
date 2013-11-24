@@ -421,15 +421,15 @@ Another area where feedback was crucial was in the GUI development. We had to ai
 \todonote{Need 2 sequence diagrams per member.\\ Da: FileOp.applyPatch() and FileOp.createPatch();\\ Mike: GuiController.revertRevision() and GuiController.viewRevision();\\ Michael: GuiController.changeLiveDirectory() and GuiController.change\-BackupDirectory();\\ Hattan: FileHistory.getRevisionInfo() and FileHistory.storeRevision();\\ Ahsen: Startup.resolveBackupDirectory() and DbConnection.getConfig().\\ Don't spend too much time on this, it's worth very little marks.}
 
 \subsection{Class diagram}
-\todonote{Mike's job}
+\todonote{Done by Mike}
 
 \subsection{Unit testing}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\todonote{Done by Da}
 
 \section{Re-engineering}
 
 \subsection{Code smells}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. \\
+\todonote{Done by Mike}
 
 \begin{longtable}{| p{2.75cm} | p{4cm} | p{8cm} |}
   \hline
@@ -448,7 +448,13 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 \end{longtable}
 
 \subsection{Refactoring}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\begin{itemize}
+\item We changed the static class \texttt{DbManager} into a singleton, and renamed it to \texttt{DbConnec\-tion}. In doing so, we set all the methods as non-static, added a private constructor, and added a \texttt{getInstance()} method.
+\item \texttt{FileInfo} implemented \texttt{Comparible} to make comparisons between \texttt{FileInfo} objects considerably easier.
+\item We renamed the \texttt{FileHistory}'s \texttt{obtainRevision()} method to \texttt{obtainRevisionCo\-ntent()}, which made the workings clearer and reduced confusion with the other methods in the class, which had similar names like \texttt{getRevision()} (which was renamed to \texttt{getRevisionInfo()}.
+\end{itemize}
+
+\todonote{Everyone needs to point out at least one instance of refactoring, file and lines, why we did it, etc. Take a look at my objectification changes from revision 436 to 448 if you need ideas.}
 
 \subsection{Gang of Four design patterns}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
