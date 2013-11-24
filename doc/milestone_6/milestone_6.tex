@@ -15,6 +15,9 @@
 %% Hyperlink support
 \usepackage{hyperref}
 
+%% Support for wrapped images
+\usepackage{wrapfig}
+
 %% Image support
 \usepackage{graphicx}
 
@@ -466,16 +469,38 @@ Or for another example, \texttt{isPlainText()} provides a simple way to get the 
 \section{Complete implementation and product delivery}
 
 \subsection{Naming conventions}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+In regards to naming conventions, our code roughly follows the \textit{Code Conventions for the Java language}\cite{conventions} as outlined by Sun.
 
 \subsection{Commenting}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+The FBMS project aims to be self documenting where possible. All functions and classes, however, are commented to explain their use, parameters, and return types.
 
 \subsection{Pretty-printing of the source}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Instead of using some additional tool for formatting the source, we use the formatter built into Eclipse\cite{eclipse}. We configured the formatter to use our agreed upon conventions (a modified version of the \textit{Code Conventions for the Java language}\cite{conventions}) upon save. \\
+
+Some of the differences include using tabs instead of spaces (for numerous reasons including consistency between editors and ease of use) and having braces start on a new line (making the opening braces easier to see).
 
 \subsection{Usability engineering}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+%% Place a figure with the settings image floating on the right somewhere in this
+%% section (not necessarily at the top; going for best fit). Extra space at the top
+%% and bottom are removed.
+\begin{wrapfigure}{R}{0.5\textwidth}
+\vspace{-20pt}
+\begin{center}
+\includegraphics[width=0.48\textwidth]{images/settings.png}
+\vspace{-15pt}
+\end{center}
+\footnotesize{The settings dialog tries to phrase the options in a naturally readable manner.}
+\end{wrapfigure}
+
+We designed FBMS to be easy to use and intuitive. The bulk of the user accessible portion of the program (ie, the GUI) is largely a file browser, so we looked at existing file browsers (such as Windows Explorer\cite{explorer} and Dolphin\cite{dolphin}) for design patterns. In particular, we changed the ``default'' behavior of the enter key in the file browser's table to activate the row instead of go to the next row. Similarly, rows are selected by single click and activated by double click. \\
+
+In a number of places, we needed to prompt the user for paths (such as when choosing the live or backup directory). To make this more convenient, we supplied file chooser dialogs that only showed folders. We also skinned these dialogs to use the system dialog. So Windows users will see a Window-themed file chooser while OS X users would see an OS X themed file chooser. \\
+
+The first run wizard was also intended to make the program much more usable. Instead of filling a configuration file or such, the user is guided through choosing the live and backup directories (or importing an existing backup) via a GUI wizard. This is not only more user friendly, but presents the opportunity to tell the user a bit about the program and how to use it. \\
+
+To make the revision dialog more friendly, we added color based on whether a revision added or removed bytes. This dialog was inspired by the history pages of Wikipedia\cite{wikipedia}. \\
+
+Finally, we included an option in the program's menu that opens up the documentation in their web browser.
 
 \subsection{Complete implementation}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -593,6 +618,20 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 \bibitem{git}
   Git: \url{http://git-scm.com/}
 
+\bibitem{conventions}
+  Code Conventions for the Java language: \url{http://www.oracle.com/technetwork/java/javase/documentation/codeconvtoc-136057.html}
+  
+\bibitem{eclipse}
+  The Eclipse IDE: \url{http://www.eclipse.org/}
+
+\bibitem{explorer}
+  Windows Explorer on Wikipedia: \url{https://en.wikipedia.org/wiki/File_Explorer}
+
+\bibitem{dolphin}
+  Dolphin File Manager: \url{http://dolphin.kde.org/}
+  
+\bibitem{wikipedia}
+  Example Wikipedia history page: \url{https://en.wikipedia.org/w/index.php?title=Software_engineering&action=history}
 
 \end{thebibliography}
 
