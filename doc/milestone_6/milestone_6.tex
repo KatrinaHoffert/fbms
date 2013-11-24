@@ -489,7 +489,7 @@ Some of the differences include using tabs instead of spaces (for numerous reaso
 \includegraphics[width=0.48\textwidth]{images/settings.png}
 \vspace{-15pt}
 \end{center}
-\footnotesize{The settings dialog tries to phrase the options in a naturally readable manner.}
+\footnotesize{The settings dialog tries to phrase the options in a naturally readable manner and uses tooltips.}
 \end{wrapfigure}
 
 We designed FBMS to be easy to use and intuitive. The bulk of the user accessible portion of the program (ie, the GUI) is largely a file browser, so we looked at existing file browsers (such as Windows Explorer\cite{explorer} and Dolphin\cite{dolphin}) for design patterns. In particular, we changed the ``default'' behavior of the enter key in the file browser's table to activate the row instead of go to the next row. Similarly, rows are selected by single click and activated by double click. \\
@@ -503,10 +503,63 @@ To make the revision dialog more friendly, we added color based on whether a rev
 Finally, we included an option in the program's menu that opens up the documentation in their web browser.
 
 \subsection{Complete implementation}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+We have included the implementation in ``release'' and ``development'' versions. \\
+
+The release version is pre-built and easy to use: just run the batch file (Windows) or shell script (Linux, OS X). This version is intended to allow the program to be run in a straightforward manner (allowing easy testing) and with optimal performance. \\
+
+The development version does not contain pre-built binaries, but has the full source code available. To compile this, you will need Eclipse\cite{eclipse} or Ant\cite{ant}. This version is intended to allow the source code to be examined. Running the development program will be slower than the release version, since debugging is enabled and logging uses slower, more exact methods. \\
+
+The release version is located in the \texttt{release} folder, relative to the location of this file. The development version is located in the \texttt{development} folder.
+
+\todonote{Add the release and development folders (last minute)}
 
 \subsection{User manual}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+When the program is started for the first time, a wizard will guide you through selecting your live and backup directories.
+
+\includegraphics{images/1-firstRunIntro.png}
+  
+You can opt to start from scratch (specifying a backup and live directory), or import an existing backup directory (which will determine the live directory from previously saved settings).
+
+\begin{itemize}
+\item \textbf{Live directory:} The folder that you want to keep backed up and revisioned.
+\item \textbf{Backup directory:} The location to store the backup. Don't use an existing folder, or you risk losing your files.
+\end{itemize}
+
+\includegraphics{images/2-newBackup.png}
+
+\includegraphics{images/3-oldBackup.png}
+
+Once folders are chosen and the wizard is completed, the program will run quietly in the background. An icon will be created on the system tray. Double clicking this icon will open the program's interface. \\
+
+\includegraphics{images/4-systemTray.png}
+
+The interface shows a special file browser, which displays the contents of the backup directory along with information such as the number of revisions stored. This file browser can be navigated with the keyboard or a mouse, and has functionality similar to other file browsers, such as Windows Explorer or Dolphin. It is, however, a specialized browser intended only to be able to restore files and view revisions. \\
+
+\includegraphics[width=\textwidth]{images/5-mainWindow.png}
+
+Double clicking a file will open the revisions dialog, displaying a list of past revisions (if there are any). These revisions can be viewed (which opens the revision in your default program) or reverted (which sets that file in your live directory to the specified revision). You can also view the changes introduced by a revision, which will open in your default web browser. \\
+
+\includegraphics[width=\textwidth]{images/6-revisionDialog.png}
+
+The file browser is also able to:
+
+\begin{itemize}
+\item Copy the selected file to a chosen folder
+\item Restore all files
+\item Change the live or backup directory
+\end{itemize}
+
+FBMS is also able to detect when files have changed since the last time you ran the program. When starting the program up, FBMS will perform a one time scan for file changes. This scan is slow, and can be disabled in the settings if FBMS is always running.
+
+The settings dialog is accessed under the File menu of the GUI. It provides a few choices such as:
+
+\begin{itemize}
+\item Whether or not to display non-fatal error messages (which don't stop the program from running, but notify the user of issues).
+\item Whether or not to run the previously mentioned first run scan
+\item Whether or not to enable the trim feature, which removes revisions older than a specified date.
+\end{itemize}
+
+\todonote{Test this manual on someone outside our group}
 
 \section{Project plan, budget justification, and performance evaluation}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. \\
@@ -632,6 +685,9 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
   
 \bibitem{wikipedia}
   Example Wikipedia history page: \url{https://en.wikipedia.org/w/index.php?title=Software_engineering&action=history}
+  
+\bibitem{ant}
+  Apache Ant: \url{https://ant.apache.org/}
 
 \end{thebibliography}
 
