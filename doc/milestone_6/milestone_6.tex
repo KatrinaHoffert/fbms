@@ -8,6 +8,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{multirow}
 
 %% Use 1 inch margins
 \usepackage{fullpage}
@@ -259,8 +260,39 @@ Our final result is very similar to the mockups: \\
 \item View revision
 \item First run setup
 \item Startup
-\item Change live directory
-\item Change backup directory
+\item Change live directory$^{Tao}$
+\begin{enumerate}
+	\item[•] Level \hfill \\
+	Summary
+	\item[•] User \hfill \\
+	User
+	\item[•] Goal \hfill \\
+	Change the folder system monitors.
+	\item[•] Activities \hfill \\
+	User select "Change live directory" in main window.\\
+	The system changes configuration in database, removes the old watcher and adds a new watcher for new live folder.\\
+	\item[•] Quality \hfill \\
+	This is a median use case in the system and should work to a high standard.
+	\item[•] Version \hfill \\
+	26 November 2013	
+\end{enumerate}
+\item Change backup directory$^{Tao}$
+\begin{enumerate}
+	\item[•] Level \hfill \\
+	Summary
+	\item[•] User \hfill \\
+	User
+	\item[•] Goal \hfill \\
+	Change the folder for storing backups.
+	\item[•] Activities \hfill \\
+	User select "Change backup directory" in main window.\\
+	The system changes configuration in database, and copies the old folder and its content to the new location.\\
+	The old backup folder still lives.
+	\item[•] Quality \hfill \\
+	This is a median use case in the system and should work to a high standard.
+	\item[•] Version \hfill \\
+	26 November 2013
+\end{enumerate}	
 \item Change settings
 \end{itemize}
 
@@ -623,9 +655,9 @@ The following table breaks up the development of this milestone by group member.
    & 1.7. User involvement plan & Hoffert(0.1h) &  \\ \hline
    & 1.8. Low fidelity prototypes & Hoffert(0.25h) &  \\ \hline
   2. & Requirements and early design &  &  \\ \hline
-   & 2.1. Summary use cases & Hoffert(0.1h) &  \\ \hline
+   & 2.1. Summary use cases & Hoffert(0.1h)\newline Tao(1.5h) &  \\ \hline
    & 2.2. Fully-dressed use cases &  &  \\ \hline
-   & 2.3. Use case diagram &  &  \\ \hline
+   & 2.3. Use case diagram & Tao(0.5h) &  \\ \hline
    & 2.4. Domain model &  &  \\ \hline
    & 2.5. Glossary & Hoffert(0.25h) &  \\ \hline
    & 2.6. Supplementary specification & Hoffert(0.25h) &  \\ \hline
@@ -653,7 +685,7 @@ The following table breaks up the development of this milestone by group member.
   8. & Acknowledgements &  &  \\ \hline
    & References &  &  \\ \hline
     & \textbf{Total member contributions} & \textbf{Hoffert} & 5.95h \\ \cline{3-4}
-    &  & \textbf{Tao} & \\ \cline{3-4}
+    &  & \textbf{Tao} & 1.5h \\ \cline{3-4}
     &  & \textbf{Butler} & \\ \cline{3-4}
     &  & \textbf{Rizvi} & \\ \cline{3-4}
     &  & \textbf{Alsharif} & \\ \hline
