@@ -371,95 +371,173 @@ These components integrate with our program and were chosen with efficiency in m
 %% need to manually add line breaks to some of the cross references, which are too
 %% long to wrap
 \textbf{\texttt{FileOp.createPatch(Path oldRevision, Path currentRevision)}}
-\begin{description}
-\item[Cross references:] \texttt{FileChangeHandlers.handleModifiedFiles()}, \texttt{FileChangeHandlers.} \texttt{handleRenamedFiles()}, \texttt{Startup.startupScan()}
-\item[Precondition:] \texttt{oldRevision} and \texttt{currentRevision} exist
-\item[Postconditions:] Creates a temporary file containing the patch to patch \texttt{currentRevision} to \texttt{oldRevision}.
+\begin{description} 
+	\item[Cross references:] \hfill \vspace{-4ex} \\
+		\begin{description}
+		\item[Operation contracts:] \hfill \\
+			\texttt{FileChangeHandlers.handleModifiedFiles()},\\
+			\texttt{FileChangeHandlers.handleRenamedFiles()},\\
+			\texttt{Startup.startupScan()}
+		\item[Use cases:] \hfill \\
+			\texttt{Startup}, \texttt{Rename file}, \texttt{Modify file},\\
+			\texttt{View revision}, \texttt{Revert revision}
+		\end{description}
+	\item[Precondition:] \texttt{oldRevision} and \texttt{currentRevision} exist
+	\item[Postconditions:] A \texttt{Path} is created. It points to a temporary file containing the patch to patch \texttt{currentRevision} to \texttt{oldRevision}.
 \end{description}
 
 \vspace{0.75cm}
 
 \noindent{\textbf{\texttt{FileOp.applyPatch(Path currentRevision, Path patchFile)}}}
 \begin{description}
-\item[Cross references:] \texttt{FileHistory.displayRevision(Path, long)}
-\item[Precondition:] \texttt{currentRevision} and \texttt{patchFile} exist
-\item[Postconditions:] Creates a temporary file, which contains the contents of the \texttt{currentRevision} with \texttt{patchFile} applied to it.
+	\item[Cross references:] \hfill \vspace{-4ex} \\
+	\begin{description}
+		\item[Operation contracts:] \hfill \\
+			\texttt{FileHistory.displayRevision(Path, long)}
+		\item[Use cases:] \hfill \\
+			\texttt{View revision}, \texttt{Revert revision}
+	\end{description}
+	\item[Precondition:] \texttt{currentRevision} and \texttt{patchFile} exist
+	\item[Postconditions:] Creates a temporary file, which contains the contents of the 		\texttt{currentRevision} with \texttt{patchFile} applied to it.
 \end{description}
 
 \vspace{0.75cm}
 
 \noindent{\textbf{\texttt{DataRetriever.getFolderContents(Path folder)}}}
 \begin{description}
-\item[Cross references:] \texttt{Data.getTableData(Path)}
-\item[Precondition:] Path \texttt{folder} exists
-\item[Postconditions:] None
+	\item[Cross references:] \hfill \vspace{-4ex}  \\
+	\begin{description} 
+		\item[Operation contracts:] \hfill \\
+			\texttt{Data.getTableData(Path)}
+		\item[Use cases:] \hfill \\
+			None
+	\end{description}
+	\item[Precondition:] Path \texttt{folder} exists
+	\item[Postconditions:] A \texttt{List<FileInfo>} is returned, containing the content of the \texttt{folder}
 \end{description}
 
 \vspace{0.75cm}
 
 \noindent{\textbf{\texttt{GuiController.displayRevision(Path file, long timestamp)}}}
 \begin{description}
-\item[Cross references:] \texttt{RevisionTableSelectionListener.activateRow()}
-\item[Precondition:] A revision exists in the database for the specified file and time stamp
-\item[Postconditions:] A temporary file of the specific revision is created. System will open the file with default application for the file type
+	\item[Cross references:] \hfill \vspace{-4ex}  \\
+	\begin{description} 
+		\item[Operation contracts:] \hfill \\
+			\texttt{RevisionTableSelectionListener.activateRow()}
+		\item[Use cases:] \hfill \\
+			\texttt{View revision}
+	\end{description}	
+	\item[Precondition:] A revision exists in the database for the specified file and time stamp
+	\item[Postconditions:] A temporary file of the specific revision is created. System will open the file with default application for the file type
 \end{description}
 
 \vspace{0.75cm}
 
 \noindent{\textbf{\texttt{GuiController.changeLiveDirectory(Path newDirectory)}}}
 \begin{description}
-\item[Cross references:] \texttt{MainMenu.initFileActions()}
-\item[Precondition:] \texttt{newDirectory} exists and is valid (not a parent or child of backup directory)
-\item[Postconditions:] \texttt{Main.liveDirectory} is changed to \texttt{newDirectory}. The previous file watcher is cancelled. A new file watcher is created for the new live directory. Files in the live directory are scanned once to backup
+	\item[Cross references:] \hfill \vspace{-4ex}  \\
+		\begin{description} 
+		\item[Operation contracts:] \hfill \\
+			\texttt{MainMenu.initFileActions()}
+		\item[Use cases:] \hfill \\
+			\texttt{Change live directory}
+	\end{description}	
+	\item[Precondition:] \texttt{newDirectory} exists and is valid (not a parent or child of backup directory)
+	\item[Postconditions:] \texttt{Main.liveDirectory} is changed to \texttt{newDirectory}. The previous file watcher is cancelled. A new file watcher is created for the new live directory. Files in the live directory are scanned once to backup
 \end{description}
 
 \vspace{0.75cm}
 
 \noindent{\textbf{\texttt{Startup.resolveBackupDirectory()}}}
 \begin{description}
-\item[Cross references:] \texttt{Main.main(String[])}
-\item[Precondition:] None
-\item[Postconditions:] \texttt{Main.backupDirectory} is set to contents of \texttt{backup\_{}location} file if it exists and is valid. First run will begin if backup directory cannot be resolved
+	\item[Cross references:] \hfill \vspace{-4ex}  \\
+		\begin{description} 
+		\item[Operation contracts:] \hfill \\
+			\texttt{Main.main(String[])}
+		\item[Use cases:] \hfill \\
+			\texttt{Startup}
+	\end{description}
+	\item[Precondition:] None
+	\item[Postconditions:] \texttt{Main.backupDirectory} is set to contents of \texttt{backup\_{}location} file if it exists and is valid. First run will begin if backup directory cannot be resolved
 \end{description}
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{DbManager.getFileRevisions(Path file)}}}
-\begin{description}
-\item[Cross references:] \texttt{DataRetriever.getFolderContents(Path)}, \texttt{DataRetriever.} \\\texttt{getRevisionInfo(Path)}, \texttt{FileHistory.obtainRevisionContent(Path, long)}
-\item[Precondition:] None
-\item[Postconditions:] None
+\noindent{\textbf{\texttt{DbConnection.getFileRevisions(Path file)}}}
+	\begin{description}
+	\item[Cross references:] \hfill \vspace{-4ex}  \\
+		\begin{description} 
+		\item[Operation contracts:] \hfill \\
+			\texttt{DataRetriever.getFolderContents(Path)},\\
+			\texttt{DataRetriever.getRevisionInfo(Path)},\\
+			\texttt{FileHistory.obtainRevisionContent(Path, long)}
+		\item[Use cases:] \hfill \\
+			\texttt{View revision}, \texttt{Revert revision}
+	\end{description}
+	\item[Precondition:] \texttt{file} exists
+	\item[Postconditions:] \hfill \\
+	A \texttt{List<RevisionInfo>} is returned, containing revision infomation of \texttt{file}.
 \end{description}
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{DbManager.setConfig(String settingName, String settingValue)}}}
+\noindent{\textbf{\texttt{DbConnection.setConfig(String settingName, String settingValue)}}}
 \begin{description}
-\item[Cross references:] \texttt{GuiController.changeLiveDirectory(Path)}, \texttt{Startup.startup()}
-\item[Precondition:] None
-\item[Postconditions:] None
+	\item[Cross references:] \hfill \vspace{-4ex}  \\
+		\begin{description} 
+		\item[Operation contracts:] \hfill \\
+			\texttt{GuiController.changeLiveDirectory(Path)},\\
+			\texttt{Startup.startup()}
+		\item[Use cases:] \hfill \\
+			\texttt{Startup}, \texttt{First run setup}, \texttt{Change live directory}
+	\end{description}
+	\item[Precondition:] The database exists.
+	\item[Postconditions:] The field \texttt{settingName} is set to \texttt{settingValue}
 \end{description}
 
 \vspace{0.75cm}
 
 \noindent{\textbf{\texttt{FileOp.copy(Path file, Path destinationFolder)}}}
 \begin{description}
-\item[Cross references:] \texttt{GuiController.changeBackupDirectory(Path)}, \texttt{GuiController.} \texttt{copyTo(Path, Path)}, \texttt{FileChangeHandlers.handleCreatedFiles()}, \\ \texttt{FileChangeHandlers.handleModifiedFiles()}, \texttt{FileChangeHandlers.} \\ \texttt{handleRenamedFiles()}, \texttt{GuiController.restoreBackup(Path)}, \texttt{Startup.} \\ \texttt{startupScan(Path)}
-\item[Precondition:] File exists
-\item[Postconditions:] \texttt{file} will be copied to the \texttt{destinationFolder}. If \texttt{destinationFolder} does not exist, it will be created. Any non-existant parent folders up to \texttt{destinationFolder} will be created
+	\item[Cross references:] \hfill \vspace{-4ex}  \\
+		\begin{description} 
+		\item[Operation contracts:] \hfill \\
+			\texttt{GuiController.changeBackupDirectory(Path)},\\
+			\texttt{GuiController.copyTo(Path, Path)},\\
+			\texttt{FileChangeHandlers.handleCreatedFiles()}, \\
+			\texttt{FileChangeHandlers.handleModifiedFiles()}, \\
+			\texttt{FileChangeHandlers.handleRenamedFiles()},\\
+			\texttt{GuiController.restoreBackup(Path)},\\
+			\texttt{Startup.startupScan(Path)}
+		\item[Use cases:] \hfill \\
+			\texttt{Startup}, \texttt{Create file}, \texttt{Rename file},
+			\texttt{Modify file}, \texttt{Revert revision},\\
+			\texttt{Change backup directory}
+	\end{description} 	      
+	\item[Precondition:] \texttt{file} exists
+	\item[Postconditions:] \texttt{file} will be copied to the \texttt{destinationFolder}. If \texttt{destinationFolder} does not exist, it will be created. Any non-existant parent folders up to \texttt{destinationFolder} will be created.\\
+	Any existed file will be overwritten.
 \end{description}
 
 \vspace{0.75cm}
 
 \noindent{\textbf{\texttt{FileHistory.storeRevision(Path file, Path diff, long filesize, long delta)}}}
 \begin{description}
-\item[Cross references:] \texttt{FileChangeHandlers.handleModifiedFiles()}, \texttt{FileChangeHandlers.}
-\texttt{handleRenamedFiles()}, \texttt{GuiController.revertRevision(Path, long)}
-\item[Precondition:] \texttt{file} and \texttt{diff} exist
-\item[Postconditions:] A row is inserted into the database containing information about the revision. In addition to the path of the file, the contents of the diff, the file size, and the delta (change in file size), the time will also be stored.
+	\item[Cross references:] \hfill \vspace{-4ex}  \\
+		\begin{description} 
+		\item[Operation contracts:] \hfill \\
+			\texttt{FileChangeHandlers.handleModifiedFiles()},\\
+			\texttt{FileChangeHandlers.handleRenamedFiles()},\\
+			\texttt{GuiController.revertRevision(Path, long)}
+		\item[Use cases:] \hfill \\
+			\texttt{Startup}, \texttt{Create file}, \texttt{Rename file},
+			\texttt{Modify file}
+	\end{description}
+	\item[Precondition:] \texttt{file} and \texttt{diff} exist
+	\item[Postconditions:] A row is inserted into the database containing information about the revision. In addition to the path of the file, the contents of the diff, the file size, and the delta (change in file size), the time will also be stored.
 \end{description}
 
-\todonote{Revise these. We only got a 7/10 here last time. What can we improve?}
+\todonote{Revised by Da. References to use cases are added. Anyone would like to check again about all those?}
 
 \subsection{Obtaining user feedback}
 Most of our user-feedback stems from heavy testing. We have found several bugs by combining manual testing with logging. Features are also prioritized by user feedback. In version 1.0, for example, we had no support for binary revisions. They were backed up, but not revisioned. This was one of the biggest limitations at the time, and reflected by user feedback. In version 2.0, we introduced support for these binary revisions. \\
@@ -662,13 +740,13 @@ The following table breaks up the development of this milestone by group member.
    & 2.5. Glossary & Hoffert(0.25h) &  \\ \hline
    & 2.6. Supplementary specification & Hoffert(0.25h) &  \\ \hline
    & 2.7. System sequence diagrams &  &  \\ \hline
-   & 2.8. Operation contracts & Hoffert(1.5h) &  \\ \hline
+   & 2.8. Operation contracts & Hoffert(1.5h)\newline Tao(1.5h) & \newline References of use cases  \\ \hline
    & 2.9. Obtaining user feedback & Hoffert(0.25h) &  \\ \hline
   3. & Updated design and unit testing &  &  \\ \hline
    & 3.1. System operations & Hoffert(0.25h) &  \\ \hline
    & 3.2. Sequence diagrams &  &  \\ \hline
    & 3.3. Class diagram &  &  \\ \hline
-   & 3.4. Unit testing &  &  \\ \hline
+   & 3.4. Unit testing & Tao(4.0h) & Unit test for FileChangeHandler \\ \hline
   4. & Re-engineering &  &  \\ \hline
    & 4.1. Code smells &  &  \\ \hline
    & 4.2. Refactoring & Hoffert(0.25h) &  \\ \hline
@@ -685,11 +763,11 @@ The following table breaks up the development of this milestone by group member.
   8. & Acknowledgements &  &  \\ \hline
    & References &  &  \\ \hline
     & \textbf{Total member contributions} & \textbf{Hoffert} & 5.95h \\ \cline{3-4}
-    &  & \textbf{Tao} & 1.5h \\ \cline{3-4}
+    &  & \textbf{Tao} & 6.0h \\ \cline{3-4}
     &  & \textbf{Butler} & \\ \cline{3-4}
     &  & \textbf{Rizvi} & \\ \cline{3-4}
     &  & \textbf{Alsharif} & \\ \hline
-    & \textbf{Grand total} &  & 5.95h \\ \hline
+    & \textbf{Grand total} &  & 11.95h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
