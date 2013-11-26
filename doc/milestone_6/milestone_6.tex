@@ -207,10 +207,51 @@ Our final result is very similar to the mockups: \\
 \subsection{Summary use cases}
 \textbf{All use cases:}
 \begin{itemize}
-\item Create file
+\item Create file$^{Tao}$
+\begin{enumerate}
+	\item[•] Level \hfill \\
+	Summary
+	\item[•] User \hfill \\
+	Main system
+	\item[•] Goal \hfill \\
+	Add the file created by user to the system and backup it.
+	\item[•] Activities \hfill \\
+	The system receives a file created notice from the watcher module, and put it in file created list.\\
+	The file change handler will process the list:
+	\begin{enumerate}
+		\item[a)]A file with the same name and location exists in the system: 
+		\hfill \\
+		The system will treat the file as a modified file, and make a diff  file for it.
+
+		\item[b)]No file with the same name and location exists in the system: 
+		\hfill \\
+		The system just simply copies the file into the backup folder. Then a new record will be added in database stating a new file added.
+	\end{enumerate}
+	\item[•] Quality \hfill \\
+	This is a main use case in the system and must work to a very high standard.
+	\item[•] Version \hfill \\
+	26 November 2013	
+\end{enumerate}
+	
 \item Create folder
 \item Modify file
-\item Rename file
+\item Rename file$^{Tao}$
+\begin{enumerate}
+	\item[•] Level \hfill \\
+	Summary
+	\item[•] User \hfill \\
+	Main system
+	\item[•] Goal \hfill \\
+	Reflect the effect of renaming a file.
+	\item[•] Activities \hfill \\
+	The system receives a file renamed notice from the watcher module, and put it in file renamed list.\\
+	The file change handler will process the list: \\
+	The system will either make a diff file or copy the file to backup folder.
+	\item[•] Quality \hfill \\
+	This is a main use case in the system and must work to a very high standard.
+	\item[•] Version \hfill \\
+	26 November 2013	
+\end{enumerate}
 \item Rename folder
 \item Delete file
 \item Delete folder
