@@ -30,6 +30,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import cmpt370.fbms.Errors;
+import cmpt370.fbms.FileOp;
 import cmpt370.fbms.GuiController;
 import cmpt370.fbms.Main;
 
@@ -113,7 +114,7 @@ class MainMenu extends JMenuBar
 			public void actionPerformed(ActionEvent e)
 			{
 				RevisionDialog revisionWindow = new RevisionDialog(
-						MainFrame.getInstance().selectedFile);
+						FileOp.convertPath(MainFrame.getInstance().selectedFile));
 				revisionWindow.setLocationRelativeTo(MainFrame.getInstance());
 				revisionWindow.setModalityType(ModalityType.APPLICATION_MODAL);
 				revisionWindow.setVisible(true);
