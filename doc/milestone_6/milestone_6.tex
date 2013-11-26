@@ -298,7 +298,44 @@ Our final result is very similar to the mockups: \\
 \todonote{Need 2 summary use cases per group member. Adapt from M4.}
 
 \subsection{Fully-dressed use cases}
-
+\subsubsection{Create File$^{Tao}$}
+\begin{description}
+	\item[] \textbf{Scope} \hfill \\
+		FBMS
+	\item[] \textbf{Level} \hfill \\
+		User goal
+	\item[] \textbf{Primary actor} \hfill \\
+		Main system
+	\item[] \textbf{Stakeholders and interests} \hfill \\
+		User: Want this new created file is automatically backed up.
+	\item[] \textbf{Preconditions} \hfill \\
+		The Watcher module is running normally.\\
+		There is enough space in backup folder.\\
+		System has read access to the newly created file.
+		System has write access to backup folder.
+	\item[] \textbf{Success Guarantee} \hfill \\
+		The newly created file is backed up.\\
+		Records are added in database.\\
+		The history of this file is accessible from GUI.
+	\item[] \textbf{Main Success scenario} \hfill \vspace{-4ex} \\
+	\begin{itemize}
+		\item[(1)] The system received a file created notice, and put it in file created list.
+		\item[(2)] The system determines whether a file with the same name and location has been existed in the backup folder.
+		\item[(3a)] If so, the system treated this file as a modified file.\\
+					Remove this file form file create list. Add it to file modified list.\\
+					Make a diff file for this file.
+		\item[(3b)] If not, copy this file to backup folder.
+		\item[(4)] Add a record in database.
+	\end{itemize}
+	\item[] \textbf{Extensions} \hfill \\
+		The file will be locked when being copied to backup folder.
+	\item[] \textbf{Special Requirements}\hfill \\
+		Privilege is possible required.
+	\item[] \textbf{Technology and Data Variations List}\hfill \\
+		The program flow changes based on whether a file with the same name and location has been existed in the system. If it exists, system will do additional steps to ensure no wrong overwriting occurs. If not, system will do it in regular way.
+	\item[] \textbf{Frequency of Occurrence}\hfill \\
+		Every time a new file is created in live folder.
+\end{description}
 \todonote{Need 1 fully dressed use case per group member. Adapt from M4.}
 
 \subsection{Use case diagram}
@@ -734,7 +771,7 @@ The following table breaks up the development of this milestone by group member.
    & 1.8. Low fidelity prototypes & Hoffert(0.25h) &  \\ \hline
   2. & Requirements and early design &  &  \\ \hline
    & 2.1. Summary use cases & Hoffert(0.1h)\newline Tao(1.5h) &  \\ \hline
-   & 2.2. Fully-dressed use cases &  &  \\ \hline
+   & 2.2. Fully-dressed use cases & Tao(0.5h) & Adapted to current design. \\ \hline
    & 2.3. Use case diagram & Tao(0.5h) &  \\ \hline
    & 2.4. Domain model &  &  \\ \hline
    & 2.5. Glossary & Hoffert(0.25h) &  \\ \hline
