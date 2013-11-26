@@ -15,6 +15,8 @@ public class TesterMainSuite
 		TestResult result = new TestResult();
 		ts.addTestSuite(TesterFileOp.class);
 		ts.addTestSuite(TesterServices.class);
+		ts.addTestSuite(TesterFileChangeHandler.class);
+		ts.addTestSuite(TesterServices.class);
 		ts.run(result);
 		System.out.println("------\n" + "Test result\n" + "------");
 		System.out.println("All tests succeed: " + result.wasSuccessful());
