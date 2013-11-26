@@ -628,7 +628,18 @@ Another area where feedback was crucial was in the GUI development. We had to ai
 \todonote{Done by Mike}
 
 \subsection{Unit testing}
-\todonote{Done by Da}
+
+\hspace{1em} The test file is in /trunk/main/src/cmpt370/fbms/test. TesterMainSuite.java is the test suite of the project.
+\par
+The sample testing data is automatically created by test cases.\par
+JUnit is also used in testing other modules, except the GUI modules, since the GUI modules are meant to be looked fine and no fault.
+\par
+TTD is used while developing FileOp.  While developing, it decreased the weight of the class.
+\par
+JUnit is a very powetful testing tool. It helps to avoid asserting in source code other than the test case, keeping the code clean. The setUp() and tearDown() eliminates the need to create and delete test samples, keeping the svn folder clean.
+\par
+In all, JUnit is powerful to test base parts for a project. However, for GUI parts, we still need to review them by eyes.
+
 
 \section{Re-engineering}
 
@@ -788,7 +799,7 @@ The following table breaks up the development of this milestone by group member.
    & 2.3. Use case diagram & Tao(0.5h) &  \\ \hline
    & 2.4. Domain model &  &  \\ \hline
    & 2.5. Glossary & Hoffert(0.25h) &  \\ \hline
-   & 2.6. Supplementary specification & Hoffert(0.25h) \newline Tao(0.4h) &  \\ \hline
+   & 2.6. Supplementary specification & Hoffert(0.25h) \newline Tao(0.5h) &  \\ \hline
    & 2.7. System sequence diagrams &  &  \\ \hline
    & 2.8. Operation contracts & Hoffert(1.5h)\newline Tao(1.5h) & \newline References of use cases  \\ \hline
    & 2.9. Obtaining user feedback & Hoffert(0.25h) &  \\ \hline
@@ -796,7 +807,7 @@ The following table breaks up the development of this milestone by group member.
    & 3.1. System operations & Hoffert(0.25h) &  \\ \hline
    & 3.2. Sequence diagrams &  &  \\ \hline
    & 3.3. Class diagram &  &  \\ \hline
-   & 3.4. Unit testing & Tao(4.0h) & Unit test for FileChangeHandler \\ \hline
+   & 3.4. Unit testing & Tao(0.5h) &  \\ \hline
   4. & Re-engineering &  &  \\ \hline
    & 4.1. Code smells &  &  \\ \hline
    & 4.2. Refactoring & Hoffert(0.25h) &  \\ \hline
@@ -813,11 +824,11 @@ The following table breaks up the development of this milestone by group member.
   8. & Acknowledgements &  &  \\ \hline
    & References &  &  \\ \hline
     & \textbf{Total member contributions} & \textbf{Hoffert} & 5.95h \\ \cline{3-4}
-    &  & \textbf{Tao} & 6.0h \\ \cline{3-4}
+    &  & \textbf{Tao} & 4.5h \\ \cline{3-4}
     &  & \textbf{Butler} & \\ \cline{3-4}
     &  & \textbf{Rizvi} & \\ \cline{3-4}
     &  & \textbf{Alsharif} & \\ \hline
-    & \textbf{Grand total} &  & 11.95h \\ \hline
+    & \textbf{Grand total} &  & 10.45h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
