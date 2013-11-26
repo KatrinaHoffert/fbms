@@ -383,7 +383,20 @@ Our final result is very similar to the mockups: \\
 \todonote{Done by Hattan. Adapt from M4. Mention some of the checks in file change handlers.}
 
 \subsubsection{Supportability}
-\todonote{Done by Da. Adapt from M4. Mention usage of system L and F, AA.}
+\begin{description}
+	\item[•] \textbf{OS Compatibility} \hfill \\
+	To adapt different OSes, we are storing a relative path in database. It solves the problem of changing backup folder.
+	\item[•] \textbf{Logging} \hfill \\
+	Log is provided to diagnose problem when error occurs.\\
+	Through analysing the log it is possible to give out a solution.
+	\item[•] \textbf{Import from old backup} \hfill \\
+	It is possible to import backups from an old backup folder.\\
+	This function is provided in first run wizard.
+	\item[•] \textbf{Configuration} \hfill \\
+	Live folder and backup folder could be changed.
+\end{description}
+
+
 
 \subsubsection{Third party components}
 The project uses third party components for several areas, allowing the project to be completed in a reasonable span of time, as well as assisting in functionality beyond our current skills. Currently, we use:
@@ -775,7 +788,7 @@ The following table breaks up the development of this milestone by group member.
    & 2.3. Use case diagram & Tao(0.5h) &  \\ \hline
    & 2.4. Domain model &  &  \\ \hline
    & 2.5. Glossary & Hoffert(0.25h) &  \\ \hline
-   & 2.6. Supplementary specification & Hoffert(0.25h) &  \\ \hline
+   & 2.6. Supplementary specification & Hoffert(0.25h) \newline Tao(0.4h) &  \\ \hline
    & 2.7. System sequence diagrams &  &  \\ \hline
    & 2.8. Operation contracts & Hoffert(1.5h)\newline Tao(1.5h) & \newline References of use cases  \\ \hline
    & 2.9. Obtaining user feedback & Hoffert(0.25h) &  \\ \hline
