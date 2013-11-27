@@ -450,8 +450,19 @@ Our final result is very similar to the mockups: \\
 \todonote{Done by Michael. Adapt from M4.}
 
 \subsubsection{Interfaces}
-\todonote{Done by Ahsen. Adapt from M4. Add settings dialog, mention the revisions dialog more, other menu bar options.}
-
+The interface consists of the GUI windowing system along with a minimizer tray icon. Closing the GUI minimizes the application to an icon in the system tray. This means that the application does not end simply by pressing the “x” button on the GUI but needs to be shut down from the system tray icon which has an “exit” option for closing the application entirely. We have tried to make the main GUI as simple as possible so that an average user could be able to handle the software. It comprises of a few simple areas namely a table, a toolbar, and a menubar. 
+\\\textbf{Table}: This is used to display the contents of the backup directory. This directory is specified by the user and shows detailed entries of the names of the files or the folder, the sizes, the modified and the created dates as well as the last date it was accessed on and finally the revision size and the number of current revisions. Interactive features of the table include a scrollbar, which the user can use to scroll up and down the list and selection, allowing the user to select a single file at a time. 
+When a folder is selected the table refreshes the contents of the list by generating the contents of the folder. Selecting a file opens up a dialog box with information of the file revisions. Errors are handled by the means of dialog boxes. 
+\\\textbf{Toolbar}: This is located above the table and contains two buttons and a text field. One of the button is an up button enabling the user to navigate out of the current folder. However the button is disabled if the user is already in the backup directory. The second button is the refresh button which refreshes the directory to the latest version. The text field is set to contain the current path of the directory and is also disabled if the user is already in the back up directory. 
+\\\textbf{Menubar}: At the very top is a menubar which consists of a file and a help item. The file item expands to options of: 
+\\\begin{itemize}
+\item \textbf{View revisions}: It works in the same was a double clicking a file (eg, opens the revision dialog box; if no files are selected, do nothing). The dialog has options of view and revert which enables the user to view the revision of the file selected. This gives the information in the form of a JTable which shows the name of the file, its size and the modified size in bytes. The revert reversion removes any changes and changes to the file to the original state.
+\item \textbf{Copy-to}: Creates a dialog for selecting the folder to copy the selected file to. Like review revisions, this cannot be done if no file is selected. 
+Restore all: Prompts the user (with a dialog box) if they're sure they want to continue. Upon approval, the directory is restored to the previous revision. 
+Settings\item \textbf{Settings}: This has a number of interesting options like removing revisions older than a particular number of days, which the user can specify in a text box, and controlling the sizes of the files set for revision.  Furthermore, a user can also enable or disable the scanning of the directories at start-up by the means of a check box. Lastly they can choose whether they want non fatal displayed or not.
+\item \textbf{Exit}: Closes the GUI window. However it can be brought back by clicking on the icon in the system tray. 
+\item \textbf{Help}:The help menu has a single option to display the online help. This opens the website for the software in the users default browser. 
+\end{itemize}
 \subsubsection{Reliability}
 \todonote{Done by Hattan. Adapt from M4. Mention some of the checks in file change handlers.}
 
