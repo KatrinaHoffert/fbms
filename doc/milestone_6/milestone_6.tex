@@ -10,6 +10,9 @@
 \usepackage{amssymb}
 \usepackage{multirow}
 
+%% Clean paragraph spacing
+\usepackage{parskip}
+
 %% Use 1 inch margins
 \usepackage{fullpage}
 
@@ -85,9 +88,9 @@
 
 %% Abstract
 \begin{abstract}
-The \textit{File Backup or Management System}, henceforth referred to as \textbf{FBMS}, is a system for backing up files while maintaining revisions. FBMS monitors the file operations that take place within the folder that the user wants to backup (called the "live directory"). Not only are file changes copied to the specified backup directory, but revisions (the instance of the file at a given time) are stored in a database, allowing the program to restore the file's state from any point of time. \\
+The \textit{File Backup or Management System}, henceforth referred to as \textbf{FBMS}, is a system for backing up files while maintaining revisions. FBMS monitors the file operations that take place within the folder that the user wants to backup (called the "live directory"). Not only are file changes copied to the specified backup directory, but revisions (the instance of the file at a given time) are stored in a database, allowing the program to restore the file's state from any point of time.
 
-FBMS works on all locally accessible drives, including external drives and network drives. The revisioning creates a patch file for plain text, keeping file size down. For binary files, the entire file is stored as the revision. This revisioning ensures not only are the user's files safe, but erroneous changes can be reverted. \\
+FBMS works on all locally accessible drives, including external drives and network drives. The revisioning creates a patch file for plain text, keeping file size down. For binary files, the entire file is stored as the revision. This revisioning ensures not only are the user's files safe, but erroneous changes can be reverted.
 
 FBMS has a focus on ease of use. A wizard guides the user through the setup, where the backup and live directories are chosen. With that complete, the program will run in the background and needs no user interaction until the use desires to restore or view files from the backup.
 
@@ -113,9 +116,9 @@ FBMS has a focus on ease of use. A wizard guides the user through the setup, whe
 \section{Introduction}
 
 \subsection{System description}
-FBMS is an automated backup and revision program. The user specifies a folder that they want to keep backed up (the "live directory") and the location to store the backup (the "backup directory"). The program automatically copies changes in the live directory to the backup directory. Revisions are automatically created by creating "patch" files for every change. \\
+FBMS is an automated backup and revision program. The user specifies a folder that they want to keep backed up (the "live directory") and the location to store the backup (the "backup directory"). The program automatically copies changes in the live directory to the backup directory. Revisions are automatically created by creating "patch" files for every change.
 
-Thus, not only is the user's data backed up, but older versions of the data are also backed up. FBMS can be thought of as a hybrid of a local-only Dropbox\cite{dropbox} and a version control system. While it's not as customizable as a version control system like SVN\cite{svn} or git\cite{git}, FBMS is easy to use and runs in the background without the need for user interaction. \\
+Thus, not only is the user's data backed up, but older versions of the data are also backed up. FBMS can be thought of as a hybrid of a local-only Dropbox\cite{dropbox} and a version control system. While it's not as customizable as a version control system like SVN\cite{svn} or git\cite{git}, FBMS is easy to use and runs in the background without the need for user interaction.
 
 FBMS backs up and revisions both plain text and binary files. A maximum file size to backup can be set. It's also possible to configure the system to remove revisions older than a certain date.
 
@@ -147,17 +150,20 @@ FBMS differs itself from other backup systems in how it doesn't just backup file
 \end{enumerate}
 
 \subsection{User scenarios}
-\textbf{A user wants to backup files:} \\
-\noindent{The user will start up the software. The first start wizard will guide the user through setting the live and backup directories. With that done, the system will perform a startup scan, grabbing any files not already in the backup directory. With this done, the software can monitor the file system for changes and act accordingly.} \\
+\textbf{A user wants to backup files:}
 
-\noindent{\textbf{User has lost the live directory:}} \\
-\noindent{User can reinstall the software and specify the existing backup directory. From the GUI, the user can restore the entire backup directory and can set the live directory again.} \\
+\noindent{The user will start up the software. The first start wizard will guide the user through setting the live and backup directories. With that done, the system will perform a startup scan, grabbing any files not already in the backup directory. With this done, the software can monitor the file system for changes and act accordingly.}
 
-\noindent{\textbf{User has accidentally deleted a file:}} \\
-\noindent{The user can bring up the user interface for our program. They then select the file in question which brings up a list of prior revisions that have been stored. The user can then select the revision they desire to restore and the program will restore it to its directory.} \\
+\noindent{\textbf{User has lost the live directory:}}
 
-\noindent{\textbf{User wants to minimize file sizes:}} \\
-\noindent{The program offers two features to reduce the storage impact of the system. One is to set the maximum file size that is revisioned (defaults to 5 MB). Files larger than this will be backed up, but will not have versions stored. Another is to enable the trim features (disabled by default). Trim will remove all revisions older than a specified number of days. Both of these features are configured in the settings dialog, accessed via the GUI menus.} \\
+\noindent{User can reinstall the software and specify the existing backup directory. From the GUI, the user can restore the entire backup directory and can set the live directory again.}
+
+\noindent{\textbf{User has accidentally deleted a file:}}
+
+\noindent{The user can bring up the user interface for our program. They then select the file in question which brings up a list of prior revisions that have been stored. The user can then select the revision they desire to restore and the program will restore it to its directory.}
+
+\noindent{\textbf{User wants to minimize file sizes:}}
+\noindent{The program offers two features to reduce the storage impact of the system. One is to set the maximum file size that is revisioned (defaults to 5 MB). Files larger than this will be backed up, but will not have versions stored. Another is to enable the trim features (disabled by default). Trim will remove all revisions older than a specified number of days. Both of these features are configured in the settings dialog, accessed via the GUI menus.}
 
 \subsection{Scope document}
 \begin{itemize}
@@ -175,29 +181,29 @@ FBMS differs itself from other backup systems in how it doesn't just backup file
 \end{itemize}
 
 \subsection{Project plan / Rough estimates}
-Our plan for our project was to take a concurrent engineering approach with some agile methods, such as SCRUM-like meetings and iterative design. We split the project into stages based on the estimated priority of certain features. For example, the file patching was a high priority feature, since the system revolved that feature. With priority figured out, the project was further subdivided amongst our group members. \\
+Our plan for our project was to take a concurrent engineering approach with some agile methods, such as SCRUM-like meetings and iterative design. We split the project into stages based on the estimated priority of certain features. For example, the file patching was a high priority feature, since the system revolved that feature. With priority figured out, the project was further subdivided amongst our group members.
 
-For the most part, group members worked alone. The assignment of components was made to try and balance familiarity with diversity. We wanted the group members to focus on some areas, allowing them to become proficient at that area. For example, Butler focused on the file change handlers, while Rizvi focused on the GUI. But to prevent the group members from being too specific (and thus blind to the other areas of the project), we also diversified our sections. For example, Butler also worked with the database and Rizvi also worked with the data retriever. \\
+For the most part, group members worked alone. The assignment of components was made to try and balance familiarity with diversity. We wanted the group members to focus on some areas, allowing them to become proficient at that area. For example, Butler focused on the file change handlers, while Rizvi focused on the GUI. But to prevent the group members from being too specific (and thus blind to the other areas of the project), we also diversified our sections. For example, Butler also worked with the database and Rizvi also worked with the data retriever.
 
-We only had initial estimates for version 1.0 of the program, which was our base goal. In that, we estimated approximately 25 hours of work per group member for a total of 125 man hours of work on the project. \\
+We only had initial estimates for version 1.0 of the program, which was our base goal. In that, we estimated approximately 25 hours of work per group member for a total of 125 man hours of work on the project.
 
 However, we ended up adding many features to our project that were not originally planned. For example, we had not allocated time for the first run wizard, initially. These extra features caused the actual time spent on the project to well exceed the initial estimate. The rough estimate was a slight overestimate for the initially planned features.
 
 \subsection{User involvement plan}
-We designed the system with rational uses in mind. Thus, we are not just the system's creators, but also the system's users. This eliminates the need for a dedicated user. Planning was done both individually and together, collaborating on ideas for both the system's use cases and interior workings. \\
+We designed the system with rational uses in mind. Thus, we are not just the system's creators, but also the system's users. This eliminates the need for a dedicated user. Planning was done both individually and together, collaborating on ideas for both the system's use cases and interior workings.
 
 The time used from these users was heavily invested in the planning stage, going through several thousand words of planning. We also used user feedback heavily in revising the project. We made many changes to the project based on user feedback, including better display of errors, a wizard for the first run, and a greater deal of configuration.
 
 \subsection{Low fidelity prototypes}
-Our initial prototype was created by editing images of windows. With that, we obtained these early prototype: \\
+Our initial prototype was created by editing images of windows. With that, we obtained these early prototype:
 
-\noindent{\includegraphics[width=\linewidth]{images/concept.png}} \\
+\noindent{\includegraphics[width=\linewidth]{images/concept.png}}
 
-\noindent{\includegraphics[width=\linewidth]{images/concept2.png}} \\
+\noindent{\includegraphics[width=\linewidth]{images/concept2.png}}
 
-Our final result is very similar to the mockups: \\
+Our final result is very similar to the mockups:
 
-\noindent{\includegraphics[width=\linewidth]{images/real.png}} \\
+\noindent{\includegraphics[width=\linewidth]{images/real.png}}
 
 \noindent{\includegraphics[width=\linewidth]{images/real2.png}}
 
@@ -451,11 +457,15 @@ Our final result is very similar to the mockups: \\
 
 \subsubsection{Interfaces}
 The interface consists of the GUI windowing system along with a minimizer tray icon. Closing the GUI minimizes the application to an icon in the system tray. This means that the application does not end simply by pressing the “x” button on the GUI but needs to be shut down from the system tray icon which has an “exit” option for closing the application entirely. We have tried to make the main GUI as simple as possible so that an average user could be able to handle the software. It comprises of a few simple areas namely a table, a toolbar, and a menubar. 
-\\\textbf{Table}: This is used to display the contents of the backup directory. This directory is specified by the user and shows detailed entries of the names of the files or the folder, the sizes, the modified and the created dates as well as the last date it was accessed on and finally the revision size and the number of current revisions. Interactive features of the table include a scrollbar, which the user can use to scroll up and down the list and selection, allowing the user to select a single file at a time. 
+
+\textbf{Table}: This is used to display the contents of the backup directory. This directory is specified by the user and shows detailed entries of the names of the files or the folder, the sizes, the modified and the created dates as well as the last date it was accessed on and finally the revision size and the number of current revisions. Interactive features of the table include a scrollbar, which the user can use to scroll up and down the list and selection, allowing the user to select a single file at a time. 
 When a folder is selected the table refreshes the contents of the list by generating the contents of the folder. Selecting a file opens up a dialog box with information of the file revisions. Errors are handled by the means of dialog boxes. 
-\\\textbf{Toolbar}: This is located above the table and contains two buttons and a text field. One of the button is an up button enabling the user to navigate out of the current folder. However the button is disabled if the user is already in the backup directory. The second button is the refresh button which refreshes the directory to the latest version. The text field is set to contain the current path of the directory and is also disabled if the user is already in the back up directory. 
-\\\textbf{Menubar}: At the very top is a menubar which consists of a file and a help item. The file item expands to options of: 
-\\\begin{itemize}
+
+\textbf{Toolbar}: This is located above the table and contains two buttons and a text field. One of the button is an up button enabling the user to navigate out of the current folder. However the button is disabled if the user is already in the backup directory. The second button is the refresh button which refreshes the directory to the latest version. The text field is set to contain the current path of the directory and is also disabled if the user is already in the back up directory. 
+
+\textbf{Menubar}: At the very top is a menubar which consists of a file and a help item. The file item expands to options of: 
+
+\begin{itemize}
 \item \textbf{View revisions}: It works in the same was a double clicking a file (eg, opens the revision dialog box; if no files are selected, do nothing). The dialog has options of view and revert which enables the user to view the revision of the file selected. This gives the information in the form of a JTable which shows the name of the file, its size and the modified size in bytes. The revert reversion removes any changes and changes to the file to the original state.
 \item \textbf{Copy-to}: Creates a dialog for selecting the folder to copy the selected file to. Like review revisions, this cannot be done if no file is selected. 
 Restore all: Prompts the user (with a dialog box) if they're sure they want to continue. Upon approval, the directory is restored to the previous revision. 
@@ -463,6 +473,7 @@ Settings\item \textbf{Settings}: This has a number of interesting options like r
 \item \textbf{Exit}: Closes the GUI window. However it can be brought back by clicking on the icon in the system tray. 
 \item \textbf{Help}:The help menu has a single option to display the online help. This opens the website for the software in the users default browser. 
 \end{itemize}
+
 \subsubsection{Reliability}
 \todonote{Done by Hattan. Adapt from M4. Mention some of the checks in file change handlers.}
 
@@ -480,8 +491,6 @@ Settings\item \textbf{Settings}: This has a number of interesting options like r
 	Live folder and backup folder could be changed.
 \end{description}
 
-
-
 \subsubsection{Third party components}
 The project uses third party components for several areas, allowing the project to be completed in a reasonable span of time, as well as assisting in functionality beyond our current skills. Currently, we use:
 
@@ -493,7 +502,7 @@ The project uses third party components for several areas, allowing the project 
 \item \textbf{Java MIME Magic}: This library is used to maximize our ability to detect the difference between binary and text files (since they are revisioned differently).
 \end{itemize}
 
-We originally planned to use Java-diff-utils as the patching engine, but the library appears to be either bugged or the documentation is incorrect. We switched to the diff match patch library instead, which performed all the functionality we need and was better documented. \\
+We originally planned to use Java-diff-utils as the patching engine, but the library appears to be either bugged or the documentation is incorrect. We switched to the diff match patch library instead, which performed all the functionality we need and was better documented.
 
 These components integrate with our program and were chosen with efficiency in mind.
 
@@ -674,7 +683,7 @@ These components integrate with our program and were chosen with efficiency in m
 \todonote{Revised by Da. References to use cases are added. Anyone would like to check again about all those?}
 
 \subsection{Obtaining user feedback}
-Most of our user-feedback stems from heavy testing. We have found several bugs by combining manual testing with logging. Features are also prioritized by user feedback. In version 1.0, for example, we had no support for binary revisions. They were backed up, but not revisioned. This was one of the biggest limitations at the time, and reflected by user feedback. In version 2.0, we introduced support for these binary revisions. \\
+Most of our user-feedback stems from heavy testing. We have found several bugs by combining manual testing with logging. Features are also prioritized by user feedback. In version 1.0, for example, we had no support for binary revisions. They were backed up, but not revisioned. This was one of the biggest limitations at the time, and reflected by user feedback. In version 2.0, we introduced support for these binary revisions.
 
 Another area where feedback was crucial was in the GUI development. We had to aim to make the GUI both natural and easy to use. For example, the table rows are activated via double clicking or the enter key. The default behavior of the enter key in a table, however, was to go to the next line, which is counter-intuitive for a file browser, and was overridden.
 
@@ -713,15 +722,15 @@ Another area where feedback was crucial was in the GUI development. We had to ai
 
 \subsection{Unit testing}
 
-\hspace{1em} The test file is in /trunk/main/src/cmpt370/fbms/test. TesterMainSuite.java is the test suite of the project.
-\par
+The test file is in /trunk/main/src/cmpt370/fbms/test. TesterMainSuite.java is the test suite of the project.
+
 The sample testing data is automatically created by test cases.\par
 JUnit is also used in testing other modules, except the GUI modules, since the GUI modules are meant to be looked fine and no fault.
-\par
+
 TTD is used while developing FileOp.  While developing, it decreased the weight of the class.
-\par
+
 JUnit is a very powetful testing tool. It helps to avoid asserting in source code other than the test case, keeping the code clean. The setUp() and tearDown() eliminates the need to create and delete test samples, keeping the svn folder clean.
-\par
+
 In all, JUnit is powerful to test base parts for a project. However, for GUI parts, we still need to review them by eyes.
 
 
@@ -756,9 +765,9 @@ In all, JUnit is powerful to test base parts for a project. However, for GUI par
 \todonote{Everyone needs to point out at least one instance of refactoring, file and lines, why we did it, etc. Take a look at my objectification changes from revision 436 to 448 if you need ideas.}
 
 \subsection{Gang of Four design patterns}
-We used several Gang of Four design patterns in our project. One of the most notable is the use of a singleton for the \texttt{DbConnection} class. We used a singleton here because it's very slow to create and close connections at whim. The SQLite database manager we used supports serialized access, so the singleton is thread-safe. \\
+We used several Gang of Four design patterns in our project. One of the most notable is the use of a singleton for the \texttt{DbConnection} class. We used a singleton here because it's very slow to create and close connections at whim. The SQLite database manager we used supports serialized access, so the singleton is thread-safe.
 
-The \texttt{FileOp} class, which performs file operations, is a facade. It provides easier access to modifications of the Java \texttt{Files} class and the libraries that we used. This makes the parameters and return values easier to work with and reduces the code present in other files. For example, we could copy a file with \texttt{Files.copy()}, but that doesn't handle directories well. \texttt{FileOp.copy()} cleanly handles both directories and files. It also allows us to just specify the directory to copy to, not the destination file name. \\
+The \texttt{FileOp} class, which performs file operations, is a facade. It provides easier access to modifications of the Java \texttt{Files} class and the libraries that we used. This makes the parameters and return values easier to work with and reduces the code present in other files. For example, we could copy a file with \texttt{Files.copy()}, but that doesn't handle directories well. \texttt{FileOp.copy()} cleanly handles both directories and files. It also allows us to just specify the directory to copy to, not the destination file name.
 
 Or for another example, \texttt{isPlainText()} provides a simple way to get the MIME type from Java MIME magic and determine if the MIME type starts with ``text''. Without the use of \texttt{FileOp}, we'd be repeating a large block of code that is not as easily understood as ``is plain text''.
 
@@ -771,7 +780,7 @@ In regards to naming conventions, our code roughly follows the \textit{Code Conv
 The FBMS project aims to be self documenting where possible. All functions and classes, however, are commented to explain their use, parameters, and return types.
 
 \subsection{Pretty-printing of the source}
-Instead of using some additional tool for formatting the source, we use the formatter built into Eclipse\cite{eclipse}. We configured the formatter to use our agreed upon conventions (a modified version of the \textit{Code Conventions for the Java language}\cite{conventions}) upon save. \\
+Instead of using some additional tool for formatting the source, we use the formatter built into Eclipse\cite{eclipse}. We configured the formatter to use our agreed upon conventions (a modified version of the \textit{Code Conventions for the Java language}\cite{conventions}) upon save.
 
 Some of the differences include using tabs instead of spaces (for numerous reasons including consistency between editors and ease of use) and having braces start on a new line (making the opening braces easier to see).
 
@@ -783,27 +792,26 @@ Some of the differences include using tabs instead of spaces (for numerous reaso
 \vspace{-20pt}
 \begin{center}
 \includegraphics[width=0.48\textwidth]{images/settings.png}
-\vspace{-15pt}
 \end{center}
 \footnotesize{The settings dialog tries to phrase the options in a naturally readable manner and uses tooltips.}
 \end{wrapfigure}
 
-We designed FBMS to be easy to use and intuitive. The bulk of the user accessible portion of the program (ie, the GUI) is largely a file browser, so we looked at existing file browsers (such as Windows Explorer\cite{explorer} and Dolphin\cite{dolphin}) for design patterns. In particular, we changed the ``default'' behavior of the enter key in the file browser's table to activate the row instead of go to the next row. Similarly, rows are selected by single click and activated by double click. \\
+We designed FBMS to be easy to use and intuitive. The bulk of the user accessible portion of the program (ie, the GUI) is largely a file browser, so we looked at existing file browsers (such as Windows Explorer\cite{explorer} and Dolphin\cite{dolphin}) for design patterns. In particular, we changed the ``default'' behavior of the enter key in the file browser's table to activate the row instead of go to the next row. Similarly, rows are selected by single click and activated by double click.
 
-In a number of places, we needed to prompt the user for paths (such as when choosing the live or backup directory). To make this more convenient, we supplied file chooser dialogs that only showed folders. We also skinned these dialogs to use the system dialog. So Windows users will see a Window-themed file chooser while OS X users would see an OS X themed file chooser. \\
+In a number of places, we needed to prompt the user for paths (such as when choosing the live or backup directory). To make this more convenient, we supplied file chooser dialogs that only showed folders. We also skinned these dialogs to use the system dialog. So Windows users will see a Window-themed file chooser while OS X users would see an OS X themed file chooser.
 
-The first run wizard was also intended to make the program much more usable. Instead of filling a configuration file or such, the user is guided through choosing the live and backup directories (or importing an existing backup) via a GUI wizard. This is not only more user friendly, but presents the opportunity to tell the user a bit about the program and how to use it. \\
+The first run wizard was also intended to make the program much more usable. Instead of filling a configuration file or such, the user is guided through choosing the live and backup directories (or importing an existing backup) via a GUI wizard. This is not only more user friendly, but presents the opportunity to tell the user a bit about the program and how to use it.
 
-To make the revision dialog more friendly, we added color based on whether a revision added or removed bytes. This dialog was inspired by the history pages of Wikipedia\cite{wikipedia}. \\
+To make the revision dialog more friendly, we added color based on whether a revision added or removed bytes. This dialog was inspired by the history pages of Wikipedia\cite{wikipedia}.
 
 Finally, we included an option in the program's menu that opens up the documentation in their web browser.
 
 \subsection{Complete implementation}
-We have included the implementation in ``release'' and ``development'' versions. \\
+We have included the implementation in ``release'' and ``development'' versions.
 
-The release version is pre-built and easy to use: just run the batch file (Windows) or shell script (Linux, OS X). This version is intended to allow the program to be run in a straightforward manner (allowing easy testing) and with optimal performance. \\
+The release version is pre-built and easy to use: just run the batch file (Windows) or shell script (Linux, OS X). This version is intended to allow the program to be run in a straightforward manner (allowing easy testing) and with optimal performance.
 
-The development version does not contain pre-built binaries, but has the full source code available. To compile this, you will need Eclipse\cite{eclipse} or Ant\cite{ant}. This version is intended to allow the source code to be examined. Running the development program will be slower than the release version, since debugging is enabled and logging uses slower, more exact methods. \\
+The development version does not contain pre-built binaries, but has the full source code available. To compile this, you will need Eclipse\cite{eclipse} or Ant\cite{ant}. This version is intended to allow the source code to be examined. Running the development program will be slower than the release version, since debugging is enabled and logging uses slower, more exact methods.
 
 The release version is located in the \texttt{release} folder, relative to the location of this file. The development version is located in the \texttt{development} folder.
 
@@ -825,15 +833,15 @@ You can opt to start from scratch (specifying a backup and live directory), or i
 
 \includegraphics{images/3-oldBackup.png}
 
-Once folders are chosen and the wizard is completed, the program will run quietly in the background. An icon will be created on the system tray. Double clicking this icon will open the program's interface. \\
+Once folders are chosen and the wizard is completed, the program will run quietly in the background. An icon will be created on the system tray. Double clicking this icon will open the program's interface.
 
 \includegraphics{images/4-systemTray.png}
 
-The interface shows a special file browser, which displays the contents of the backup directory along with information such as the number of revisions stored. This file browser can be navigated with the keyboard or a mouse, and has functionality similar to other file browsers, such as Windows Explorer or Dolphin. It is, however, a specialized browser intended only to be able to restore files and view revisions. \\
+The interface shows a special file browser, which displays the contents of the backup directory along with information such as the number of revisions stored. This file browser can be navigated with the keyboard or a mouse, and has functionality similar to other file browsers, such as Windows Explorer or Dolphin. It is, however, a specialized browser intended only to be able to restore files and view revisions.
 
 \includegraphics[width=\textwidth]{images/5-mainWindow.png}
 
-Double clicking a file will open the revisions dialog, displaying a list of past revisions (if there are any). These revisions can be viewed (which opens the revision in your default program) or reverted (which sets that file in your live directory to the specified revision). You can also view the changes introduced by a revision, which will open in your default web browser. \\
+Double clicking a file will open the revisions dialog, displaying a list of past revisions (if there are any). These revisions can be viewed (which opens the revision in your default program) or reverted (which sets that file in your live directory to the specified revision). You can also view the changes introduced by a revision, which will open in your default web browser.
 
 \includegraphics[width=\textwidth]{images/6-revisionDialog.png}
 
@@ -858,7 +866,7 @@ The settings dialog is accessed under the File menu of the GUI. It provides a fe
 \todonote{Test this manual on someone outside our group}
 
 \section{Project plan, budget justification, and performance evaluation}
-The following table breaks up the development of this milestone by group member. The time spent developing past milestones where contents was copied to this milestone is \textbf{not} included in this table. \\
+The following table breaks up the development of this milestone by group member. The time spent developing past milestones where contents was copied to this milestone is \textbf{not} included in this table.
 
 %% The first column is a tiny little column for the section number.
 %% The next column is the actual section name and subsection numbers.
@@ -973,14 +981,14 @@ The next table summarizes the time spent by each member throughout the project (
   \multicolumn{2}{|r|}{\textbf{Total for Alsharif}}  &  & \\ \hline
 \end{longtable}
 
-Our initial estimate focused largely on the ``basics'', the features we absolutely needed. However, we finished those and managed to add many extra features that weren't originally planned. The introduction estimated 150 man hours of work to create the system. The features mentioned in the introduction took 147 man hours including planning, testing, and debugging time, but not including time spent on the milestones. \\
+Our initial estimate focused largely on the ``basics'', the features we absolutely needed. However, we finished those and managed to add many extra features that weren't originally planned. The introduction estimated 150 man hours of work to create the system. The features mentioned in the introduction took 147 man hours including planning, testing, and debugging time, but not including time spent on the milestones.
 
 This indicates that our estimate was very close. If we include the time spent on past milestones (not including this one), the total time comes to over 200 man hours. Another 15 man hours was needed to bring the program up to version 2.0, which consisted entirely of ``extra'' features. 
 
 \todonote{Fill me out, yo!}
 
 \section{Conclusion}
-FBMS is a program that balances ease of use with power. It's geared at those wanting something inbetween the power of version control and the ease of use of online backup solutions. FBMS goes beyond most backup systems to store revisions of files. Monitoring the file system real time allowed efficiency for the system, which focuses on a single folder rather than an entire hard drive. \\
+FBMS is a program that balances ease of use with power. It's geared at those wanting something inbetween the power of version control and the ease of use of online backup solutions. FBMS goes beyond most backup systems to store revisions of files. Monitoring the file system real time allowed efficiency for the system, which focuses on a single folder rather than an entire hard drive.
 
 FBMS is best used for small projects where files change rapidly, where the system's live monitoring comes in handy. FBMS supports multi-drive systems, and works best when the backup and live directory are on different drives, decreasing the risk of losing both at the same time. 
 
