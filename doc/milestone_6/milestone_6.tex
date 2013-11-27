@@ -35,7 +35,7 @@
 %% Custom command to create todo notes. This is a red framed box that contains
 %% wrapped, bold, red text.
 \usepackage{xcolor}
-\newcommand\todonote[1]{\noindent{\color{red}\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\textit\large{\textbf{TODO: #1}}}}}}
+\newcommand\todonote[1]{{\color{red}\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\textit\large{\textbf{TODO: #1}}}}}}
 
 %% Header and footer styles (page number centered at the bottom)
 \usepackage{fancyhdr}
@@ -45,10 +45,6 @@
 %% behavior, remove this line and replace all instances of "longtable"
 %% with "tabular"
 \usepackage{longtable}
-
-%% Don't indent tables (we need every centimeter we can get)
-\let\TAB\tabular
-\renewcommand\tabular{\noindent\TAB}  
 
 \begin{document}
 
@@ -135,14 +131,14 @@ FBMS differs itself from other backup systems in how it doesn't just backup file
 \item User can specify any locally available drive (including external and network drives) to serve as the backup or live directory.
 \end{enumerate}
 
-\noindent{\textbf{A file versioning and backup solution for their files.}}
+\textbf{A file versioning and backup solution for their files.}
 \begin{enumerate}
 \item User can recover deleted/lost files.
 \item User can revert to a prior version of a file.
 \item User can view a revision history of the file.
 \end{enumerate}
 
-\noindent{\textbf{Gives users a lightweight multi-platform software solution.}}
+\textbf{Gives users a lightweight multi-platform software solution.}
 \begin{enumerate}
 \item Able to use this same software on various operating systems due to Java architecture.
 \item Once setup, it runs in the background unobtrusively until needed.
@@ -152,18 +148,19 @@ FBMS differs itself from other backup systems in how it doesn't just backup file
 \subsection{User scenarios}
 \textbf{A user wants to backup files:}
 
-\noindent{The user will start up the software. The first start wizard will guide the user through setting the live and backup directories. With that done, the system will perform a startup scan, grabbing any files not already in the backup directory. With this done, the software can monitor the file system for changes and act accordingly.}
+The user will start up the software. The first start wizard will guide the user through setting the live and backup directories. With that done, the system will perform a startup scan, grabbing any files not already in the backup directory. With this done, the software can monitor the file system for changes and act accordingly.
 
-\noindent{\textbf{User has lost the live directory:}}
+\textbf{User has lost the live directory:}
 
-\noindent{User can reinstall the software and specify the existing backup directory. From the GUI, the user can restore the entire backup directory and can set the live directory again.}
+User can reinstall the software and specify the existing backup directory. From the GUI, the user can restore the entire backup directory and can set the live directory again.
 
-\noindent{\textbf{User has accidentally deleted a file:}}
+\textbf{User has accidentally deleted a file:}
 
-\noindent{The user can bring up the user interface for our program. They then select the file in question which brings up a list of prior revisions that have been stored. The user can then select the revision they desire to restore and the program will restore it to its directory.}
+The user can bring up the user interface for our program. They then select the file in question which brings up a list of prior revisions that have been stored. The user can then select the revision they desire to restore and the program will restore it to its directory.
 
-\noindent{\textbf{User wants to minimize file sizes:}}
-\noindent{The program offers two features to reduce the storage impact of the system. One is to set the maximum file size that is revisioned (defaults to 5 MB). Files larger than this will be backed up, but will not have versions stored. Another is to enable the trim features (disabled by default). Trim will remove all revisions older than a specified number of days. Both of these features are configured in the settings dialog, accessed via the GUI menus.}
+\textbf{User wants to minimize file sizes:}
+
+The program offers two features to reduce the storage impact of the system. One is to set the maximum file size that is revisioned (defaults to 5 MB). Files larger than this will be backed up, but will not have versions stored. Another is to enable the trim features (disabled by default). Trim will remove all revisions older than a specified number of days. Both of these features are configured in the settings dialog, accessed via the GUI menus.
 
 \subsection{Scope document}
 \begin{itemize}
@@ -197,15 +194,15 @@ The time used from these users was heavily invested in the planning stage, going
 \subsection{Low fidelity prototypes}
 Our initial prototype was created by editing images of windows. With that, we obtained these early prototype:
 
-\noindent{\includegraphics[width=\linewidth]{images/concept.png}}
+\includegraphics[width=\linewidth]{images/concept.png}
 
-\noindent{\includegraphics[width=\linewidth]{images/concept2.png}}
+\includegraphics[width=\linewidth]{images/concept2.png}
 
 Our final result is very similar to the mockups:
 
-\noindent{\includegraphics[width=\linewidth]{images/real.png}}
+\includegraphics[width=\linewidth]{images/real.png}
 
-\noindent{\includegraphics[width=\linewidth]{images/real2.png}}
+\includegraphics[width=\linewidth]{images/real2.png}
 
 \todonote{Add linux and mac images of the above cases here (try to get full windows that show off the program well)}
 
@@ -418,7 +415,7 @@ Our final result is very similar to the mockups:
 \todonote{Need 1 fully dressed use case per group member. Adapt from M4.}
 
 \subsection{Use case diagram}
-\noindent{\includegraphics[width=\linewidth]{images/use_cases.png}} \\
+\includegraphics[width=\linewidth]{images/use_cases.png}
 
 \subsection{Domain model}
 \todonote{This one's Michael's}
@@ -531,7 +528,7 @@ These components integrate with our program and were chosen with efficiency in m
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{FileOp.applyPatch(Path currentRevision, Path patchFile)}}}
+\textbf{\texttt{FileOp.applyPatch(Path currentRevision, Path patchFile)}}
 \begin{description}
 	\item[Cross references:] \hfill \vspace{-4ex} \\
 	\begin{description}
@@ -546,7 +543,7 @@ These components integrate with our program and were chosen with efficiency in m
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{DataRetriever.getFolderContents(Path folder)}}}
+\textbf{\texttt{DataRetriever.getFolderContents(Path folder)}}
 \begin{description}
 	\item[Cross references:] \hfill \vspace{-4ex}  \\
 	\begin{description} 
@@ -561,7 +558,7 @@ These components integrate with our program and were chosen with efficiency in m
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{GuiController.displayRevision(Path file, long timestamp)}}}
+\textbf{\texttt{GuiController.displayRevision(Path file, long timestamp)}}
 \begin{description}
 	\item[Cross references:] \hfill \vspace{-4ex}  \\
 	\begin{description} 
@@ -576,7 +573,7 @@ These components integrate with our program and were chosen with efficiency in m
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{GuiController.changeLiveDirectory(Path newDirectory)}}}
+\textbf{\texttt{GuiController.changeLiveDirectory(Path newDirectory)}}
 \begin{description}
 	\item[Cross references:] \hfill \vspace{-4ex}  \\
 		\begin{description} 
@@ -591,7 +588,7 @@ These components integrate with our program and were chosen with efficiency in m
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{Startup.resolveBackupDirectory()}}}
+\textbf{\texttt{Startup.resolveBackupDirectory()}}
 \begin{description}
 	\item[Cross references:] \hfill \vspace{-4ex}  \\
 		\begin{description} 
@@ -606,7 +603,7 @@ These components integrate with our program and were chosen with efficiency in m
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{DbConnection.getFileRevisions(Path file)}}}
+\textbf{\texttt{DbConnection.getFileRevisions(Path file)}}
 	\begin{description}
 	\item[Cross references:] \hfill \vspace{-4ex}  \\
 		\begin{description} 
@@ -624,7 +621,7 @@ These components integrate with our program and were chosen with efficiency in m
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{DbConnection.setConfig(String settingName, String settingValue)}}}
+\textbf{\texttt{DbConnection.setConfig(String settingName, String settingValue)}}
 \begin{description}
 	\item[Cross references:] \hfill \vspace{-4ex}  \\
 		\begin{description} 
@@ -640,7 +637,7 @@ These components integrate with our program and were chosen with efficiency in m
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{FileOp.copy(Path file, Path destinationFolder)}}}
+\textbf{\texttt{FileOp.copy(Path file, Path destinationFolder)}}
 \begin{description}
 	\item[Cross references:] \hfill \vspace{-4ex}  \\
 		\begin{description} 
@@ -664,7 +661,7 @@ These components integrate with our program and were chosen with efficiency in m
 
 \vspace{0.75cm}
 
-\noindent{\textbf{\texttt{FileHistory.storeRevision(Path file, Path diff, long filesize, long delta)}}}
+\textbf{\texttt{FileHistory.storeRevision(Path file, Path diff, long filesize, long delta)}}
 \begin{description}
 	\item[Cross references:] \hfill \vspace{-4ex}  \\
 		\begin{description} 
@@ -1002,13 +999,13 @@ FBMS is best used for small projects where files change rapidly, where the syste
 \item Hattan Alsharif (haa775)
 \end{itemize}
 
-\noindent{\textbf{Some code derived from work by:}}
+\textbf{Some code derived from work by:}
 \begin{itemize}
 \item aioobe <\url{http://stackoverflow.com/users/276052/aioobe}>
 \item erickson <\url{http://stackoverflow.com/users/3474/erickson}>
 \end{itemize}
 
-\noindent{\textbf{Resources:}}
+\textbf{Resources:}
 \begin{itemize}
 \item Program and refresh icons by oxygen (CC-BY-SA 3.0) \\
 \url{http://www.oxygen-icons.org/}
@@ -1018,22 +1015,22 @@ FBMS is best used for small projects where files change rapidly, where the syste
 \url{http://nuovext.pwsp.net/}
 \end{itemize}
 
-\noindent{\textbf{FBMS is licensed under GPL v3:}} \\
+\textbf{FBMS is licensed under GPL v3:} \\
 \url{https://code.google.com/p/fbms} \\
 
-\noindent{\textbf{Log4j is licensed under the Apache License v2:}} \\
+\textbf{Log4j is licensed under the Apache License v2:} \\
 \url{https://logging.apache.org/log4j/1.2/} \\
 
-\noindent{\textbf{SQLite JDBC Driver is licensed under the Apache License v2:}} \\
+\textbf{SQLite JDBC Driver is licensed under the Apache License v2:} \\
 \url{https://bitbucket.org/xerial/sqlite-jdbc} \\
 
-\noindent{\textbf{JNotify is licensed under the LGPL v2:}} \\
+\textbf{JNotify is licensed under the LGPL v2:} \\
 \url{http://jnotify.sourceforge.net/} \\
 
-\noindent{\textbf{google-diff-match-patch is licensed under the Apache License v2:}} \\
+\textbf{google-diff-match-patch is licensed under the Apache License v2:} \\
 \url{https://code.google.com/p/google-diff-match-patch/} \\
 
-\noindent{\textbf{Java MIME Magic is licensed under GPL v2:}} \\
+\textbf{Java MIME Magic is licensed under GPL v2:} \\
 \url{https://github.com/arimus/jmimemagic}
 
 \begin{thebibliography}{9}
