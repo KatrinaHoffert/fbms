@@ -32,10 +32,14 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 
-%% Custom command to create todo notes. This is a red framed box that contains
+%% Custom template to create todo notes. This is a red framed box that contains
 %% wrapped, bold, red text.
 \usepackage{xcolor}
 \newcommand\todonote[1]{{\color{red}\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\textit\large{\textbf{TODO: #1}}}}}}
+
+%% Custom template for paragraphs in tables, which don't leave spaces between
+%% paragraphs. Add this to the end of a paragraph to force a nice little space.
+\newcommand\tablepar{\vspace{0.25cm}\newline}
 
 %% Header and footer styles (page number centered at the bottom)
 \usepackage{fancyhdr}
@@ -862,23 +866,34 @@ In all, JUnit is powerful to test base parts for a project. However, for GUI par
 \section{Re-engineering}
 
 \subsection{Code smells}
-\todonote{Done by Mike}
+Our project was found to have only two clones (both blind, with the latter also being classified as consistent). Preventing poor practices like clones was kept in mind when designing our program (and indeed, we probably removed several clones before we reached this point). We have no need to guess on why these clones appeared: we know why they exist.
 
-\begin{longtable}{| p{2.75cm} | p{4cm} | p{8cm} |}
+\begin{longtable}{| p{1.5cm} | p{1.25cm} | p{12cm} |}
   \hline
-  \textbf{Clone Pair / Class ID} & \textbf{Root causes} & \textbf{Further comments} \\ \hline
-    &  &   \\ \hline
-    &  &   \\ \hline
-    &  &   \\ \hline
+  \textbf{ID} & \textbf{Root causes} & \textbf{Comments} \\ \hline
+  40 \newline
+  42 & 
+  3.a(ii) \newline
+  1.a(iv) &
+  \textbf{FirstStartWizard.java lines 101-141 and 148-186} \tablepar
+  Main reason is that abstraction here creates complexity. The two functions generate panels for the first start wizard. They need two different logging methods, two of the buttons need different labels, the panel text is different, and the values passed into two other functions are different. \tablepar
+ The large number of differences would mean abstracting the problem into multiple functions would require a very large number of parameters, which ultimately ends up more confusing than the repetition. \\ \hline
+ 101 \newline
+ 102 &
+ 3.a(ii) \newline
+ 3.a(iv) &
+ \textbf{MainMenu.java lines 148-176 181-210} \tablepar
+ These two functions handle changing the backup and live directories, respectively. They're fairly similar except for the variables used to store the chosen path and the fact that they call different functions in their bodies. The latter is the reason for the clone. \tablepar
+ These small methods weren't deemed worth the bother of implementing callbacks to handle the difference in their implementation. They're too specific and they are easier to understand without the necessary callback. \\ \hline
 \end{longtable}
 
-\begin{longtable}{| p{2.75cm} | p{12.5cm} |}
-  \hline
-  \textbf{Clone Pair / Class ID} & \textbf{Why not refactorable / risks in refactoring} \\ \hline
-    &   \\ \hline
-    &   \\ \hline
-    &   \\ \hline
-\end{longtable}
+There are \textbf{no} clones in our project that cannot be refactored. All of our clones could be removed, we merely have deemed them not worth removing, for the reasons mentioned in the table.
+
+There are some areas in our code, however, that resemble clones (but were not picked up by the clone detection software) and cannot be removed. In particular, the \texttt{TableSelecti\-onListener} and \texttt{RevisionTableSelectionListener} classes, located in \texttt{MainFrame.java} and \texttt{RevisionDialog.java}, respectfully, are quite similar at first look. With the exception of their constructors, they contain the same functions.
+
+However, their behavior is quite different. They need to access variables in different ways to make all the necessary changes to the window (the table selector for the main frame, for example, has to disable menu options in the \texttt{MainMenu} object), one has to check if the selected row is a file or folder (whereas the other is selecting revisions which are assumed to exist in the database).
+
+As an end result, there's a complicated network of dependencies and variances between those classes. They appear similar, but they just aren't compatible with each other and cannot be reliably merged while maintaining consistent functionality.
 
 \subsection{Refactoring}
 \begin{itemize}
