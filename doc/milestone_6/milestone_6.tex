@@ -347,7 +347,20 @@ Our final result is very similar to the mockups:
 \end{description}
 
 \subsubsection{First run setup}
-\todonote{Alsharif. Adapt from M4.}
+\begin{description}
+	\item \textbf{Level}  \\
+	Summary
+	\item \textbf{Actors} \\
+	User
+	\item \textbf{Goal} \\
+	To setup the live and backup directories on the first time the program is run 
+	\item \textbf{Activities} \\
+	The program determines if it is the first run by checking for the existence of the file which specifies the backup directory. If this 	file is not found or the backup directory is invalid, it is considered to be the first run. A GUI wizard is shown, and the user is 			asked if they wish to specify a new backup or if they wish to import an old backup. To create a new backup, the user is 				prompted for paths for a live and backup directory (which cannot be children of one or the other). To import an old backup, the 	user is prompted to provide a path to the backup folder (which contains a database file). If the user enters invalid paths, they 		will be prompted to enter a new one. The wizard also allows the user to go back and change previously made choices. On the 			final screen of the wizard, the program initializes the backup and live directories and creates the database connection. 
+	\item \textbf{Quality} \\
+	This aspect of the program is top priority, as it is mandatory for the program to be used at all. Therefore, it must be completely 	stable and well designed. In fact, this portion of the program is already complete in our prototype, as will be demonstrated in 			section 9. 
+	\item \textbf{Version} \\
+	28 November 2013	
+\end{description}
 
 \subsubsection{Change live directory}
 \begin{description}
@@ -499,7 +512,51 @@ Our final result is very similar to the mockups:
 \end{description}
 
 \subsubsection{Revert file to revision}
-\todonote{Alsharif. Adapt from M4.}
+\begin{description}
+	\item \textbf{Scope} \\
+		FBMS
+	\item \textbf{Level} \\
+		User goal
+	\item \textbf{Primary actor} \\
+		User 
+	\item \textbf{Stakeholders and interests} \\
+		User: Revert the selected file to the selected version. 
+	\item \textbf{Preconditions} \\
+		\begin{itemize}
+		\item System must be in a properly setup and running state. 
+		\item A file must be selected by the user. 
+		\item The file must be within the folder listing that is currently being backed up. .
+		\item A version must be selected by the user. 
+		\item A version history must exist for the file. 
+		\item System has proper read/write access to the backup and the system file. 
+		\end{itemize}
+	\item \textbf{Success Guarantee} \\
+		\begin{itemize}
+		\item The selected file is reverted to the proper revision. 
+		\item The previous version that was overwritten still remains in backup as a version. 
+		\end{itemize}
+	\item \textbf{Main Success scenario} \vspace{-4ex} \\
+	\begin{itemize}
+		\item User prompts the program via the GUI that they wish to make a file revision. 
+		\item The user selects the file in question and then selects the revision they desire from the selection. 
+		\item The system then goes through file history to find the proper diff file referenced by the database. 
+		\item Temporary files are made where appropriate.
+		\item The diff file is used to create a reverted version of the specified file. 
+		\item The file specified is now reverted and in the proper location. 
+	\end{itemize}
+	\item \textbf{Extensions} \\
+		\begin{itemize}
+		\item Only files within the specified backup environment will have versions stored to revert to. 
+		\item Nothing will happen if the user selects the file and revision and exits the dialogue or otherwise does not hit ‘Ok’.  
+		\item If the function fails due to system level issues, like permission conflicts, the function ends and the user is notified.  
+	\end{itemize}
+	\item \textbf{Special Requirements}\\
+		Require write/read access to the file being modified. 
+	\item \textbf{Technology and Data Variations List}\\
+		None
+	\item \textbf{Frequency of Occurrence}\\
+		Whenever specified by the user.
+\end{description}
 
 \subsubsection{Rename file}
 \todonote{Butler. Adapt from M4.}
@@ -562,7 +619,11 @@ Settings\item \textbf{Settings}: This has a number of interesting options like r
 \end{itemize}
 
 \subsubsection{Reliability}
-\todonote{Alsharif. Adapt from M4. Mention some of the checks in file change handlers.}
+To maximize efficiency, the watcher module, which notices changes to files, adds these changes to lists. At specific intervals, the program handles the files in these lists. This reduces the program's use of system resources by allowing the program to frequently sleep instead of constantly looping while the program is running. It also drastically reduces the number of file operations. Some operating systems and programs will actually modify a file multiple times in just a few milliseconds (even if the file only appears to have been modified once from the user's perspective). The interval based system combines duplicate operations. So if the user modifies a file a dozen times within the interval, the program only stores one modification as a revision (with that revision being all the changes since the file was last modified).
+\\Similarly, we use the JNotify library specifically because it binds with the operating systems for maximum performance. At one early point of time, we actually considered checking all the files in the live directory for changes in their CRC value, which would have been much slower.
+\\The program also handles errors in a user-friendly way. Fatal errors are displayed as dialog boxes and also copied to the log (which helps find the source of errors). Non-fatal errors use a non-obtrusive error pop-up message that appears in the bottom corner of the screen and disappears on its own after a few seconds.
+Finally, when file operations cannot be performed on a file (for reasons such as the file being open in another program or invalid permissions), the operation is retried after a short delay before informing the user of the error (which is a non-fatal error, as the file can simply be skipped).
+
 
 \subsubsection{Supportability}
 \begin{itemize}
