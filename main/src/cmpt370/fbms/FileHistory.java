@@ -126,6 +126,11 @@ public class FileHistory
 		String diffString = null;
 		if(diff != null)
 		{
+			// Prevent an empty diff is inserted.
+			if(FileOp.fileSize(diff) <= 0)
+			{
+				return;
+			}
 			try
 			{
 				diffString = FileOp.fileToString(diff);
