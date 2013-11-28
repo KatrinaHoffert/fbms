@@ -146,7 +146,7 @@ FBMS differs itself from other backup systems in how it doesn't just backup file
 \begin{enumerate}
 \item Able to use this same software on various operating systems due to Java architecture.
 \item Once setup, it runs in the background unobtrusively until needed.
-\item Tested on Windows, Linux, and Mac.
+\item Tested on Windows and Linux (no OS X support)
 \end{enumerate}
 
 \subsection{User scenarios}
@@ -938,7 +938,7 @@ Some of the differences include using tabs instead of spaces (for numerous reaso
 
 We designed FBMS to be easy to use and intuitive. The bulk of the user accessible portion of the program (ie, the GUI) is largely a file browser, so we looked at existing file browsers (such as Windows Explorer\cite{explorer} and Dolphin\cite{dolphin}) for design patterns. In particular, we changed the ``default'' behavior of the enter key in the file browser's table to activate the row instead of go to the next row. Similarly, rows are selected by single click and activated by double click.
 
-In a number of places, we needed to prompt the user for paths (such as when choosing the live or backup directory). To make this more convenient, we supplied file chooser dialogs that only showed folders. We also skinned these dialogs to use the system dialog. So Windows users will see a Window-themed file chooser while OS X users would see an OS X themed file chooser.
+In a number of places, we needed to prompt the user for paths (such as when choosing the live or backup directory). To make this more convenient, we supplied file chooser dialogs that only showed folders. We also skinned these dialogs to use the system dialog. So Windows users will see a Window-themed file chooser while Linx users would see an Linux themed file chooser.
 
 The first run wizard was also intended to make the program much more usable. Instead of filling a configuration file or such, the user is guided through choosing the live and backup directories (or importing an existing backup) via a GUI wizard. This is not only more user friendly, but presents the opportunity to tell the user a bit about the program and how to use it.
 
