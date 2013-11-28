@@ -598,7 +598,7 @@ These components integrate with our program and were chosen with efficiency in m
 \todonote{Butler. Requires renaming since the objectification.}
 
 \subsubsection{Delete file}
-\includegraphics[width=\linewidth]{images/DeleteFileSD.png}
+\todonote{Rizvi. Needs to be redone.}
 
 \subsubsection{Rename folder}
 \todonote{Alsharif. Needs to be more detailed. Requires renaming since the objectification}
@@ -812,7 +812,35 @@ Another area where feedback was crucial was in the GUI development. We had to ai
 \end{itemize}
 
 \subsection{Sequence or communication diagrams with GRASP patterns}
-\todonote{Need 2 sequence diagrams per member.\\ Tao: FileOp.applyPatch() and FileOp.createPatch();\\ Hoffert: GuiController.revertRevision() and GuiController.viewRevision();\\ Butler: GuiController.changeLiveDirectory() and GuiController.change\-BackupDirectory();\\ Alsharif: FileHistory.getRevisionInfo() and FileHistory.storeRevision();\\ Rizvi: Startup.resolveBackupDirectory() and DbConnection.getConfig().\\ Don't spend too much time on this, it's worth very little marks.}
+\subsubsection{GuiController.revertRevision}
+\includegraphics[width=\textwidth]{images/revert_revision_sequence.png}
+
+\subsubsection{GuiController.displayRevision}
+\includegraphics[width=\textwidth]{images/view_revision_sequence.png}
+
+\subsubsection{GuiController.changeLiveDirectory}
+\todonote{Butler}
+
+\subsubsection{GuiController.changeBackupDirectory}
+\todonote{Butler}
+
+\subsubsection{FileOp.applyPatch}
+\todonote{Tao}
+
+\subsubsection{FileOp.createPatch}
+\todonote{Tao}
+
+\subsubsection{FileHistory.getRevisionInfo}
+\todonote{Alsharif}
+
+\subsubsection{FileHistory.storeRevision}
+\todonote{Alsharif}
+
+\subsubsection{Startup.resolveBackupDirectory}
+\todonote{Rizvi}
+
+\subsubsection{DbConnection.getConfig}
+\todonote{Rizvi}
 
 \subsection{Class diagram}
 The class diagram is too large to embed in this document, so has been included separately as the file \texttt{class\_{}diagram.png}.
