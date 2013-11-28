@@ -211,175 +211,175 @@ Our final result is very similar to the mockups:
 \subsection{Summary use cases}
 \subsubsection{Create file} 
 \begin{description}
-	\item \textbf{Level}  \hfill \\
+	\item \textbf{Level}  \\
 	Summary
-	\item \textbf{Actors} \hfill \\
+	\item \textbf{Actors} \\
 	System
-	\item \textbf{Goal} \hfill \\
+	\item \textbf{Goal} \\
 	Add the file created by user to the system and backup it.
-	\item \textbf{Activities} \hfill \\
+	\item \textbf{Activities} \\
 	The system receives a file created notice from the watcher module, and put it in file created list.\\
 	The file change handler will process the list:
 	\begin{enumerate}
 		\item[a)]A file with the same name and location exists in the system: 
-		\hfill \\
+		\\
 		The system will treat the file as a modified file, and make a diff  file for it.
 
 		\item[b)]No file with the same name and location exists in the system: 
-		\hfill \\
+		\\
 		The system just simply copies the file into the backup folder. Then a new record will be added in database stating a new file added.
 	\end{enumerate}
-	\item \textbf{Quality} \hfill \\
+	\item \textbf{Quality} \\
 	This is a main use case in the system and must work to a very high standard.
-	\item \textbf{Version} \hfill \\
+	\item \textbf{Version} \\
 	26 November 2013	
 \end{description}
 
 \subsubsection{Modify file}
 \begin{description}
-	\item \textbf{Level} \hfill \\
+	\item \textbf{Level} \\
 	Summary
-	\item \textbf{Actors} \hfill \\
+	\item \textbf{Actors} \\
 	User
-	\item \textbf{Goal} \hfill \\
+	\item \textbf{Goal} \\
 	Backup the modified file and make a revision for the change.
-	\item \textbf{Activities} \hfill \\
+	\item \textbf{Activities} \\
 	The watcher module notices the file has been modified and adds it to the modified files list. The file change handler for modified files will then handle the files in this list, making a revision for the changes and then copying the file to the correct folder in the backup directory.
-	\item \textbf{Quality} \hfill \\
+	\item \textbf{Quality} \\
 	This is a main use case in the system and must work to a very high standard.
-	\item \textbf{Version} \hfill \\
+	\item \textbf{Version} \\
 	27 November 2013	
 \end{description}
 
 \subsubsection{Rename file}
 \begin{description}
-	\item \textbf{Level} \hfill \\
+	\item \textbf{Level} \\
 	Summary
-	\item \textbf{Actors} \hfill \\
+	\item \textbf{Actors} \\
 	System
-	\item \textbf{Goal} \hfill \\
+	\item \textbf{Goal} \\
 	Reflect the effect of renaming a file.
-	\item \textbf{Activities} \hfill \\
+	\item \textbf{Activities} \\
 	The system receives a file renamed notice from the watcher module, and put it in file renamed list.\\
 	The file change handler will process the list: \\
 	The system will either make a diff file or copy the file to backup folder.
-	\item \textbf{Quality} \hfill \\
+	\item \textbf{Quality} \\
 	This is a main use case in the system and must work to a very high standard.
-	\item \textbf{Version} \hfill \\
+	\item \textbf{Version} \\
 	26 November 2013	
 \end{description}
 
 \subsubsection{Rename folder}
 \begin{description}
-	\item \textbf{Level} \hfill \\
+	\item \textbf{Level} \\
 	Summary
-	\item \textbf{Actors} \hfill \\
+	\item \textbf{Actors} \\
 	User
-	\item \textbf{Goal} \hfill \\
+	\item \textbf{Goal} \\
 	When a folder is renamed, ensure that the revisions have the corrected path.
-	\item \textbf{Activities} \hfill \\
+	\item \textbf{Activities} \\
 	The watcher notices the folder has been renamed and adds it to the renamed list. The file change handler for renamed files will later handle the paths in this list, copying the folder in the backup directory to the new name and renaming revisions in the database to the new path.
-	\item \textbf{Quality} \hfill \\
+	\item \textbf{Quality} \\
 	This is a main use case in the system and must work to a very high standard.
-	\item \textbf{Version} \hfill \\
+	\item \textbf{Version} \\
 	27 November 2013
 \end{description}
 
 \subsubsection{Delete file}
-
+\todonote{Butler. Adapt from M4.}
 
 \subsubsection{Revert Revision} 
 \begin{description}
-	\item \textbf{Level}  \hfill \\
+	\item \textbf{Level}  \\
 	Summary
-	\item \textbf{Actors} \hfill \\
+	\item \textbf{Actors} \\
 	User
-	\item \textbf{Goal} \hfill \\
+	\item \textbf{Goal} \\
 	Ability to revert a file to a prior version.
-	\item \textbf{Activities} \hfill \\
+	\item \textbf{Activities} \\
 	The file selects a revision using the GUI. Backend then uses FileHistory and FileOp to revert the file in such a way as not to interfere with versioning. 
-	\item \textbf{Quality} \hfill \\
+	\item \textbf{Quality} \\
 	This part of the program is high priority, it is not critical to the backup functionality of the program but is necessary for the user to take advantage of the versioning information being created.
 	 To that end it is also a primary component to why a user would use our program. 
-	\item \textbf{Version} \hfill \\
+	\item \textbf{Version} \\
 	26 November 2013	
 \end{description}
 
 \subsubsection{View revision}
 \begin{description}
-	\item \textbf{Level}  \hfill \\
+	\item \textbf{Level}  \\
 	Summary
-	\item \textbf{Actors} \hfill \\
+	\item \textbf{Actors} \\
 	User
-	\item \textbf{Goal} \hfill \\
+	\item \textbf{Goal} \\
 	Ability to revert a file to a prior version.
-	\item \textbf{Activities} \hfill \\
+	\item \textbf{Activities} \\
 	The user selects whatever file he/she wants to view a specific revision for that file. With a selected file, the user is presented a list of revisions and options, which include view revision. 
-	\item \textbf{Quality} \hfill \\
+	\item \textbf{Quality} \\
 	This is a main use case in the system and must work to a very high standard. 
-	\item \textbf{Version} \hfill \\
+	\item \textbf{Version} \\
 	26 November 2013	
 \end{description}
 
 \subsubsection{First run setup}
-
+\todonote{Alsharif. Adapt from M4.}
 
 \subsubsection{Change live directory}
 \begin{description}
-	\item \textbf{Level} \hfill \\
+	\item \textbf{Level} \\
 	Summary
-	\item \textbf{Actors} \hfill \\
+	\item \textbf{Actors} \\
 	User
-	\item \textbf{Goal} \hfill \\
+	\item \textbf{Goal} \\
 	Change the folder system monitors.
-	\item \textbf{Activities} \hfill \\
+	\item \textbf{Activities} \\
 	User select "Change live directory" in main window.\\
 	The system changes configuration in database, removes the old watcher and adds a new watcher for new live folder.\\
-	\item \textbf{Quality} \hfill \\
+	\item \textbf{Quality} \\
 	This is a median use case in the system and should work to a high standard.
-	\item \textbf{Version} \hfill \\
+	\item \textbf{Version} \\
 	26 November 2013	
 \end{description}
 
 \subsubsection{Change backup directory}
 \begin{description}
-	\item \textbf{Level} \hfill \\
+	\item \textbf{Level} \\
 	Summary
-	\item \textbf{Actors} \hfill \\
+	\item \textbf{Actors} \\
 	User
-	\item \textbf{Goal} \hfill \\
+	\item \textbf{Goal} \\
 	Change the folder for storing backups.
-	\item \textbf{Activities} \hfill \\
+	\item \textbf{Activities} \\
 	User select "Change backup directory" in main window.\\
 	The system changes configuration in database, and copies the old folder and its content to the new location.\\
 	The old backup folder still lives.
-	\item \textbf{Quality} \hfill \\
+	\item \textbf{Quality} \\
 	This is a median use case in the system and should work to a high standard.
-	\item \textbf{Version} \hfill \\
+	\item \textbf{Version} \\
 	26 November 2013
 \end{description}
 
 \subsection{Fully-dressed use cases}
 \subsubsection{Create File}
 \begin{description}
-	\item[] \textbf{Scope} \hfill \\
+	\item \textbf{Scope} \\
 		FBMS
-	\item[] \textbf{Level} \hfill \\
+	\item \textbf{Level} \\
 		User goal
-	\item[] \textbf{Primary actor} \hfill \\
+	\item \textbf{Primary actor} \\
 		Main system
-	\item[] \textbf{Stakeholders and interests} \hfill \\
+	\item \textbf{Stakeholders and interests} \\
 		User: Want this new created file is automatically backed up.
-	\item[] \textbf{Preconditions} \hfill \\
+	\item \textbf{Preconditions} \\
 		The Watcher module is running normally.\\
 		There is enough space in backup folder.\\
 		System has read access to the newly created file.
 		System has write access to backup folder.
-	\item[] \textbf{Success Guarantee} \hfill \\
+	\item \textbf{Success Guarantee} \\
 		The newly created file is backed up.\\
 		Records are added in database.\\
 		The history of this file is accessible from GUI.
-	\item[] \textbf{Main Success scenario} \hfill \vspace{-4ex} \\
+	\item \textbf{Main Success scenario} \vspace{-4ex} \\
 	\begin{itemize}
 		\item[(1)] The system received a file created notice, and put it in file created list.
 		\item[(2)] The system determines whether a file with the same name and location has been existed in the backup folder.
@@ -389,30 +389,31 @@ Our final result is very similar to the mockups:
 		\item[(3b)] If not, copy this file to backup folder.
 		\item[(4)] Add a record in database.
 	\end{itemize}
-	\item[] \textbf{Extensions} \hfill \\
+	\item \textbf{Extensions} \\
 		The file will be locked when being copied to backup folder.
-	\item[] \textbf{Special Requirements}\hfill \\
+	\item \textbf{Special Requirements}\\
 		Privilege is possible required.
-	\item[] \textbf{Technology and Data Variations List}\hfill \\
+	\item \textbf{Technology and Data Variations List}\\
 		The program flow changes based on whether a file with the same name and location has been existed in the system. If it exists, system will do additional steps to ensure no wrong overwriting occurs. If not, system will do it in regular way.
-	\item[] \textbf{Frequency of Occurrence}\hfill \\
+	\item \textbf{Frequency of Occurrence}\\
 		Every time a new file is created in live folder.
 \end{description}
+
 \subsubsection{First Run}
 \begin{description}
-	\item[] \textbf{Scope} \hfill \\
+	\item \textbf{Scope} \\
 		Program is run for the first time 
-	\item[] \textbf{Level} \hfill \\
+	\item \textbf{Level} \\
 		User goal
-	\item[] \textbf{Primary actor} \hfill \\
+	\item \textbf{Primary actor} \\
 		User 
-	\item[] \textbf{Stakeholders and interests} \hfill \\
+	\item \textbf{Stakeholders and interests} \\
 		User: Setup the program with the directories it will act on.
-	\item[] \textbf{Preconditions} \hfill \\
+	\item \textbf{Preconditions} \\
 		It is the program's first run or the program cannot startup normally. 
-	\item[] \textbf{Success Guarantee} \hfill \\
+	\item \textbf{Success Guarantee} \\
 		The backup and live directories are configured to valid paths.
-	\item[] \textbf{Main Success scenario} \hfill \vspace{-4ex} \\
+	\item \textbf{Main Success scenario} \vspace{-4ex} \\
 	\begin{itemize}
 		\item Program determines that it is the first run because the file pointing to the backup location is missing, or the backup location is otherwise invalid (non-existent folder or missing necessary database file inside this folder). 
 		\item A GUI wizard is displayed, with buttons for navigating and exiting the wizard. 
@@ -422,7 +423,7 @@ Our final result is very similar to the mockups:
 		\item The wizard finalizes, telling the user that setup was completed. 
 		\item The program establishes a connection with the database, setting it up in the specified backup directory by creating the file that points to the backup directory. 
 	\end{itemize}
-	\item[] \textbf{Extensions} \hfill \\
+	\item \textbf{Extensions} \\
 	\begin{itemize}
 		\item The user cannot specify live and backup directories that are children or parents of each other. 
 				This prevents infinite recursion. If the backup folder was inside the live directory, every backup would be identified as a change to the live directory (and thus need to be backed up as well). If the live directory was inside the backup directory, then we 					run the risk of backed up files overwriting files in the live directory. 
@@ -432,11 +433,11 @@ Our final result is very similar to the mockups:
 				The program will issue an error dialog if this occurs, and will not allow the user to continue until they specify a valid directory. 
 				If the user closes the dialog window, it will do nothing unless they are on the final panel of the wizard, which indicates a success. 
 	\end{itemize}
-	\item[] \textbf{Special Requirements}\hfill \\
+	\item \textbf{Special Requirements}\\
 		The program directory and the chosen live and backup directories must have write access.
-	\item[] \textbf{Technology and Data Variations List}\hfill \\
+	\item \textbf{Technology and Data Variations List}\\
 		The program flow changes based on whether the user chose to import an existing backup or start a new one. If they chose to import an existing backup, the live directory is set when the program initializes the database. If they started a new backup, the wizard sets 		the live directory.
-	\item[] \textbf{Frequency of Occurrence}\hfill \\
+	\item \textbf{Frequency of Occurrence}\\
 		Exactly once when the program starts for the first time 
 		May also occur if an error is encountered when the program starts up (such as if the backup directory is invalid) 
 \end{description}
@@ -505,15 +506,15 @@ Settings\item \textbf{Settings}: This has a number of interesting options like r
 
 \subsubsection{Supportability}
 \begin{itemize}
-	\item \textbf{OS Compatibility} \hfill \\
+	\item \textbf{OS Compatibility} \\
 	To adapt different OSes, we are storing a relative path in database. It solves the problem of changing backup folder.
-	\item \textbf{Logging} \hfill \\
+	\item \textbf{Logging} \\
 	Log is provided to diagnose problem when error occurs.\\
 	Through analysing the log it is possible to give out a solution.
-	\item \textbf{Import from old backup} \hfill \\
+	\item \textbf{Import from old backup} \\
 	It is possible to import backups from an old backup folder.\\
 	This function is provided in first run wizard.
-	\item \textbf{Configuration} \hfill \\
+	\item \textbf{Configuration} \\
 	Live folder and backup folder could be changed.
 \end{itemize}
 
