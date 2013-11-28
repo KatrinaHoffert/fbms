@@ -209,14 +209,12 @@ Our final result is very similar to the mockups:
 \section{Requirements and early design}
 
 \subsection{Summary use cases}
-
-
 \subsubsection{Create file} 
 \begin{description}
 	\item \textbf{Level}  \hfill \\
 	Summary
-	\item \textbf{User} \hfill \\
-	Main system
+	\item \textbf{Actors} \hfill \\
+	System
 	\item \textbf{Goal} \hfill \\
 	Add the file created by user to the system and backup it.
 	\item \textbf{Activities} \hfill \\
@@ -236,14 +234,29 @@ Our final result is very similar to the mockups:
 	\item \textbf{Version} \hfill \\
 	26 November 2013	
 \end{description}
-\subsubsection{Create folder} 	
-\subsubsection{Modify file} 
+
+\subsubsection{Modify file}
+\begin{description}
+	\item \textbf{Level} \hfill \\
+	Summary
+	\item \textbf{Actors} \hfill \\
+	User
+	\item \textbf{Goal} \hfill \\
+	Backup the modified file and make a revision for the change.
+	\item \textbf{Activities} \hfill \\
+	The watcher module notices the file has been modified and adds it to the modified files list. The file change handler for modified files will then handle the files in this list, making a revision for the changes and then copying the file to the correct folder in the backup directory.
+	\item \textbf{Quality} \hfill \\
+	This is a main use case in the system and must work to a very high standard.
+	\item \textbf{Version} \hfill \\
+	27 November 2013	
+\end{description}
+
 \subsubsection{Rename file}
 \begin{description}
 	\item \textbf{Level} \hfill \\
 	Summary
-	\item \textbf{User} \hfill \\
-	Main system
+	\item \textbf{Actors} \hfill \\
+	System
 	\item \textbf{Goal} \hfill \\
 	Reflect the effect of renaming a file.
 	\item \textbf{Activities} \hfill \\
@@ -255,15 +268,31 @@ Our final result is very similar to the mockups:
 	\item \textbf{Version} \hfill \\
 	26 November 2013	
 \end{description}
+
 \subsubsection{Rename folder}
+\begin{description}
+	\item \textbf{Level} \hfill \\
+	Summary
+	\item \textbf{Actors} \hfill \\
+	User
+	\item \textbf{Goal} \hfill \\
+	When a folder is renamed, ensure that the revisions have the corrected path.
+	\item \textbf{Activities} \hfill \\
+	The watcher notices the folder has been renamed and adds it to the renamed list. The file change handler for renamed files will later handle the paths in this list, copying the folder in the backup directory to the new name and renaming revisions in the database to the new path.
+	\item \textbf{Quality} \hfill \\
+	This is a main use case in the system and must work to a very high standard.
+	\item \textbf{Version} \hfill \\
+	27 November 2013
+\end{description}
+
 \subsubsection{Delete file}
-\subsubsection{Delete folder}
+
 
 \subsubsection{Revert Revision} 
 \begin{description}
 	\item \textbf{Level}  \hfill \\
 	Summary
-	\item \textbf{Actor} \hfill \\
+	\item \textbf{Actors} \hfill \\
 	User
 	\item \textbf{Goal} \hfill \\
 	Ability to revert a file to a prior version.
@@ -275,11 +304,12 @@ Our final result is very similar to the mockups:
 	\item \textbf{Version} \hfill \\
 	26 November 2013	
 \end{description}
+
 \subsubsection{View revision}
 \begin{description}
 	\item \textbf{Level}  \hfill \\
 	Summary
-	\item \textbf{Actor} \hfill \\
+	\item \textbf{Actors} \hfill \\
 	User
 	\item \textbf{Goal} \hfill \\
 	Ability to revert a file to a prior version.
@@ -290,13 +320,15 @@ Our final result is very similar to the mockups:
 	\item \textbf{Version} \hfill \\
 	26 November 2013	
 \end{description}
+
 \subsubsection{First run setup}
-\subsubsection{Startup}
+
+
 \subsubsection{Change live directory}
 \begin{description}
 	\item \textbf{Level} \hfill \\
 	Summary
-	\item \textbf{User} \hfill \\
+	\item \textbf{Actors} \hfill \\
 	User
 	\item \textbf{Goal} \hfill \\
 	Change the folder system monitors.
@@ -308,11 +340,12 @@ Our final result is very similar to the mockups:
 	\item \textbf{Version} \hfill \\
 	26 November 2013	
 \end{description}
+
 \subsubsection{Change backup directory}
 \begin{description}
 	\item \textbf{Level} \hfill \\
 	Summary
-	\item \textbf{User} \hfill \\
+	\item \textbf{Actors} \hfill \\
 	User
 	\item \textbf{Goal} \hfill \\
 	Change the folder for storing backups.
@@ -324,11 +357,7 @@ Our final result is very similar to the mockups:
 	This is a median use case in the system and should work to a high standard.
 	\item \textbf{Version} \hfill \\
 	26 November 2013
-\end{description}	
-\subsubsection{Change settings}
-
-
-\todonote{Need 2 summary use cases per group member. Adapt from M4.}
+\end{description}
 
 \subsection{Fully-dressed use cases}
 \subsubsection{Create File}
