@@ -209,6 +209,30 @@ Our final result is very similar to the mockups:
 \section{Requirements and early design}
 
 \subsection{Summary use cases}
+\subsubsection{List of all use cases}
+\begin{itemize}
+\item \textbf{Create file}: A file is created. The file will be backed up.
+\item \textbf{Modify file}: A file is modified. The file will be backed up and revisioned.
+\item \textbf{Rename file}: A file is renamed. Any existing revisions will be renamed to the new name.
+\item \textbf{Delete file}: A file is deleted. No other operations will be done on that file.
+\item \textbf{Create folder}: A folder is created. Empty folders are not backed up. Folders are created automatically when files are backed up.
+\item \textbf{Rename folder}: A folder is renamed. Any existing revisions containing this folder in their path will be renamed to the new name.
+\item \textbf{Delete folder}: A folder is deleted. No other operations will be done on that folder.
+\item \textbf{Startup}: The program is started up. The location of the backup directory will be determined, database connection established, startup scan commenced, and file watcher initialized. If necessary, first run wizard will be run.
+\item \textbf{First run setup}: First run wizard is run if the program determines this is the first run (or regular startup cannot be commenced). Gets from the user the locations of the backup and live directories.
+\item \textbf{Change live directory}: The live directory is changed to a new, user specified location. The directory's files are scanned for differences from the backup and the watcher is reinitialized.
+\item \textbf{Change backup directory}: The backup directory is changed to a new, user specified location. The previous backup directory's contents are copied to the new location.
+\item \textbf{Change settings}: A settings window displays available settings. On close, the settings are saved.
+\item \textbf{View backed up files}: The main window is opened by double clicking the system tray icon. The window lists the contents of the backup directory, including files that were deleted or renamed in the live directory.
+\item \textbf{Go into folder}: A folder in the main window's file browser is double clicked. The main window's contents are replaced with the contents of that directory (in other words, the contents of a different directory are displayed).
+\item \textbf{Go up a directory}: The up button in the main window is clicked. The main window's contents are replaced with the contents of the directory "up" from the current folder. Cannot go up further than the backup directory.
+\item \textbf{Refresh the current directory}: The refresh button in the main window is clicked. The main window's contents are replaced with the contents of the current directory. This allows the user to see any updates to the contents of the directory.
+\item \textbf{Navigate to a user specified directory}: The file browser location bar is changed and the user presses enter. The entered path is parsed and navigated to as though the user went into that folder. If the path is invalid, the user is alerted.
+\item \textbf{View list of revisions for a file}: A file is double clicked in the main window's file browser. A modal displays all available revisions. The time stamp, file size, and difference in file size is shown.
+\item \textbf{View revision}: In the revisions dialog, the user double clicks on a revision or selects a revision and clicks the ``view revision'' button. The revision is obtained and opens in the user's default program for that file type.
+\item \textbf{Revert revision}: In the revisions dialog, the user double clicks on a revision or selects a revision and clicks the ``view revision'' button. The revision is obtained and is copied to the live directory. A revision is created for the revert operation.
+\end{itemize}
+
 \subsubsection{Create file} 
 \begin{description}
 	\item \textbf{Level}  \\
@@ -756,7 +780,7 @@ These components integrate with our program and were chosen with efficiency in m
 	\item[Postconditions:] A row is inserted into the database containing information about the revision. In addition to the path of the file, the contents of the diff, the file size, and the delta (change in file size), the time will also be stored.
 \end{description}
 
-\todonote{Revised by Da. References to use cases are added. Anyone would like to check again about all those?}
+\todonote{Alsharif, Butler, Rizvi need to improve this. Go into more detail, make clearer, etc.}
 
 \subsection{Obtaining user feedback}
 Most of our user-feedback stems from heavy testing. We have found several bugs by combining manual testing with logging. Features are also prioritized by user feedback. In version 1.0, for example, we had no support for binary revisions. They were backed up, but not revisioned. This was one of the biggest limitations at the time, and reflected by user feedback. In version 2.0, we introduced support for these binary revisions.
