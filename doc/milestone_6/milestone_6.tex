@@ -442,7 +442,42 @@ Our final result is very similar to the mockups:
 		May also occur if an error is encountered when the program starts up (such as if the backup directory is invalid) 
 \end{description}
 
-\todonote{Need 1 fully dressed use case per group member. Adapt from M4.}
+\subsubsection{Delete file}
+\begin{description}
+	\item \textbf{Scope} \\
+		FBMS
+	\item \textbf{Level} \\
+		User goal
+	\item \textbf{Primary actor} \\
+		User 
+	\item \textbf{Stakeholders and interests} \\
+		System: don't try and backup a deleted file
+	\item \textbf{Preconditions} \\
+		A file or folder is deleted
+	\item \textbf{Success Guarantee} \\
+		The deleted path will be removed from all other file handler lists
+	\item \textbf{Main Success scenario} \vspace{-4ex} \\
+	\begin{itemize}
+		\item A file or folder is deleted by the user.
+		\item The watcher detects the deletion and adds it to the list of deleted files. 
+		\item The file change handler for deleted files fires before the other file change handlers.
+		\item The handler removes the paths in the deleted files list from all the file change lists. This ensures that the other handlers won't try to act on deleted files.
+	\end{itemize}
+	\item \textbf{Extensions} \\
+		None
+	\item \textbf{Special Requirements}\\
+		None
+	\item \textbf{Technology and Data Variations List}\\
+		None
+	\item \textbf{Frequency of Occurrence}\\
+		Once for each deleted file
+\end{description}
+
+\subsubsection{Revert file to revision}
+\todonote{Alsharif. Adapt from M4.}
+
+\subsubsection{Rename file}
+\todonote{Butler. Adapt from M4.}
 
 \subsection{Use case diagram}
 \includegraphics[width=\linewidth]{images/use_cases.png}
