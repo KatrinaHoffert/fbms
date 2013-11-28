@@ -90,7 +90,7 @@ FBMS works on all locally accessible drives, including external drives and netwo
 
 FBMS has a focus on ease of use. A wizard guides the user through the setup, where the backup and live directories are chosen. With that complete, the program will run in the background and needs no user interaction until the use desires to restore or view files from the backup.
 
-\todonote{Alsharif, Tao, Butler, and Rizvi: Review and revise}
+\todonote{Alsharif, Tao, Butler, and Rizvi. Review and revise}
 \end{abstract}
 \clearpage
 
@@ -204,7 +204,7 @@ Our final result is very similar to the mockups:
 
 \includegraphics[width=\linewidth]{images/real2.png}
 
-\todonote{Add linux images of the above cases here (try to get full windows that show off the program well)}
+\todonote{Hoffert. Add linux images of the above cases here.}
 
 \section{Requirements and early design}
 
@@ -504,7 +504,7 @@ Our final result is very similar to the mockups:
 \includegraphics[width=\linewidth]{images/use_cases.png}
 
 \subsection{Domain model}
-\todonote{This one's Michael's}
+\todonote{Butler. Make from scratch.}
 
 \subsection{Glossary}
 \begin{itemize}
@@ -536,7 +536,7 @@ Our final result is very similar to the mockups:
 
 \subsection{Supplementary specification}
 \subsubsection{Vision}
-\todonote{Done by Michael. Adapt from M4.}
+\todonote{Butler. Adapt from M4.}
 
 \subsubsection{Interfaces}
 The interface consists of the GUI windowing system along with a minimizer tray icon. Closing the GUI minimizes the application to an icon in the system tray. This means that the application does not end simply by pressing the “x” button on the GUI but needs to be shut down from the system tray icon which has an “exit” option for closing the application entirely. We have tried to make the main GUI as simple as possible so that an average user could be able to handle the software. It comprises of a few simple areas namely a table, a toolbar, and a menubar. 
@@ -558,7 +558,7 @@ Settings\item \textbf{Settings}: This has a number of interesting options like r
 \end{itemize}
 
 \subsubsection{Reliability}
-\todonote{Done by Hattan. Adapt from M4. Mention some of the checks in file change handlers.}
+\todonote{Alsharif. Adapt from M4. Mention some of the checks in file change handlers.}
 
 \subsubsection{Supportability}
 \begin{itemize}
@@ -812,7 +812,7 @@ Another area where feedback was crucial was in the GUI development. We had to ai
 \end{itemize}
 
 \subsection{Sequence or communication diagrams with GRASP patterns}
-\todonote{Need 2 sequence diagrams per member.\\ Da: FileOp.applyPatch() and FileOp.createPatch();\\ Mike: GuiController.revertRevision() and GuiController.viewRevision();\\ Michael: GuiController.changeLiveDirectory() and GuiController.change\-BackupDirectory();\\ Hattan: FileHistory.getRevisionInfo() and FileHistory.storeRevision();\\ Ahsen: Startup.resolveBackupDirectory() and DbConnection.getConfig().\\ Don't spend too much time on this, it's worth very little marks.}
+\todonote{Need 2 sequence diagrams per member.\\ Tao: FileOp.applyPatch() and FileOp.createPatch();\\ Hoffert: GuiController.revertRevision() and GuiController.viewRevision();\\ Butler: GuiController.changeLiveDirectory() and GuiController.change\-BackupDirectory();\\ Alsharif: FileHistory.getRevisionInfo() and FileHistory.storeRevision();\\ Rizvi: Startup.resolveBackupDirectory() and DbConnection.getConfig().\\ Don't spend too much time on this, it's worth very little marks.}
 
 \subsection{Class diagram}
 The class diagram is too large to embed in this document, so has been included separately as the file \texttt{class\_{}diagram.png}.
@@ -859,7 +859,7 @@ In all, JUnit is powerful to test base parts for a project. However, for GUI par
 \item We renamed the \texttt{FileHistory}'s \texttt{obtainRevision()} method to \texttt{obtainRevisionCo\-ntent()}, which made the workings clearer and reduced confusion with the other methods in the class, which had similar names like \texttt{getRevision()} (which was renamed to \texttt{getRevisionInfo()}.
 \end{itemize}
 
-\todonote{Everyone needs to point out at least one instance of refactoring, file and lines, why we did it, etc. Take a look at my objectification changes from revision 436 to 448 if you need ideas.}
+\todonote{Butler, Tao, Alsharif, Rizvi. Everyone needs to point out at least one instance of refactoring, file and lines, why we did it, etc. Take a look at my objectification changes from revision 436 to 448 if you need ideas.}
 
 \subsection{Gang of Four design patterns}
 We used several Gang of Four design patterns in our project. One of the most notable is the use of a singleton for the \texttt{DbConnection} class. We used a singleton here because it's very slow to create and close connections at whim. The SQLite database manager we used supports serialized access, so the singleton is thread-safe.
@@ -912,7 +912,7 @@ The development version does not contain pre-built binaries, but has the full so
 
 The release version is located in the \texttt{release} folder, relative to the location of this file. The development version is located in the \texttt{development} folder.
 
-\todonote{Add the release and development folders (last minute)}
+\todonote{Hoffert. Add the release and development folders (last minute)}
 
 \subsection{User manual}
 When the program is started for the first time, a wizard will guide you through selecting your live and backup directories.
@@ -960,8 +960,6 @@ The settings dialog is accessed under the File menu of the GUI. It provides a fe
 \item Whether or not to enable the trim feature, which removes revisions older than a specified date.
 \end{itemize}
 
-\todonote{Test this manual on someone outside our group}
-
 \section{Project plan, budget justification, and performance evaluation}
 The following table breaks up the development of this milestone by group member. The time spent developing past milestones where contents was copied to this milestone is \textbf{not} included in this table.
 
@@ -995,7 +993,7 @@ The following table breaks up the development of this milestone by group member.
   3. & Updated design and unit testing &  &  \\ \hline
    & 3.1. System operations & Hoffert(0.25h) &  \\ \hline
    & 3.2. Sequence diagrams &  &  \\ \hline
-   & 3.3. Class diagram &  &  \\ \hline
+   & 3.3. Class diagram & Hoffert(1.5h) &  \\ \hline
    & 3.4. Unit testing & Tao(0.5h) &  \\ \hline
   4. & Re-engineering &  &  \\ \hline
    & 4.1. Code smells &  &  \\ \hline
@@ -1012,12 +1010,12 @@ The following table breaks up the development of this milestone by group member.
   7. & Conclusion & Hoffert(0.25h) &  \\ \hline
   8. & Acknowledgements & Hoffert(0.25h) &  \\ \hline
    & References & Hoffert(0h) &  \\ \hline
-    & \textbf{Total member contributions} & \textbf{Hoffert} & 8.85h \\ \cline{3-4}
+    & \textbf{Total member contributions} & \textbf{Hoffert} & 10.35h \\ \cline{3-4}
     &  & \textbf{Tao} & 4.5h \\ \cline{3-4}
     &  & \textbf{Butler} & \\ \cline{3-4}
     &  & \textbf{Rizvi} & \\ \cline{3-4}
     &  & \textbf{Alsharif} & \\ \hline
-    & \textbf{Grand total} &  & 13.35h \\ \hline
+    & \textbf{Grand total} &  & 14.85h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
@@ -1082,7 +1080,7 @@ Our initial estimate focused largely on the ``basics'', the features we absolute
 
 This indicates that our estimate was very close. If we include the time spent on past milestones (not including this one), the total time comes to over 200 man hours. Another 15 man hours was needed to bring the program up to version 2.0, which consisted entirely of ``extra'' features. 
 
-\todonote{Fill me out, yo!}
+\todonote{Tao, Rizvi, Alsharif, Butler. Fill me out, yo!}
 
 \section{Conclusion}
 FBMS is a program that balances ease of use with power. It's geared at those wanting something inbetween the power of version control and the ease of use of online backup solutions. FBMS goes beyond most backup systems to store revisions of files. Monitoring the file system real time allowed efficiency for the system, which focuses on a single folder rather than an entire hard drive.
