@@ -90,7 +90,7 @@ FBMS works on all locally accessible drives, including external drives and netwo
 
 FBMS has a focus on ease of use. A wizard guides the user through the setup, where the backup and live directories are chosen. With that complete, the program will run in the background and needs no user interaction until the use desires to restore or view files from the backup.
 
-\todonote{Review and revise}
+\todonote{Alsharif, Tao, Butler, and Rizvi: Review and revise}
 \end{abstract}
 \clearpage
 
@@ -204,7 +204,7 @@ Our final result is very similar to the mockups:
 
 \includegraphics[width=\linewidth]{images/real2.png}
 
-\todonote{Add linux and mac images of the above cases here (try to get full windows that show off the program well)}
+\todonote{Add linux images of the above cases here (try to get full windows that show off the program well)}
 
 \section{Requirements and early design}
 
@@ -245,12 +245,9 @@ Our final result is very similar to the mockups:
 	The system receives a file created notice from the watcher module, and put it in file created list.\\
 	The file change handler will process the list:
 	\begin{enumerate}
-		\item[a)]A file with the same name and location exists in the system: 
-		\\
+		\item[a)]A file with the same name and location exists in the system: \\
 		The system will treat the file as a modified file, and make a diff  file for it.
-
-		\item[b)]No file with the same name and location exists in the system: 
-		\\
+		\item[b)]No file with the same name and location exists in the system: \\
 		The system just simply copies the file into the backup folder. Then a new record will be added in database stating a new file added.
 	\end{enumerate}
 	\item \textbf{Quality} \\
@@ -909,7 +906,7 @@ Finally, we included an option in the program's menu that opens up the documenta
 \subsection{Complete implementation}
 We have included the implementation in ``release'' and ``development'' versions.
 
-The release version is pre-built and easy to use: just run the batch file (Windows) or shell script (Linux, OS X). This version is intended to allow the program to be run in a straightforward manner (allowing easy testing) and with optimal performance.
+The release version is pre-built and easy to use: just run the batch file (Windows) or shell script (Linux). This version is intended to allow the program to be run in a straightforward manner (allowing easy testing) and with optimal performance.
 
 The development version does not contain pre-built binaries, but has the full source code available. To compile this, you will need Eclipse\cite{eclipse} or Ant\cite{ant}. This version is intended to allow the source code to be examined. Running the development program will be slower than the release version, since debugging is enabled and logging uses slower, more exact methods.
 
@@ -986,13 +983,13 @@ The following table breaks up the development of this milestone by group member.
    & 1.7. User involvement plan & Hoffert(0.1h) &  \\ \hline
    & 1.8. Low fidelity prototypes & Hoffert(0.25h) &  \\ \hline
   2. & Requirements and early design &  &  \\ \hline
-   & 2.1. Summary use cases & Hoffert(0.1h)\newline Tao(1.5h) &  \\ \hline
-   & 2.2. Fully-dressed use cases & Tao(0.5h) & Adapted to current design. \\ \hline
+   & 2.1. Summary use cases & Hoffert(2h)\newline Tao(1.5h) &  \\ \hline
+   & 2.2. Fully-dressed use cases & Hoffert(0.5h) \newline Tao(0.5h) & Adapted to current design. \\ \hline
    & 2.3. Use case diagram & Tao(0.5h) &  \\ \hline
    & 2.4. Domain model &  &  \\ \hline
    & 2.5. Glossary & Hoffert(0.25h) &  \\ \hline
    & 2.6. Supplementary specification & Hoffert(0.25h) \newline Tao(0.5h) &  \\ \hline
-   & 2.7. System sequence diagrams &  &  \\ \hline
+   & 2.7. System sequence diagrams & Hoffert(0.5h) &  \\ \hline
    & 2.8. Operation contracts & Hoffert(1.5h)\newline Tao(1.5h) & \newline References of use cases  \\ \hline
    & 2.9. Obtaining user feedback & Hoffert(0.25h) &  \\ \hline
   3. & Updated design and unit testing &  &  \\ \hline
@@ -1012,15 +1009,15 @@ The following table breaks up the development of this milestone by group member.
    & 5.5. Complete implementation & Hoffert(0.25h) &  \\ \hline
    & 5.6. User manual & Hoffert(0.1h) &  \\ \hline
   6. & Project plan, evaluation & Hoffert(0.5h) &  \\ \hline
-  7. & Conclusion &  &  \\ \hline
-  8. & Acknowledgements &  &  \\ \hline
-   & References &  &  \\ \hline
-    & \textbf{Total member contributions} & \textbf{Hoffert} & 5.95h \\ \cline{3-4}
+  7. & Conclusion & Hoffert(0.25h) &  \\ \hline
+  8. & Acknowledgements & Hoffert(0.25h) &  \\ \hline
+   & References & Hoffert(0h) &  \\ \hline
+    & \textbf{Total member contributions} & \textbf{Hoffert} & 8.85h \\ \cline{3-4}
     &  & \textbf{Tao} & 4.5h \\ \cline{3-4}
     &  & \textbf{Butler} & \\ \cline{3-4}
     &  & \textbf{Rizvi} & \\ \cline{3-4}
     &  & \textbf{Alsharif} & \\ \hline
-    & \textbf{Grand total} &  & 10.45h \\ \hline
+    & \textbf{Grand total} &  & 13.35h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
