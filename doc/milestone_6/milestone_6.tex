@@ -965,6 +965,8 @@ As an end result, there's a complicated network of dependencies and variances be
 \item We changed the static class \texttt{DbManager} into a singleton, and renamed it to \texttt{DbConnec\-tion}. In doing so, we set all the methods as non-static, added a private constructor, and added a \texttt{getInstance()} method.
 \item \texttt{FileInfo} implemented \texttt{Comparible} to make comparisons between \texttt{FileInfo} objects considerably easier.
 \item We renamed the \texttt{FileHistory}'s \texttt{obtainRevision()} method to \texttt{obtainRevisionCo\-ntent()}, which made the workings clearer and reduced confusion with the other methods in the class, which had similar names like \texttt{getRevision()} (which was renamed to \texttt{getRevisionInfo()}.
+
+\item The if clauses in \texttt{DbConnection} (line 115 and 129) , \texttt{FilechangeHandlers} (line 57, 68, 79 and 90) and \texttt{Startup} (line 270) are reversed to enhance the readability.
 \end{itemize}
 
 \todonote{Butler, Tao, Alsharif, Rizvi. Everyone needs to point out at least one instance of refactoring, file and lines, why we did it, etc. Take a look at my objectification changes from revision 436 to 448 if you need ideas.}
@@ -1105,7 +1107,7 @@ The following table breaks up the development of this milestone by group member.
    & 3.4. Unit testing & Tao(0.5h) &  \\ \hline
   4. & Re-engineering &  &  \\ \hline
    & 4.1. Code smells & Hoffert(2h) &  \\ \hline
-   & 4.2. Refactoring & Hoffert(0.25h) &  \\ \hline
+   & 4.2. Refactoring & Hoffert(0.25h) \newline Tao(1.0h) & \newline Refactored code \\ \hline
    & 4.3. Gang of Four design patterns & Hoffert(0.5h) &  \\ \hline
   5. & Complete implementation &  &  \\ \hline
    & 5.1. Naming conventions & Hoffert(0h) &  \\ \hline
@@ -1119,11 +1121,11 @@ The following table breaks up the development of this milestone by group member.
   8. & Acknowledgements & Hoffert(0.25h) &  \\ \hline
    & References & Hoffert(0h) &  \\ \hline
     & \textbf{Total member contributions} & \textbf{Hoffert} & 12.35h \\ \cline{3-4}
-    &  & \textbf{Tao} & 7.5h \\ \cline{3-4}
+    &  & \textbf{Tao} & 8.5h \\ \cline{3-4}
     &  & \textbf{Butler} & \\ \cline{3-4}
     &  & \textbf{Rizvi} & \\ \cline{3-4}
     &  & \textbf{Alsharif} & \\ \hline
-    & \textbf{Grand total} &  & 19.85h \\ \hline
+    & \textbf{Grand total} &  & 20.85h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
