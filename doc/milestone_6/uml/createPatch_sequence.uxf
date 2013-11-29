@@ -21,7 +21,7 @@
       <h>80</h>
     </coordinates>
     <panel_attributes>lt=&gt;
-p1=fileToString(currentRevision)
+p1=fileToString(oldRevision)
 p2=originalFile</panel_attributes>
     <additional_attributes>30;30;210;30;210;60;30;60</additional_attributes>
   </element>
@@ -45,8 +45,8 @@ p2=originalFile</panel_attributes>
       <h>80</h>
     </coordinates>
     <panel_attributes>lt=&gt;
-p1=fileToString(patchFile)
-p2=patchString</panel_attributes>
+p1=fileToString(currentrevision)
+p2=modifiedFile</panel_attributes>
     <additional_attributes>30;30;210;30;210;60;30;60</additional_attributes>
   </element>
   <element>
@@ -91,7 +91,7 @@ p2=patchString</panel_attributes>
       <h>70</h>
     </coordinates>
     <panel_attributes>lt=&gt;
-patch_fromText(patchString)</panel_attributes>
+patch_make(modifiedFile, originalFile)</panel_attributes>
     <additional_attributes>30;50;320;50</additional_attributes>
   </element>
   <element>
@@ -100,7 +100,7 @@ patch_fromText(patchString)</panel_attributes>
       <x>550</x>
       <y>290</y>
       <w>20</w>
-      <h>130</h>
+      <h>110</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes/>
@@ -111,7 +111,7 @@ patch_fromText(patchString)</panel_attributes>
       <x>860</x>
       <y>290</y>
       <w>20</w>
-      <h>110</h>
+      <h>80</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes/>
@@ -129,40 +129,16 @@ patch</panel_attributes>
     <additional_attributes>30;50;320;50</additional_attributes>
   </element>
   <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>540</x>
-      <y>330</y>
-      <w>340</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>lt=&gt;
-patch_apply(linkedListPatch, originalFile)[0]</panel_attributes>
-    <additional_attributes>30;50;320;50</additional_attributes>
-  </element>
-  <element>
     <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>890</x>
-      <y>300</y>
-      <w>140</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>linkedListPatch is 
-build from patch</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Note</type>
-    <coordinates>
-      <x>360</x>
+      <x>350</x>
       <y>80</y>
-      <w>120</w>
+      <w>130</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>currentRevision 
-and patchFile are 
-parameters.</panel_attributes>
+    <panel_attributes>oldRevision and
+currentRevision
+are parameters.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -203,13 +179,26 @@ parameters.</panel_attributes>
     <type>com.umlet.element.Note</type>
     <coordinates>
       <x>360</x>
-      <y>390</y>
+      <y>370</y>
       <w>110</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>Return a Path
-to patched file</panel_attributes>
+to patch file</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>400</x>
+      <y>350</y>
+      <w>400</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+Write patch
+to a temporary file</panel_attributes>
+    <additional_attributes>30;90;320;90;320;30;170;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Note</type>
@@ -255,18 +244,5 @@ to patched file</panel_attributes>
     <panel_attributes>Write error message to log.
 Notice user we encountered an error.</panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>400</x>
-      <y>370</y>
-      <w>380</w>
-      <h>110</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;
-Write patch
-to a temporary file</panel_attributes>
-    <additional_attributes>30;90;300;90;300;30;170;30</additional_attributes>
   </element>
 </diagram>
