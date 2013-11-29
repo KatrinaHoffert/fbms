@@ -267,8 +267,14 @@ public class Startup
 
 		for(File file : directory.toFile().listFiles())
 		{
-			if(!file.isDirectory())
+			if(file.isDirectory())
 			{
+				// Call itself recursively for directories
+				startupScan(directory.resolve(file.toPath()));
+			}
+			else
+			{
+				
 				// If the file doesn't already exist, we can just copy it over
 				if(!FileOp.convertPath(file.toPath()).toFile().exists())
 				{
@@ -298,11 +304,6 @@ public class Startup
 
 					logger.info("Startup: Found modified file " + file.toString());
 				}
-			}
-			else
-			{
-				// Call itself recursively for directories
-				startupScan(directory.resolve(file.toPath()));
 			}
 		}
 	}
