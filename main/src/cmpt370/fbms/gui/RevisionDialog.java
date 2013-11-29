@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.nio.file.Path;
 import java.util.Vector;
 
@@ -184,7 +184,7 @@ public class RevisionDialog extends JDialog
  * An event listener for finding changes to the currently selected row in the table (via either
  * clicking a row with the mouse or navigating via the keyboard).
  */
-class RevisionTableSelectionListener implements MouseListener, KeyListener
+class RevisionTableSelectionListener extends MouseAdapter implements KeyListener
 {
 	// Logger instance
 	private static Logger logger = Logger.getLogger(Main.class);
@@ -267,22 +267,6 @@ class RevisionTableSelectionListener implements MouseListener, KeyListener
 
 	@Override
 	public void keyPressed(KeyEvent e)
-	{}
-
-	@Override
-	public void mouseEntered(MouseEvent e)
-	{}
-
-	@Override
-	public void mouseExited(MouseEvent e)
-	{}
-
-	@Override
-	public void mousePressed(MouseEvent e)
-	{}
-
-	@Override
-	public void mouseReleased(MouseEvent e)
 	{}
 
 	@Override

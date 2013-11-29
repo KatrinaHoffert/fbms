@@ -19,10 +19,10 @@ import java.awt.BorderLayout;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Vector;
@@ -83,37 +83,13 @@ public class MainFrame extends JFrame
 		setVisible(true);
 		setTitle("FBMS: File Backup and Management System");
 
-		addWindowListener(new WindowListener()
+		addWindowListener(new WindowAdapter()
 		{
 			@Override
 			public void windowClosed(WindowEvent arg0)
 			{
 				instance = null;
 			}
-
-			@Override
-			public void windowOpened(WindowEvent arg0)
-			{}
-
-			@Override
-			public void windowIconified(WindowEvent arg0)
-			{}
-
-			@Override
-			public void windowDeiconified(WindowEvent arg0)
-			{}
-
-			@Override
-			public void windowDeactivated(WindowEvent arg0)
-			{}
-
-			@Override
-			public void windowClosing(WindowEvent arg0)
-			{}
-
-			@Override
-			public void windowActivated(WindowEvent arg0)
-			{}
 		});
 
 		// Set size and position
@@ -258,7 +234,7 @@ public class MainFrame extends JFrame
  * An event listener for finding changes to the currently selected row in the table (via either
  * clicking a row with the mouse or navigating via the keyboard).
  */
-class TableSelectionListener implements MouseListener, KeyListener
+class TableSelectionListener extends MouseAdapter implements KeyListener
 {
 	// Logger instance
 	private static Logger logger = Logger.getLogger(Main.class);
@@ -372,22 +348,6 @@ class TableSelectionListener implements MouseListener, KeyListener
 
 	@Override
 	public void keyPressed(KeyEvent e)
-	{}
-
-	@Override
-	public void mouseEntered(MouseEvent e)
-	{}
-
-	@Override
-	public void mouseExited(MouseEvent e)
-	{}
-
-	@Override
-	public void mousePressed(MouseEvent e)
-	{}
-
-	@Override
-	public void mouseReleased(MouseEvent e)
 	{}
 
 	@Override

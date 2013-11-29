@@ -21,8 +21,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -291,7 +291,7 @@ public class FirstStartWizard
 		prevButton.addActionListener(new WizardButtonListener(this, -10));
 
 		// Event handler for directory choices
-		backupDirectoryField.addMouseListener(new MouseListener()
+		backupDirectoryField.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -326,21 +326,6 @@ public class FirstStartWizard
 				}
 			}
 
-			@Override
-			public void mouseReleased(MouseEvent e)
-			{}
-
-			@Override
-			public void mousePressed(MouseEvent e)
-			{}
-
-			@Override
-			public void mouseExited(MouseEvent e)
-			{}
-
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{}
 		});
 
 		// Event handler for quit button press
@@ -520,7 +505,7 @@ class WizardButtonListener implements ActionListener
 /**
  * Event handler for clicks inside the folder choosers.
  */
-class DirectoryListener implements MouseListener
+class DirectoryListener extends MouseAdapter
 {
 	// Logger instance
 	private static Logger logger = Logger.getLogger(Main.class);
@@ -625,20 +610,4 @@ class DirectoryListener implements MouseListener
 			Errors.fatalError("Could not access specified directories", e);
 		}
 	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0)
-	{}
-
-	@Override
-	public void mousePressed(MouseEvent arg0)
-	{}
-
-	@Override
-	public void mouseExited(MouseEvent arg0)
-	{}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0)
-	{}
 }
