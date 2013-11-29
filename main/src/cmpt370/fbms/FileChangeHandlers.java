@@ -54,40 +54,44 @@ public class FileChangeHandlers
 		Iterator<Path> createdIterator = createdFiles.iterator();
 		while(createdIterator.hasNext())
 		{
-			if(!createdIterator.next().toFile().exists())
+			if(createdIterator.next().toFile().exists())
 			{
-				createdIterator.remove();
+				continue;	
 			}
+			createdIterator.remove();
 		}
 
 		// Remove non-existant modifications
 		Iterator<Path> modifiedIterator = modifiedFiles.iterator();
 		while(modifiedIterator.hasNext())
 		{
-			if(!modifiedIterator.next().toFile().exists())
+			if(modifiedIterator.next().toFile().exists())
 			{
-				modifiedIterator.remove();
+				continue;
 			}
+			modifiedIterator.remove();
 		}
 
 		// Remove non-existant renames (we only care about the new name)
 		Iterator<RenamedFile> renamedIterator = renamedFiles.iterator();
 		while(renamedIterator.hasNext())
 		{
-			if(!renamedIterator.next().newName.toFile().exists())
+			if(renamedIterator.next().newName.toFile().exists())
 			{
-				renamedIterator.remove();
+				continue;
 			}
+			renamedIterator.remove();
 		}
 
 		// Remove non-existant deletions
 		Iterator<Path> deletedIterator = deletedFiles.iterator();
 		while(deletedIterator.hasNext())
 		{
-			if(!deletedIterator.next().toFile().exists())
+			if(deletedIterator.next().toFile().exists())
 			{
-				deletedIterator.remove();
+				continue;
 			}
+			deletedIterator.remove();
 		}
 	}
 
@@ -151,7 +155,7 @@ public class FileChangeHandlers
 				{
 					// If we find a duplicate but already have made a diff/backup just delete the
 					// duplicate.
-					if(hit == true || found == true)
+					if(hit || found)
 					{
 						itrm.remove();
 						logger.debug("Create File Handle: Found duplicate in modified, removing:"
@@ -238,7 +242,7 @@ public class FileChangeHandlers
 				{
 					// Clean up additional copies, will only do this if its already made a
 					// diff/backup of the file.
-					if(hit == true)
+					if(hit)
 					{
 						itrr.remove();
 					}

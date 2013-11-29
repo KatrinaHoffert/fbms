@@ -112,45 +112,47 @@ public class DbConnection
 			ResultSet settingsTableExists = metadata.getTables(null, null, "settings", null);
 
 			// If the revisions table is missing, create it
-			if(!revisionsTableExists.next())
+			if(revisionsTableExists.next())
 			{
+				logger.info("Existing revisions table found");
+			}
+			else
+			{	
 				statement.executeUpdate("CREATE TABLE revisions (id INTEGER PRIMARY KEY ASC,"
 						+ " path STRING, diff STRING, binary BLOB, delta INTEGER, filesize INTEGER, time INTEGER)");
 				firstRun = true;
 
 				logger.info("Existing revisions table not found; new table created");
 			}
-			else
-			{
-				logger.info("Existing revisions table found");
-			}
 
 			// Likewise for the settings table
-			if(!settingsTableExists.next())
+			if(settingsTableExists.next())
+			{
+				logger.info("Existing settings table found");
+				
+			}
+			else
 			{
 				statement.executeUpdate("CREATE TABLE settings (name STRING, setting STRING)");
 				firstRun = true;
 
 				logger.info("Existing settings table not found; new table created");
 			}
-			else
-			{
-				logger.info("Existing settings table found");
-			}
 
-			// If this isn't the first run, fetch the live directory. If it is the first run, that's
-			// up to the Control to do
-			if(!firstRun)
+			// If it is the first run, that's up to the Control to do
+			if(firstRun)
 			{
-				// Get the rows of the settings table and loop through them, searching for the
-				// live directory path
-				ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'liveDirectory'");
-				while(settingsRows.next())
+				return;	
+			}
+			// If this isn't the first run, fetch the live directory. 
+			// Get the rows of the settings table and loop through them, searching for the
+			// live directory path
+			ResultSet settingsRows = statement.executeQuery("SELECT * FROM settings WHERE name = 'liveDirectory'");
+			while(settingsRows.next())
+			{
+				if(settingsRows.getString("name").equals("liveDirectory"))
 				{
-					if(settingsRows.getString("name").equals("liveDirectory"))
-					{
-						Main.liveDirectory = Paths.get(settingsRows.getString("setting"));
-					}
+					Main.liveDirectory = Paths.get(settingsRows.getString("setting"));
 				}
 			}
 		}
