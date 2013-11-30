@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Vector;
 
@@ -53,7 +54,17 @@ public class RevisionDialog extends JDialog
 	 */
 	public RevisionDialog(Path file)
 	{
-		setTitle("Revision Log");
+		super(MainFrame.getInstance(), true);
+
+		// Put the relative path in the title
+		String relativePath = MainFrame.getInstance().toolbar.locationBar.getText();
+		if(!relativePath.endsWith(File.separator))
+		{
+			relativePath += File.separator;
+		}
+		relativePath += file.getFileName();
+		setTitle("Revision Log: " + relativePath);
+
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setIconImage(new ImageIcon("res/icon.png").getImage());
 		setSize(450, 250);
