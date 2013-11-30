@@ -59,6 +59,17 @@ class MainMenu extends JMenuBar
 		this.add(fileMenu);
 		this.add(helpMenu);
 
+		// Tooltips
+		copyToOption.setToolTipText("Copies the selected file to a chosen folder");
+		revisionsOption.setToolTipText("Opens a dialog to view the selected file's revision history");
+		restoreAllOption.setToolTipText("Restores all files to a chosen folder");
+		settingsOption.setToolTipText("Opens the settings dialog");
+		changeLiveDirOption.setToolTipText("Changes the path of the live directory");
+		changeBackupDirOption.setToolTipText("Changes the path of the backup directory");
+		exitOption.setToolTipText("Terminates the program");
+
+		helpOption.setToolTipText("Opens the documentation in the web browser");
+
 		fileMenu.add(copyToOption);
 		fileMenu.add(revisionsOption);
 		fileMenu.addSeparator();

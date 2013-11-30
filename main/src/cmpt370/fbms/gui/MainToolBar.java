@@ -64,6 +64,11 @@ public class MainToolBar extends JToolBar
 		refreshButton.setBorderPainted(false);
 		refreshButton.setFocusPainted(false);
 
+		// Tooltips
+		upButton.setToolTipText("Go up a folder");
+		refreshButton.setToolTipText("Refresh");
+		locationBar.setToolTipText("The current path, relative to the backup directory");
+
 		// Format the directory text field to be disabled and a dark grey
 		locationBar.setDisabledTextColor(new Color(0.2f, 0.2f, 0.2f));
 
