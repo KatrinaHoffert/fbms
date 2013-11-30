@@ -208,8 +208,6 @@ Our final result is very similar to the mockups:
 
 \includegraphics[width=\linewidth]{images/real2.png}
 
-\todonote{Hoffert. Add linux images of the above cases here.}
-
 \section{Requirements and early design}
 
 \subsection{Summary use cases}
@@ -846,8 +844,6 @@ These components integrate with our program and were chosen with efficiency in m
 	\item[Postconditions:] A row is inserted into the database containing information about the revision. In addition to the path of the file, the contents of the diff, the file size, and the delta (change in file size), the time will also be stored.
 \end{description}
 
-\todonote{Alsharif, Butler, Rizvi need to improve this. Go into more detail, make clearer, etc.}
-
 \subsection{Obtaining user feedback}
 Most of our user-feedback stems from heavy testing. We have found several bugs by combining manual testing with logging. Features are also prioritized by user feedback. In version 1.0, for example, we had no support for binary revisions. They were backed up, but not revisioned. This was one of the biggest limitations at the time, and reflected by user feedback. In version 2.0, we introduced support for these binary revisions.
 
@@ -916,7 +912,7 @@ The class diagram is too large to embed in this document, so has been included s
 
 \subsection{Unit testing}
 
-The test file is in /trunk/main/src/cmpt370/fbms/test. TesterMainSuite.java is the test suite of the project.
+The test file is in \path{trunk/main/src/cmpt370/fbms/test}. TesterMainSuite.java is the test suite of the project.
 
 The sample testing data is automatically created by test cases.\par
 JUnit is also used in testing other modules, except the GUI modules, since the GUI modules are meant to be looked fine and no fault.
@@ -1104,12 +1100,12 @@ The following table breaks up the development of this milestone by group member.
    & 2.9. Obtaining user feedback & Hoffert(0.25h) &  \\ \hline
   3. & Updated design and unit testing &  &  \\ \hline
    & 3.1. System operations & Hoffert(0.25h) &  \\ \hline
-   & 3.2. Sequence diagrams & Tao(3.0h) &  \\ \hline
+   & 3.2. Sequence diagrams & Hoffert(2h) \newline Tao(3h) &  \\ \hline
    & 3.3. Class diagram & Hoffert(1.5h) &  \\ \hline
    & 3.4. Unit testing & Tao(0.5h) &  \\ \hline
   4. & Re-engineering &  &  \\ \hline
    & 4.1. Code smells & Hoffert(2h) &  \\ \hline
-   & 4.2. Refactoring & Hoffert(0.25h) \newline Tao(1.0h) & \newline Refactored code \\ \hline
+   & 4.2. Refactoring & Hoffert(0.25h) \newline Tao(1h) & \newline Refactored code \\ \hline
    & 4.3. Gang of Four design patterns & Hoffert(0.5h) &  \\ \hline
   5. & Complete implementation &  &  \\ \hline
    & 5.1. Naming conventions & Hoffert(0h) &  \\ \hline
@@ -1122,12 +1118,12 @@ The following table breaks up the development of this milestone by group member.
   7. & Conclusion & Hoffert(0.25h) &  \\ \hline
   8. & Acknowledgements & Hoffert(0.25h) &  \\ \hline
    & References & Hoffert(0h) &  \\ \hline
-    & \textbf{Total member contributions} & \textbf{Hoffert} & 12.35h \\ \cline{3-4}
+    & \textbf{Total member contributions} & \textbf{Hoffert} & 14.35h \\ \cline{3-4}
     &  & \textbf{Tao} & 8.5h \\ \cline{3-4}
     &  & \textbf{Butler} & \\ \cline{3-4}
     &  & \textbf{Rizvi} & \\ \cline{3-4}
     &  & \textbf{Alsharif} & \\ \hline
-    & \textbf{Grand total} &  & 20.85h \\ \hline
+    & \textbf{Grand total} &  & 22.85h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
@@ -1164,6 +1160,7 @@ The next table summarizes the time spent by each member throughout the project (
    & Refactoring & 4 hours & Objectification, use of design patterns \\ \cline{2-4}
    & Binary revisioning feature & 5 hours & Also lumped in bug fixes to file handlers \\ \cline{2-4}
    & MIME detection & 3 hours & Getting Java MIME Magic to work\\ \cline{2-4}
+   & Usability fixes & 1 hour & As suggested by marker in M5 \\ \hline
    & Miscellaneous bug fixes & 4 hours & Numerous smaller bug fixes\\ \hline
   \multicolumn{2}{|r|}{\textbf{Total for Hoffert}} & 93 hours & 67\% of the commits from one person\\ \hline \hline
   Tao & Rough design of modules & 1 hour & \\ \cline{2-4}
