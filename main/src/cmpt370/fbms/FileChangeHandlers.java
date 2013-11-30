@@ -58,7 +58,6 @@ public class FileChangeHandlers
 			{
 				createdIterator.remove();
 			}
-
 		}
 
 		// Remove non-existant modifications
@@ -69,7 +68,6 @@ public class FileChangeHandlers
 			{
 				modifiedIterator.remove();
 			}
-
 		}
 
 		// Remove non-existant renames (we only care about the new name)
@@ -80,7 +78,6 @@ public class FileChangeHandlers
 			{
 				renamedIterator.remove();
 			}
-
 		}
 
 		// Remove non-existant deletions
@@ -91,9 +88,73 @@ public class FileChangeHandlers
 			{
 				deletedIterator.remove();
 			}
-
 		}
 	}
+
+	/**
+	 * A helper method for the handlers. Create a patch for a file. If binary, leave diff field
+	 * null. If text, leave binary field null.
+	 * 
+	 * @param oldFile
+	 *            The original path to the file to compare against.
+	 * @param newFile
+	 *            The path to the new file to create the patch for.
+	 * @param diff
+	 *            The diff of the two file versions.
+	 * 
+	 * @param binary
+	 *            Byte array for binary patches.
+	 * 
+	 */
+	private void createPatchEntry(Path oldName, Path newName, Path diff, byte[] binary)
+	{
+		long delta = FileOp.fileSize(newName) - FileOp.fileSize(FileOp.convertPath(oldName));
+		FileHistory fileHist = new FileHistory(newName);
+		fileHist.storeRevision(diff, binary, FileOp.fileSize(newName), delta);
+	}
+
+	/**
+	 * A helper method for the handlers. Create a patch for a binary file.
+	 * 
+	 * @param oldFile
+	 *            The original path to the file to compare against.
+	 * @param newFile
+	 *            The path to the new file to create the patch for.
+	 * @param errorMsg
+	 *            Associated error message to prepend to the file name.
+	 */
+	private void copyAndRename(Path oldName, Path newName, String errorMsg)
+	{
+
+		String newNameCalculated = oldName.getParent().relativize(newName).toString();
+
+		Path targetDirectory = FileOp.convertPath(newName).getParent();
+		FileOp.copy(FileOp.convertPath(oldName), targetDirectory);
+
+		FileHistory fileHist = new FileHistory(oldName);
+		fileHist.renameRevision(newNameCalculated);
+
+		logger.debug(errorMsg + " " + newName.toFile().toString());
+
+	}
+
+	/**
+	 * Simply copies a file from the live location to the corresponding backup location.
+	 * 
+	 * @param file
+	 *            Location of the file in live.
+	 * @param errorMsg
+	 *            Associated error message to prepend to the file name.
+	 */
+	private void copyNewFile(Path file, String errorMsg)
+	{
+		Path targetDirectory = FileOp.convertPath(file.getParent());
+		FileOp.copy(file, targetDirectory);
+
+		logger.debug(errorMsg + " " + file.toFile().toString());
+
+	}
+
 
 	/**
 	 * Handles all created files identified by the watcher. Also handles recurrent entries between
@@ -131,7 +192,7 @@ public class FileChangeHandlers
 					// delete this one safely.
 					if(hit == true)
 					{
-						itrr.remove();
+						// itrr.remove();
 						logger.debug("Create Handle: Found duplicate in renamed, removing.");
 					}
 					// Otherwise we set found and hit to be true. It will be then removed from
@@ -155,7 +216,7 @@ public class FileChangeHandlers
 				{
 					// If we find a duplicate but already have made a diff/backup just delete the
 					// duplicate.
-					if(hit || found)
+					if(hit == true || found == true)
 					{
 						itrm.remove();
 						logger.debug("Create File Handle: Found duplicate in modified, removing:"
@@ -180,10 +241,8 @@ public class FileChangeHandlers
 				if(!FileOp.isFolder(pathc) && !FileOp.convertPath(pathc).toFile().exists())
 				{
 					// If the file isn't a folder and is not in the backup folder, copy it over.
-					Path targetDirectory = FileOp.convertPath(pathc).getParent();
-					FileOp.copy(pathc, targetDirectory);
+					copyNewFile(pathc, "Create Handle: Found new file");
 
-					logger.debug("Create Handle: Found new file " + pathc.toFile().toString());
 				}
 				else if(FileOp.isFolder(pathc) && !FileOp.convertPath(pathc).toFile().exists())
 				{
@@ -223,7 +282,7 @@ public class FileChangeHandlers
 		{
 			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
 		}
-		catch(Exception e)
+		catch(NumberFormatException e)
 		{
 			maxSizeInBytes = 5 * 1024 * 1024;
 		}
@@ -242,9 +301,9 @@ public class FileChangeHandlers
 				{
 					// Clean up additional copies, will only do this if its already made a
 					// diff/backup of the file.
-					if(hit)
+					if(hit == true)
 					{
-						itrr.remove();
+						// itrr.remove();
 					}
 					else
 					{
@@ -259,11 +318,9 @@ public class FileChangeHandlers
 					if(!FileOp.convertPath(pathm).toFile().exists())
 					{
 						// If the file isn't a folder and is not in the backup folder, copy it over.
-						Path targetDirectory = FileOp.convertPath(pathm).getParent();
-						FileOp.copy(pathm, targetDirectory);
 
-						logger.debug("Create File Handle: Found new file "
-								+ pathm.toFile().toString());
+						copyNewFile(pathm, "Create File Handle: Found new file");
+
 					}
 					else
 					{
@@ -277,23 +334,16 @@ public class FileChangeHandlers
 						{
 							logger.info("File delta created in handleModified was 0 in size: "
 									+ pathm.toFile().toString() + " -- revision not made.");
-
 						}
 						else
 						{
-							long delta = FileOp.fileSize(pathm)
-									- FileOp.fileSize(FileOp.convertPath(pathm));
-
 							// Store a revision
-							FileHistory fileHist = new FileHistory(pathm);
-							fileHist.storeRevision(diff, null, FileOp.fileSize(pathm), delta);
+							createPatchEntry(pathm, pathm, diff, null);
 
 							// Copy file over.
-							Path targetDirectory = FileOp.convertPath(pathm).getParent();
-							FileOp.copy(pathm, targetDirectory);
 
-							logger.debug("Handle File Modified: Found existing modified file "
-									+ pathm.toFile().toString());
+							copyNewFile(pathm, "Handle File Modified: Found existing modified file");
+
 						}
 					}
 				}
@@ -302,14 +352,11 @@ public class FileChangeHandlers
 						&& FileOp.convertPath(pathm).toFile().exists())
 				{
 					// No diffs, just store the revision
-					long delta = FileOp.fileSize(pathm)
-							- FileOp.fileSize(FileOp.convertPath(pathm));
 
 					try
 					{
-						FileHistory fileHist = new FileHistory(pathm);
-						fileHist.storeRevision(null, Files.readAllBytes(pathm),
-								FileOp.fileSize(pathm), delta);
+						createPatchEntry(pathm, pathm, null, Files.readAllBytes(pathm));
+
 					}
 					catch(IOException e)
 					{
@@ -317,19 +364,13 @@ public class FileChangeHandlers
 					}
 
 					// Copy it over
-					Path targetDirectory = FileOp.convertPath(pathm).getParent();
-					FileOp.copy(pathm, targetDirectory);
 
-					logger.debug("Create File Handle: Found binary file "
-							+ pathm.toFile().toString());
+					copyNewFile(pathm, "Create File Handle: Found binary file ");
+
 				}
 				// It doesn't exist in the backup directory, so just copy
 				{
-					Path targetDirectory = FileOp.convertPath(pathm).getParent();
-					FileOp.copy(pathm, targetDirectory);
-
-					logger.debug("Create File Handle: Found new unrevisioned or large file "
-							+ pathm.toFile().toString());
+					copyNewFile(pathm, "Create File Handle: Found new unrevisioned or large file");
 				}
 			}
 			itrm.remove();
@@ -342,7 +383,6 @@ public class FileChangeHandlers
 
 		RenamedFile toRename;
 		Path diff;
-		String newName;
 
 		// Figure out the maximum size that gets revisioned (note the config is in MB, so is
 		// multiplied by 1024^2 to get bytes
@@ -352,7 +392,7 @@ public class FileChangeHandlers
 		{
 			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
 		}
-		catch(Exception e)
+		catch(NumberFormatException e)
 		{
 			maxSizeInBytes = 5 * 1024 * 1024;
 		}
@@ -364,7 +404,6 @@ public class FileChangeHandlers
 		while(itrr.hasNext())
 		{
 			toRename = itrr.next();
-			newName = toRename.oldName.getParent().relativize(toRename.newName).toString();
 			if(FileOp.convertPath(toRename.oldName).toFile().exists())
 			{
 				// If this is a file we're renaming update database and rename file.
@@ -383,56 +422,42 @@ public class FileChangeHandlers
 							logger.info("File delta created in handleRename was 0 in size: "
 									+ toRename.oldName.toFile().toString()
 									+ " -- revision not made.");
-
 							// Don't actually rename the file: make a copy (so we can access
 							// revisions when moving across folders)
-							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
-							FileOp.copy(FileOp.convertPath(toRename.oldName), targetDirectory);
+							copyAndRename(toRename.oldName, toRename.newName,
+									"Copied in handleRenamedFiles: ");
 
-							FileHistory fileHist = new FileHistory(toRename.oldName);
-							fileHist.renameRevision(newName);
 						}
 						else
 						{
 							// Store the revision if the file is below the max size
 							if(FileOp.fileSize(toRename.newName) < maxSizeInBytes)
 							{
-								long delta = FileOp.fileSize(toRename.newName)
-										- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
+								createPatchEntry(toRename.oldName, toRename.newName, diff, null);
 
-								FileHistory fileHist = new FileHistory(toRename.newName);
-								fileHist.storeRevision(diff, null,
-										FileOp.fileSize(toRename.newName), delta);
 							}
-
 							// Copy file over
-							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
-							FileOp.copy(toRename.newName, targetDirectory);
+							copyAndRename(toRename.oldName, toRename.newName,
+									"Handle Renamed updated an existing file by copying:");
 
-							FileHistory fileHist = new FileHistory(toRename.oldName);
-							fileHist.renameRevision(newName);
-
-							logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-									+ "already existed and was updated.");
 						}
 					}
 					// Binary files (which exist in the backup directory)
 					else if(toRename.oldName.toFile().exists())
 					{
 						// Store the revision
-						long delta = FileOp.fileSize(toRename.newName)
-								- FileOp.fileSize(FileOp.convertPath(toRename.oldName));
 						try
 						{
 							// In the event of moving a file within the live directory, the old name
 							// won't exist. In this case, there are no changes and no revision is
 							// necessary (or even possible, since the old file == the new file)
+
 							if(toRename.oldName.toFile().exists()
 									&& FileOp.fileSize(toRename.newName) < maxSizeInBytes)
 							{
-								FileHistory fileHist = new FileHistory(toRename.newName);
-								fileHist.storeRevision(null, Files.readAllBytes(toRename.oldName),
-										FileOp.fileSize(toRename.newName), delta);
+								createPatchEntry(toRename.oldName, toRename.newName, null,
+										Files.readAllBytes(toRename.oldName));
+
 							}
 						}
 						catch(IOException e)
@@ -440,28 +465,15 @@ public class FileChangeHandlers
 							Errors.nonfatalError("Could not insert revision for renamed, existing "
 									+ "binary file " + toRename.newName.toString(), e);
 						}
-
 						// And copy the file
-						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
-						FileOp.copy(toRename.newName, targetDirectory);
-
-						FileHistory fileHist = new FileHistory(toRename.oldName);
-						fileHist.renameRevision(newName);
-
-						logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-								+ " existed and was updated.");
+						copyAndRename(toRename.oldName, toRename.newName,
+								"Handle Renamed found a file and updated it:");
 					}
 					// Files that don't exist in the backup directory
 					else
 					{
-						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
-						FileOp.copy(toRename.newName, targetDirectory);
+						copyAndRename(toRename.oldName, toRename.newName, "");
 
-						FileHistory fileHist = new FileHistory(toRename.oldName);
-						fileHist.renameRevision(newName);
-
-						logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-								+ " existed but was not a valid file and was updated.");
 					}
 				}
 				else
@@ -506,20 +518,14 @@ public class FileChangeHandlers
 							// Store the revision if it's within the size limits
 							if(FileOp.fileSize(toRename.newName) < maxSizeInBytes)
 							{
-								long delta = FileOp.fileSize(toRename.newName)
-										- FileOp.fileSize(FileOp.convertPath(toRename.newName));
-
-								FileHistory fileHist = new FileHistory(toRename.newName);
-								fileHist.storeRevision(diff, null,
-										FileOp.fileSize(toRename.newName), delta);
+								createPatchEntry(toRename.oldName, toRename.newName, diff, null);
 							}
 
 							// Copy file over
-							Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
-							FileOp.copy(toRename.newName, targetDirectory);
 
-							logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-									+ "already existed and was updated.");
+							copyNewFile(toRename.newName,
+									"Handle renamed updated an existing file by copy:");
+
 						}
 					}
 					// Binary files
@@ -528,13 +534,11 @@ public class FileChangeHandlers
 						// Store the revision if it's within size limits
 						if(FileOp.fileSize(toRename.newName) < maxSizeInBytes)
 						{
-							long delta = FileOp.fileSize(toRename.newName)
-									- FileOp.fileSize(FileOp.convertPath(toRename.newName));
+
 							try
 							{
-								FileHistory fileHist = new FileHistory(toRename.newName);
-								fileHist.storeRevision(null, Files.readAllBytes(toRename.newName),
-										FileOp.fileSize(toRename.newName), delta);
+								createPatchEntry(toRename.oldName, toRename.newName, null,
+										Files.readAllBytes(toRename.newName));
 							}
 							catch(IOException e)
 							{
@@ -545,11 +549,10 @@ public class FileChangeHandlers
 						}
 
 						// And copy the file
-						Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
-						FileOp.copy(toRename.newName, targetDirectory);
 
-						logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-								+ " only new name existed.");
+						copyNewFile(toRename.newName,
+								"Handle renamed updated a file where only the new name existed:");
+
 					}
 
 					logger.debug("Handle Renamed: "
@@ -560,10 +563,8 @@ public class FileChangeHandlers
 				// renaming an existing file
 				else
 				{
-					Path targetDirectory = FileOp.convertPath(toRename.newName).getParent();
-					FileOp.copy(toRename.newName, targetDirectory);
-					logger.debug("Handle Renamed: " + toRename.newName.toFile().toString()
-							+ " did not exist and was added.");
+					copyNewFile(toRename.newName,
+							"Handle renamed found a file that did not exist and copied it:");
 				}
 			}
 
@@ -580,9 +581,9 @@ public class FileChangeHandlers
 	public void handleDeletedFiles()
 	{
 		Iterator<Path> itrd = deletedFiles.iterator();
-		Iterator<Path> itrc = null;
-		Iterator<Path> itrm = null;
-		Iterator<RenamedFile> itrr = null;
+		Iterator<Path> itrc = createdFiles.iterator();
+		Iterator<Path> itrm = modifiedFiles.iterator();
+		Iterator<RenamedFile> itrr = renamedFiles.iterator();
 		RenamedFile toRename;
 		Path pathm, pathc, pathd;
 		logger.debug("Handle Deleted Files has started.");
@@ -590,12 +591,6 @@ public class FileChangeHandlers
 		while(itrd.hasNext())
 		{
 			pathd = itrd.next();
-
-			// Must get iterators at each loop, since iterators are not cycling.
-			itrc = createdFiles.iterator();
-			itrm = modifiedFiles.iterator();
-			itrr = renamedFiles.iterator();
-
 			while(itrc.hasNext())
 			{
 				pathc = itrc.next();
