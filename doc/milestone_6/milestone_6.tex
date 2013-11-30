@@ -963,6 +963,8 @@ As an end result, there's a complicated network of dependencies and variances be
 \subsection{Refactoring}
 \begin{itemize}
 \item We changed the static class \texttt{DbManager} into a singleton, and renamed it to \texttt{DbConnec\-tion}. In doing so, we set all the methods as non-static, added a private constructor, and added a \texttt{getInstance()} method.
+\item We added helper method to handlers, which is \texttt{validateLists()} for clearing the lists, which lets us remove a vital dependency from  \texttt{GuiController}.
+\item \texttt{Main} has become a singleton. This allows us to objectify \texttt{Watcher} and \texttt{GuiController} better, and decoupling the lists, which are no longer static.
 \item \texttt{FileInfo} implemented \texttt{Comparible} to make comparisons between \texttt{FileInfo} objects considerably easier.
 \item We renamed the \texttt{FileHistory}'s \texttt{obtainRevision()} method to \texttt{obtainRevisionCo\-ntent()}, which made the workings clearer and reduced confusion with the other methods in the class, which had similar names like \texttt{getRevision()} (which was renamed to \texttt{getRevisionInfo()}.
 
