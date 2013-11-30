@@ -55,10 +55,10 @@ public class TesterFileChangeHandler extends TestCase
 		// Initialize database.
 		db = DbConnection.getInstance();
 		db.initConnection();
-		db.setConfig("trimDate", "-1");
-		db.setConfig("startupScan", "true");
-		db.setConfig("disableNonFatalErrors", "false");
-		db.setConfig("maxSize", "5");
+		// db.setConfig("trimDate", "-1");
+		// db.setConfig("startupScan", "true");
+		// db.setConfig("disableNonFatalErrors", "false");
+		// db.setConfig("maxSize", "5");
 		// db.close();
 
 
@@ -75,11 +75,8 @@ public class TesterFileChangeHandler extends TestCase
 		{}
 
 		db.initConnection();
-		// Add this file to list
+		// Add test file to list
 		createdFiles.add(Paths.get(Main.liveDirectory.toString(), "TestFile1"));
-
-		// Add a non-exist files
-		createdFiles.add(Paths.get(Main.liveDirectory.toString(), "HTTP_404"));
 
 		// Call handler to handle this.
 		testHandler.handleCreatedFiles();
@@ -88,7 +85,7 @@ public class TesterFileChangeHandler extends TestCase
 
 		assertTrue("File is not copied", new File("FileHandlerTest/backup/TestFile1").exists());
 
-		// non-exist file should be removed, the list should be empty.
+		// Test file should be removed, the list should be empty.
 		assertTrue("Nothing should be in created files list", createdFiles.isEmpty());
 
 		// Delete the file in backup folder.
@@ -150,33 +147,44 @@ public class TesterFileChangeHandler extends TestCase
 		// Add items to lists.
 		Path testPath = null;
 		testPath = Paths.get(Main.liveDirectory.toString(), "TestFile1");
+
 		createdFiles.add(testPath);
-		deletedFiles.add(testPath);
 		modifiedFiles.add(testPath);
+		deletedFiles.add(testPath);
+
 		RenamedFile renamedFile = new RenamedFile();
 		renamedFile.oldName = testPath;
 		renamedFiles.add(renamedFile);
 
 		testPath = Paths.get(Main.liveDirectory.toString(), "TestFile2");
-		deletedFiles.add(testPath);
+
 		modifiedFiles.add(testPath);
+		deletedFiles.add(testPath);
+
 		renamedFile = new RenamedFile();
 		renamedFile.oldName = testPath;
 		renamedFiles.add(renamedFile);
 
 		testPath = Paths.get(Main.liveDirectory.toString(), "TestFile3");
+
 		modifiedFiles.add(testPath);
+		deletedFiles.add(testPath);
+
 		renamedFile = new RenamedFile();
 		renamedFile.oldName = testPath;
 		renamedFiles.add(renamedFile);
 
 		testPath = Paths.get(Main.liveDirectory.toString(), "TestFile4");
+
+		deletedFiles.add(testPath);
+
 		renamedFile = new RenamedFile();
 		renamedFile.oldName = testPath;
 		renamedFiles.add(renamedFile);
 
 		// handle list
 		testHandler.handleDeletedFiles();
+
 
 		assertTrue("createdFiles is not cleared.", createdFiles.isEmpty());
 		assertTrue("deletedFiles is not cleared.", deletedFiles.isEmpty());
