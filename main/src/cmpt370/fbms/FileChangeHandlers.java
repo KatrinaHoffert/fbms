@@ -21,6 +21,8 @@ public class FileChangeHandlers
 	private Set<RenamedFile> renamedFiles;
 	private Set<Path> deletedFiles;
 
+	private static final int sMBtoBytes = 1024 * 1024;
+
 	/**
 	 * Creates a file change listener for the supplied lists.
 	 * 
@@ -276,15 +278,17 @@ public class FileChangeHandlers
 
 		// Figure out the maximum size that gets revisioned (note the config is in MB, so is
 		// multiplied by 1024^2 to get bytes
+		// If we could not get it from DB, we use 5 MB.
 		DbConnection db = DbConnection.getInstance();
 		long maxSizeInBytes;
 		try
 		{
-			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
+			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize"))
+					* sMBtoBytes);
 		}
-		catch(NumberFormatException e)
+		catch(Exception e)
 		{
-			maxSizeInBytes = 5 * 1024 * 1024;
+			maxSizeInBytes = 5 * sMBtoBytes;
 		}
 
 		logger.debug("Handle Modified Files has started.");
@@ -386,15 +390,17 @@ public class FileChangeHandlers
 
 		// Figure out the maximum size that gets revisioned (note the config is in MB, so is
 		// multiplied by 1024^2 to get bytes
+		// If we could not retrieve it from DB, we use 5 MB in default.
 		DbConnection db = DbConnection.getInstance();
 		long maxSizeInBytes;
 		try
 		{
-			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
+			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize"))
+					* sMBtoBytes);
 		}
-		catch(NumberFormatException e)
+		catch(Exception e)
 		{
-			maxSizeInBytes = 5 * 1024 * 1024;
+			maxSizeInBytes = 5 * sMBtoBytes;
 		}
 
 		logger.debug("Handle Renamed Files has started.");
@@ -581,9 +587,9 @@ public class FileChangeHandlers
 	public void handleDeletedFiles()
 	{
 		Iterator<Path> itrd = deletedFiles.iterator();
-		Iterator<Path> itrc = createdFiles.iterator();
-		Iterator<Path> itrm = modifiedFiles.iterator();
-		Iterator<RenamedFile> itrr = renamedFiles.iterator();
+		Iterator<Path> itrc = null;
+		Iterator<Path> itrm = null;
+		Iterator<RenamedFile> itrr = null;
 		RenamedFile toRename;
 		Path pathm, pathc, pathd;
 		logger.debug("Handle Deleted Files has started.");
@@ -591,6 +597,13 @@ public class FileChangeHandlers
 		while(itrd.hasNext())
 		{
 			pathd = itrd.next();
+
+			// since iterators are not cycling in set, we must get iterators in each loop.
+
+			itrc = createdFiles.iterator();
+			itrm = modifiedFiles.iterator();
+			itrr = renamedFiles.iterator();
+
 			while(itrc.hasNext())
 			{
 				pathc = itrc.next();
