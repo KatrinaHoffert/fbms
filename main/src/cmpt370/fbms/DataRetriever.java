@@ -191,7 +191,14 @@ public class DataRetriever
 			{
 				row = new Vector<>();
 
-				row.add(new ImageIcon("res/folder.png"));
+				if(FileOp.convertPath(path.resolve(file.fileName)).toFile().exists())
+				{
+					row.add(new ImageIcon("res/folder.png"));
+				}
+				else
+				{
+					row.add(new ImageIcon("res/folder_deleted.png"));
+				}
 				row.add(file.fileName);
 				row.add(GuiUtility.humanReadableBytes(file.fileSize, false));
 				row.add(GuiUtility.formatDate(file.createdDate));
@@ -213,7 +220,14 @@ public class DataRetriever
 			{
 				row = new Vector<>();
 
-				row.add(new ImageIcon("res/file.png"));
+				if(FileOp.convertPath(path.resolve(file.fileName)).toFile().exists())
+				{
+					row.add(new ImageIcon("res/file.png"));
+				}
+				else
+				{
+					row.add(new ImageIcon("res/file_deleted.png"));
+				}
 				row.add(file.fileName);
 				row.add(GuiUtility.humanReadableBytes(file.fileSize, false));
 				row.add(GuiUtility.formatDate(file.createdDate));
