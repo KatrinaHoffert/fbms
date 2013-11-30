@@ -17,6 +17,8 @@ package cmpt370.fbms.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog.ModalityType;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -35,6 +37,7 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
@@ -62,6 +65,7 @@ public class MainFrame extends JFrame
 	public MainMenu menubar;
 	public Path selectedFile = null;
 	public Vector<String> columns;
+	public Vector<Vector<Object>> rows;
 
 	private JPanel contentPane;
 
@@ -132,7 +136,7 @@ public class MainFrame extends JFrame
 		// Insert the data into a modified table model based on the default. This lets us disable
 		// editing of table cells.
 		DataRetriever folderRetriever = new DataRetriever(Main.backupDirectory);
-		Vector<Vector<Object>> rows = folderRetriever.getFolderContentsTable();
+		rows = folderRetriever.getFolderContentsTable();
 		table.setModel(new DefaultTableModel(rows, columns)
 		{
 			@Override
@@ -184,29 +188,57 @@ public class MainFrame extends JFrame
 		table.addKeyListener(new TableSelectionListener());
 
 		logger.info("Main frame drawn");
+
+		// Auto refresh the folder contents every 2 seconds
+		new Timer(2000, new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				Path selectedFileBackup = selectedFile;
+
+				// Note that this will blank selectedFile
+				redrawTable(currentDirectory);
+
+				// Reselect the row (if any)
+				if(selectedFileBackup != null)
+				{
+					// Figure out which row is supposed to be selected (by name)
+					int selectedRowNumber = -1;
+					for(Vector<Object> row : rows)
+					{
+						selectedRowNumber++;
+						String fileName = (String) row.get(1);
+						if(fileName.equals(selectedFileBackup.getFileName().toString()))
+						{
+							// Found the right row, so the selected file persists (otherwise the
+							// file has presumably gone missing and we can't select that)
+							selectedFile = selectedFileBackup;
+							break;
+						}
+					}
+					table.setRowSelectionInterval(selectedRowNumber, selectedRowNumber);
+				}
+			}
+		}).start();
 	}
 
+	/**
+	 * Redraws the table contents with the given directory (ie, display the contents of this
+	 * folder).
+	 * 
+	 * @param directory
+	 *            The directory we are now "in".
+	 */
 	public void redrawTable(Path directory)
 	{
 		// Recreate the data model
 		DataRetriever folderRetriever = new DataRetriever(directory);
-		Vector<Vector<Object>> rows = folderRetriever.getFolderContentsTable();
-		table.setModel(new DefaultTableModel(rows, columns)
-		{
-			@Override
-			public boolean isCellEditable(int row, int column)
-			{
-				return false;
-			}
+		rows = folderRetriever.getFolderContentsTable();
 
-			@Override
-			public Class<?> getColumnClass(int column)
-			{
-				return getValueAt(0, column).getClass();
-			}
-		});
+		// Redo the table contents
+		((DefaultTableModel) table.getModel()).setDataVector(rows, columns);
 
-		// Set the appropriate widths
+		// And column sizes
 		table.getColumnModel().getColumn(0).setMinWidth(25);
 		table.getColumnModel().getColumn(0).setMaxWidth(25);
 		table.getColumnModel().getColumn(1).setMinWidth(100);
