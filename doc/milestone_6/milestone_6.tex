@@ -309,7 +309,20 @@ Our final result is very similar to the mockups:
 \end{description}
 
 \subsubsection{Delete file}
-\todonote{Butler. Adapt from M4.}
+\begin{description}
+	\item \textbf{Level} \\
+	Summary
+	\item \textbf{Actors} \\
+	System
+	\item \textbf{Goal} \\
+	Allows the user to delete a specified file 
+	\item \textbf{Activities} \\
+	User scrolls over live directory and finds the file to be deleted. JNotify notices the file change and calls the watcher. The watcher notices a file has been deleted from the live directory and add to the list. The control reads the list and removes any other instances of the file in the other list. 
+	\item \textbf{Quality} \\
+	This is a main use case in the system and must work to a very high standard.
+	\item \textbf{Version} \\
+	28 November 2013
+\end{description}
 
 \subsubsection{Revert Revision} 
 \begin{description}
@@ -557,7 +570,45 @@ Our final result is very similar to the mockups:
 \end{description}
 
 \subsubsection{Rename file}
-\todonote{Butler. Adapt from M4.}
+\begin{description}
+	\item \textbf{Scope} \\
+		FBMS
+	\item \textbf{Level} \\
+		User goal
+	\item \textbf{Primary actor} \\
+		User 
+	\item \textbf{Stakeholders and interests} \\
+		User: Want this renamed file is automatically renamed in system. 
+	\item \textbf{Preconditions} \\
+		\begin{itemize}
+		\item The Watcher module is running normally. 
+		\item The reversion is accessible. 
+		\item System has read access to the newly created file. 
+		\item System has write access to backup folder.   
+		\end{itemize}
+	\item \textbf{Success Guarantee} \\
+		\begin{itemize}
+		\item The backups of file renamed are renamed. 
+		\item Records are renamed in database. 
+		\end{itemize}
+	\item \textbf{Main Success scenario} \vspace{-4ex} \\
+	\begin{itemize}
+		\item System is notified for the renaming operation. 
+		\item System renames all the backups of the file.  
+		\item System add a rename record into the database.  
+		\item System changes all the records of the file. 
+	\end{itemize}
+	\item \textbf{Extensions} \\
+		\begin{itemize}
+		\item The backups of file will be locked when being renamed.     
+	\end{itemize}
+	\item \textbf{Special Requirements}\\
+		None 
+	\item \textbf{Technology and Data Variations List}\\
+		None
+	\item \textbf{Frequency of Occurrence}\\
+		Every time a file is renamed in live folder.
+\end{description}
 
 \subsection{Use case diagram}
 \includegraphics[width=\linewidth]{images/use_cases.png}
@@ -595,7 +646,13 @@ Our final result is very similar to the mockups:
 
 \subsection{Supplementary specification}
 \subsubsection{Vision}
-\todonote{Butler. Adapt from M4.}
+FBMS is a multiplatform, self-contained automated backup and revision program. It does not require cloud services or any online access to function. It uses local resources and ideally secondary drive locations to backup critical data.
+
+We chose this project as it fills a gap between cloud backup platforms and weighty software suites requiring considerable infrastructure and resources. Our program takes advantage of external drives or mapped network drives and consolidates folders specified by the user to a secure location. Joined with a redundant hardware solution like RAID, our software is a suitable replacement to cloud services.
+
+Our design choices have lead to a cross platform utility that should be usable on any operating system supported by the Java run time. This frees it from the majority of dependencies that weigh down other software.
+
+Using the data we backup we are able to run and operate a versioning system. This allows a user to revert unwanted file changes, restore corrupted files, or replace files accidentally deleted. It takes a step further then previous versions in windows, or other similar systems like svn. This gives more control over where versions are kept and is more straightforward then other versioning systems. 
 
 \subsubsection{Interfaces}
 The interface consists of the GUI windowing system along with a minimizer tray icon. Closing the GUI minimizes the application to an icon in the system tray. This means that the application does not end simply by pressing the “x” button on the GUI but needs to be shut down from the system tray icon which has an “exit” option for closing the application entirely. We have tried to make the main GUI as simple as possible so that an average user could be able to handle the software. It comprises of a few simple areas namely a table, a toolbar, and a menubar. 
@@ -658,7 +715,7 @@ These components integrate with our program and were chosen with efficiency in m
 \includegraphics[width=\linewidth]{images/sequence_diagram_first_run.png}
 
 \subsubsection{Revert to file revision}
-\todonote{Butler. Requires renaming since the objectification.}
+\includegraphics[width=\linewidth] {images/revertRevision_ssd.png}
 
 \subsubsection{Delete file}
 \includegraphics[width=\linewidth]{images/DeleteFileSD.png}
@@ -965,6 +1022,9 @@ As an end result, there's a complicated network of dependencies and variances be
 \item We renamed the \texttt{FileHistory}'s \texttt{obtainRevision()} method to \texttt{obtainRevisionCo\-ntent()}, which made the workings clearer and reduced confusion with the other methods in the class, which had similar names like \texttt{getRevision()} (which was renamed to \texttt{getRevisionInfo()}.
 
 \item The if clauses in \texttt{DbConnection} (line 115 and 129) , \texttt{FilechangeHandlers} (line 57, 68, 79 and 90) and \texttt{Startup} (line 270) are reversed to enhance the readability.
+
+\item Removed and consolidated rudundant code in \texttt{FileChangeHandlers} including common \texttt{FileOp} and \texttt{FileHistory} method call patterns. Putting them instead into class internal helper functions. 
+
 \end{itemize}
 
 \todonote{Butler, Tao, Alsharif, Rizvi. Everyone needs to point out at least one instance of refactoring, file and lines, why we did it, etc. Take a look at my objectification changes from revision 436 to 448 if you need ideas.}

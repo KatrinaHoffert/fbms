@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Actor</type>
+    <coordinates>
+      <x>60</x>
+      <y>50</y>
+      <w>80</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>User</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>370</x>
+      <y>80</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>_:Instance_
+FBMS</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>390</x>
+      <y>90</y>
+      <w>50</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>30;30;30;450</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>90</y>
+      <w>50</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>30;30;30;450</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>200</y>
+      <w>370</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+GuiController().revertRevision(path, timestamp)</panel_attributes>
+    <additional_attributes>350;50;30;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>120</y>
+      <w>370</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+FrontEnd(prompt file revision)</panel_attributes>
+    <additional_attributes>350;50;30;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>160</y>
+      <w>370</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+FileInfo() All necessary info</panel_attributes>
+    <additional_attributes>30;50;350;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>360</y>
+      <w>370</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+FileOp.copy(Path)</panel_attributes>
+    <additional_attributes>350;50;30;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>280</y>
+      <w>370</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+FileOp.createPatch(Path, Path)
+</panel_attributes>
+    <additional_attributes>350;50;30;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>240</y>
+      <w>370</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+FileHistory.obtainRevision()</panel_attributes>
+    <additional_attributes>350;50;30;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>160</x>
+      <y>480</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>System continues normal
+functions.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>430</x>
+      <y>130</y>
+      <w>280</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Front end prompts for for file info when 
+the user requests to make a file revision.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>430</x>
+      <y>210</y>
+      <w>280</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Once a file and revision are selected from
+the info, GuiController is invoked to make 
+the revision from the selections.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>430</x>
+      <y>290</y>
+      <w>280</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>Take steps necessary to preserve current
+copy as a revision and make necessary 
+changes to live and backup versions.
+
+This includes obtaining the revision of the
+file we are reverting to.
+Making a patch of temp file produced and
+the file we are reverting.
+Finally applying that patch to both live and
+backup.
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>430</x>
+      <y>470</y>
+      <w>280</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Once finished the system awaits user
+input to do another task. Background 
+functions should not be interrupted in this 
+call.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>320</y>
+      <w>370</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+FileHistory.storeRevision()</panel_attributes>
+    <additional_attributes>350;50;30;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>400</y>
+      <w>370</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+FileOp.copy(Path)</panel_attributes>
+    <additional_attributes>350;50;30;50</additional_attributes>
+  </element>
+</diagram>
