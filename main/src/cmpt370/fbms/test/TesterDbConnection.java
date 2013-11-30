@@ -17,60 +17,37 @@ package cmpt370.fbms.test;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 import junit.framework.TestCase;
-import cmpt370.fbms.DataRetriever;
 import cmpt370.fbms.DbConnection;
-import cmpt370.fbms.FileInfo;
+import cmpt370.fbms.FileOp;
 import cmpt370.fbms.Main;
+import cmpt370.fbms.RevisionInfo;
 
 /**
  * This class runs tests that can be automated. There must not be any output that has to be examined
  * or such. This allows us to simply run the file and JUnit will report a success or failure.
  */
-public class TesterServices extends TestCase
+public class TesterDbConnection extends TestCase
 {
 	DbConnection db;
+	Path path;
 
-	// Set up DbConnection for test
+	// Prepare DB and path.
 	public void setUp()
 	{
 		Main.backupDirectory = Paths.get("").toAbsolutePath();
 		Main.liveDirectory = Paths.get("").toAbsolutePath();
+		path = Paths.get("").toAbsolutePath();
 		db = DbConnection.getInstance();
 		db.initConnection();
 	}
 
-	// Test getting folder contents
-	public void testDataGetFolderContents() throws IOException
-	{
 
-		// Get the folder contents of this directory
-		DataRetriever revisionRetriever = new DataRetriever(Paths.get("").toAbsolutePath());
-		List<FileInfo> list = revisionRetriever.getFolderContents();
-
-		// Find the readme and assert that the information on it is logical
-		boolean foundReadme = false;
-		for(FileInfo file : list)
-		{
-			if(file.fileName.equals("README.txt"))
-			{
-				foundReadme = true;
-				assertTrue(file.fileSize > 0);
-				assertTrue(!file.folder);
-				assertTrue(file.lastAccessedDate != 0);
-				assertTrue(file.lastModifiedDate != 0);
-				assertTrue(file.createdDate != 0);
-			}
-		}
-
-		assertTrue(foundReadme);
-
-	}
-
-	public void testDbConnectionGetSetConfig() throws Exception
+	public void test_GetSetConfig() throws Exception
 	{
 		// Try to change the live directory
 		db.setConfig("liveDirectory", "/some/other/path");
@@ -80,6 +57,30 @@ public class TesterServices extends TestCase
 
 	}
 
+	// Insert a revision and then obtain it
+	public void test_InsertGetRevision() throws IOException
+	{
+		// Insert a "revision" with filler content
+		db.insertRevision(path.resolve("README.txt"),
+				FileOp.fileToString(path.resolve("README.txt")), null, 100, 50);
+
+		// Then we should get it.
+		List<RevisionInfo> insertedInfos = db.getFileRevisions(path.resolve("README.txt"));
+		assertNotNull("Obtaining info of README.txt failed, check insert/getRevision",
+				insertedInfos);
+
+	}
+
+	// Rename the revision we inserted.
+	public void test_RenameRevision()
+	{
+		// Rename that revision
+		db.renameRevisions(path.resolve("README.txt"), "not-readme.txt");
+
+		// Obtain it
+		List<RevisionInfo> list = db.getFileRevisions(path.resolve("not-readme.txt"));
+		assertNotNull("Renaming from README.txt to not-readme.txt failed", list);
+	}
 
 	// Close Dbconnection and clean up
 	public void tearDown()

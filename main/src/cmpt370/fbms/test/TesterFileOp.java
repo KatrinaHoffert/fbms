@@ -33,6 +33,10 @@ import java.util.List;
 import java.util.Random;
 
 import junit.framework.TestCase;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.FileOp;
 import cmpt370.fbms.Main;
 
@@ -99,6 +103,13 @@ public class TesterFileOp extends TestCase
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// Mute JMIMEMagic.
+		Logger.getLogger(net.sf.jmimemagic.Magic.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.MagicParser.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.MagicMatch.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.MagicMatcher.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.detectors.TextFileDetector.class).setLevel(Level.OFF);
 	}
 
 	/**
@@ -219,6 +230,7 @@ public class TesterFileOp extends TestCase
 		assertTrue(FileOp.isEqual(original, applied));
 	}
 
+	// Clean up
 	@Override
 	public void tearDown() throws Exception
 	{

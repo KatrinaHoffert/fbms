@@ -2,14 +2,21 @@ package cmpt370.fbms.test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import junit.framework.TestCase;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import cmpt370.fbms.DbConnection;
 import cmpt370.fbms.FileChangeHandlers;
 import cmpt370.fbms.Main;
@@ -54,6 +61,13 @@ public class TesterFileChangeHandler extends TestCase
 		db = DbConnection.getInstance();
 		db.initConnection();
 
+		// Mute JMIMEMagic.
+		Logger.getLogger(net.sf.jmimemagic.Magic.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.MagicParser.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.MagicMatch.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.MagicMatcher.class).setLevel(Level.OFF);
+		Logger.getLogger(net.sf.jmimemagic.detectors.TextFileDetector.class).setLevel(Level.OFF);
+
 
 	}
 
@@ -67,7 +81,6 @@ public class TesterFileChangeHandler extends TestCase
 		catch(IOException e)
 		{}
 
-		db.initConnection();
 		// Add test file to list
 		createdFiles.add(Paths.get(Main.liveDirectory.toString(), "TestFile1"));
 
@@ -178,6 +191,7 @@ public class TesterFileChangeHandler extends TestCase
 		testHandler.handleDeletedFiles();
 
 
+		// the lists should be empty.
 		assertTrue("createdFiles is not cleared.", createdFiles.isEmpty());
 		assertTrue("deletedFiles is not cleared.", deletedFiles.isEmpty());
 		assertTrue("modifiedFiles is not cleared.", modifiedFiles.isEmpty());
@@ -188,7 +202,6 @@ public class TesterFileChangeHandler extends TestCase
 
 	public void test_handleModifiedFiles()
 	{
-		db.initConnection();
 		// Create a blank file for test.
 		try
 		{
@@ -222,7 +235,6 @@ public class TesterFileChangeHandler extends TestCase
 
 	public void test_handleRenamedFiles()
 	{
-		db.initConnection();
 		// Create a blank file for test.
 		try
 		{
@@ -255,9 +267,48 @@ public class TesterFileChangeHandler extends TestCase
 		renamedFiles.clear();
 	}
 
+	// Close Dbconnection and clean up
 	public void tearDown()
 	{
 		db.close();
+		File basePath = new File("FileHandlerTest");
+		Path start = basePath.toPath();
+		try
+		{
+			Files.walkFileTree(start, new SimpleFileVisitor<Path>()
+			{
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+						throws IOException
+				{
+					Files.delete(file);
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult postVisitDirectory(Path dir, IOException e)
+						throws IOException
+				{
+					if(e == null)
+					{
+						Files.delete(dir);
+						return FileVisitResult.CONTINUE;
+					}
+					else
+					{
+						// directory iteration failed
+						throw e;
+					}
+				}
+			});
+			basePath.delete();
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+
 
 	}
+
 }
