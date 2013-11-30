@@ -111,10 +111,10 @@ public class FileHistory
 	/**
 	 * Stores the revision in the database with the supplied information.
 	 * 
-	 * @param file
-	 *            the path to the actual file (in the live directory).
 	 * @param diff
 	 *            the path to the diff file.
+	 * @param binary
+	 *            raw data of the file.
 	 * @param filesize
 	 *            the new file size (ie, the file size of the file in the live directory).
 	 * @param delta
