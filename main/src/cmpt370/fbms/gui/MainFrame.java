@@ -66,6 +66,7 @@ public class MainFrame extends JFrame
 	public Path selectedFile = null;
 	public Vector<String> columns;
 	public Vector<Vector<Object>> rows;
+	Timer timer = null;
 
 	private JPanel contentPane;
 
@@ -93,6 +94,12 @@ public class MainFrame extends JFrame
 			public void windowClosed(WindowEvent arg0)
 			{
 				instance = null;
+
+				if(timer != null)
+				{
+					timer.stop();
+					timer = null;
+				}
 			}
 		});
 
@@ -190,7 +197,7 @@ public class MainFrame extends JFrame
 		logger.info("Main frame drawn");
 
 		// Auto refresh the folder contents every 2 seconds
-		new Timer(2000, new ActionListener()
+		timer = new Timer(2000, new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -219,7 +226,8 @@ public class MainFrame extends JFrame
 					table.setRowSelectionInterval(selectedRowNumber, selectedRowNumber);
 				}
 			}
-		}).start();
+		});
+		timer.start();
 	}
 
 	/**
