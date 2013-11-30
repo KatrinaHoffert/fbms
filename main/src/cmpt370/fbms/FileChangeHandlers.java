@@ -223,7 +223,7 @@ public class FileChangeHandlers
 		{
 			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
 		}
-		catch(NumberFormatException e)
+		catch(Exception e)
 		{
 			maxSizeInBytes = 5 * 1024 * 1024;
 		}
@@ -352,7 +352,7 @@ public class FileChangeHandlers
 		{
 			maxSizeInBytes = (long) Math.round(Float.parseFloat(db.getConfig("maxSize")) * 1024 * 1024);
 		}
-		catch(NumberFormatException e)
+		catch(Exception e)
 		{
 			maxSizeInBytes = 5 * 1024 * 1024;
 		}
@@ -579,7 +579,7 @@ public class FileChangeHandlers
 	 */
 	public void handleDeletedFiles()
 	{
-		Iterator<Path> itrd = null;
+		Iterator<Path> itrd = deletedFiles.iterator();
 		Iterator<Path> itrc = null;
 		Iterator<Path> itrm = null;
 		Iterator<RenamedFile> itrr = null;
@@ -592,7 +592,6 @@ public class FileChangeHandlers
 			pathd = itrd.next();
 
 			// Must get iterators at each loop, since iterators are not cycling.
-			itrd = deletedFiles.iterator();
 			itrc = createdFiles.iterator();
 			itrm = modifiedFiles.iterator();
 			itrr = renamedFiles.iterator();
