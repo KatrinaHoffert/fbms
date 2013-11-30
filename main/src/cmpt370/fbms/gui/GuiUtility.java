@@ -86,7 +86,14 @@ public class GuiUtility
 		int unit = si ? 1000 : 1024;
 		if(bytes < unit)
 		{
-			return bytes + " B";
+			if(positive)
+			{
+				return bytes + " B";
+			}
+			else
+			{
+				return "-" + bytes + " B";
+			}
 		}
 
 		// Figure out the unit being used

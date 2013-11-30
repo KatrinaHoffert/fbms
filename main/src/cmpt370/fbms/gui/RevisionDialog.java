@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
@@ -44,6 +45,8 @@ public class RevisionDialog extends JDialog
 	public long selectedTimestamp = -1;
 	public Vector<String> columns;
 	public Path fileDisplayed;
+
+	private Vector<Vector<String>> rows;
 
 	/**
 	 * Create the frame.
@@ -76,7 +79,7 @@ public class RevisionDialog extends JDialog
 
 		// Create the data model
 		DataRetriever revisionRetriever = new DataRetriever(fileDisplayed);
-		Vector<Vector<String>> rows = revisionRetriever.getRevisionInfoTable();
+		rows = revisionRetriever.getRevisionInfoTable();
 		table.setModel(new DefaultTableModel(rows, columns)
 		{
 			@Override
@@ -155,21 +158,47 @@ public class RevisionDialog extends JDialog
 				}
 			}
 		});
+
+		// Auto refresh the revision table every 2 seconds
+		new Timer(2000, new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				long selectedTimestampBackup = selectedTimestamp;
+
+				// Note that this will blank selectedTimestamp
+				redrawTable();
+
+				// Reselect the row (if any)
+				if(selectedTimestampBackup != -1)
+				{
+					// Figure out which row is supposed to be selected (by name)
+					int selectedRowNumber = -1;
+					for(Vector<String> row : rows)
+					{
+						selectedRowNumber++;
+						String fileName = row.get(0);
+						if(GuiUtility.unformatDate(fileName) == selectedTimestampBackup)
+						{
+							// Found the right row
+							selectedTimestamp = selectedTimestampBackup;
+							revertRevisionButton.setEnabled(true);
+							viewRevisionButton.setEnabled(true);
+							break;
+						}
+					}
+					table.setRowSelectionInterval(selectedRowNumber, selectedRowNumber);
+				}
+			}
+		}).start();
 	}
 
 	public void redrawTable()
 	{
 		// Create the data model
 		DataRetriever revisionRetriever = new DataRetriever(fileDisplayed);
-		Vector<Vector<String>> rows = revisionRetriever.getRevisionInfoTable();
-		table.setModel(new DefaultTableModel(rows, columns)
-		{
-			@Override
-			public boolean isCellEditable(int row, int column)
-			{
-				return false;
-			}
-		});
+		rows = revisionRetriever.getRevisionInfoTable();
+		((DefaultTableModel) table.getModel()).setDataVector(rows, columns);
 
 		// Set the column widths
 		table.getColumnModel().getColumn(0).setMinWidth(115);
