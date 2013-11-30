@@ -547,7 +547,7 @@ Our final result is very similar to the mockups:
 	\item \textbf{Extensions} \\
 		\begin{itemize}
 		\item Only files within the specified backup environment will have versions stored to revert to. 
-		\item Nothing will happen if the user selects the file and revision and exits the dialogue or otherwise does not hit â€˜Okâ€™.  
+		\item Nothing will happen if the user selects the file and revision and exits the dialogue or otherwise does not hit ‘Ok’.  
 		\item If the function fails due to system level issues, like permission conflicts, the function ends and the user is notified.  
 	\end{itemize}
 	\item \textbf{Special Requirements}\\
@@ -600,7 +600,7 @@ Our final result is very similar to the mockups:
 \todonote{Butler. Adapt from M4.}
 
 \subsubsection{Interfaces}
-The interface consists of the GUI windowing system along with a minimizer tray icon. Closing the GUI minimizes the application to an icon in the system tray. This means that the application does not end simply by pressing the â€œxâ€ button on the GUI but needs to be shut down from the system tray icon which has an â€œexitâ€ option for closing the application entirely. We have tried to make the main GUI as simple as possible so that an average user could be able to handle the software. It comprises of a few simple areas namely a table, a toolbar, and a menubar. 
+The interface consists of the GUI windowing system along with a minimizer tray icon. Closing the GUI minimizes the application to an icon in the system tray. This means that the application does not end simply by pressing the “x” button on the GUI but needs to be shut down from the system tray icon which has an “exit” option for closing the application entirely. We have tried to make the main GUI as simple as possible so that an average user could be able to handle the software. It comprises of a few simple areas namely a table, a toolbar, and a menubar. 
 
 \textbf{Table}: This is used to display the contents of the backup directory. This directory is specified by the user and shows detailed entries of the names of the files or the folder, the sizes, the modified and the created dates as well as the last date it was accessed on and finally the revision size and the number of current revisions. Interactive features of the table include a scrollbar, which the user can use to scroll up and down the list and selection, allowing the user to select a single file at a time. 
 When a folder is selected the table refreshes the contents of the list by generating the contents of the folder. Selecting a file opens up a dialog box with information of the file revisions. Errors are handled by the means of dialog boxes. 
