@@ -2,12 +2,9 @@ package cmpt370.fbms.test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -32,6 +29,7 @@ public class TesterFileChangeHandler extends TestCase
 
 	protected FileChangeHandlers testHandler;
 
+
 	@Override
 	public void setUp()
 	{
@@ -55,11 +53,6 @@ public class TesterFileChangeHandler extends TestCase
 		// Initialize database.
 		db = DbConnection.getInstance();
 		db.initConnection();
-		// db.setConfig("trimDate", "-1");
-		// db.setConfig("startupScan", "true");
-		// db.setConfig("disableNonFatalErrors", "false");
-		// db.setConfig("maxSize", "5");
-		// db.close();
 
 
 	}
@@ -94,10 +87,7 @@ public class TesterFileChangeHandler extends TestCase
 			Files.deleteIfExists(new File("FileHandlerTest/backup/TestFile1").toPath());
 		}
 		catch(IOException e)
-		{
-			System.out.println("I/O Error.\nTest may behaves incorrectly.");
-			e.printStackTrace();
-		}
+		{}
 
 		// Add same file to renamed lists.
 		RenamedFile file = new RenamedFile();
@@ -135,9 +125,7 @@ public class TesterFileChangeHandler extends TestCase
 			Files.deleteIfExists(new File("FileHandlerTest/live/TestFile1").toPath());
 		}
 		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
+		{}
 
 		clearLists();
 	}
@@ -158,6 +146,7 @@ public class TesterFileChangeHandler extends TestCase
 
 		testPath = Paths.get(Main.liveDirectory.toString(), "TestFile2");
 
+		createdFiles.add(testPath);
 		modifiedFiles.add(testPath);
 		deletedFiles.add(testPath);
 
@@ -167,6 +156,7 @@ public class TesterFileChangeHandler extends TestCase
 
 		testPath = Paths.get(Main.liveDirectory.toString(), "TestFile3");
 
+		createdFiles.add(testPath);
 		modifiedFiles.add(testPath);
 		deletedFiles.add(testPath);
 
@@ -176,6 +166,8 @@ public class TesterFileChangeHandler extends TestCase
 
 		testPath = Paths.get(Main.liveDirectory.toString(), "TestFile4");
 
+		createdFiles.add(testPath);
+		modifiedFiles.add(testPath);
 		deletedFiles.add(testPath);
 
 		renamedFile = new RenamedFile();
@@ -222,9 +214,8 @@ public class TesterFileChangeHandler extends TestCase
 			Files.deleteIfExists(new File("FileHandlerTest/backup/TestFile1").toPath());
 		}
 		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
+		{}
+
 		clearLists();
 
 	}
@@ -262,44 +253,11 @@ public class TesterFileChangeHandler extends TestCase
 		modifiedFiles.clear();
 		deletedFiles.clear();
 		renamedFiles.clear();
-		// db.close();
 	}
 
 	public void tearDown()
 	{
 		db.close();
-		Path start = Paths.get("FileHandlerTest");
-		try
-		{
-			Files.walkFileTree(start, new SimpleFileVisitor<Path>()
-			{
-				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-						throws IOException
-				{
-					Files.delete(file);
-					return FileVisitResult.CONTINUE;
-				}
-
-				@Override
-				public FileVisitResult postVisitDirectory(Path dir, IOException e)
-						throws IOException
-				{
-					if(e == null)
-					{
-						Files.delete(dir);
-						return FileVisitResult.CONTINUE;
-					}
-					else
-					{
-						// directory iteration failed
-						throw e;
-					}
-				}
-			});
-		}
-		catch(IOException e)
-		{}
 
 	}
 }
