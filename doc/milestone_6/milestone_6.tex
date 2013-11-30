@@ -1115,9 +1115,9 @@ Double clicking a file will open the revisions dialog, displaying a list of past
 The file browser is also able to:
 
 \begin{itemize}
-\item Copy the selected file to a chosen folder
-\item Restore all files
-\item Change the live or backup directory
+\item Copy the selected file to a chosen folder: From the ``File'' menu, choose ``copy-to'' while selecting a file. This will open a prompt for choosing the location you wish to copy the selected file to.
+\item Restore all files: From the ``File'' menu, choose ``restore all''. This will open a prompt for choosing the location you wish to restore all the files to.
+\item Change the live or backup directory: From the ``File'' menu, choose either ``Change live directory'' or `Change backup directory''. This will open a prompt for choosing the directory. The live and backup directories cannot be children of each other.
 \end{itemize}
 
 FBMS is also able to detect when files have changed since the last time you ran the program. When starting the program up, FBMS will perform a one time scan for file changes. This scan is slow, and can be disabled in the settings if FBMS is always running.
@@ -1128,6 +1128,14 @@ The settings dialog is accessed under the File menu of the GUI. It provides a fe
 \item Whether or not to display non-fatal error messages (which don't stop the program from running, but notify the user of issues).
 \item Whether or not to run the previously mentioned first run scan
 \item Whether or not to enable the trim feature, which removes revisions older than a specified date.
+\end{itemize}
+
+In terms of file operations, there's several operations that can occur:
+\begin{itemize}
+\item A file is created: if the file doesn't already exist, it is merely backed up. If the file does exist, this is treated like a modification.
+\item A file is modified: if the file already exists, it is backed up and revisioned. If it doesn't already exist, this is treated like a creation.
+\item A file is renamed: if the old name already exists, that is renamed, otherwise this is treated like a creation (under the new name). If the new name doesn't already exist, we rename the file. If the new name already exists, we treat this like a modification, backing up and revisioning the file. The current behavior of ``renaming'' a file is to make a copy and move the revisions to the new name. To allow the old name to be restored, it is not deleted. Therefore, we end up with copies (this will be improved in future versions of the software, which will keep track of name history).
+\item A file is deleted: The file is not removed from the backup directory, but files that no longer exist in the live directory will be marked with an exclamation mark in the file browser.
 \end{itemize}
 
 \section{Project plan, budget justification, and performance evaluation}
@@ -1175,17 +1183,17 @@ The following table breaks up the development of this milestone by group member.
    & 5.3. Pretty-printing & Hoffert(0.1h) &  \\ \hline
    & 5.4. Usability engineering & Hoffert(0.5h) &  \\ \hline
    & 5.5. Complete implementation & Hoffert(0.25h) &  \\ \hline
-   & 5.6. User manual & Hoffert(0.1h) &  \\ \hline
+   & 5.6. User manual & Hoffert(0.5h) &  \\ \hline
   6. & Project plan, evaluation & Hoffert(0.5h) &  \\ \hline
   7. & Conclusion & Hoffert(0.25h) &  \\ \hline
   8. & Acknowledgements & Hoffert(0.25h) &  \\ \hline
    & References & Hoffert(0h) &  \\ \hline
-    & \textbf{Total member contributions} & \textbf{Hoffert} & 14.35h \\ \cline{3-4}
+    & \textbf{Total member contributions} & \textbf{Hoffert} & 14.75h \\ \cline{3-4}
     &  & \textbf{Tao} & 8.5h \\ \cline{3-4}
     &  & \textbf{Butler} & \\ \cline{3-4}
     &  & \textbf{Rizvi} & 11.5h\\ \cline{3-4}
     &  & \textbf{Alsharif} & 12h\\ \hline
-    & \textbf{Grand total} &  & 22.85h \\ \hline
+    & \textbf{Grand total} &  & 23.25h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
@@ -1222,9 +1230,9 @@ The next table summarizes the time spent by each member throughout the project (
    & Refactoring & 4 hours & Objectification, use of design patterns \\ \cline{2-4}
    & Binary revisioning feature & 5 hours & Also lumped in bug fixes to file handlers \\ \cline{2-4}
    & MIME detection & 3 hours & Getting Java MIME Magic to work\\ \cline{2-4}
-   & Usability fixes & 1 hour & As suggested by marker in M5 \\ \hline
+   & Usability fixes & 3 hours & As suggested by marker in M5 \\ \hline
    & Miscellaneous bug fixes & 4 hours & Numerous smaller bug fixes\\ \hline
-  \multicolumn{2}{|r|}{\textbf{Total for Hoffert}} & 93 hours & 67\% of the commits from one person\\ \hline \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Hoffert}} & 96 hours & 67\% of the commits from one person\\ \hline \hline
   Tao & Rough design of modules & 1 hour & \\ \cline{2-4}
    & Rough design of functions & 1 hour & \\ \cline{2-4}
    & Work on M1-M3 & 4 hours & \\ \cline{2-4}
