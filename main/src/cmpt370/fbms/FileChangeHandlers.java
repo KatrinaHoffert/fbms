@@ -54,44 +54,44 @@ public class FileChangeHandlers
 		Iterator<Path> createdIterator = createdFiles.iterator();
 		while(createdIterator.hasNext())
 		{
-			if(createdIterator.next().toFile().exists())
+			if(!createdIterator.next().toFile().exists())
 			{
-				continue;	
+				createdIterator.remove();
 			}
-			createdIterator.remove();
+
 		}
 
 		// Remove non-existant modifications
 		Iterator<Path> modifiedIterator = modifiedFiles.iterator();
 		while(modifiedIterator.hasNext())
 		{
-			if(modifiedIterator.next().toFile().exists())
+			if(!modifiedIterator.next().toFile().exists())
 			{
-				continue;
+				modifiedIterator.remove();
 			}
-			modifiedIterator.remove();
+
 		}
 
 		// Remove non-existant renames (we only care about the new name)
 		Iterator<RenamedFile> renamedIterator = renamedFiles.iterator();
 		while(renamedIterator.hasNext())
 		{
-			if(renamedIterator.next().newName.toFile().exists())
+			if(!renamedIterator.next().newName.toFile().exists())
 			{
-				continue;
+				renamedIterator.remove();
 			}
-			renamedIterator.remove();
+
 		}
 
 		// Remove non-existant deletions
 		Iterator<Path> deletedIterator = deletedFiles.iterator();
 		while(deletedIterator.hasNext())
 		{
-			if(deletedIterator.next().toFile().exists())
+			if(!deletedIterator.next().toFile().exists())
 			{
-				continue;
+				deletedIterator.remove();
 			}
-			deletedIterator.remove();
+
 		}
 	}
 
@@ -579,10 +579,10 @@ public class FileChangeHandlers
 	 */
 	public void handleDeletedFiles()
 	{
-		Iterator<Path> itrd = deletedFiles.iterator();
-		Iterator<Path> itrc = createdFiles.iterator();
-		Iterator<Path> itrm = modifiedFiles.iterator();
-		Iterator<RenamedFile> itrr = renamedFiles.iterator();
+		Iterator<Path> itrd = null;
+		Iterator<Path> itrc = null;
+		Iterator<Path> itrm = null;
+		Iterator<RenamedFile> itrr = null;
 		RenamedFile toRename;
 		Path pathm, pathc, pathd;
 		logger.debug("Handle Deleted Files has started.");
@@ -590,6 +590,13 @@ public class FileChangeHandlers
 		while(itrd.hasNext())
 		{
 			pathd = itrd.next();
+
+			// Must get iterators at each loop, since iterators are not cycling.
+			itrd = deletedFiles.iterator();
+			itrc = createdFiles.iterator();
+			itrm = modifiedFiles.iterator();
+			itrr = renamedFiles.iterator();
+
 			while(itrc.hasNext())
 			{
 				pathc = itrc.next();
