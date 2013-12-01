@@ -20,7 +20,7 @@
 FBMS is an automated backup system written in Java. It keeps track of file
 changes and stores older revisions of files.
 
-FBMS works on Windows and Linux (Mac untested).
+FBMS works on Windows and Linux.
 
 For documentation on this project, see the wiki:
    https://code.google.com/p/fbms/wiki/Documentation
@@ -28,7 +28,7 @@ For documentation on this project, see the wiki:
 RUNNING THE PROGRAM (pre-built distribution only):
   - Windows users can run the "run.cmd" file (either double click it or type
     the name in the command line)
-  - Linux and Mac users can run the "run.sh" file via the terminal
+  - Linux users can run the "run.sh" file via the terminal
   - The working directory must be the directory that the JAR file is in (same
     directory as the "run" files are in)
 
@@ -36,6 +36,6 @@ COMPILING IT YOURSELF:
   - The pre-built distribution only includes the necessary files to run the
     program. To build it yourself, you'll need the full SVN repository.
     See: https://code.google.com/p/fbms/source/checkout
-  - The "coding.txt" file in the SVN (located in trunk/main) contains details
+  - The "coding.txt" file in the SVN (located in trunk/doc) contains details
     about building the program from source and importing the project into
     the Eclipse IDE
