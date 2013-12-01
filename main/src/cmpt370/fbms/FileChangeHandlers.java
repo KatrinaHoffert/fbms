@@ -186,7 +186,7 @@ public class FileChangeHandlers
 				{
 					// If we've hit a duplicate already, we've made the diff/backup and we can
 					// delete this one safely.
-					if(hit == true)
+					if(hit)
 					{
 						// itrr.remove();
 						logger.debug("Create Handle: Found duplicate in renamed, removing.");
