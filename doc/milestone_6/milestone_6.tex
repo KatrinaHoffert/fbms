@@ -94,7 +94,7 @@ FBMS works on all locally accessible drives, including external drives and netwo
 
 FBMS has a focus on ease of use. A wizard guides the user through the setup, where the backup and live directories are chosen. With that complete, the program will run in the background and needs no user interaction until the use desires to restore or view files from the backup.
 
-\todonote{Alsharif, Tao, Butler, and Rizvi. Review and revise}
+
 \end{abstract}
 \clearpage
 
@@ -1022,20 +1022,27 @@ As an end result, there's a complicated network of dependencies and variances be
 \subsection{Refactoring}
 \begin{itemize}
 \item We changed the static class \texttt{DbManager} into a singleton, and renamed it to \texttt{DbConnec\-tion}. In doing so, we set all the methods as non-static, added a private constructor, and added a \texttt{getInstance()} method.
+
 \item We added helper method to handlers, which is \texttt{validateLists()} for clearing the lists, which lets us remove a vital dependency from  \texttt{GuiController}.
+
 \item \texttt{Main} has become a singleton. This allows us to objectify \texttt{Watcher} and \texttt{GuiController} better, and decoupling the lists, which are no longer static.
+
 \item \texttt{FileInfo} implemented \texttt{Comparible} to make comparisons between \texttt{FileInfo} objects considerably easier.
-\item We added helper method to handlers, which is \texttt{validateLists()} for clearing the lists, which lets us remove a vital dependency from \texttt{GuiController}.
-\item \texttt{Main} has become a singleton. This allows us to objectify \texttt{Watcher} and \texttt{GuiController} better, and decoupling the lists, which are no longer static.
+
 \item We renamed the \texttt{FileHistory}'s \texttt{obtainRevision()} method to \texttt{obtainRevisionCo\-ntent()}, which made the workings clearer and reduced confusion with the other methods in the class, which had similar names like \texttt{getRevision()} (which was renamed to \texttt{getRevisionInfo()}.
 
-\item The if clauses in \texttt{DbConnection} (line 115 and 129) , \texttt{FilechangeHandlers} (line 57, 68, 79 and 90) and \texttt{Startup} (line 270) are reversed to enhance the readability.
+\item The if clauses in \texttt{DbConnection} (line 115 and 129) and \texttt{Startup} (line 270) are reversed to enhance the readability.
+
+\item The nested classes in \texttt{FirstStartWizard}, \texttt{RevisionDialog} and \texttt{MainFrame} are not implementing \texttt{MouseListener}. They are extending \texttt{MouseAdapter} to reduce code length.
+
+\item Some excalmatory marks, \texttt{==true} in \texttt{FileChangeHandlers} are removed to enhance the readability.
+
 
 \item Removed and consolidated rudundant code in \texttt{FileChangeHandlers} including common \texttt{FileOp} and \texttt{FileHistory} method call patterns. Putting them instead into class internal helper functions. 
 
 \end{itemize}
 
-\todonote{Butler, Tao, Alsharif, Rizvi. Everyone needs to point out at least one instance of refactoring, file and lines, why we did it, etc. Take a look at my objectification changes from revision 436 to 448 if you need ideas.}
+
 
 \subsection{Gang of Four design patterns}
 We used several Gang of Four design patterns in our project. One of the most notable is the use of a singleton for the \texttt{DbConnection} class. We used a singleton here because it's very slow to create and close connections at whim. The SQLite database manager we used supports serialized access, so the singleton is thread-safe.
@@ -1199,7 +1206,7 @@ The following table breaks up the development of this milestone by group member.
     &  & \textbf{Butler} & 11.5h \\ \cline{3-4}
     &  & \textbf{Rizvi} & 9.0h\\ \cline{3-4}
     &  & \textbf{Alsharif} & 10.0h\\ \hline
-    & \textbf{Grand total} &  & 58.75 \\ \hline
+    & \textbf{Grand total} &  & 58.75h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
@@ -1262,7 +1269,7 @@ The next table summarizes the time spent by each member throughout the project (
    & handleModifiedFiles & 4 hours & \\ \cline{2-4}
    & handleRenamedFiles & 3 hours & \\ \cline{2-4}
    & testing & 4 hours & \\ \cline{2-4}
-   & debugging/optimization & 4 hours & \\ \cline{2-4} \\ \hline
+   & debugging/optimization & 4 hours & \\ \hline 
   \multicolumn{2}{|r|}{\textbf{Total for Butler}}  & 37 hours & \\ \hline \hline
   Rizvi & Milestone(1-4) documentation & 7 hours  & \\ \cline{2-4}
    & frontend implementation  & 4 hours  & \\ \cline{2-4}
@@ -1278,7 +1285,7 @@ The next table summarizes the time spent by each member throughout the project (
    &  Test FileOp.creatPatch &  2 hours & \\ \cline{2-4}
    &  Test FileOp.fileToList &  3 hours & \\ \cline{2-4}
    &  FileOp.applyPatch &  6 hours & \\ \cline{2-4}
-   &  Milestone 5 &  4 hours & \\ \cline{2-4}
+   &  Milestone 5 &  4 hours & \\ \hline
    
   \multicolumn{2}{|r|}{\textbf{Total for Alsharif}}  & 35 hours & \\ \hline
 \end{longtable}
@@ -1287,7 +1294,7 @@ Our initial estimate focused largely on the ``basics'', the features we absolute
 
 This indicates that our estimate was very close. If we include the time spent on past milestones (not including this one), the total time comes to over 200 man hours. Another 15 man hours was needed to bring the program up to version 2.0, which consisted entirely of ``extra'' features. 
 
-\todonote{Tao, Rizvi, Alsharif, Butler. Fill me out, yo!}
+
 
 \section{Conclusion}
 FBMS is a program that balances ease of use with power. It's geared at those wanting something inbetween the power of version control and the ease of use of online backup solutions. FBMS goes beyond most backup systems to store revisions of files. Monitoring the file system real time allowed efficiency for the system, which focuses on a single folder rather than an entire hard drive.
