@@ -614,7 +614,7 @@ Our final result is very similar to the mockups:
 \includegraphics[width=\linewidth]{images/use_cases.png}
 
 \subsection{Domain model}
-\todonote{Butler. Make from scratch.}
+ The diagram is too large so it is not included directly in the document but is available at images/domainDiagram.png
 
 \subsection{Glossary}
 \begin{itemize}
@@ -941,10 +941,10 @@ Another area where feedback was crucial was in the GUI development. We had to ai
 \includegraphics[width=\textwidth]{images/view_revision_sequence.png}
 
 \subsubsection{GuiController.changeLiveDirectory}
-\todonote{Butler}
+\includegraphics[width=\textwidth]{images/changeLiveDirectory.png}
 
 \subsubsection{GuiController.changeBackupDirectory}
-\todonote{Butler}
+\includegraphics[width=\textwidth]{images/changeBackupDirectory.png}
 
 \subsubsection{FileOp.applyPatch}
 \includegraphics[width=\textwidth]{images/applyPatch_sequence.png}
@@ -1165,25 +1165,25 @@ The following table breaks up the development of this milestone by group member.
    & 1.7. User involvement plan & Hoffert(0.1h) &  \\ \hline
    & 1.8. Low fidelity prototypes & Hoffert(0.25h) &  \\ \hline
   2. & Requirements and early design &  &  \\ \hline
-   & 2.1. Summary use cases & Hoffert(2h)\newline Tao(1.5h)\newline Rizvi(2h) \newline Alsharif(2h)&  \\ \hline
-   & 2.2. Fully-dressed use cases & Hoffert(0.5h) \newline Tao(0.5h)\newline Rizvi(1.5h) \newline Alsharif (1.5h)) & Adapted to current design. \\ \hline
+   & 2.1. Summary use cases & Hoffert(2h)\newline Tao(1.5h)\newline Rizvi(2h) \newline Alsharif(2h) \newline Butler(2h) &  \\ \hline
+   & 2.2. Fully-dressed use cases & Hoffert(0.5h) \newline Tao(0.5h)\newline Rizvi(1.5h) \newline Alsharif (1.5h)) \newline Butler(0.5h)& Adapted to current design. \\ \hline
    & 2.3. Use case diagram & Tao(0.5h) &  \\ \hline
-   & 2.4. Domain model &  &  \\ \hline
+   & 2.4. Domain model & Butler(3h) &  \\ \hline
    & 2.5. Glossary & Hoffert(0.25h) &  \\ \hline
-   & 2.6. Supplementary specification & Hoffert(0.25h) \newline Tao(0.5h) \newline Rizvi(1h) \newline Alsharif(1.5h)&  \\ \hline
-   & 2.7. System sequence diagrams & Hoffert(0.5h)\newline Rizvi(1.5h) \newline Alsharif(1.5h) &  \\ \hline
+   & 2.6. Supplementary specification & Hoffert(0.25h) \newline Tao(0.5h) \newline Rizvi(1h) \newline Alsharif(1.5h) \newline Butler(0.5h)&  \\ \hline
+   & 2.7. System sequence diagrams & Hoffert(0.5h)\newline Rizvi(1.5h) \newline Alsharif(1.5h) \newline Butler(0.5h)&  \\ \hline
    & 2.8. Operation contracts & Hoffert(1.5h)\newline Tao(1.5h) & \newline References of use cases  \\ \hline
    & 2.9. Obtaining user feedback & Hoffert(0.25h) &  \\ \hline
   3. & Updated design and unit testing &  &  \\ \hline
    & 3.1. System operations & Hoffert(0.25h) &  \\ \hline
-   & 3.2. Sequence diagrams & Hoffert(2h) \newline Tao(3h) \newline Rizvi(3h) \newline Alsharif(3h)&  \\ \hline
+   & 3.2. Sequence diagrams & Hoffert(2h) \newline Tao(3h) \newline Rizvi(3h) \newline Alsharif(3h) \newline Butler(3h)&  \\ \hline
    & 3.3. Class diagram & Hoffert(1.5h) &  \\ \hline
    & 3.4. Unit testing & Tao(5.0h) & Revamping included \\ \hline
   4. & Re-engineering &  &  \\ \hline
    & 4.1. Code smells & Hoffert(2h) &  \\ \hline
-   & 4.2. Refactoring & Hoffert(0.25h) \newline Tao(1h) \newline Rizvi(1.5h) \newline Alsharif(0.5h)& \newline Refactored code \\ \hline
+   & 4.2. Refactoring & Hoffert(0.25h) \newline Tao(1h) \newline Rizvi(1.5h) \newline Alsharif(0.5h) \newline Butler(4h)& \newline Refactored code \\ \hline
    & 4.3. Gang of Four design patterns & Hoffert(0.5h)&  \\ \hline
-  5. & Complete implementation &  &  \\ \hline
+  5. & Complete implementation &  & These conventions were followed mostly from the start. \\ \hline
    & 5.1. Naming conventions & Hoffert(0h) &  \\ \hline
    & 5.2. Commenting & Hoffert(0h) &  \\ \hline
    & 5.3. Pretty-printing & Hoffert(0.1h) &  \\ \hline
@@ -1196,10 +1196,10 @@ The following table breaks up the development of this milestone by group member.
    & References & Hoffert(0h) &  \\ \hline
     & \textbf{Total member contributions} & \textbf{Hoffert} & 14.75h \\ \cline{3-4}
     &  & \textbf{Tao} & 13.5h \\ \cline{3-4}
-    &  & \textbf{Butler} & \\ \cline{3-4}
+    &  & \textbf{Butler} & 11.5h \\ \cline{3-4}
     &  & \textbf{Rizvi} & 9.0h\\ \cline{3-4}
     &  & \textbf{Alsharif} & 10.0h\\ \hline
-    & \textbf{Grand total} &  & 47.25h \\ \hline
+    & \textbf{Grand total} &  & 58.75 \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
@@ -1254,11 +1254,16 @@ The next table summarizes the time spent by each member throughout the project (
    & Work on M5 graph & 5 hours & \\ \cline{2-4}
    & Miscellaneous bug fixes & 3.5 hours & \\ \hline
   \multicolumn{2}{|r|}{\textbf{Total for Tao}}  & 51 hours & Preliminary design and library suggestion \\ \hline \hline
-  Butler &  &  & \\ \cline{2-4}
-   &  &  & \\ \cline{2-4}
-   &  &  & \\ \cline{2-4}
-   &  &  & \\ \hline
-  \multicolumn{2}{|r|}{\textbf{Total for Butler}}  &  & \\ \hline \hline
+  Butler & Milestone 1-5 & 8 hours & \\ \cline{2-4}
+   & getConfig() & 3 hours & \\ \cline{2-4}
+   & setConfig & 3 hours & \\ \cline{2-4}
+   & handleCreatedFiles & 6 hours & \\ \cline{2-4}
+   & handleDeletedFiles & 2 hours & \\ \cline{2-4}
+   & handleModifiedFiles & 4 hours & \\ \cline{2-4}
+   & handleRenamedFiles & 3 hours & \\ \cline{2-4}
+   & testing & 4 hours & \\ \cline{2-4}
+   & debugging/optimization & 4 hours & \\ \cline{2-4} \\ \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Butler}}  & 37 hours & \\ \hline \hline
   Rizvi & Milestone(1-4) documentation & 7 hours  & \\ \cline{2-4}
    & frontend implementation  & 4 hours  & \\ \cline{2-4}
    &  GUI brainstorm & 7 hours & \\ \cline{2-4}
