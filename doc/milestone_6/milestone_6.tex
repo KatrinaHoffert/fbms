@@ -285,7 +285,7 @@ Our final result is very similar to the mockups:
 	\item \textbf{Activities} \\
 	The system receives a file renamed notice from the watcher module, and put it in file renamed list.\\
 	The file change handler will process the list: \\
-	The system will either make a diff file or copy the file to backup folder.
+	The system will either make a diff file or copy tdomaihe file to backup folder.
 	\item \textbf{Quality} \\
 	This is a main use case in the system and must work to a very high standard.
 	\item \textbf{Version} \\
@@ -614,7 +614,7 @@ Our final result is very similar to the mockups:
 \includegraphics[width=\linewidth]{images/use_cases.png}
 
 \subsection{Domain model}
- The diagram is too large so it is not included directly in the document but is available at images/domainDiagram.png
+The class diagram is too large to embed in this document, so has been included separately as the file \texttt{domain\_{}diagram.png}.
 
 \subsection{Glossary}
 \begin{itemize}
@@ -1084,7 +1084,9 @@ The first run wizard was also intended to make the program much more usable. Ins
 
 To make the revision dialog more friendly, we added color based on whether a revision added or removed bytes. This dialog was inspired by the history pages of Wikipedia\cite{wikipedia}.
 
-Finally, we included an option in the program's menu that opens up the documentation in their web browser.
+We also included an option in the program's menu that opens up the documentation in their web browser.
+
+As per the marker's feedback in milestone 4, we implemented auto-refresh to the file browser and revisions dialog window. Now it is no longer necessary to re-open the revisions dialog to see changes to the revisions. We further added tooltips to all the menu options and toolbar icons, ensuring the user can easily find out what an option or feature does.
 
 \subsection{Complete implementation}
 We have included the implementation in ``release'' and ``development'' versions.
@@ -1094,8 +1096,6 @@ The release version is pre-built and easy to use: just run the batch file (Windo
 The development version does not contain pre-built binaries, but has the full source code available. To compile this, you will need Eclipse\cite{eclipse} or Ant\cite{ant}. This version is intended to allow the source code to be examined. Running the development program will be slower than the release version, since debugging is enabled and logging uses slower, more exact methods.
 
 The release version is located in the \texttt{release} folder, relative to the location of this file. The development version is located in the \texttt{development} folder.
-
-\todonote{Hoffert. Add the release and development folders (last minute)}
 
 \subsection{User manual}
 When the program is started for the first time, a wizard will guide you through selecting your live and backup directories.
@@ -1177,9 +1177,9 @@ The following table breaks up the development of this milestone by group member.
    & 2.3. Use case diagram & Tao(0.5h) &  \\ \hline
    & 2.4. Domain model & Butler(3h) &  \\ \hline
    & 2.5. Glossary & Hoffert(0.25h) &  \\ \hline
-   & 2.6. Supplementary specification & Hoffert(0.25h) \newline Tao(0.5h) \newline Rizvi(1h) \newline Alsharif(1.5h) \newline Butler(0.5h)&  \\ \hline
-   & 2.7. System sequence diagrams & Hoffert(0.5h)\newline Rizvi(1.5h) \newline Alsharif(1.5h) \newline Butler(0.5h)&  \\ \hline
-   & 2.8. Operation contracts & Hoffert(1.5h)\newline Tao(1.5h) & \newline References of use cases  \\ \hline
+   & 2.6. Supplementary specification & Hoffert(0.25h) \newline Tao(0.5h) \newline Rizvi(1h) \newline Alsharif(1.5h) \newline Butler(0.5h)& \\ \hline
+   & 2.7. System sequence diagrams & Hoffert(0.5h)\newline Rizvi(1.5h) \newline Alsharif(1.5h) \newline Butler(0.5h)& \\ \hline
+   & 2.8. Operation contracts & Hoffert(1.5h)\newline Tao(1.5h) & References of use cases by Tao \\ \hline
    & 2.9. Obtaining user feedback & Hoffert(0.25h) &  \\ \hline
   3. & Updated design and unit testing &  &  \\ \hline
    & 3.1. System operations & Hoffert(0.25h) &  \\ \hline
@@ -1188,25 +1188,25 @@ The following table breaks up the development of this milestone by group member.
    & 3.4. Unit testing & Tao(5.0h) & Revamping included \\ \hline
   4. & Re-engineering &  &  \\ \hline
    & 4.1. Code smells & Hoffert(2h) &  \\ \hline
-   & 4.2. Refactoring & Hoffert(0.25h) \newline Tao(1h) \newline Rizvi(1.5h) \newline Alsharif(0.5h) \newline Butler(4h)& \newline Refactored code \\ \hline
+   & 4.2. Refactoring & Hoffert(0.25h) \newline Tao(1h) \newline Rizvi(1.5h) \newline Alsharif(0.5h) \newline Butler(0.5h) & \\ \hline
    & 4.3. Gang of Four design patterns & Hoffert(0.5h)&  \\ \hline
-  5. & Complete implementation &  & These conventions were followed mostly from the start. \\ \hline
+  5. & Complete implementation &  & These conventions were followed from the start \\ \hline
    & 5.1. Naming conventions & Hoffert(0h) &  \\ \hline
    & 5.2. Commenting & Hoffert(0h) &  \\ \hline
    & 5.3. Pretty-printing & Hoffert(0.1h) &  \\ \hline
    & 5.4. Usability engineering & Hoffert(0.5h) &  \\ \hline
-   & 5.5. Complete implementation & Hoffert(0.25h) &  \\ \hline
+   & 5.5. Complete implementation & Hoffert(1h) &  \\ \hline
    & 5.6. User manual & Hoffert(0.5h) &  \\ \hline
   6. & Project plan, evaluation & Hoffert(0.5h) &  \\ \hline
   7. & Conclusion & Hoffert(0.25h) &  \\ \hline
   8. & Acknowledgements & Hoffert(0.25h) &  \\ \hline
    & References & Hoffert(0h) &  \\ \hline
-    & \textbf{Total member contributions} & \textbf{Hoffert} & 14.75h \\ \cline{3-4}
+    & \textbf{Total member contributions} & \textbf{Hoffert} & 15.5h \\ \cline{3-4}
     &  & \textbf{Tao} & 13.5h \\ \cline{3-4}
     &  & \textbf{Butler} & 11.5h \\ \cline{3-4}
     &  & \textbf{Rizvi} & 9.0h\\ \cline{3-4}
     &  & \textbf{Alsharif} & 10.0h\\ \hline
-    & \textbf{Grand total} &  & 58.75h \\ \hline
+    & \textbf{Grand total} &  & 59.5h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
@@ -1245,7 +1245,7 @@ The next table summarizes the time spent by each member throughout the project (
    & MIME detection & 3 hours & Getting Java MIME Magic to work\\ \cline{2-4}
    & Usability fixes & 3 hours & As suggested by marker in M5 \\ \hline
    & Miscellaneous bug fixes & 4 hours & Numerous smaller bug fixes\\ \hline
-  \multicolumn{2}{|r|}{\textbf{Total for Hoffert}} & 96 hours & 67\% of the commits from one person\\ \hline \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Hoffert}} & 96 hours & 62\% of the commits from one person\\ \hline \hline
   Tao & Rough design of modules & 1 hour & \\ \cline{2-4}
    & Rough design of functions & 1 hour & \\ \cline{2-4}
    & Work on M1-M3 & 4 hours & \\ \cline{2-4}
@@ -1268,15 +1268,16 @@ The next table summarizes the time spent by each member throughout the project (
    & handleDeletedFiles & 2 hours & \\ \cline{2-4}
    & handleModifiedFiles & 4 hours & \\ \cline{2-4}
    & handleRenamedFiles & 3 hours & \\ \cline{2-4}
+   &  Refactoring & 3.5 hours & File change handlers \\ \cline{2-4}
    & testing & 4 hours & \\ \cline{2-4}
    & debugging/optimization & 4 hours & \\ \hline 
-  \multicolumn{2}{|r|}{\textbf{Total for Butler}}  & 37 hours & \\ \hline \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Butler}}  & 40.5 hours & \\ \hline \hline
   Rizvi & Milestone(1-4) documentation & 7 hours  & \\ \cline{2-4}
    & frontend implementation  & 4 hours  & \\ \cline{2-4}
    &  GUI brainstorm & 7 hours & \\ \cline{2-4}
    &  GUI implementation & 10 hours & \\ \cline{2-4}
    &  Testing and reporting & 6 hours & \\ \cline{2-4}
-   &   Milestone 5 & 3 hours & \\ \hline
+   &  Milestone 5 & 3 hours & \\ \hline
   \multicolumn{2}{|r|}{\textbf{Total for Rizvi}}  &  37 hours & \\ \hline \hline
   Alsharif & Milestone (1-4)  & 9 hours & \\ \cline{2-4}
    &  work on presentation slides & 3 hours & \\ \cline{2-4}
