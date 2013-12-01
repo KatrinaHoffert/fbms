@@ -715,7 +715,7 @@ These components integrate with our program and were chosen with efficiency in m
 \includegraphics[width=\linewidth]{images/sequence_diagram_first_run.png}
 
 \subsubsection{Revert to file revision}
-\includegraphics[width=\linewidth] {images/revertRevision_ssd.png}
+\includegraphics[width=\linewidth] {images/revert_revision_sequence.png}
 
 \subsubsection{Delete file}
 \includegraphics[width=\linewidth]{images/DeleteFileSD.png}
@@ -969,16 +969,22 @@ The class diagram is too large to embed in this document, so has been included s
 
 \subsection{Unit testing}
 
-The test file is in \path{trunk/main/src/cmpt370/fbms/test}. TesterMainSuite.java is the test suite of the project.
 
-The sample testing data is automatically created by test cases.\par
-JUnit is also used in testing other modules, except the GUI modules, since the GUI modules are meant to be looked fine and no fault.
-
-TTD is used while developing FileOp.  While developing, it decreased the weight of the class.
-
-JUnit is a very powetful testing tool. It helps to avoid asserting in source code other than the test case, keeping the code clean. The setUp() and tearDown() eliminates the need to create and delete test samples, keeping the svn folder clean.
-
-In all, JUnit is powerful to test base parts for a project. However, for GUI parts, we still need to review them by eyes.
+\begin{itemize}
+	
+	\item Test cases \\
+	The test file is in \texttt{/trunk/main/src/cmpt370/fbms/test}. All test cases are in package \texttt{cmpt370.fbms.test} to keep other packages clean.
+	
+	\item What is tested \\
+	FileOp, FileChangeHandlers, and parts of DbConnection, DataRetriever is tested by JUnit. Some methods are tested in one test, since they have a close relationship. Some time-depended result needs human to check.\\
+	The GUI parts (\texttt{Errors}) are test by a special \texttt{TestCase} class, TesterVisual. Since GUI needs "look good", this test case always reports successful. However, you need to check the look and feel of the windows.
+	
+	\item JUnit is helpful \\
+	With JUnit, it becomes easy to detect bugs in program. Besides, when the program evolves, The only thing is to add tests to test suite and test again. Less manpower is consumed by testing basic part. \\
+	Some parts of the program used TDD. JUnit also speeds TDD. It clearly shows what passed test and what not, and gives a very distinct view of test results. Since it integrates with Eclipse, It is avoided to check output line by line at most time.
+	
+	
+\end{itemize}
 
 
 \section{Re-engineering}
@@ -1166,17 +1172,17 @@ The following table breaks up the development of this milestone by group member.
    & 2.5. Glossary & Hoffert(0.25h) &  \\ \hline
    & 2.6. Supplementary specification & Hoffert(0.25h) \newline Tao(0.5h) \newline Rizvi(1h) \newline Alsharif(1.5h)&  \\ \hline
    & 2.7. System sequence diagrams & Hoffert(0.5h)\newline Rizvi(1.5h) \newline Alsharif(1.5h) &  \\ \hline
-   & 2.8. Operation contracts & Hoffert(1.5h)\newline Tao(1.5h) \newline Rizvi(0.5h) \newline Alsharif(0.5h)& \newline References of use cases  \\ \hline
+   & 2.8. Operation contracts & Hoffert(1.5h)\newline Tao(1.5h) & \newline References of use cases  \\ \hline
    & 2.9. Obtaining user feedback & Hoffert(0.25h) &  \\ \hline
   3. & Updated design and unit testing &  &  \\ \hline
    & 3.1. System operations & Hoffert(0.25h) &  \\ \hline
    & 3.2. Sequence diagrams & Hoffert(2h) \newline Tao(3h) \newline Rizvi(3h) \newline Alsharif(3h)&  \\ \hline
    & 3.3. Class diagram & Hoffert(1.5h) &  \\ \hline
-   & 3.4. Unit testing & Tao(0.5h) &  \\ \hline
+   & 3.4. Unit testing & Tao(5.0h) & Revamping included \\ \hline
   4. & Re-engineering &  &  \\ \hline
    & 4.1. Code smells & Hoffert(2h) &  \\ \hline
    & 4.2. Refactoring & Hoffert(0.25h) \newline Tao(1h) \newline Rizvi(1.5h) \newline Alsharif(0.5h)& \newline Refactored code \\ \hline
-   & 4.3. Gang of Four design patterns & Hoffert(0.5h) \newline Rizvi(0.5h) \newline Alsharif(1.5h)&  \\ \hline
+   & 4.3. Gang of Four design patterns & Hoffert(0.5h)&  \\ \hline
   5. & Complete implementation &  &  \\ \hline
    & 5.1. Naming conventions & Hoffert(0h) &  \\ \hline
    & 5.2. Commenting & Hoffert(0h) &  \\ \hline
@@ -1189,11 +1195,11 @@ The following table breaks up the development of this milestone by group member.
   8. & Acknowledgements & Hoffert(0.25h) &  \\ \hline
    & References & Hoffert(0h) &  \\ \hline
     & \textbf{Total member contributions} & \textbf{Hoffert} & 14.75h \\ \cline{3-4}
-    &  & \textbf{Tao} & 8.5h \\ \cline{3-4}
+    &  & \textbf{Tao} & 13.5h \\ \cline{3-4}
     &  & \textbf{Butler} & \\ \cline{3-4}
-    &  & \textbf{Rizvi} & 11.5h\\ \cline{3-4}
-    &  & \textbf{Alsharif} & 12h\\ \hline
-    & \textbf{Grand total} &  & 23.25h \\ \hline
+    &  & \textbf{Rizvi} & 9.0h\\ \cline{3-4}
+    &  & \textbf{Alsharif} & 10.0h\\ \hline
+    & \textbf{Grand total} &  & 47.25h \\ \hline
 \end{longtable}
 
 The next table summarizes the time spent by each member throughout the project (not including the time counted on the above table):
@@ -1239,15 +1245,15 @@ The next table summarizes the time spent by each member throughout the project (
    & Work on M4 text & 5 hours & \\ \cline{2-4}
    & Work on M4 graph & 2 hours & \\ \cline{2-4}
    & Work on FileOp & 7 hours & \\ \cline{2-4}
-   & Revamping test case & 2 hours & \\ \cline{2-4}
+   & Revamping test case & 4 hours & \\ \cline{2-4}
    & FileOp test cases & 2 hours & \\ \cline{2-4}
    & FileChangeHandlers \newline test cases & 5 hours & \\ \cline{2-4}
    & Work on FileHistory & 6 hours & \\ \cline{2-4}
    & Redo operation contracts & 1 hours & \\ \cline{2-4}
    & Build.xml and run script & 4.5 hours & \\ \cline{2-4}
    & Work on M5 graph & 5 hours & \\ \cline{2-4}
-   & Miscellaneous bug fixes & 2.5 hours & \\ \hline
-  \multicolumn{2}{|r|}{\textbf{Total for Tao}}  & 48 hours & Preliminary design and library suggestion \\ \hline \hline
+   & Miscellaneous bug fixes & 3.5 hours & \\ \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Tao}}  & 51 hours & Preliminary design and library suggestion \\ \hline \hline
   Butler &  &  & \\ \cline{2-4}
    &  &  & \\ \cline{2-4}
    &  &  & \\ \cline{2-4}
@@ -1258,8 +1264,8 @@ The next table summarizes the time spent by each member throughout the project (
    &  GUI brainstorm & 7 hours & \\ \cline{2-4}
    &  GUI implementation & 10 hours & \\ \cline{2-4}
    &  Testing and reporting & 6 hours & \\ \cline{2-4}
-   &   Milestone 5 -6 & 12 hours & \\ \hline
-  \multicolumn{2}{|r|}{\textbf{Total for Rizvi}}  &  44 hours & \\ \hline \hline
+   &   Milestone 5 & 3 hours & \\ \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Rizvi}}  &  35 hours & \\ \hline \hline
   Alsharif & Milestone (1-3)  & 6 hours & \\ \cline{2-4}
    &  work on presentation slides & 3 hours & \\ \cline{2-4}
    &  FileOp.creatDiff &  4 hours & \\ \cline{2-4}
@@ -1267,9 +1273,8 @@ The next table summarizes the time spent by each member throughout the project (
    &  Test FileOp.creatDiff &  3 hours & \\ \cline{2-4}
    &  Test FileOp.fileToList &  6 hours & \\ \cline{2-4}
    &  FileOp.applyDiff &  6 hours & \\ \cline{2-4}
-   &  Milestone 5 - 6  &  10 hours & \\ \cline{2-4}
    
-  \multicolumn{2}{|r|}{\textbf{Total for Alsharif}}  & 42 hours & \\ \hline
+  \multicolumn{2}{|r|}{\textbf{Total for Alsharif}}  & 32 hours & \\ \hline
 \end{longtable}
 
 Our initial estimate focused largely on the ``basics'', the features we absolutely needed. However, we finished those and managed to add many extra features that weren't originally planned. The introduction estimated 150 man hours of work to create the system. The features mentioned in the introduction took 147 man hours including planning, testing, and debugging time, but not including time spent on the milestones.
