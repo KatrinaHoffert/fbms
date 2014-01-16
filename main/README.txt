@@ -39,3 +39,5 @@ COMPILING IT YOURSELF:
   - The "coding.txt" file in the SVN (located in trunk/doc) contains details
     about building the program from source and importing the project into
     the Eclipse IDE
+  - To create the pre-built distribution package, run "ant release" in this
+    folder.
